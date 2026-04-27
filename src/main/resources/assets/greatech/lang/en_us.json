@@ -1,0 +1,24 @@
+{
+  "itemGroup.greatech": "Greatech",
+  "block.greatech.su_energy_converter": "SU Energy Converter",
+  "item.greatech.su_energy_converter": "SU Energy Converter",
+
+  "greatech.configuration.title": "Greatech Configs",
+  "greatech.configuration.section.greatech.common.toml": "Greatech Configs",
+  "greatech.configuration.section.greatech.common.toml.title": "Greatech Configs",
+  "greatech.configuration.converterCapacity": "Converter Capacity",
+  "greatech.configuration.converterMaxOutput": "Converter Max Output",
+  "greatech.configuration.converterOutputVoltage": "Converter Output Voltage",
+  "greatech.configuration.converterOutputAmperage": "Converter Output Amperage",
+  "greatech.configuration.converterEfficiency": "Converter Efficiency",
+  "greatech.configuration.converterStressImpact": "Converter Stress Impact",
+  "greatech.configuration.converterMinimumSpeed": "Converter Minimum Speed",
+  "greatech.configuration.converterCapacity.tooltip": "Internal EU buffer size.",
+  "greatech.configuration.converterMaxOutput.tooltip": "Maximum EU generated each tick after all conversion calculations.",
+  "greatech.configuration.converterOutputVoltage.tooltip": "GTCEu output voltage for each packet sent to adjacent machines.",
+  "greatech.configuration.converterOutputAmperage.tooltip": "Maximum packets sent per tick. Voltage x amperage limits export throughput.",
+  "greatech.configuration.converterEfficiency.tooltip": "EU generated per 1 RPM of Create rotation before the max output cap is applied.",
+  "greatech.configuration.converterStressImpact.tooltip": "Stress impact added to the Create kinetic network by this machine.",
+  "greatech.configuration.converterMinimumSpeed.tooltip": "Minimum absolute RPM required before the machine starts generating EU.",
+  "message.greatech.su_energy_converter.status": "Speed: %s rpm | Stored: %s EU | Generated: %s EU/t"
+}
