@@ -21,12 +21,13 @@ Implemented so far:
 - `SU Energy Converter` block entity logic
 - `Create` kinetic hookup
 - `GTCEu` energy capability exposure
-- temporary placeholder block model and loot table
+- custom casing and rotor block art
+- BER-driven rotor animation using `Create` kinetic logic
+- active casing texture swap while outputting `EU`
 - right-click debug output in chat
 
 Still in progress:
 
-- final art, model, texture, and animation
 - recipe design
 - polished balance
 - additional machines and integration features
@@ -75,8 +76,10 @@ Key code locations:
 - [Config.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/Config.java)
 - [SUEnergyConverterBlock.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterBlock.java)
 - [SUEnergyConverterBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterBlockEntity.java)
+- [SUEnergyConverterRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterRenderer.java)
 - [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
 - [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
 - [GreatechCapabilities.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechCapabilities.java)
 
 Key resource locations:
@@ -85,6 +88,10 @@ Key resource locations:
 - [en_us.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/lang/en_us.json)
 - [su_energy_converter blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/su_energy_converter.json)
 - [su_energy_converter block model](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/su_energy_converter.json)
+- [lv_sucon_casing model](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/lv_sucon_casing.json)
+- [lv_sucon_casing_active model](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/lv_sucon_casing_active.json)
+- [lv_sucon_rotor model](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/lv_sucon_rotor.json)
+- [lv_su_energy_converter textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/lv_su_energy_converter)
 
 ## Build Notes
 
@@ -136,3 +143,4 @@ Project docs live in:
 - [docs/converter.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/converter.md)
 - [docs/dependencies.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/dependencies.md)
 - [docs/art-direction.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/art-direction.md)
+- [docs/create-machine-tips.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/create-machine-tips.md)

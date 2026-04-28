@@ -48,6 +48,7 @@ public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements 
     private void serverTick() {
         lastSpeed = getSpeed();
         lastGeneratedEu = generateEnergyFromSpeed(lastSpeed);
+        updateActiveState(lastGeneratedEu > 0);
 
         if (lastGeneratedEu > 0) {
             long previousEnergy = energyStored;
@@ -58,6 +59,19 @@ public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements 
         }
 
         pushEnergyToNeighbors();
+    }
+
+    private void updateActiveState(boolean active) {
+        if (level == null) {
+            return;
+        }
+
+        BlockState currentState = getBlockState();
+        if (currentState.getValue(SUEnergyConverterBlock.ACTIVE) == active) {
+            return;
+        }
+
+        level.setBlock(worldPosition, currentState.setValue(SUEnergyConverterBlock.ACTIVE, active), 3);
     }
 
     private int generateEnergyFromSpeed(float speed) {

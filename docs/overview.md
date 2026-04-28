@@ -30,8 +30,7 @@ Its role is:
 
 ## Near-Term Development Goals
 
-- replace placeholder model with final custom model
-- add animated visible rotor
+- validate the new custom art and active-state presentation in gameplay
 - finish `neoforge.mods.toml` dependency declarations
 - add recipe and progression balancing
 - expand debugging and testing workflow
