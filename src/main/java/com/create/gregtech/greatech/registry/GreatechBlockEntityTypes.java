@@ -2,6 +2,7 @@ package com.create.gregtech.greatech.registry;
 
 import com.create.gregtech.greatech.Greatech;
 import com.create.gregtech.greatech.content.converter.SUEnergyConverterBlockEntity;
+import com.create.gregtech.greatech.content.shaft.GreatechShaftBlockEntity;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -19,6 +20,12 @@ public final class GreatechBlockEntityTypes {
                     GreatechBlocks.LV_SUCON.get(),
                     GreatechBlocks.MV_SUCON.get(),
                     GreatechBlocks.HV_SUCON.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechShaftBlockEntity>> STEEL_SHAFT = BLOCK_ENTITY_TYPES.register(
+            "steel_shaft",
+            () -> BlockEntityType.Builder.of(
+                    GreatechShaftBlockEntity::new,
+                    GreatechBlocks.STEEL_SHAFT.get()).build(null));
 
     private GreatechBlockEntityTypes() {
     }

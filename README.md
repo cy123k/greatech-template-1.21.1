@@ -5,6 +5,7 @@
 The current prototype focuses on one core machine family:
 
 - `SU Energy Converter`
+- `Steel Shaft`
 
 These machines accept `Create` rotational power and output `GTCEu` `EU`.
 
@@ -27,6 +28,7 @@ Implemented so far:
 - tier-specific casing, rotor, active textures, and item display models
 - right-click debug output in chat
 - Greatech-monitored kinetic failure accidents for overloaded `Create` transmission parts
+- `steel_shaft` registration with Create-style kinetic behavior and animated rendering
 
 Still in progress:
 
@@ -85,6 +87,7 @@ Key code locations:
 - [SUEnergyConverterBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterBlockEntity.java)
 - [SUEnergyConverterRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterRenderer.java)
 - [SUEnergyConverterTier.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterTier.java)
+- [Greatech shaft code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/shaft)
 - [Kinetic failure system](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/kinetics/failure)
 - [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
 - [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
@@ -100,6 +103,8 @@ Key resource locations:
 - [hv_sucon blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/hv_sucon.json)
 - [SU converter block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/su_energy_converter)
 - [SU converter item models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/item/su_energy_converter)
+- [Greatech shaft block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/shaft)
+- [Greatech shaft textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/greatech_shaft)
 - [LV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/lv_su_energy_converter)
 - [MV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/mv_su_energy_converter)
 - [HV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/hv_su_energy_converter)
@@ -157,6 +162,8 @@ Project docs live in:
 - [docs/overview.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/overview.md)
 - [docs/converter.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/converter.md)
 - [docs/kinetic-failure.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/kinetic-failure.md)
+- [docs/greatech-shaft.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-shaft.md)
+- [docs/greatech-renderer-register.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-renderer-register.md)
 - [docs/dependencies.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/dependencies.md)
 - [docs/art-direction.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/art-direction.md)
 - [docs/create-machine-tips.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/create-machine-tips.md)

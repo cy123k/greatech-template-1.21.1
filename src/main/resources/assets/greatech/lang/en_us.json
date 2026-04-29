@@ -3,9 +3,11 @@
   "block.greatech.lv_sucon": "LV SU Energy Converter",
   "block.greatech.mv_sucon": "MV SU Energy Converter",
   "block.greatech.hv_sucon": "HV SU Energy Converter",
+  "block.greatech.steel_shaft": "Steel Shaft",
   "item.greatech.lv_sucon": "LV SU Energy Converter",
   "item.greatech.mv_sucon": "MV SU Energy Converter",
   "item.greatech.hv_sucon": "HV SU Energy Converter",
+  "item.greatech.steel_shaft": "Steel Shaft",
 
   "greatech.configuration.title": "Greatech Configs",
   "greatech.configuration.section.greatech.common.toml": "Greatech Configs",

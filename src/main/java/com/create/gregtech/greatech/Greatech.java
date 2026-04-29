@@ -38,6 +38,7 @@ public class Greatech {
                 output.accept(GreatechBlocks.LV_SUCON_ITEM.get());
                 output.accept(GreatechBlocks.MV_SUCON_ITEM.get());
                 output.accept(GreatechBlocks.HV_SUCON_ITEM.get());
+                output.accept(GreatechBlocks.STEEL_SHAFT_ITEM.get());
             }).build());
 
     public Greatech(IEventBus modEventBus, ModContainer modContainer) {
@@ -62,6 +63,7 @@ public class Greatech {
             event.accept(GreatechBlocks.LV_SUCON_ITEM);
             event.accept(GreatechBlocks.MV_SUCON_ITEM);
             event.accept(GreatechBlocks.HV_SUCON_ITEM);
+            event.accept(GreatechBlocks.STEEL_SHAFT_ITEM);
         }
     }
 

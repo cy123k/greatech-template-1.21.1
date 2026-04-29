@@ -1,6 +1,7 @@
 package com.create.gregtech.greatech;
 
 import com.create.gregtech.greatech.content.converter.SUEnergyConverterRenderer;
+import com.create.gregtech.greatech.content.shaft.GreatechShaftRenderer;
 import com.create.gregtech.greatech.registry.GreatechBlockEntityTypes;
 import com.create.gregtech.greatech.registry.GreatechPartialModels;
 import net.minecraft.client.Minecraft;
@@ -37,5 +38,6 @@ public class GreatechClient {
     @SubscribeEvent
     static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.SU_ENERGY_CONVERTER.get(), SUEnergyConverterRenderer::new);
+        event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_SHAFT.get(), GreatechShaftRenderer::new);
     }
 }
