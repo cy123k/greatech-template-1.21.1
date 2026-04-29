@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "greatech:su_energy_converter"
+          "name": "greatech:lv_sucon"
         }
       ],
       "conditions": [

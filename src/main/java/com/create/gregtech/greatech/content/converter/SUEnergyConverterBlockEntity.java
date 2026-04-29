@@ -41,7 +41,7 @@ public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements 
 
     @Override
     public float calculateStressApplied() {
-        this.lastStressApplied = (float) Config.converterStressImpact;
+        this.lastStressApplied = (float) Config.converterStressImpact(getTier());
         return this.lastStressApplied;
     }
 
@@ -52,7 +52,7 @@ public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements 
 
         if (lastGeneratedEu > 0) {
             long previousEnergy = energyStored;
-            energyStored = Math.min(energyStored + lastGeneratedEu, Config.converterCapacity);
+            energyStored = Math.min(energyStored + lastGeneratedEu, Config.converterCapacity(getTier()));
             if (energyStored != previousEnergy) {
                 setChanged();
             }
@@ -80,8 +80,8 @@ public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements 
             return 0;
         }
 
-        int generated = Math.round(absoluteSpeed * Config.converterEfficiency);
-        return Math.min(generated, Config.converterMaxOutput);
+        int generated = Math.round(absoluteSpeed * Config.converterEfficiency(getTier()));
+        return Math.min(generated, Config.converterMaxOutput(getTier()));
     }
 
     @Override
@@ -141,17 +141,17 @@ public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements 
 
     @Override
     public long getEnergyCapacity() {
-        return Config.converterCapacity;
+        return Config.converterCapacity(getTier());
     }
 
     @Override
     public long getOutputAmperage() {
-        return Config.converterOutputAmperage;
+        return Config.converterOutputAmperage(getTier());
     }
 
     @Override
     public long getOutputVoltage() {
-        return Config.converterOutputVoltage;
+        return Config.converterOutputVoltage(getTier());
     }
 
     @Override
@@ -216,5 +216,13 @@ public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements 
 
     private boolean isShaftInput(Direction side) {
         return side == getBlockState().getValue(SUEnergyConverterBlock.FACING).getOpposite();
+    }
+
+    private SUEnergyConverterTier getTier() {
+        if (getBlockState().getBlock() instanceof SUEnergyConverterBlock converterBlock) {
+            return converterBlock.getTier();
+        }
+
+        return SUEnergyConverterTier.LV;
     }
 }

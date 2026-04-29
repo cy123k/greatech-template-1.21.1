@@ -1,0 +1,10 @@
+﻿{
+  "parent": "greatech:item/su_energy_converter/sucon_item",
+  "textures": {
+    "0": "greatech:block/mv_su_energy_converter/mv_sucon_casing",
+    "1": "greatech:block/mv_su_energy_converter/mv_sucon_rotor",
+    "2": "greatech:block/mv_su_energy_converter/mv_sucon_casing_2",
+    "particle": "greatech:block/mv_su_energy_converter/mv_sucon_casing"
+  }
+}
+

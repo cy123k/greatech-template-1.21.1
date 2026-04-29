@@ -33,9 +33,11 @@ public class Greatech {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN_TAB = CREATIVE_MODE_TABS.register("main_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.greatech"))
             .withTabsBefore(CreativeModeTabs.COMBAT)
-            .icon(() -> GreatechBlocks.SU_ENERGY_CONVERTER_ITEM.get().getDefaultInstance())
+            .icon(() -> GreatechBlocks.LV_SUCON_ITEM.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                output.accept(GreatechBlocks.SU_ENERGY_CONVERTER_ITEM.get());
+                output.accept(GreatechBlocks.LV_SUCON_ITEM.get());
+                output.accept(GreatechBlocks.MV_SUCON_ITEM.get());
+                output.accept(GreatechBlocks.HV_SUCON_ITEM.get());
             }).build());
 
     public Greatech(IEventBus modEventBus, ModContainer modContainer) {
@@ -57,7 +59,9 @@ public class Greatech {
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
-            event.accept(GreatechBlocks.SU_ENERGY_CONVERTER_ITEM);
+            event.accept(GreatechBlocks.LV_SUCON_ITEM);
+            event.accept(GreatechBlocks.MV_SUCON_ITEM);
+            event.accept(GreatechBlocks.HV_SUCON_ITEM);
         }
     }
 

@@ -54,10 +54,11 @@ This avoids:
 - duplicated faces
 - confusion when active-state textures are added later
 
-The converter uses:
+The converter uses shared geometry plus tier texture wrappers:
 
-- [lv_sucon_casing.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/lv_sucon_casing.json)
-- [lv_sucon_rotor.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/lv_sucon_rotor.json)
+- [sucon_casing.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/su_energy_converter/sucon_casing.json)
+- [sucon_rotor.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/su_energy_converter/sucon_rotor.json)
+- tier wrappers such as [lv_sucon_casing.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/su_energy_converter/lv_sucon_casing.json)
 
 ## 4. Register the Block, Block Entity, and Capabilities Together
 
@@ -75,7 +76,7 @@ In this project the relevant locations are:
 - [GreatechCapabilities.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechCapabilities.java)
 - [GreatechClient.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/GreatechClient.java)
 
-If one of these is missing, the machine often appears to “half work”.
+If one of these is missing, the machine often appears to "half work".
 
 ## 5. Let the Block Entity Own the Machine Logic
 
@@ -112,7 +113,9 @@ In this project:
 - partials are declared in [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
 - `GreatechClient` calls `GreatechPartialModels.init()` during client construction
 
-This avoids “missing model” problems where the code compiles but the in-game dynamic part renders as missing.
+This avoids "missing model" problems where the code compiles but the in-game dynamic part renders as missing.
+
+For tiered machines, register a partial per visual variant and choose the right one in the renderer.
 
 ## 8. Be Careful With Light on Inset Moving Parts
 
@@ -132,7 +135,7 @@ When a moving part looks black or muddy, check these before rewriting the render
 
 ## 9. Active State: Start Simple
 
-There are two common ways to show “machine is running”.
+There are two common ways to show "machine is running":
 
 Option A:
 
@@ -151,10 +154,43 @@ For early development, Option A is often better:
 The current converter uses:
 
 - `ACTIVE` property on the block
-- `active=true` variants in [su_energy_converter.json blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/su_energy_converter.json)
-- [lv_sucon_casing_active.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/lv_sucon_casing_active.json) for the active appearance
+- `active=true` variants in tier blockstates such as [lv_sucon.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/lv_sucon.json)
+- active wrappers such as [lv_sucon_active.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/su_energy_converter/lv_sucon_active.json)
+- a low block light level while active
 
-## 10. Overlay Advice if You Revisit It Later
+## 10. Add Item Display Models Deliberately
+
+Create-style machines often have block-world rendering and item rendering needs that are not identical.
+
+For the converter:
+
+- the world block model renders only the static casing
+- the moving rotor is rendered by the block entity renderer
+- the item model includes both casing and a static rotor so it looks complete in inventories, hands, and item entities
+
+Recommended pattern:
+
+- keep root item model files named after the item ids, such as `models/item/lv_sucon.json`
+- keep shared item geometry in a separate file such as `models/item/su_energy_converter/sucon_item.json`
+- bind LV/MV/HV textures in small tier wrapper files
+- point the root item models to the wrapper files
+- use `"parent": "block/block"` on custom element models so default block display transforms are inherited
+- override only the display transforms you truly need
+
+The converter item model only customizes `fixed`, following the Create clutch style:
+
+```json
+"display": {
+  "fixed": {
+    "rotation": [0, 90, 0],
+    "scale": [0.5, 0.5, 0.5]
+  }
+}
+```
+
+Leaving `gui`, `ground`, `firstperson`, and `thirdperson` to the default block transforms helps avoid item models that are too large or show only a flat front face.
+
+## 11. Overlay Advice if You Revisit It Later
 
 If you later want GT-style overlays:
 
@@ -171,7 +207,7 @@ The model decides:
 
 If the lamp is painted onto a large face, the overlay usually has to reuse that same face geometry.
 
-## 11. Common Failure Modes
+## 12. Common Failure Modes
 
 The converter work hit several useful edge cases:
 
@@ -179,10 +215,13 @@ The converter work hit several useful edge cases:
 - static and dynamic copies of the same geometry can cause black edges or z-fighting
 - late partial registration can produce missing dynamic models
 - dynamic parts inside a casing may need borrowed light from a nearby position
+- custom item models without `"parent": "block/block"` may render too large or face-on in inventory
+- item model root files must match registered item ids, even if they only forward to subfolder models
+- generated config files keep old values until edited or regenerated
 
 These are worth checking before assuming the texture is wrong.
 
-## 12. A Good Development Order
+## 13. A Good Development Order
 
 For new Create-style machines, this order has worked well:
 
@@ -193,6 +232,7 @@ For new Create-style machines, this order has worked well:
 5. split dynamic parts into partials
 6. attach a BER using `KineticBlockEntityRenderer`
 7. add active-state visuals
-8. do balance and UX polish after the machine already works
+8. build a separate item model if the item should show dynamic parts statically
+9. do balance and UX polish after the machine already works
 
 This keeps logic and art moving together without forcing you to solve rendering and gameplay at the same time.

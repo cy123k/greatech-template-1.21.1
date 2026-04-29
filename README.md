@@ -2,11 +2,11 @@
 
 `Greatech` is a NeoForge mod for Minecraft `1.21.1` that aims to bridge the mechanical systems of `Create` with the electrical systems of `GregTechCEu Modern`.
 
-The current prototype focuses on one core machine:
+The current prototype focuses on one core machine family:
 
 - `SU Energy Converter`
 
-This machine accepts `Create` rotational power and outputs `GTCEu` `EU`.
+These machines accept `Create` rotational power and output `GTCEu` `EU`.
 
 ## Current Status
 
@@ -17,13 +17,14 @@ Implemented so far:
 - NeoForge `1.21.1` project setup
 - `Create` dependency integration
 - `GTCEu` dependency integration
-- `SU Energy Converter` block registration
+- `LV/MV/HV SU Energy Converter` block registration
 - `SU Energy Converter` block entity logic
 - `Create` kinetic hookup
 - `GTCEu` energy capability exposure
 - custom casing and rotor block art
 - BER-driven rotor animation using `Create` kinetic logic
 - active casing texture swap while outputting `EU`
+- tier-specific casing, rotor, active textures, and item display models
 - right-click debug output in chat
 
 Still in progress:
@@ -51,21 +52,21 @@ The current formula is:
 EU/t = min(converterMaxOutput, abs(rpm) * converterEfficiency)
 ```
 
-Default prototype values:
+Tiered default prototype values:
 
-- `converterEfficiency = 2`
-- `converterMaxOutput = 128`
-- `converterOutputVoltage = 32`
-- `converterOutputAmperage = 4`
-- `converterStressImpact = 16.0`
+- `converterCapacity = [2048, 8192, 32768]`
+- `converterEfficiency = [2, 4, 8]`
+- `converterMaxOutput = [32, 128, 512]`
+- `converterOutputVoltage = [32, 128, 512]`
+- `converterOutputAmperage = [1, 1, 1]`
+- `converterStressImpact = [16.0, 64.0, 256.0]`
 - `converterMinimumSpeed = 1.0`
 
 That means, by default:
 
-- `1 RPM -> 2 EU/t`
-- `16 RPM -> 32 EU/t`
-- `32 RPM -> 64 EU/t`
-- `64 RPM -> 128 EU/t`
+- LV: `2 EU/RPM`, capped at `32 EU/t`, reaches cap at `16 RPM`
+- MV: `4 EU/RPM`, capped at `128 EU/t`, reaches cap at `32 RPM`
+- HV: `8 EU/RPM`, capped at `512 EU/t`, reaches cap at `64 RPM`
 
 ## Project Layout
 
@@ -77,6 +78,7 @@ Key code locations:
 - [SUEnergyConverterBlock.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterBlock.java)
 - [SUEnergyConverterBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterBlockEntity.java)
 - [SUEnergyConverterRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterRenderer.java)
+- [SUEnergyConverterTier.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterTier.java)
 - [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
 - [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
 - [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
@@ -86,12 +88,14 @@ Key resource locations:
 
 - [neoforge.mods.toml](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/templates/META-INF/neoforge.mods.toml)
 - [en_us.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/lang/en_us.json)
-- [su_energy_converter blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/su_energy_converter.json)
-- [su_energy_converter block model](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/su_energy_converter.json)
-- [lv_sucon_casing model](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/lv_sucon_casing.json)
-- [lv_sucon_casing_active model](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/lv_sucon_casing_active.json)
-- [lv_sucon_rotor model](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/lv_sucon_rotor.json)
-- [lv_su_energy_converter textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/lv_su_energy_converter)
+- [lv_sucon blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/lv_sucon.json)
+- [mv_sucon blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/mv_sucon.json)
+- [hv_sucon blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/hv_sucon.json)
+- [SU converter block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/su_energy_converter)
+- [SU converter item models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/item/su_energy_converter)
+- [LV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/lv_su_energy_converter)
+- [MV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/mv_su_energy_converter)
+- [HV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/hv_su_energy_converter)
 
 ## Build Notes
 
@@ -134,6 +138,8 @@ Common config values are defined in:
 - [Config.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/Config.java)
 
 They are exposed as a standard NeoForge common config and can be tuned by players or pack makers.
+
+Tiered converter config lists are ordered as `[LV, MV, HV]`.
 
 ## Documentation
 

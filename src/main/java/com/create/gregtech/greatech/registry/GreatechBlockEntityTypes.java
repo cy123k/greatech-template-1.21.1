@@ -14,7 +14,11 @@ public final class GreatechBlockEntityTypes {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SUEnergyConverterBlockEntity>> SU_ENERGY_CONVERTER = BLOCK_ENTITY_TYPES.register(
             "su_energy_converter",
-            () -> BlockEntityType.Builder.of(SUEnergyConverterBlockEntity::new, GreatechBlocks.SU_ENERGY_CONVERTER.get()).build(null));
+            () -> BlockEntityType.Builder.of(
+                    SUEnergyConverterBlockEntity::new,
+                    GreatechBlocks.LV_SUCON.get(),
+                    GreatechBlocks.MV_SUCON.get(),
+                    GreatechBlocks.HV_SUCON.get()).build(null));
 
     private GreatechBlockEntityTypes() {
     }

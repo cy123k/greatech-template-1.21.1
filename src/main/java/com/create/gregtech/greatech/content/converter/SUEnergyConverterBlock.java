@@ -16,17 +16,23 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.BlockHitResult;
 
 public class SUEnergyConverterBlock extends DirectionalKineticBlock implements IBE<SUEnergyConverterBlockEntity> {
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
+    private final SUEnergyConverterTier tier;
 
-    public SUEnergyConverterBlock(Properties properties) {
+    public SUEnergyConverterBlock(Properties properties, SUEnergyConverterTier tier) {
         super(properties);
+        this.tier = tier;
         registerDefaultState(defaultBlockState()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(ACTIVE, false));
+    }
+
+    public SUEnergyConverterTier getTier() {
+        return tier;
     }
 
     @Override

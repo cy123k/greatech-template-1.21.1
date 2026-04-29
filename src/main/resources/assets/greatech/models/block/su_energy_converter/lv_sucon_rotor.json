@@ -1,0 +1,8 @@
+﻿{
+  "parent": "greatech:block/su_energy_converter/sucon_rotor",
+  "textures": {
+    "0": "greatech:block/lv_su_energy_converter/lv_sucon_rotor",
+    "particle": "greatech:block/lv_su_energy_converter/lv_sucon_rotor"
+  }
+}
+

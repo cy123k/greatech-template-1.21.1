@@ -1,11 +1,8 @@
-{
+﻿{
 	"format_version": "1.9.0",
 	"credit": "Made with Blockbench",
+	"parent": "block/block",
 	"texture_size": [32, 32],
-	"textures": {
-		"0": "greatech:block/lv_su_energy_converter/lv_sucon_rotor",
-		"particle": "greatech:block/lv_su_energy_converter/lv_sucon_rotor"
-	},
 	"elements": [
 		{
 			"from": [6, 6, 8],
@@ -70,3 +67,4 @@
 		}
 	]
 }
+

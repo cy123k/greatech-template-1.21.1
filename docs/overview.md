@@ -19,9 +19,15 @@ The design goal is not to make one mod imitate the other. The goal is to create 
 
 ## Current Prototype
 
-The first implemented machine is the `SU Energy Converter`.
+The first implemented machine family is the `SU Energy Converter`.
 
-Its role is:
+The currently registered blocks are:
+
+- `lv_sucon`
+- `mv_sucon`
+- `hv_sucon`
+
+Their role is:
 
 - consume rotational motion from `Create`
 - occupy a fixed stress impact in the kinetic network
