@@ -23,6 +23,34 @@ public final class Config {
     private static final int[] DEFAULT_CONVERTER_EFFICIENCY = {2, 4, 8};
     private static final double[] DEFAULT_CONVERTER_STRESS_IMPACT = {16.0D, 64.0D, 256.0D};
 
+    private static final ModConfigSpec.DoubleValue CREATE_SHAFT_BREAK_STRESS_LIMIT = BUILDER
+            .comment("When a Create kinetic network contains a Greatech failure source, vanilla create:shaft blocks can break above this network stress.")
+            .defineInRange("createShaftBreakStressLimit", 512.0D, 0.0D, Double.MAX_VALUE);
+
+    private static final ModConfigSpec.DoubleValue CREATE_COGWHEEL_BREAK_STRESS_LIMIT = BUILDER
+            .comment("When a Create kinetic network contains a Greatech failure source, vanilla create:cogwheel blocks can break above this network stress.")
+            .defineInRange("createCogwheelBreakStressLimit", 512.0D, 0.0D, Double.MAX_VALUE);
+
+    private static final ModConfigSpec.DoubleValue CREATE_LARGE_COGWHEEL_BREAK_STRESS_LIMIT = BUILDER
+            .comment("When a Create kinetic network contains a Greatech failure source, vanilla create:large_cogwheel blocks can break above this network stress.")
+            .defineInRange("createLargeCogwheelBreakStressLimit", 1024.0D, 0.0D, Double.MAX_VALUE);
+
+    private static final ModConfigSpec.BooleanValue ENABLE_KINETIC_FAILURES = BUILDER
+            .comment("Enables Greatech kinetic failure accidents in Create kinetic networks containing Greatech failure sources.")
+            .define("enableKineticFailures", true);
+
+    private static final ModConfigSpec.BooleanValue KEEP_KINETIC_FAILURE_DROPS = BUILDER
+            .comment("Keeps block drops when a kinetic part breaks from a Greatech kinetic failure accident.")
+            .define("keepKineticFailureDrops", false);
+
+    private static final ModConfigSpec.IntValue KINETIC_FAILURE_CHECK_INTERVAL = BUILDER
+            .comment("How often, in ticks, each eligible Greatech kinetic network checks for overloaded kinetic parts.")
+            .defineInRange("kineticFailureCheckInterval", 20, 1, Integer.MAX_VALUE);
+
+    private static final ModConfigSpec.IntValue KINETIC_FAILURE_COOLDOWN = BUILDER
+            .comment("Cooldown in ticks after a kinetic part breaks in a Greatech-monitored kinetic network.")
+            .defineInRange("kineticFailureCooldown", 100, 0, Integer.MAX_VALUE);
+
     private static final ModConfigSpec.ConfigValue<List<? extends Integer>> CONVERTER_CAPACITY = BUILDER
             .comment("Internal EU buffers for the SU converters.", TIER_ORDER)
             .defineList("converterCapacity", List.of(2_048, 8_192, 32_768), Config::isNonNegativeInteger);
@@ -66,6 +94,13 @@ public final class Config {
     private static int[] converterEfficiency = DEFAULT_CONVERTER_EFFICIENCY.clone();
     private static double[] converterStressImpact = DEFAULT_CONVERTER_STRESS_IMPACT.clone();
     public static double converterMinimumSpeed;
+    private static float createShaftBreakStressLimit;
+    private static float createCogwheelBreakStressLimit;
+    private static float createLargeCogwheelBreakStressLimit;
+    private static boolean enableKineticFailures;
+    private static boolean keepKineticFailureDrops;
+    private static int kineticFailureCheckInterval;
+    private static int kineticFailureCooldown;
 
     private Config() {
     }
@@ -79,6 +114,13 @@ public final class Config {
         converterEfficiency = readIntTierValues(CONVERTER_EFFICIENCY.get(), DEFAULT_CONVERTER_EFFICIENCY);
         converterStressImpact = readDoubleTierValues(CONVERTER_STRESS_IMPACT.get(), DEFAULT_CONVERTER_STRESS_IMPACT);
         converterMinimumSpeed = CONVERTER_MINIMUM_SPEED.get();
+        createShaftBreakStressLimit = CREATE_SHAFT_BREAK_STRESS_LIMIT.get().floatValue();
+        createCogwheelBreakStressLimit = CREATE_COGWHEEL_BREAK_STRESS_LIMIT.get().floatValue();
+        createLargeCogwheelBreakStressLimit = CREATE_LARGE_COGWHEEL_BREAK_STRESS_LIMIT.get().floatValue();
+        enableKineticFailures = ENABLE_KINETIC_FAILURES.get();
+        keepKineticFailureDrops = KEEP_KINETIC_FAILURE_DROPS.get();
+        kineticFailureCheckInterval = KINETIC_FAILURE_CHECK_INTERVAL.get();
+        kineticFailureCooldown = KINETIC_FAILURE_COOLDOWN.get();
     }
 
     public static int converterCapacity(SUEnergyConverterTier tier) {
@@ -103,6 +145,34 @@ public final class Config {
 
     public static double converterStressImpact(SUEnergyConverterTier tier) {
         return converterStressImpact[tier.configIndex()];
+    }
+
+    public static float createShaftBreakStressLimit() {
+        return createShaftBreakStressLimit;
+    }
+
+    public static float createCogwheelBreakStressLimit() {
+        return createCogwheelBreakStressLimit;
+    }
+
+    public static float createLargeCogwheelBreakStressLimit() {
+        return createLargeCogwheelBreakStressLimit;
+    }
+
+    public static boolean enableKineticFailures() {
+        return enableKineticFailures;
+    }
+
+    public static boolean keepKineticFailureDrops() {
+        return keepKineticFailureDrops;
+    }
+
+    public static int kineticFailureCheckInterval() {
+        return kineticFailureCheckInterval;
+    }
+
+    public static int kineticFailureCooldown() {
+        return kineticFailureCooldown;
     }
 
     private static int[] readIntTierValues(List<? extends Integer> configured, int[] defaults) {

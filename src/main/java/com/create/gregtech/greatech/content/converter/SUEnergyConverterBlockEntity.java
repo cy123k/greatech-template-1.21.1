@@ -3,6 +3,8 @@ package com.create.gregtech.greatech.content.converter;
 import java.util.List;
 
 import com.create.gregtech.greatech.Config;
+import com.create.gregtech.greatech.content.kinetics.failure.GreatechKineticNetworkFailure;
+import com.create.gregtech.greatech.content.kinetics.failure.KineticFailureSource;
 import com.create.gregtech.greatech.registry.GreatechBlockEntityTypes;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
@@ -15,10 +17,11 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements IEnergyContainer {
+public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements IEnergyContainer, KineticFailureSource {
     private long energyStored;
     private int lastGeneratedEu;
     private float lastSpeed;
+    private int kineticFailureCooldown;
 
     public SUEnergyConverterBlockEntity(BlockPos pos, BlockState blockState) {
         super(GreatechBlockEntityTypes.SU_ENERGY_CONVERTER.get(), pos, blockState);
@@ -32,6 +35,7 @@ public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements 
             return;
         }
 
+        GreatechKineticNetworkFailure.tick(this, this);
         serverTick();
     }
 
@@ -89,6 +93,7 @@ public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements 
         tag.putLong("EnergyStored", energyStored);
         tag.putInt("LastGeneratedEu", lastGeneratedEu);
         tag.putFloat("LastSpeed", lastSpeed);
+        tag.putInt("KineticFailureCooldown", kineticFailureCooldown);
         super.write(tag, registries, clientPacket);
     }
 
@@ -97,6 +102,7 @@ public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements 
         energyStored = tag.getLong("EnergyStored");
         lastGeneratedEu = tag.getInt("LastGeneratedEu");
         lastSpeed = tag.getFloat("LastSpeed");
+        kineticFailureCooldown = tag.getInt("KineticFailureCooldown");
         super.read(tag, registries, clientPacket);
     }
 
@@ -114,6 +120,17 @@ public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements 
 
     public float getLastSpeed() {
         return lastSpeed;
+    }
+
+    @Override
+    public int getKineticFailureCooldown() {
+        return kineticFailureCooldown;
+    }
+
+    @Override
+    public void setKineticFailureCooldown(int cooldown) {
+        kineticFailureCooldown = Math.max(0, cooldown);
+        setChanged();
     }
 
     @Override

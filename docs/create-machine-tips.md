@@ -104,7 +104,35 @@ Why this is a good starting point:
 
 The current example is [SUEnergyConverterRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterRenderer.java).
 
-## 7. Register Partial Models Early
+## 7. Understand Create's SU Network Model
+
+Create does not treat shafts as pipes carrying a directly stored local SU value.
+
+The useful runtime model is:
+
+- `KineticBlockEntity` stores speed, source, network id, network stress, and network capacity snapshots
+- `KineticNetwork` stores loaded source and member block entities
+- stress is calculated from member stress impact multiplied by speed
+- capacity is calculated from generating sources multiplied by speed
+- overstress is a network-level state, not a shaft-local field
+
+Practical consequences:
+
+- machines that consume SU should normally override `calculateStressApplied()`
+- machines that generate SU should normally use Create's generator patterns instead of inventing a separate network
+- `getSpeed()` returns `0` while the network is overstressed, while `getTheoreticalSpeed()` can still represent the attempted speed
+- transmission parts such as `create:shaft`, `create:cogwheel`, and `create:large_cogwheel` are network members but do not each store a separate "SU passing through this block"
+
+For Greatech accident behavior, use the shared failure system rather than changing Create classes directly:
+
+- implement `KineticFailureSource` on Greatech machines that should activate accident checks
+- call `GreatechKineticNetworkFailure.tick(this, this)` during the server tick
+- implement `KineticBreakable` on future Greatech transmission parts that need custom break limits
+- avoid mixins unless there is no clean extension point
+
+This lets Greatech react to Create networks while leaving pure Create networks and vanilla Create classes alone.
+
+## 8. Register Partial Models Early
 
 If you use a rotating partial model, register it before model bake timing becomes an issue.
 
@@ -117,7 +145,7 @@ This avoids "missing model" problems where the code compiles but the in-game dyn
 
 For tiered machines, register a partial per visual variant and choose the right one in the renderer.
 
-## 8. Be Careful With Light on Inset Moving Parts
+## 9. Be Careful With Light on Inset Moving Parts
 
 Moving parts that sit slightly inside a casing can render much darker than expected.
 
@@ -133,7 +161,7 @@ When a moving part looks black or muddy, check these before rewriting the render
 - overlapping geometry
 - transparent or padded texture edges
 
-## 9. Active State: Start Simple
+## 10. Active State: Start Simple
 
 There are two common ways to show "machine is running":
 
@@ -158,7 +186,7 @@ The current converter uses:
 - active wrappers such as [lv_sucon_active.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/su_energy_converter/lv_sucon_active.json)
 - a low block light level while active
 
-## 10. Add Item Display Models Deliberately
+## 11. Add Item Display Models Deliberately
 
 Create-style machines often have block-world rendering and item rendering needs that are not identical.
 
@@ -190,7 +218,7 @@ The converter item model only customizes `fixed`, following the Create clutch st
 
 Leaving `gui`, `ground`, `firstperson`, and `thirdperson` to the default block transforms helps avoid item models that are too large or show only a flat front face.
 
-## 11. Overlay Advice if You Revisit It Later
+## 12. Overlay Advice if You Revisit It Later
 
 If you later want GT-style overlays:
 
@@ -207,7 +235,7 @@ The model decides:
 
 If the lamp is painted onto a large face, the overlay usually has to reuse that same face geometry.
 
-## 12. Common Failure Modes
+## 13. Common Failure Modes
 
 The converter work hit several useful edge cases:
 
@@ -218,10 +246,11 @@ The converter work hit several useful edge cases:
 - custom item models without `"parent": "block/block"` may render too large or face-on in inventory
 - item model root files must match registered item ids, even if they only forward to subfolder models
 - generated config files keep old values until edited or regenerated
+- trying to read "local SU inside a shaft" will lead to the wrong abstraction; check the kinetic network stress/capacity instead
 
 These are worth checking before assuming the texture is wrong.
 
-## 13. A Good Development Order
+## 14. A Good Development Order
 
 For new Create-style machines, this order has worked well:
 

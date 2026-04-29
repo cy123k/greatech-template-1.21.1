@@ -26,6 +26,7 @@ Implemented so far:
 - active casing texture swap while outputting `EU`
 - tier-specific casing, rotor, active textures, and item display models
 - right-click debug output in chat
+- Greatech-monitored kinetic failure accidents for overloaded `Create` transmission parts
 
 Still in progress:
 
@@ -61,6 +62,11 @@ Tiered default prototype values:
 - `converterOutputAmperage = [1, 1, 1]`
 - `converterStressImpact = [16.0, 64.0, 256.0]`
 - `converterMinimumSpeed = 1.0`
+- `enableKineticFailures = true`
+- `keepKineticFailureDrops = false`
+- `createShaftBreakStressLimit = 512.0`
+- `createCogwheelBreakStressLimit = 512.0`
+- `createLargeCogwheelBreakStressLimit = 1024.0`
 
 That means, by default:
 
@@ -79,6 +85,7 @@ Key code locations:
 - [SUEnergyConverterBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterBlockEntity.java)
 - [SUEnergyConverterRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterRenderer.java)
 - [SUEnergyConverterTier.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterTier.java)
+- [Kinetic failure system](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/kinetics/failure)
 - [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
 - [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
 - [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
@@ -141,12 +148,15 @@ They are exposed as a standard NeoForge common config and can be tuned by player
 
 Tiered converter config lists are ordered as `[LV, MV, HV]`.
 
+The kinetic failure config controls whether Greatech-monitored Create networks can break overloaded vanilla transmission parts. By default the system is enabled, accident-broken parts do not drop items, shafts and small cogwheels break above `512 SU`, and large cogwheels break above `1024 SU`.
+
 ## Documentation
 
 Project docs live in:
 
 - [docs/overview.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/overview.md)
 - [docs/converter.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/converter.md)
+- [docs/kinetic-failure.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/kinetic-failure.md)
 - [docs/dependencies.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/dependencies.md)
 - [docs/art-direction.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/art-direction.md)
 - [docs/create-machine-tips.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/create-machine-tips.md)

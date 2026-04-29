@@ -49,8 +49,30 @@ Current design intent:
 - the machines are kinetic consumers, not kinetic generators
 - each tier occupies a configured `Create` stress impact
 - each block entity reads rotation speed from `KineticBlockEntity#getSpeed()`
+- each converter is a Greatech kinetic failure source
 
 This means each converter behaves as a machine with a stable network cost rather than trying to calculate exact live SU drain.
+
+## Kinetic Failure Integration
+
+The converter implements `KineticFailureSource` and calls the shared failure handler during its server tick.
+
+When a converter is connected to a `Create` kinetic network, that network is eligible for Greatech kinetic failure checks. If total network stress exceeds configured limits, the shared handler can break one overloaded transmission part from the network.
+
+Current vanilla Create defaults:
+
+- `create:shaft`: breaks above `512 SU`
+- `create:cogwheel`: breaks above `512 SU`
+- `create:large_cogwheel`: breaks above `1024 SU`
+
+The relevant config switches are:
+
+- `enableKineticFailures = true`
+- `keepKineticFailureDrops = false`
+- `kineticFailureCheckInterval = 20`
+- `kineticFailureCooldown = 100`
+
+See [kinetic-failure.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/kinetic-failure.md) for the full accident system.
 
 ## Electrical Model
 
@@ -158,6 +180,7 @@ This is still prototype debug UX and can be replaced later with proper goggles, 
 
 - current balance is prototype-only
 - not currently based on exact live SU consumption
+- converter-connected Create networks can trigger kinetic failures when the feature is enabled
 - no final recipe yet
 - active state currently swaps the full casing texture rather than using a layered GT-style overlay system
 - config files generated before default changes may keep old values until edited or regenerated
