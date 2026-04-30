@@ -27,6 +27,7 @@ Registration:
 - [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
 - [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
 - [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
+- [Greatech placement helpers](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement)
 
 ## Resource Layout
 
@@ -42,6 +43,7 @@ Current resources:
 - `assets/greatech/models/block/cogwheel/steel_cogwheel_block.json`
 - `assets/greatech/models/item/steel_cogwheel.json`
 - `assets/greatech/textures/block/greatech_cogwheel/steel_cogwheel.png`
+- `assets/greatech/textures/block/greatech_cogwheel/steel_cogwheel_2.png`
 - `assets/greatech/textures/block/greatech_cogwheel/steel_cogwheel_axis.png`
 - `assets/greatech/textures/block/greatech_cogwheel/steel_axis_top.png`
 - `data/greatech/loot_table/blocks/steel_cogwheel.json`
@@ -55,6 +57,8 @@ The split is intentional:
 
 This mirrors the shaft model pattern. Future cogwheel materials should add new texture wrappers rather than copying the shared geometry.
 
+`steel_cogwheel.json` blockstates also include `placement_ghost=true` variants. Normal placed blocks use `placement_ghost=false` and the empty `steel_cogwheel_block.json` model. Placement preview ghost states use `placement_ghost=true` and point to the full `steel_cogwheel.json` model so Catnip can render a visible translucent preview without drawing a static cogwheel in the world.
+
 ## Block and BlockEntity Pattern
 
 `GreatechCogwheelBlock` extends Create's `CogWheelBlock` so it inherits:
@@ -65,6 +69,8 @@ This mirrors the shaft model pattern. Future cogwheel materials should add new t
 - waterlogging
 - basic wrench/bracket behavior
 - Create kinetic network participation
+
+`GreatechCogwheelBlock` adds a `placement_ghost` boolean property used only for placement preview rendering. Gameplay placement defaults it to `false`.
 
 It also implements `KineticBreakable` so the Greatech failure system can read its custom stress limit.
 
@@ -114,6 +120,21 @@ orientCogwheelToAxis(cogwheel, axis);
 cogwheel.renderInto(poseStack, vertexConsumer);
 ```
 
+## Placement Helper
+
+`steel_cogwheel` participates in the Greatech small cogwheel placement helper.
+
+Current behavior:
+
+- hand item `greatech:steel_cogwheel` can place against Greatech and Create small cogwheel targets
+- hand item `create:cogwheel` can place against Greatech small cogwheel targets
+- `create:cogwheel` on `create:cogwheel` remains handled by Create's original helper
+- the helper provides Catnip arrow indicators and a visible ghost preview
+
+The current small cogwheel helper intentionally only treats cogwheel states as cogwheel targets. Shaft-target placement is kept out of this helper to avoid classifying shafts as cogwheels in Catnip's preview filtering. If Greatech later needs cogwheel-on-shaft assisted placement, add a separate helper with that explicit responsibility.
+
+See [greatech-placement-helper.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-placement-helper.md) for the reusable placement design.
+
 ## Adding More Cogwheel Tiers
 
 For another small cogwheel tier:
@@ -126,6 +147,8 @@ For another small cogwheel tier:
 6. Register a valid block entity type in `GreatechBlockEntityTypes`.
 7. Register a partial in `GreatechPartialModels`.
 8. Register a renderer in `GreatechClient`.
-9. Add a loot table and lang entries.
+9. Register the tier with the Greatech placement registry if it should support assisted placement.
+10. Add `placement_ghost` blockstate variants if the world model is empty and the preview needs full geometry.
+11. Add a loot table and lang entries.
 
 For large cogwheels, revisit render bounds, diagonal propagation, and Create's large cog offset behavior before copying the small cogwheel pattern directly.

@@ -3,9 +3,9 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
-		"0": "greatech:block/greatech_shaft/steel_axis",
-		"1": "greatech:block/greatech_shaft/steel_axis_top",
-		"particle": "#0"
+		"0": "texture/steel_axis",
+		"1": "texture/steel_axis_top",
+		"particle": "texture/steel_axis"
 	},
 	"elements": [
 		{
@@ -16,8 +16,8 @@
 				"east": {"uv": [6, 0, 10, 16], "texture": "#0"},
 				"south": {"uv": [6, 0, 10, 16], "texture": "#0"},
 				"west": {"uv": [6, 0, 10, 16], "texture": "#0"},
-				"up": {"uv": [11, 10, 7, 6], "texture": "#1"},
-				"down": {"uv": [11, 6, 7, 10], "texture": "#1"}
+				"up": {"uv": [10, 10, 6, 6], "texture": "#1"},
+				"down": {"uv": [10, 6, 6, 10], "texture": "#1"}
 			}
 		}
 	]

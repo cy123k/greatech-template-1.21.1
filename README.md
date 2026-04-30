@@ -6,6 +6,7 @@ The current prototype focuses on one core machine family:
 
 - `SU Energy Converter`
 - `Steel Shaft`
+- `Steel Cogwheel`
 
 These machines accept `Create` rotational power and output `GTCEu` `EU`.
 
@@ -30,6 +31,7 @@ Implemented so far:
 - Greatech-monitored kinetic failure accidents for overloaded `Create` transmission parts
 - `steel_shaft` registration with Create-style kinetic behavior and animated rendering
 - `steel_cogwheel` registration with Create-style cogwheel behavior and animated rendering
+- Greatech placement helpers for shaft/cogwheel assisted placement, arrow indicators, and visible ghost previews
 
 Still in progress:
 
@@ -91,6 +93,7 @@ Key code locations:
 - [SUEnergyConverterTier.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterTier.java)
 - [Greatech shaft code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/shaft)
 - [Greatech cogwheel code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/cogwheel)
+- [Greatech placement helper code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement)
 - [Kinetic failure system](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/kinetics/failure)
 - [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
 - [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
@@ -191,6 +194,7 @@ Project docs live in:
 - [docs/kinetic-failure.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/kinetic-failure.md)
 - [docs/greatech-shaft.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-shaft.md)
 - [docs/greatech-cogwheel.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-cogwheel.md)
+- [docs/greatech-placement-helper.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-placement-helper.md)
 - [docs/greatech-renderer-register.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-renderer-register.md)
 - [docs/dependencies.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/dependencies.md)
 - [docs/art-direction.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/art-direction.md)

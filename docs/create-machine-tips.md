@@ -239,7 +239,50 @@ The converter item model only customizes `fixed`, following the Create clutch st
 
 Leaving `gui`, `ground`, `firstperson`, and `thirdperson` to the default block transforms helps avoid item models that are too large or show only a flat front face.
 
-## 13. Overlay Advice if You Revisit It Later
+## 13. Reuse Placement Helpers Deliberately
+
+Create and Catnip already provide a useful assisted placement system:
+
+- placement helper predicates choose matching held items and target blockstates
+- `PlacementOffset` chooses the next block position and transforms the placed state
+- Catnip renders the crosshair arrow and ghost preview
+- successful helpers can place through `PlacementOffset#placeInWorld(...)`
+
+Use the vanilla Create helper directly when your block and item fit the exact original assumptions.
+
+Examples:
+
+- Create cogwheels use `CogwheelBlockItem`, whose constructor registers small and large cogwheel helpers.
+- Create shafts use a helper registered from `ShaftBlock`, but its state predicate is intentionally tied to Create's own shaft entries.
+
+For Greatech-owned transmission parts, do not assume subclassing a Create block is enough. The helper may still check Create registries, Create item classes, or Create-owned block entity types.
+
+The current Greatech pattern is:
+
+- keep a Greatech placement registry for item and target predicates
+- register Catnip helpers from `GreatechPlacementHelpers`
+- use a `RightClickBlock` dispatcher when Create's original items should work on Greatech targets
+- let Create keep handling `create:item -> create:block` interactions
+
+This gives four clean cases:
+
+- Greatech item on Greatech target: Greatech helper
+- Create item on Greatech target: Greatech helper
+- Greatech item on Create target: Greatech helper
+- Create item on Create target: Create helper
+
+Be careful with helper state predicates. Catnip filters helpers by held item and target state before calling `getOffset(...)`. If a small cogwheel helper lists shaft states as matching targets, shafts can look like cogwheel-helper targets in the preview pipeline. Use a separate helper for cross-part behavior such as cogwheel-on-shaft placement.
+
+If your placed block uses an empty world model because a BER renders the visible moving part, the default ghost preview may also be empty. Add a preview-only blockstate property such as `placement_ghost`:
+
+- `placement_ghost=false`: normal placed block, empty static model
+- `placement_ghost=true`: ghost preview, full static model
+
+Then set that property on the ghost state before returning the placement offset. Greatech does this in [GreatechPlacementGhosts.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement/GreatechPlacementGhosts.java).
+
+See [greatech-placement-helper.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-placement-helper.md) for the current reusable implementation.
+
+## 14. Overlay Advice if You Revisit It Later
 
 If you later want GT-style overlays:
 
@@ -256,7 +299,7 @@ The model decides:
 
 If the lamp is painted onto a large face, the overlay usually has to reuse that same face geometry.
 
-## 14. Common Failure Modes
+## 15. Common Failure Modes
 
 The converter work hit several useful edge cases:
 
@@ -269,10 +312,13 @@ The converter work hit several useful edge cases:
 - generated config files keep old values until edited or regenerated
 - trying to read "local SU inside a shaft" will lead to the wrong abstraction; check the kinetic network stress/capacity instead
 - treating every belt segment as an independent break candidate can make long belts fail far more often than short belts
+- assuming a Create placement helper will recognize Greatech subclasses can fail if the helper checks Create registries or Create item classes
+- adding unrelated target states to a helper predicate can make Catnip's preview classify blocks as the wrong helper type
+- empty BER world models also produce empty placement ghosts unless a preview-only ghost state points to a full model
 
 These are worth checking before assuming the texture is wrong.
 
-## 15. A Good Development Order
+## 16. A Good Development Order
 
 For new Create-style machines, this order has worked well:
 
@@ -284,6 +330,7 @@ For new Create-style machines, this order has worked well:
 6. attach a BER using `KineticBlockEntityRenderer`
 7. add active-state visuals
 8. build a separate item model if the item should show dynamic parts statically
-9. do balance and UX polish after the machine already works
+9. wire placement helpers if the block should support Create-style assisted placement
+10. do balance and UX polish after the machine already works
 
 This keeps logic and art moving together without forcing you to solve rendering and gameplay at the same time.

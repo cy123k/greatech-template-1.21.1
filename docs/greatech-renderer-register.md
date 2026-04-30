@@ -22,6 +22,7 @@ Current renderer registrations:
 ```java
 event.registerBlockEntityRenderer(GreatechBlockEntityTypes.SU_ENERGY_CONVERTER.get(), SUEnergyConverterRenderer::new);
 event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_SHAFT.get(), GreatechShaftRenderer::new);
+event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_COGWHEEL.get(), GreatechCogwheelRenderer::new);
 ```
 
 Keep renderer classes client-safe. They can import Minecraft client rendering classes because `GreatechClient` is loaded only on the client distribution.
@@ -58,11 +59,13 @@ For `steel_shaft`:
 
 This prevents the common mistake where both the block model and renderer draw the same shaft.
 
-For a future cogwheel, the same rule applies:
+For `steel_cogwheel`, the same rule applies:
 
-- if the whole cogwheel rotates, make the world block model empty
-- render the full cogwheel as a partial
-- keep the item model complete
+- static world model: `steel_cogwheel_block.json`, empty except particle texture
+- dynamic partial: `steel_cogwheel.json`, rendered by `GreatechCogwheelRenderer`
+- item model: `models/item/steel_cogwheel.json`, uses the full cogwheel model
+
+Shaft and cogwheel blockstates also have `placement_ghost=true` variants. These are for Catnip placement previews only. Normal placed blocks use the empty model, while ghost states use the full model so the preview is visible.
 
 For a machine with static casing and one moving rotor:
 

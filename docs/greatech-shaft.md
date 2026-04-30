@@ -27,6 +27,7 @@ Registration:
 - [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
 - [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
 - [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
+- [Greatech placement helpers](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement)
 
 ## Resource Layout
 
@@ -48,6 +49,8 @@ The split is intentional:
 - `steel_shaft_block.json`: empty world block model used to avoid static/dynamic overlap
 - `models/item/steel_shaft.json`: item model using the full shaft geometry
 
+`steel_shaft.json` blockstates also include `placement_ghost=true` variants. Normal placed blocks use `placement_ghost=false` and the empty `steel_shaft_block.json` model. Placement preview ghost states use `placement_ghost=true` and point to the full `steel_shaft.json` model so Catnip can render a visible translucent preview without reintroducing a static world model.
+
 ## Block and BlockEntity Pattern
 
 `GreatechShaftBlock` extends Create's `ShaftBlock` so it inherits:
@@ -57,6 +60,8 @@ The split is intentional:
 - waterlogging
 - basic wrench/bracket behavior
 - Create kinetic network participation
+
+`GreatechShaftBlock` adds a `placement_ghost` boolean property used only for placement preview rendering. Gameplay placement defaults it to `false`.
 
 It also implements `KineticBreakable` so the Greatech failure system can read its custom stress limit.
 
@@ -110,6 +115,25 @@ shaft.renderInto(poseStack, vertexConsumer);
 
 This keeps horizontal shafts rotating around the correct visual axis.
 
+## Placement Helper
+
+`steel_shaft` participates in the Greatech placement helper system.
+
+Current behavior:
+
+- hand item `greatech:steel_shaft` can extend Greatech and Create shaft targets
+- hand item `create:shaft` can extend Greatech shaft targets
+- `create:shaft` on `create:shaft` remains handled by Create's original helper
+- the helper provides Catnip arrow indicators and a visible ghost preview
+
+The helper lives under:
+
+- [GreatechPlacementRegistry.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement/GreatechPlacementRegistry.java)
+- [GreatechShaftPlacementHelper.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement/GreatechShaftPlacementHelper.java)
+- [GreatechPlacementGhosts.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement/GreatechPlacementGhosts.java)
+
+See [greatech-placement-helper.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-placement-helper.md) for the reusable placement design.
+
 ## Adding More Shaft Tiers
 
 For another shaft tier:
@@ -122,6 +146,8 @@ For another shaft tier:
 6. Register a valid block entity type in `GreatechBlockEntityTypes`.
 7. Register a partial in `GreatechPartialModels`.
 8. Register a renderer in `GreatechClient`.
-9. Add a loot table and lang entries.
+9. Register the tier with the Greatech placement registry if it should support assisted placement.
+10. Add `placement_ghost` blockstate variants if the world model is empty and the preview needs full geometry.
+11. Add a loot table and lang entries.
 
 If multiple shaft tiers share the same runtime behavior, consider generalizing the block entity type after the tier list settles. For the current prototype, one explicit `STEEL_SHAFT` path is easier to debug.

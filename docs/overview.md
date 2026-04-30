@@ -26,6 +26,8 @@ The currently registered blocks are:
 - `lv_sucon`
 - `mv_sucon`
 - `hv_sucon`
+- `steel_shaft`
+- `steel_cogwheel`
 
 Their role is:
 
@@ -34,9 +36,12 @@ Their role is:
 - generate `GTCEu` `EU`
 - export energy through `GTCEu` capabilities
 
+The current transmission parts behave like Create shaft/cogwheel parts while using Greatech block entity types, renderers, kinetic failure limits, and placement helpers.
+
 ## Near-Term Development Goals
 
 - validate the new custom art and active-state presentation in gameplay
+- validate Greatech placement helper previews against Create/Greatech transmission part combinations
 - finish `neoforge.mods.toml` dependency declarations
 - add recipe and progression balancing
 - expand debugging and testing workflow

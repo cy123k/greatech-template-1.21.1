@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import com.create.gregtech.greatech.registry.GreatechBlockEntityTypes;
 import com.create.gregtech.greatech.registry.GreatechBlocks;
 import com.create.gregtech.greatech.registry.GreatechCapabilities;
+import com.create.gregtech.greatech.content.placement.GreatechPlacementEvents;
+import com.create.gregtech.greatech.content.placement.GreatechPlacementHelpers;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.registries.Registries;
@@ -47,10 +49,12 @@ public class Greatech {
 
         GreatechBlocks.register(modEventBus);
         GreatechBlockEntityTypes.register(modEventBus);
+        GreatechPlacementHelpers.init();
         CREATIVE_MODE_TABS.register(modEventBus);
         modEventBus.addListener(GreatechCapabilities::register);
 
         NeoForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.addListener(GreatechPlacementEvents::onRightClickBlock);
         modEventBus.addListener(this::addCreative);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
