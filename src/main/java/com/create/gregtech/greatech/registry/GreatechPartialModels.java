@@ -10,6 +10,7 @@ public final class GreatechPartialModels {
     public static final PartialModel MV_SUCON_ROTOR = block("su_energy_converter/mv_sucon_rotor");
     public static final PartialModel HV_SUCON_ROTOR = block("su_energy_converter/hv_sucon_rotor");
     public static final PartialModel STEEL_SHAFT = block("shaft/steel_shaft");
+    public static final PartialModel STEEL_COGWHEEL = block("cogwheel/steel_cogwheel");
 
     private GreatechPartialModels() {
     }

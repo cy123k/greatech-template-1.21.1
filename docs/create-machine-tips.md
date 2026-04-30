@@ -132,7 +132,28 @@ For Greatech accident behavior, use the shared failure system rather than changi
 
 This lets Greatech react to Create networks while leaving pure Create networks and vanilla Create classes alone.
 
-## 8. Register Partial Models Early
+## 8. Understand Create Belt Connections
+
+`belt_connector` is an item, not a block that remains in the world.
+
+When used on two valid shafts, it creates a chain of `create:belt` blocks. Each belt segment has a `BeltBlockEntity`, but the chain has one controller segment:
+
+- the controller stores the belt inventory
+- each segment stores its controller position, index, and belt length
+- `START`, `END`, and `PULLEY` segments can connect to shafts
+- `MIDDLE` segments normally do not expose shaft connections
+
+Create belts participate in kinetic propagation even though they have no stress impact by default. The important runtime behavior is:
+
+- belt segments in the same controller chain propagate speed to each other at `1:1`
+- a long belt should usually be treated as one logical transmission part, not one independent accident candidate per segment
+- breaking one belt segment lets Create clean up the connected belt chain and restore pulley shafts where appropriate
+
+For Greatech kinetic failures, Create belts are normalized to their controller position and use a belt-connection failure action. This prevents long belts from having inflated failure odds simply because they contain many block entities.
+
+If you add Greatech belt-like blocks later, consider implementing `KineticFailureTarget` on the block entity so the failure system can normalize all segments to one controller and choose the correct failure action.
+
+## 9. Register Partial Models Early
 
 If you use a rotating partial model, register it before model bake timing becomes an issue.
 
@@ -145,7 +166,7 @@ This avoids "missing model" problems where the code compiles but the in-game dyn
 
 For tiered machines, register a partial per visual variant and choose the right one in the renderer.
 
-## 9. Be Careful With Light on Inset Moving Parts
+## 10. Be Careful With Light on Inset Moving Parts
 
 Moving parts that sit slightly inside a casing can render much darker than expected.
 
@@ -161,7 +182,7 @@ When a moving part looks black or muddy, check these before rewriting the render
 - overlapping geometry
 - transparent or padded texture edges
 
-## 10. Active State: Start Simple
+## 11. Active State: Start Simple
 
 There are two common ways to show "machine is running":
 
@@ -186,7 +207,7 @@ The current converter uses:
 - active wrappers such as [lv_sucon_active.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/su_energy_converter/lv_sucon_active.json)
 - a low block light level while active
 
-## 11. Add Item Display Models Deliberately
+## 12. Add Item Display Models Deliberately
 
 Create-style machines often have block-world rendering and item rendering needs that are not identical.
 
@@ -218,7 +239,7 @@ The converter item model only customizes `fixed`, following the Create clutch st
 
 Leaving `gui`, `ground`, `firstperson`, and `thirdperson` to the default block transforms helps avoid item models that are too large or show only a flat front face.
 
-## 12. Overlay Advice if You Revisit It Later
+## 13. Overlay Advice if You Revisit It Later
 
 If you later want GT-style overlays:
 
@@ -235,7 +256,7 @@ The model decides:
 
 If the lamp is painted onto a large face, the overlay usually has to reuse that same face geometry.
 
-## 13. Common Failure Modes
+## 14. Common Failure Modes
 
 The converter work hit several useful edge cases:
 
@@ -247,10 +268,11 @@ The converter work hit several useful edge cases:
 - item model root files must match registered item ids, even if they only forward to subfolder models
 - generated config files keep old values until edited or regenerated
 - trying to read "local SU inside a shaft" will lead to the wrong abstraction; check the kinetic network stress/capacity instead
+- treating every belt segment as an independent break candidate can make long belts fail far more often than short belts
 
 These are worth checking before assuming the texture is wrong.
 
-## 14. A Good Development Order
+## 15. A Good Development Order
 
 For new Create-style machines, this order has worked well:
 

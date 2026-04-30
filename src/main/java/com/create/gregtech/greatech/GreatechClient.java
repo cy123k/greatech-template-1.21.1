@@ -1,5 +1,6 @@
 package com.create.gregtech.greatech;
 
+import com.create.gregtech.greatech.content.cogwheel.GreatechCogwheelRenderer;
 import com.create.gregtech.greatech.content.converter.SUEnergyConverterRenderer;
 import com.create.gregtech.greatech.content.shaft.GreatechShaftRenderer;
 import com.create.gregtech.greatech.registry.GreatechBlockEntityTypes;
@@ -39,5 +40,6 @@ public class GreatechClient {
     static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.SU_ENERGY_CONVERTER.get(), SUEnergyConverterRenderer::new);
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_SHAFT.get(), GreatechShaftRenderer::new);
+        event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_COGWHEEL.get(), GreatechCogwheelRenderer::new);
     }
 }

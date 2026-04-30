@@ -29,6 +29,7 @@ Implemented so far:
 - right-click debug output in chat
 - Greatech-monitored kinetic failure accidents for overloaded `Create` transmission parts
 - `steel_shaft` registration with Create-style kinetic behavior and animated rendering
+- `steel_cogwheel` registration with Create-style cogwheel behavior and animated rendering
 
 Still in progress:
 
@@ -69,6 +70,7 @@ Tiered default prototype values:
 - `createShaftBreakStressLimit = 512.0`
 - `createCogwheelBreakStressLimit = 512.0`
 - `createLargeCogwheelBreakStressLimit = 1024.0`
+- `createBeltConnectorBreakStressLimit = 1024.0`
 
 That means, by default:
 
@@ -88,6 +90,7 @@ Key code locations:
 - [SUEnergyConverterRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterRenderer.java)
 - [SUEnergyConverterTier.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterTier.java)
 - [Greatech shaft code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/shaft)
+- [Greatech cogwheel code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/cogwheel)
 - [Kinetic failure system](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/kinetics/failure)
 - [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
 - [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
@@ -105,6 +108,8 @@ Key resource locations:
 - [SU converter item models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/item/su_energy_converter)
 - [Greatech shaft block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/shaft)
 - [Greatech shaft textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/greatech_shaft)
+- [Greatech cogwheel block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/cogwheel)
+- [Greatech cogwheel textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/greatech_cogwheel)
 - [LV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/lv_su_energy_converter)
 - [MV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/mv_su_energy_converter)
 - [HV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/hv_su_energy_converter)
@@ -143,6 +148,28 @@ If Gradle starts fighting over locks with IDE background processes:
 - clear project `.gradle` lock/cache files
 - retry from terminal first
 
+## VS Code Notes
+
+VS Code's Java tooling may regenerate NeoForge launch configurations with:
+
+```text
+-Dfml.modFolders=greatech%%...\bin\main
+```
+
+For that launch path to work, `bin/main` must contain both compiled classes and resources. The project registers:
+
+```powershell
+./gradlew syncIdeBinMainModRoot --no-daemon
+```
+
+This sync task copies compiled Java classes, `src/main/resources`, and generated `META-INF/neoforge.mods.toml` into `bin/main`. It is also attached to `neoForgeIdeSync`, so Gradle/IDE refreshes should keep the directory usable.
+
+Important:
+
+- do not use a resource-only `Sync` task for `bin/main`; `Sync` deletes files not declared as inputs, which can remove `.class` files and make Greatech load metadata without registering items or blocks
+- if the game starts but Greatech items disappear, check whether `bin/main/com/create/gregtech/greatech/Greatech.class` still exists
+- `./gradlew runClient` remains the most reliable launch path when VS Code launch files are being regenerated
+
 ## Configuration
 
 Common config values are defined in:
@@ -153,7 +180,7 @@ They are exposed as a standard NeoForge common config and can be tuned by player
 
 Tiered converter config lists are ordered as `[LV, MV, HV]`.
 
-The kinetic failure config controls whether Greatech-monitored Create networks can break overloaded vanilla transmission parts. By default the system is enabled, accident-broken parts do not drop items, shafts and small cogwheels break above `512 SU`, and large cogwheels break above `1024 SU`.
+The kinetic failure config controls whether Greatech-monitored Create networks can break overloaded vanilla transmission parts. By default the system is enabled, accident-broken parts do not drop items, shafts and small cogwheels break above `512 SU`, and large cogwheels and belt connectors break above `1024 SU`.
 
 ## Documentation
 
@@ -163,6 +190,7 @@ Project docs live in:
 - [docs/converter.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/converter.md)
 - [docs/kinetic-failure.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/kinetic-failure.md)
 - [docs/greatech-shaft.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-shaft.md)
+- [docs/greatech-cogwheel.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-cogwheel.md)
 - [docs/greatech-renderer-register.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-renderer-register.md)
 - [docs/dependencies.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/dependencies.md)
 - [docs/art-direction.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/art-direction.md)

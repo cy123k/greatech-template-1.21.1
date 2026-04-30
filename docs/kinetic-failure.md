@@ -11,6 +11,7 @@ The system currently affects:
 - `create:shaft`
 - `create:cogwheel`
 - `create:large_cogwheel`
+- `create:belt` connections
 
 Pure Create networks are not checked. A network must contain a Greatech block entity that implements `KineticFailureSource`.
 
@@ -37,7 +38,7 @@ Every eligible server tick, the responsible Greatech failure source:
 4. scans loaded network members for breakable transmission parts
 5. compares total network stress against each part's configured limit
 6. selects one overloaded candidate from the lowest stress-limit group
-7. destroys that block
+7. destroys that block or applies the part-specific failure action
 8. starts a cooldown before another failure can occur
 
 If multiple Greatech failure sources are in the same network, only one source is responsible for checking that network. This avoids multiple machines causing several failures in the same tick.
@@ -49,6 +50,7 @@ Current defaults:
 - `create:shaft`: `512 SU`
 - `create:cogwheel`: `512 SU`
 - `create:large_cogwheel`: `1024 SU`
+- `create:belt` connection: `1024 SU`
 
 The selection rule favors the lowest overloaded limit first.
 
@@ -74,6 +76,7 @@ keepKineticFailureDrops = false
 createShaftBreakStressLimit = 512.0
 createCogwheelBreakStressLimit = 512.0
 createLargeCogwheelBreakStressLimit = 1024.0
+createBeltConnectorBreakStressLimit = 1024.0
 kineticFailureCheckInterval = 20
 kineticFailureCooldown = 100
 ```
@@ -85,6 +88,7 @@ Meaning:
 - `createShaftBreakStressLimit`: vanilla shaft break threshold
 - `createCogwheelBreakStressLimit`: vanilla small cogwheel break threshold
 - `createLargeCogwheelBreakStressLimit`: vanilla large cogwheel break threshold
+- `createBeltConnectorBreakStressLimit`: vanilla belt connection break threshold
 - `kineticFailureCheckInterval`: tick interval between checks
 - `kineticFailureCooldown`: cooldown after one accident occurs
 
@@ -110,6 +114,8 @@ public class GreatechShaftBlock extends ShaftBlock implements KineticBreakable {
 ```
 
 This allows stronger Greatech shafts, cogwheels, or other transmission parts to participate in the same failure system without adding special cases to the handler.
+
+Future belt-like block entities can implement `KineticFailureTarget` to normalize many belt segments to one controller position and choose a failure action such as `BREAK_BELT_CONNECTOR`. Create belts use this behavior internally so one belt chain counts as one accident candidate instead of every segment having separate odds.
 
 ## Compatibility Notes
 

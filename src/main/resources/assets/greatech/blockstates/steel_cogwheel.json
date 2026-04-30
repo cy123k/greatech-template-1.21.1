@@ -1,0 +1,17 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "greatech:block/cogwheel/steel_cogwheel_block",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "greatech:block/cogwheel/steel_cogwheel_block"
+    },
+    "axis=z": {
+      "model": "greatech:block/cogwheel/steel_cogwheel_block",
+      "x": 90,
+      "y": 180
+    }
+  }
+}

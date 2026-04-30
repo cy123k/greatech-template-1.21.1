@@ -35,6 +35,11 @@ public final class Config {
             .comment("When a Create kinetic network contains a Greatech failure source, vanilla create:large_cogwheel blocks can break above this network stress.")
             .defineInRange("createLargeCogwheelBreakStressLimit", 1024.0D, 0.0D, Double.MAX_VALUE);
 
+    private static final ModConfigSpec.DoubleValue CREATE_BELT_CONNECTOR_BREAK_STRESS_LIMIT = BUILDER
+            .comment("When a Create kinetic network contains a Greatech failure source, vanilla create:belt connections can break above this network stress.",
+                    "Belt failures are normalized to the belt controller so one belt chain counts as one failure candidate.")
+            .defineInRange("createBeltConnectorBreakStressLimit", 1024.0D, 0.0D, Double.MAX_VALUE);
+
     private static final ModConfigSpec.BooleanValue ENABLE_KINETIC_FAILURES = BUILDER
             .comment("Enables Greatech kinetic failure accidents in Create kinetic networks containing Greatech failure sources.")
             .define("enableKineticFailures", true);
@@ -97,6 +102,7 @@ public final class Config {
     private static float createShaftBreakStressLimit;
     private static float createCogwheelBreakStressLimit;
     private static float createLargeCogwheelBreakStressLimit;
+    private static float createBeltConnectorBreakStressLimit;
     private static boolean enableKineticFailures;
     private static boolean keepKineticFailureDrops;
     private static int kineticFailureCheckInterval;
@@ -117,6 +123,7 @@ public final class Config {
         createShaftBreakStressLimit = CREATE_SHAFT_BREAK_STRESS_LIMIT.get().floatValue();
         createCogwheelBreakStressLimit = CREATE_COGWHEEL_BREAK_STRESS_LIMIT.get().floatValue();
         createLargeCogwheelBreakStressLimit = CREATE_LARGE_COGWHEEL_BREAK_STRESS_LIMIT.get().floatValue();
+        createBeltConnectorBreakStressLimit = CREATE_BELT_CONNECTOR_BREAK_STRESS_LIMIT.get().floatValue();
         enableKineticFailures = ENABLE_KINETIC_FAILURES.get();
         keepKineticFailureDrops = KEEP_KINETIC_FAILURE_DROPS.get();
         kineticFailureCheckInterval = KINETIC_FAILURE_CHECK_INTERVAL.get();
@@ -157,6 +164,10 @@ public final class Config {
 
     public static float createLargeCogwheelBreakStressLimit() {
         return createLargeCogwheelBreakStressLimit;
+    }
+
+    public static float createBeltConnectorBreakStressLimit() {
+        return createBeltConnectorBreakStressLimit;
     }
 
     public static boolean enableKineticFailures() {

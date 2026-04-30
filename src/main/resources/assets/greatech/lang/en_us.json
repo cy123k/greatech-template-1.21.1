@@ -4,10 +4,12 @@
   "block.greatech.mv_sucon": "MV SU Energy Converter",
   "block.greatech.hv_sucon": "HV SU Energy Converter",
   "block.greatech.steel_shaft": "Steel Shaft",
+  "block.greatech.steel_cogwheel": "Steel Cogwheel",
   "item.greatech.lv_sucon": "LV SU Energy Converter",
   "item.greatech.mv_sucon": "MV SU Energy Converter",
   "item.greatech.hv_sucon": "HV SU Energy Converter",
   "item.greatech.steel_shaft": "Steel Shaft",
+  "item.greatech.steel_cogwheel": "Steel Cogwheel",
 
   "greatech.configuration.title": "Greatech Configs",
   "greatech.configuration.section.greatech.common.toml": "Greatech Configs",
@@ -19,6 +21,7 @@
   "greatech.configuration.converterEfficiency": "Converter Efficiency",
   "greatech.configuration.converterStressImpact": "Converter Stress Impact",
   "greatech.configuration.converterMinimumSpeed": "Converter Minimum Speed",
+  "greatech.configuration.createBeltConnectorBreakStressLimit": "Create Belt Connector Break Stress Limit",
   "greatech.configuration.converterCapacity.tooltip": "Internal EU buffer sizes ordered as [LV, MV, HV].",
   "greatech.configuration.converterMaxOutput.tooltip": "Maximum EU generated each tick ordered as [LV, MV, HV].",
   "greatech.configuration.converterOutputVoltage.tooltip": "GTCEu output voltage ordered as [LV, MV, HV].",
@@ -26,5 +29,6 @@
   "greatech.configuration.converterEfficiency.tooltip": "EU generated per 1 RPM of Create rotation ordered as [LV, MV, HV].",
   "greatech.configuration.converterStressImpact.tooltip": "Stress impact added to the Create kinetic network ordered as [LV, MV, HV].",
   "greatech.configuration.converterMinimumSpeed.tooltip": "Minimum absolute RPM required before the machine starts generating EU.",
+  "greatech.configuration.createBeltConnectorBreakStressLimit.tooltip": "Network stress above this value can break a Create belt connection in Greatech-monitored kinetic networks.",
   "message.greatech.su_energy_converter.status": "Speed: %s rpm | Stored: %s EU | Generated: %s EU/t"
 }

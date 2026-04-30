@@ -1,13 +1,16 @@
 package com.create.gregtech.greatech.content.kinetics.failure;
 
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.create.gregtech.greatech.Config;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.KineticNetwork;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
+import com.simibubi.create.content.kinetics.belt.BeltBlockEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -46,8 +49,8 @@ public final class GreatechKineticNetworkFailure {
             return;
         }
 
-        BlockPos target = pickRandomLowestLimit(candidates, level.random).pos();
-        level.destroyBlock(target, Config.keepKineticFailureDrops());
+        KineticFailureCandidate target = pickRandomLowestLimit(candidates, level.random);
+        target.action().apply(level, target.pos());
         source.setKineticFailureCooldown(source.getKineticFailureCooldownTicks());
     }
 
@@ -75,40 +78,92 @@ public final class GreatechKineticNetworkFailure {
     }
 
     private static List<KineticFailureCandidate> findOverloadedParts(KineticNetwork network, float stress) {
-        return network.members.keySet()
-                .stream()
-                .map(member -> createCandidate(member, stress))
-                .flatMap(Optional::stream)
-                .toList();
+        Map<BlockPos, KineticFailureCandidate> candidatesByTarget = new LinkedHashMap<>();
+        for (KineticBlockEntity member : network.members.keySet()) {
+            Optional<KineticFailureCandidate> candidate = createCandidate(member, stress);
+            candidate.ifPresent(value -> candidatesByTarget.merge(value.pos(), value,
+                    GreatechKineticNetworkFailure::pickLowerLimitCandidate));
+        }
+        return List.copyOf(candidatesByTarget.values());
     }
 
     private static Optional<KineticFailureCandidate> createCandidate(KineticBlockEntity blockEntity, float stress) {
-        Optional<Float> stressLimit = getKineticBreakStressLimit(blockEntity.getBlockState());
+        FailureCandidateType candidateType = getFailureCandidateType(blockEntity.getBlockState());
+        Optional<Float> stressLimit = candidateType.stressLimit();
         if (stressLimit.isEmpty() || stress <= stressLimit.get()) {
             return Optional.empty();
         }
 
-        return Optional.of(new KineticFailureCandidate(blockEntity.getBlockPos(), stressLimit.get()));
+        KineticFailureAction action = getFailureAction(blockEntity, candidateType);
+        Optional<BlockPos> target = normalizeFailureTarget(blockEntity, action);
+        return target.map(pos -> new KineticFailureCandidate(pos, stressLimit.get(), action));
     }
 
-    private static Optional<Float> getKineticBreakStressLimit(BlockState state) {
+    private static FailureCandidateType getFailureCandidateType(BlockState state) {
         if (state.getBlock() instanceof KineticBreakable breakable) {
-            return Optional.of(breakable.getKineticBreakStressLimit());
+            return new FailureCandidateType(Optional.of(breakable.getKineticBreakStressLimit()), KineticFailureAction.DESTROY_BLOCK);
+        }
+
+        if (AllBlocks.BELT.has(state)) {
+            return new FailureCandidateType(Optional.of(Config.createBeltConnectorBreakStressLimit()), KineticFailureAction.BREAK_BELT_CONNECTOR);
         }
 
         if (AllBlocks.SHAFT.has(state)) {
-            return Optional.of(Config.createShaftBreakStressLimit());
+            return new FailureCandidateType(Optional.of(Config.createShaftBreakStressLimit()), KineticFailureAction.DESTROY_BLOCK);
         }
 
         if (AllBlocks.COGWHEEL.has(state)) {
-            return Optional.of(Config.createCogwheelBreakStressLimit());
+            return new FailureCandidateType(Optional.of(Config.createCogwheelBreakStressLimit()), KineticFailureAction.DESTROY_BLOCK);
         }
 
         if (AllBlocks.LARGE_COGWHEEL.has(state)) {
-            return Optional.of(Config.createLargeCogwheelBreakStressLimit());
+            return new FailureCandidateType(Optional.of(Config.createLargeCogwheelBreakStressLimit()), KineticFailureAction.DESTROY_BLOCK);
         }
 
-        return Optional.empty();
+        return new FailureCandidateType(Optional.empty(), KineticFailureAction.DESTROY_BLOCK);
+    }
+
+    private static Optional<BlockPos> normalizeFailureTarget(KineticBlockEntity blockEntity, KineticFailureAction action) {
+        if (blockEntity instanceof KineticFailureTarget failureTarget) {
+            return failureTarget.getKineticFailureTarget()
+                    .filter(target -> blockEntity.getLevel() != null && blockEntity.getLevel().isLoaded(target));
+        }
+
+        if (action == KineticFailureAction.BREAK_BELT_CONNECTOR) {
+            return normalizeCreateBeltTarget(blockEntity);
+        }
+
+        return Optional.of(blockEntity.getBlockPos());
+    }
+
+    private static KineticFailureAction getFailureAction(KineticBlockEntity blockEntity, FailureCandidateType candidateType) {
+        if (blockEntity instanceof KineticFailureTarget failureTarget) {
+            return failureTarget.getKineticFailureAction();
+        }
+
+        return candidateType.action();
+    }
+
+    private static Optional<BlockPos> normalizeCreateBeltTarget(KineticBlockEntity blockEntity) {
+        Level level = blockEntity.getLevel();
+        if (!(blockEntity instanceof BeltBlockEntity belt) || level == null) {
+            return Optional.empty();
+        }
+
+        BlockPos controller = belt.getController();
+        if (controller == null || !level.isLoaded(controller)) {
+            return Optional.empty();
+        }
+
+        if (!AllBlocks.BELT.has(level.getBlockState(controller))) {
+            return Optional.empty();
+        }
+
+        return Optional.of(controller);
+    }
+
+    private static KineticFailureCandidate pickLowerLimitCandidate(KineticFailureCandidate first, KineticFailureCandidate second) {
+        return first.stressLimit() <= second.stressLimit() ? first : second;
     }
 
     private static KineticFailureCandidate pickRandomLowestLimit(List<KineticFailureCandidate> candidates, RandomSource random) {
@@ -120,5 +175,8 @@ public final class GreatechKineticNetworkFailure {
                 .filter(candidate -> candidate.stressLimit() == lowestLimit)
                 .toList();
         return lowestCandidates.get(random.nextInt(lowestCandidates.size()));
+    }
+
+    private record FailureCandidateType(Optional<Float> stressLimit, KineticFailureAction action) {
     }
 }
