@@ -7,6 +7,8 @@ The current prototype focuses on one core machine family:
 - `SU Energy Converter`
 - `Steel Shaft`
 - `Steel Cogwheel`
+- `Steel Large Cogwheel`
+- `LV Electric Fluid Bridge`
 
 These machines accept `Create` rotational power and output `GTCEu` `EU`.
 
@@ -31,7 +33,9 @@ Implemented so far:
 - Greatech-monitored kinetic failure accidents for overloaded `Create` transmission parts
 - `steel_shaft` registration with Create-style kinetic behavior and animated rendering
 - `steel_cogwheel` registration with Create-style cogwheel behavior and animated rendering
-- Greatech placement helpers for shaft/cogwheel assisted placement, arrow indicators, and visible ghost previews
+- `steel_large_cogwheel` registration with Create-style large cogwheel behavior and animated rendering
+- Greatech placement helpers for shaft/cogwheel assisted placement, arrow indicators, mixed-size cogwheel offsets, and visible ghost previews
+- `lv_fluid_bridge` registration with GTCEu energy input, directional fluid ports, vanilla GUI, passive fluid bridge behavior, and EU-powered Create fluid pressure
 
 Still in progress:
 
@@ -73,6 +77,12 @@ Tiered default prototype values:
 - `createCogwheelBreakStressLimit = 512.0`
 - `createLargeCogwheelBreakStressLimit = 1024.0`
 - `createBeltConnectorBreakStressLimit = 1024.0`
+- `fluidBridgeTankCapacity = [8000, 32000, 128000]`
+- `fluidBridgeEnergyCapacity = [2048, 8192, 32768]`
+- `fluidBridgeTransferRate = [100, 400, 1600]`
+- `fluidBridgeMaxPressure = [64, 256, 1024]`
+- `fluidBridgeEuPerPressure = [1, 1, 1]`
+- `fluidBridgeMaxPressureEuPerTick = [32, 128, 512]`
 
 That means, by default:
 
@@ -94,6 +104,7 @@ Key code locations:
 - [Greatech shaft code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/shaft)
 - [Greatech cogwheel code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/cogwheel)
 - [Greatech placement helper code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement)
+- [Greatech fluid bridge code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid)
 - [Kinetic failure system](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/kinetics/failure)
 - [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
 - [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
@@ -113,6 +124,7 @@ Key resource locations:
 - [Greatech shaft textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/greatech_shaft)
 - [Greatech cogwheel block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/cogwheel)
 - [Greatech cogwheel textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/greatech_cogwheel)
+- [LV fluid bridge blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/lv_fluid_bridge.json)
 - [LV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/lv_su_energy_converter)
 - [MV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/mv_su_energy_converter)
 - [HV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/hv_su_energy_converter)
@@ -185,6 +197,8 @@ Tiered converter config lists are ordered as `[LV, MV, HV]`.
 
 The kinetic failure config controls whether Greatech-monitored Create networks can break overloaded vanilla transmission parts. By default the system is enabled, accident-broken parts do not drop items, shafts and small cogwheels break above `512 SU`, and large cogwheels and belt connectors break above `1024 SU`.
 
+The fluid bridge config controls internal fluid capacity, EU buffer, passive transfer rate, Create pressure limit, and EU cost per applied pressure. Passive transfer is currently free; EU is consumed when the machine applies Create fluid pressure.
+
 ## Documentation
 
 Project docs live in:
@@ -195,6 +209,8 @@ Project docs live in:
 - [docs/greatech-shaft.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-shaft.md)
 - [docs/greatech-cogwheel.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-cogwheel.md)
 - [docs/greatech-placement-helper.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-placement-helper.md)
+- [docs/greatech-fluidbrigge.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-fluidbrigge.md)
+- [docs/create-fuild-tips.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/create-fuild-tips.md)
 - [docs/greatech-renderer-register.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-renderer-register.md)
 - [docs/dependencies.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/dependencies.md)
 - [docs/art-direction.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/art-direction.md)

@@ -2,8 +2,10 @@ package com.create.gregtech.greatech;
 
 import com.create.gregtech.greatech.content.cogwheel.GreatechCogwheelRenderer;
 import com.create.gregtech.greatech.content.converter.SUEnergyConverterRenderer;
+import com.create.gregtech.greatech.content.fluid.ElectricFluidBridgeScreen;
 import com.create.gregtech.greatech.content.shaft.GreatechShaftRenderer;
 import com.create.gregtech.greatech.registry.GreatechBlockEntityTypes;
+import com.create.gregtech.greatech.registry.GreatechMenus;
 import com.create.gregtech.greatech.registry.GreatechPartialModels;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
@@ -13,6 +15,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
@@ -41,5 +44,11 @@ public class GreatechClient {
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.SU_ENERGY_CONVERTER.get(), SUEnergyConverterRenderer::new);
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_SHAFT.get(), GreatechShaftRenderer::new);
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_COGWHEEL.get(), GreatechCogwheelRenderer::new);
+        event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_LARGE_COGWHEEL.get(), GreatechCogwheelRenderer::new);
+    }
+
+    @SubscribeEvent
+    static void registerMenuScreens(RegisterMenuScreensEvent event) {
+        event.register(GreatechMenus.ELECTRIC_FLUID_BRIDGE.get(), ElectricFluidBridgeScreen::new);
     }
 }

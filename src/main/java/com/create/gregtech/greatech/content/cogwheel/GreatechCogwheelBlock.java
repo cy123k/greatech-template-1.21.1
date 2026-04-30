@@ -1,7 +1,8 @@
 package com.create.gregtech.greatech.content.cogwheel;
 
+import java.util.function.Supplier;
+
 import com.create.gregtech.greatech.content.kinetics.failure.KineticBreakable;
-import com.create.gregtech.greatech.registry.GreatechBlockEntityTypes;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
 
@@ -14,10 +15,13 @@ public class GreatechCogwheelBlock extends CogWheelBlock implements KineticBreak
     public static final BooleanProperty PLACEMENT_GHOST = BooleanProperty.create("placement_ghost");
 
     private final float breakStressLimit;
+    private final Supplier<BlockEntityType<? extends KineticBlockEntity>> blockEntityType;
 
-    public GreatechCogwheelBlock(Properties properties, float breakStressLimit) {
-        super(false, properties);
+    public GreatechCogwheelBlock(boolean large, Properties properties, float breakStressLimit,
+            Supplier<BlockEntityType<? extends KineticBlockEntity>> blockEntityType) {
+        super(large, properties);
         this.breakStressLimit = breakStressLimit;
+        this.blockEntityType = blockEntityType;
         registerDefaultState(defaultBlockState().setValue(PLACEMENT_GHOST, false));
     }
 
@@ -28,7 +32,7 @@ public class GreatechCogwheelBlock extends CogWheelBlock implements KineticBreak
 
     @Override
     public BlockEntityType<? extends KineticBlockEntity> getBlockEntityType() {
-        return GreatechBlockEntityTypes.STEEL_COGWHEEL.get();
+        return blockEntityType.get();
     }
 
     @Override

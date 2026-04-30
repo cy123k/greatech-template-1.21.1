@@ -3,6 +3,7 @@ package com.create.gregtech.greatech;
 import java.util.List;
 
 import com.create.gregtech.greatech.content.converter.SUEnergyConverterTier;
+import com.create.gregtech.greatech.content.fluid.ElectricFluidBridgeTier;
 
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -22,6 +23,16 @@ public final class Config {
     private static final int[] DEFAULT_CONVERTER_OUTPUT_AMPERAGE = {1, 1, 1};
     private static final int[] DEFAULT_CONVERTER_EFFICIENCY = {2, 4, 8};
     private static final double[] DEFAULT_CONVERTER_STRESS_IMPACT = {16.0D, 64.0D, 256.0D};
+    private static final int[] DEFAULT_FLUID_BRIDGE_TANK_CAPACITY = {8_000, 32_000, 128_000};
+    private static final int[] DEFAULT_FLUID_BRIDGE_ENERGY_CAPACITY = {2_048, 8_192, 32_768};
+    private static final int[] DEFAULT_FLUID_BRIDGE_TRANSFER_RATE = {100, 400, 1_600};
+    private static final int[] DEFAULT_FLUID_BRIDGE_ENERGY_PER_BUCKET = {32, 24, 16};
+    private static final int[] DEFAULT_FLUID_BRIDGE_MAX_EU_PER_TICK = {32, 128, 512};
+    private static final int[] DEFAULT_FLUID_BRIDGE_INPUT_VOLTAGE = {32, 128, 512};
+    private static final int[] DEFAULT_FLUID_BRIDGE_INPUT_AMPERAGE = {1, 1, 1};
+    private static final int[] DEFAULT_FLUID_BRIDGE_MAX_PRESSURE = {64, 256, 1024};
+    private static final int[] DEFAULT_FLUID_BRIDGE_EU_PER_PRESSURE = {1, 1, 1};
+    private static final int[] DEFAULT_FLUID_BRIDGE_MAX_PRESSURE_EU_PER_TICK = {32, 128, 512};
 
     private static final ModConfigSpec.DoubleValue CREATE_SHAFT_BREAK_STRESS_LIMIT = BUILDER
             .comment("When a Create kinetic network contains a Greatech failure source, vanilla create:shaft blocks can break above this network stress.")
@@ -90,6 +101,46 @@ public final class Config {
                     "Speeds below this threshold produce 0 EU/t.")
             .defineInRange("converterMinimumSpeed", 1.0D, 0.0D, Double.MAX_VALUE);
 
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> FLUID_BRIDGE_TANK_CAPACITY = BUILDER
+            .comment("Internal fluid tank capacities in mB for electric fluid bridges.", TIER_ORDER)
+            .defineList("fluidBridgeTankCapacity", List.of(8_000, 32_000, 128_000), Config::isPositiveInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> FLUID_BRIDGE_ENERGY_CAPACITY = BUILDER
+            .comment("Internal EU buffers for electric fluid bridges.", TIER_ORDER)
+            .defineList("fluidBridgeEnergyCapacity", List.of(2_048, 8_192, 32_768), Config::isNonNegativeInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> FLUID_BRIDGE_TRANSFER_RATE = BUILDER
+            .comment("Maximum fluid moved each tick by electric fluid bridges, in mB/t.", TIER_ORDER)
+            .defineList("fluidBridgeTransferRate", List.of(100, 400, 1_600), Config::isNonNegativeInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> FLUID_BRIDGE_ENERGY_PER_BUCKET = BUILDER
+            .comment("EU consumed per 1000 mB moved by electric fluid bridges.", TIER_ORDER)
+            .defineList("fluidBridgeEnergyPerBucket", List.of(32, 24, 16), Config::isNonNegativeInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> FLUID_BRIDGE_MAX_EU_PER_TICK = BUILDER
+            .comment("Maximum EU consumed each tick by electric fluid bridges.", TIER_ORDER)
+            .defineList("fluidBridgeMaxEuPerTick", List.of(32, 128, 512), Config::isNonNegativeInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> FLUID_BRIDGE_INPUT_VOLTAGE = BUILDER
+            .comment("Maximum accepted GTCEu input voltage for electric fluid bridges.", TIER_ORDER)
+            .defineList("fluidBridgeInputVoltage", List.of(32, 128, 512), Config::isPositiveInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> FLUID_BRIDGE_INPUT_AMPERAGE = BUILDER
+            .comment("Maximum accepted GTCEu input amperage for electric fluid bridges.", TIER_ORDER)
+            .defineList("fluidBridgeInputAmperage", List.of(1, 1, 1), Config::isPositiveInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> FLUID_BRIDGE_MAX_PRESSURE = BUILDER
+            .comment("Maximum Create fluid pressure each electric fluid bridge tier can apply.", TIER_ORDER)
+            .defineList("fluidBridgeMaxPressure", List.of(64, 256, 1024), Config::isNonNegativeInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> FLUID_BRIDGE_EU_PER_PRESSURE = BUILDER
+            .comment("EU/t consumed for each point of applied Create fluid pressure.", TIER_ORDER)
+            .defineList("fluidBridgeEuPerPressure", List.of(1, 1, 1), Config::isNonNegativeInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> FLUID_BRIDGE_MAX_PRESSURE_EU_PER_TICK = BUILDER
+            .comment("Maximum EU/t each electric fluid bridge tier may spend on Create fluid pressure.", TIER_ORDER)
+            .defineList("fluidBridgeMaxPressureEuPerTick", List.of(32, 128, 512), Config::isNonNegativeInteger);
+
     static final ModConfigSpec SPEC = BUILDER.build();
 
     private static int[] converterCapacity = DEFAULT_CONVERTER_CAPACITY.clone();
@@ -98,6 +149,16 @@ public final class Config {
     private static int[] converterOutputAmperage = DEFAULT_CONVERTER_OUTPUT_AMPERAGE.clone();
     private static int[] converterEfficiency = DEFAULT_CONVERTER_EFFICIENCY.clone();
     private static double[] converterStressImpact = DEFAULT_CONVERTER_STRESS_IMPACT.clone();
+    private static int[] fluidBridgeTankCapacity = DEFAULT_FLUID_BRIDGE_TANK_CAPACITY.clone();
+    private static int[] fluidBridgeEnergyCapacity = DEFAULT_FLUID_BRIDGE_ENERGY_CAPACITY.clone();
+    private static int[] fluidBridgeTransferRate = DEFAULT_FLUID_BRIDGE_TRANSFER_RATE.clone();
+    private static int[] fluidBridgeEnergyPerBucket = DEFAULT_FLUID_BRIDGE_ENERGY_PER_BUCKET.clone();
+    private static int[] fluidBridgeMaxEuPerTick = DEFAULT_FLUID_BRIDGE_MAX_EU_PER_TICK.clone();
+    private static int[] fluidBridgeInputVoltage = DEFAULT_FLUID_BRIDGE_INPUT_VOLTAGE.clone();
+    private static int[] fluidBridgeInputAmperage = DEFAULT_FLUID_BRIDGE_INPUT_AMPERAGE.clone();
+    private static int[] fluidBridgeMaxPressure = DEFAULT_FLUID_BRIDGE_MAX_PRESSURE.clone();
+    private static int[] fluidBridgeEuPerPressure = DEFAULT_FLUID_BRIDGE_EU_PER_PRESSURE.clone();
+    private static int[] fluidBridgeMaxPressureEuPerTick = DEFAULT_FLUID_BRIDGE_MAX_PRESSURE_EU_PER_TICK.clone();
     public static double converterMinimumSpeed;
     private static float createShaftBreakStressLimit;
     private static float createCogwheelBreakStressLimit;
@@ -119,6 +180,16 @@ public final class Config {
         converterOutputAmperage = readIntTierValues(CONVERTER_OUTPUT_AMPERAGE.get(), DEFAULT_CONVERTER_OUTPUT_AMPERAGE);
         converterEfficiency = readIntTierValues(CONVERTER_EFFICIENCY.get(), DEFAULT_CONVERTER_EFFICIENCY);
         converterStressImpact = readDoubleTierValues(CONVERTER_STRESS_IMPACT.get(), DEFAULT_CONVERTER_STRESS_IMPACT);
+        fluidBridgeTankCapacity = readIntTierValues(FLUID_BRIDGE_TANK_CAPACITY.get(), DEFAULT_FLUID_BRIDGE_TANK_CAPACITY);
+        fluidBridgeEnergyCapacity = readIntTierValues(FLUID_BRIDGE_ENERGY_CAPACITY.get(), DEFAULT_FLUID_BRIDGE_ENERGY_CAPACITY);
+        fluidBridgeTransferRate = readIntTierValues(FLUID_BRIDGE_TRANSFER_RATE.get(), DEFAULT_FLUID_BRIDGE_TRANSFER_RATE);
+        fluidBridgeEnergyPerBucket = readIntTierValues(FLUID_BRIDGE_ENERGY_PER_BUCKET.get(), DEFAULT_FLUID_BRIDGE_ENERGY_PER_BUCKET);
+        fluidBridgeMaxEuPerTick = readIntTierValues(FLUID_BRIDGE_MAX_EU_PER_TICK.get(), DEFAULT_FLUID_BRIDGE_MAX_EU_PER_TICK);
+        fluidBridgeInputVoltage = readIntTierValues(FLUID_BRIDGE_INPUT_VOLTAGE.get(), DEFAULT_FLUID_BRIDGE_INPUT_VOLTAGE);
+        fluidBridgeInputAmperage = readIntTierValues(FLUID_BRIDGE_INPUT_AMPERAGE.get(), DEFAULT_FLUID_BRIDGE_INPUT_AMPERAGE);
+        fluidBridgeMaxPressure = readIntTierValues(FLUID_BRIDGE_MAX_PRESSURE.get(), DEFAULT_FLUID_BRIDGE_MAX_PRESSURE);
+        fluidBridgeEuPerPressure = readIntTierValues(FLUID_BRIDGE_EU_PER_PRESSURE.get(), DEFAULT_FLUID_BRIDGE_EU_PER_PRESSURE);
+        fluidBridgeMaxPressureEuPerTick = readIntTierValues(FLUID_BRIDGE_MAX_PRESSURE_EU_PER_TICK.get(), DEFAULT_FLUID_BRIDGE_MAX_PRESSURE_EU_PER_TICK);
         converterMinimumSpeed = CONVERTER_MINIMUM_SPEED.get();
         createShaftBreakStressLimit = CREATE_SHAFT_BREAK_STRESS_LIMIT.get().floatValue();
         createCogwheelBreakStressLimit = CREATE_COGWHEEL_BREAK_STRESS_LIMIT.get().floatValue();
@@ -152,6 +223,46 @@ public final class Config {
 
     public static double converterStressImpact(SUEnergyConverterTier tier) {
         return converterStressImpact[tier.configIndex()];
+    }
+
+    public static int fluidBridgeCapacity(ElectricFluidBridgeTier tier) {
+        return fluidBridgeTankCapacity[tier.configIndex()];
+    }
+
+    public static int fluidBridgeEnergyCapacity(ElectricFluidBridgeTier tier) {
+        return fluidBridgeEnergyCapacity[tier.configIndex()];
+    }
+
+    public static int fluidBridgeTransferRate(ElectricFluidBridgeTier tier) {
+        return fluidBridgeTransferRate[tier.configIndex()];
+    }
+
+    public static int fluidBridgeEnergyPerBucket(ElectricFluidBridgeTier tier) {
+        return fluidBridgeEnergyPerBucket[tier.configIndex()];
+    }
+
+    public static int fluidBridgeMaxEuPerTick(ElectricFluidBridgeTier tier) {
+        return fluidBridgeMaxEuPerTick[tier.configIndex()];
+    }
+
+    public static int fluidBridgeInputVoltage(ElectricFluidBridgeTier tier) {
+        return fluidBridgeInputVoltage[tier.configIndex()];
+    }
+
+    public static int fluidBridgeInputAmperage(ElectricFluidBridgeTier tier) {
+        return fluidBridgeInputAmperage[tier.configIndex()];
+    }
+
+    public static int fluidBridgeMaxPressure(ElectricFluidBridgeTier tier) {
+        return fluidBridgeMaxPressure[tier.configIndex()];
+    }
+
+    public static int fluidBridgeEuPerPressure(ElectricFluidBridgeTier tier) {
+        return fluidBridgeEuPerPressure[tier.configIndex()];
+    }
+
+    public static int fluidBridgeMaxPressureEuPerTick(ElectricFluidBridgeTier tier) {
+        return fluidBridgeMaxPressureEuPerTick[tier.configIndex()];
     }
 
     public static float createShaftBreakStressLimit() {

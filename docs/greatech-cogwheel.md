@@ -1,18 +1,18 @@
-# Greatech Cogwheel
+# Greatech Cogwheels
 
 ## Purpose
 
-`steel_cogwheel` is the first Greatech cogwheel-style transmission part.
-
-It behaves like a Create small cogwheel, but it belongs to Greatech and participates in Greatech's kinetic failure system with a higher break limit than vanilla Create cogwheels.
-
-Current block:
+Greatech currently has two Create-style cogwheel transmission parts:
 
 - `greatech:steel_cogwheel`
+- `greatech:steel_large_cogwheel`
 
-Current prototype break limit:
+They behave like Create small and large cogwheels, but they belong to Greatech and participate in Greatech's kinetic failure system with higher break limits than vanilla Create transmission parts.
 
-- `2048 SU`
+Current prototype break limits:
+
+- `steel_cogwheel`: `2048 SU`
+- `steel_large_cogwheel`: `4096 SU`
 
 ## Main Code
 
@@ -20,6 +20,7 @@ Core classes:
 
 - [GreatechCogwheelBlock.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/cogwheel/GreatechCogwheelBlock.java)
 - [GreatechCogwheelBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/cogwheel/GreatechCogwheelBlockEntity.java)
+- [GreatechLargeCogwheelBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/cogwheel/GreatechLargeCogwheelBlockEntity.java)
 - [GreatechCogwheelRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/cogwheel/GreatechCogwheelRenderer.java)
 
 Registration:
@@ -29,90 +30,97 @@ Registration:
 - [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
 - [Greatech placement helpers](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement)
 
-## Resource Layout
-
-Current resources:
-
-- `assets/greatech/blockstates/steel_cogwheel.json`
-- `assets/greatech/models/block/cogwheel/greatech_cogwheel.json`
-- `assets/greatech/models/block/cogwheel/greatech_cogwheel_shaftless.json`
-- `assets/greatech/models/block/cogwheel/greatech_cogwheel_shaft.json`
-- `assets/greatech/models/block/cogwheel/steel_cogwheel.json`
-- `assets/greatech/models/block/cogwheel/steel_cogwheel_shaftless.json`
-- `assets/greatech/models/block/cogwheel/steel_cogwheel_shaft.json`
-- `assets/greatech/models/block/cogwheel/steel_cogwheel_block.json`
-- `assets/greatech/models/item/steel_cogwheel.json`
-- `assets/greatech/textures/block/greatech_cogwheel/steel_cogwheel.png`
-- `assets/greatech/textures/block/greatech_cogwheel/steel_cogwheel_2.png`
-- `assets/greatech/textures/block/greatech_cogwheel/steel_cogwheel_axis.png`
-- `assets/greatech/textures/block/greatech_cogwheel/steel_axis_top.png`
-- `data/greatech/loot_table/blocks/steel_cogwheel.json`
-
-The split is intentional:
-
-- `greatech_cogwheel*.json`: shared cogwheel geometry
-- `steel_cogwheel*.json`: steel texture wrappers and animated partial sources
-- `steel_cogwheel_block.json`: empty world block model used to avoid static/dynamic overlap
-- `models/item/steel_cogwheel.json`: item model using the full cogwheel wrapper
-
-This mirrors the shaft model pattern. Future cogwheel materials should add new texture wrappers rather than copying the shared geometry.
-
-`steel_cogwheel.json` blockstates also include `placement_ghost=true` variants. Normal placed blocks use `placement_ghost=false` and the empty `steel_cogwheel_block.json` model. Placement preview ghost states use `placement_ghost=true` and point to the full `steel_cogwheel.json` model so Catnip can render a visible translucent preview without drawing a static cogwheel in the world.
-
 ## Block and BlockEntity Pattern
 
-`GreatechCogwheelBlock` extends Create's `CogWheelBlock` so it inherits:
+`GreatechCogwheelBlock` extends Create's `CogWheelBlock`.
 
-- `AXIS` placement behavior
-- small cogwheel meshing rules
-- shaft connection rules
-- waterlogging
-- basic wrench/bracket behavior
-- Create kinetic network participation
+The block now accepts a `large` flag:
 
-`GreatechCogwheelBlock` adds a `placement_ghost` boolean property used only for placement preview rendering. Gameplay placement defaults it to `false`.
+- `false`: small cogwheel behavior
+- `true`: large cogwheel behavior
 
-It also implements `KineticBreakable` so the Greatech failure system can read its custom stress limit.
+This mirrors Create's own `CogWheelBlock::small` and `CogWheelBlock::large` split while keeping Greatech-owned block entity types.
 
 Important:
 
-Do not let a Greatech cogwheel use Create's vanilla `create:bracketed_kinetic` or other Create-owned block entity type unless that type was registered for the Greatech block.
+Do not let a Greatech cogwheel use Create's vanilla `create:simple_kinetic` or `create:bracketed_kinetic` block entity type unless that type was registered for the Greatech block.
 
-The safe pattern is:
+Current safe pattern:
 
 ```java
 public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechCogwheelBlockEntity>> STEEL_COGWHEEL =
         BLOCK_ENTITY_TYPES.register("steel_cogwheel", () -> BlockEntityType.Builder.of(
                 GreatechCogwheelBlockEntity::new,
                 GreatechBlocks.STEEL_COGWHEEL.get()).build(null));
+
+public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechLargeCogwheelBlockEntity>> STEEL_LARGE_COGWHEEL =
+        BLOCK_ENTITY_TYPES.register("steel_large_cogwheel", () -> BlockEntityType.Builder.of(
+                GreatechLargeCogwheelBlockEntity::new,
+                GreatechBlocks.STEEL_LARGE_COGWHEEL.get()).build(null));
 ```
 
-Then make the block return that type:
+`GreatechCogwheelBlock` receives the matching block entity type supplier during block registration, so the same block class can support both sizes without returning the wrong type.
 
-```java
-@Override
-public BlockEntityType<? extends KineticBlockEntity> getBlockEntityType() {
-    return GreatechBlockEntityTypes.STEEL_COGWHEEL.get();
-}
-```
+## Resource Layout
+
+Current small cogwheel resources:
+
+- `assets/greatech/blockstates/steel_cogwheel.json`
+- `assets/greatech/models/block/cogwheel/greatech_cogwheel.json`
+- `assets/greatech/models/block/cogwheel/greatech_cogwheel_shaftless.json`
+- `assets/greatech/models/block/cogwheel/greatech_cogwheel_shaft.json`
+- `assets/greatech/models/block/cogwheel/small_cogwheel/steel_cogwheel.json`
+- `assets/greatech/models/block/cogwheel/small_cogwheel/steel_cogwheel_shaftless.json`
+- `assets/greatech/models/block/cogwheel/small_cogwheel/steel_cogwheel_shaft.json`
+- `assets/greatech/models/block/cogwheel/small_cogwheel/steel_cogwheel_block.json`
+- `assets/greatech/models/item/steel_cogwheel.json`
+- `data/greatech/loot_table/blocks/steel_cogwheel.json`
+
+Current large cogwheel resources:
+
+- `assets/greatech/blockstates/steel_large_cogwheel.json`
+- `assets/greatech/models/block/cogwheel/greatech_large_cogwheel.json`
+- `assets/greatech/models/block/cogwheel/greatech_large_cogwheel_shaftless.json`
+- `assets/greatech/models/block/cogwheel/large_cogwheel/steel_large_cogwheel.json`
+- `assets/greatech/models/block/cogwheel/large_cogwheel/steel_large_cogwheel_shaftless.json`
+- `assets/greatech/models/block/cogwheel/large_cogwheel/steel_large_cogwheel_block.json`
+- `assets/greatech/models/item/steel_large_cogwheel.json`
+- `assets/greatech/textures/block/greatech_cogwheel/steel_large_cogwheel.png`
+- `data/greatech/loot_table/blocks/steel_large_cogwheel.json`
+
+Shared textures:
+
+- `assets/greatech/textures/block/greatech_cogwheel/steel_axis_top.png`
+- `assets/greatech/textures/block/greatech_cogwheel/steel_cogwheel_axis.png`
+- `assets/greatech/textures/block/greatech_cogwheel/steel_cogwheel.png`
+- `assets/greatech/textures/block/greatech_cogwheel/steel_cogwheel_2.png`
+
+The split is intentional:
+
+- `greatech_cogwheel*.json`: shared small cogwheel geometry
+- `greatech_large_cogwheel*.json`: shared large cogwheel geometry
+- `small_cogwheel/steel_cogwheel*.json`: small steel texture wrappers and animated partial sources
+- `large_cogwheel/steel_large_cogwheel*.json`: large steel texture wrappers and animated partial sources
+- `*_block.json`: empty world block models used to avoid static/dynamic overlap
+- root item model files under `models/item/`: item-id entry points
+
+`steel_cogwheel.json` and `steel_large_cogwheel.json` blockstates include `placement_ghost=true` variants. Normal placed blocks use `placement_ghost=false` and empty static models. Placement preview states use `placement_ghost=true` and point to the full wrapper model so Catnip can render a visible translucent preview.
+
+Blockbench exports may contain placeholder texture paths such as `Mymodel/texture/...`. Replace them with valid lowercase Minecraft resource locations before running the game. Invalid texture paths in a parent model can make all child wrapper models bake as missing models.
 
 ## Animation Pattern
 
-The visible world cogwheel is rendered by `GreatechCogwheelRenderer`, not by the normal block model.
+The visible world cogwheels are rendered by `GreatechCogwheelRenderer`, not by the normal block model.
 
-The blockstate points to `steel_cogwheel_block.json`, an empty model with only a particle texture. This prevents:
+The renderer selects the partial by cogwheel size:
 
-- a static cogwheel being visible while the BER renders a rotating cogwheel
-- z-fighting between static and dynamic geometry
-- doubled brightness or visual thickness
+```java
+ICogWheel.isLargeCog(blockEntity.getBlockState())
+        ? GreatechPartialModels.STEEL_LARGE_COGWHEEL
+        : GreatechPartialModels.STEEL_COGWHEEL
+```
 
-The renderer uses:
-
-- `CachedBuffers.partial(GreatechPartialModels.STEEL_COGWHEEL, state)`
-- `kineticRotationTransform(...)`
-- a final axis-orientation transform for X/Z cogwheels
-
-The transform order follows the shaft renderer:
+Then it applies Create's kinetic rotation transform and a final axis-orientation transform:
 
 ```java
 kineticRotationTransform(cogwheel, blockEntity, axis, angle, light);
@@ -120,18 +128,33 @@ orientCogwheelToAxis(cogwheel, axis);
 cogwheel.renderInto(poseStack, vertexConsumer);
 ```
 
+Large cogwheel geometry extends outside a normal block cube. If the animated model appears to disappear at certain camera angles, check whether the large cogwheel block entity needs an expanded render bounding box.
+
 ## Placement Helper
 
-`steel_cogwheel` participates in the Greatech small cogwheel placement helper.
+Greatech cogwheels participate in a dedicated placement helper layer.
+
+Current helper split:
+
+- `GreatechSmallCogwheelPlacementHelper`: small item on small cogwheel target
+- `GreatechLargeCogwheelPlacementHelper`: large item on large cogwheel target
+- `GreatechMixedCogwheelPlacementHelper`: small item on large cogwheel target, and large item on small cogwheel target
 
 Current behavior:
 
-- hand item `greatech:steel_cogwheel` can place against Greatech and Create small cogwheel targets
-- hand item `create:cogwheel` can place against Greatech small cogwheel targets
-- `create:cogwheel` on `create:cogwheel` remains handled by Create's original helper
-- the helper provides Catnip arrow indicators and a visible ghost preview
+- `greatech:steel_cogwheel` can place against Greatech and Create small cogwheel targets
+- `create:cogwheel` can place against Greatech small cogwheel targets
+- `greatech:steel_large_cogwheel` can place against Greatech and Create large cogwheel targets
+- `create:large_cogwheel` can place against Greatech large cogwheel targets
+- small and large cogwheels can use mixed-size diagonal placement when at least one side is Greatech-owned
+- Create item on Create target remains handled by Create's original helper
 
-The current small cogwheel helper intentionally only treats cogwheel states as cogwheel targets. Shaft-target placement is kept out of this helper to avoid classifying shafts as cogwheels in Catnip's preview filtering. If Greatech later needs cogwheel-on-shaft assisted placement, add a separate helper with that explicit responsibility.
+The mixed helper is registered as two precise Catnip helper instances:
+
+- small item on large target
+- large item on small target
+
+This keeps Catnip preview filtering accurate and avoids a broad cogwheel helper stealing same-size previews.
 
 See [greatech-placement-helper.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-placement-helper.md) for the reusable placement design.
 
@@ -140,15 +163,26 @@ See [greatech-placement-helper.md](D:/SatisMinectory/mod/greatech-template-1.21.
 For another small cogwheel tier:
 
 1. Add textures under `textures/block/greatech_cogwheel/`.
-2. Add wrapper models under `models/block/cogwheel/`.
+2. Add wrapper models under `models/block/cogwheel/small_cogwheel/`.
 3. Add a root item model under `models/item/`.
-4. Add a blockstate file with `axis=x/y/z`.
-5. Register the block and item in `GreatechBlocks`.
+4. Add a blockstate file with `axis=x/y/z` and `placement_ghost=true/false`.
+5. Register the block and item in `GreatechBlocks` with `large=false`.
 6. Register a valid block entity type in `GreatechBlockEntityTypes`.
 7. Register a partial in `GreatechPartialModels`.
-8. Register a renderer in `GreatechClient`.
+8. Register the renderer in `GreatechClient` if it uses a new block entity type.
 9. Register the tier with the Greatech placement registry if it should support assisted placement.
-10. Add `placement_ghost` blockstate variants if the world model is empty and the preview needs full geometry.
-11. Add a loot table and lang entries.
+10. Add a loot table and lang entries.
 
-For large cogwheels, revisit render bounds, diagonal propagation, and Create's large cog offset behavior before copying the small cogwheel pattern directly.
+For another large cogwheel tier:
+
+1. Add textures under `textures/block/greatech_cogwheel/`.
+2. Add wrapper models under `models/block/cogwheel/large_cogwheel/`.
+3. Add a root item model under `models/item/`.
+4. Add a blockstate file with `axis=x/y/z` and `placement_ghost=true/false`.
+5. Register the block and item in `GreatechBlocks` with `large=true`.
+6. Register a valid block entity type in `GreatechBlockEntityTypes`.
+7. Register a partial in `GreatechPartialModels`.
+8. Register the renderer in `GreatechClient` if it uses a new block entity type.
+9. Register the tier with large and mixed cogwheel placement predicates if it should support assisted placement.
+10. Check render bounds in game because large cogwheel geometry extends outside one block.
+11. Add a loot table and lang entries.

@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import com.create.gregtech.greatech.registry.GreatechBlockEntityTypes;
 import com.create.gregtech.greatech.registry.GreatechBlocks;
 import com.create.gregtech.greatech.registry.GreatechCapabilities;
+import com.create.gregtech.greatech.registry.GreatechMenus;
 import com.create.gregtech.greatech.content.placement.GreatechPlacementEvents;
 import com.create.gregtech.greatech.content.placement.GreatechPlacementHelpers;
 import com.mojang.logging.LogUtils;
@@ -40,8 +41,10 @@ public class Greatech {
                 output.accept(GreatechBlocks.LV_SUCON_ITEM.get());
                 output.accept(GreatechBlocks.MV_SUCON_ITEM.get());
                 output.accept(GreatechBlocks.HV_SUCON_ITEM.get());
+                output.accept(GreatechBlocks.LV_FLUID_BRIDGE_ITEM.get());
                 output.accept(GreatechBlocks.STEEL_SHAFT_ITEM.get());
                 output.accept(GreatechBlocks.STEEL_COGWHEEL_ITEM.get());
+                output.accept(GreatechBlocks.STEEL_LARGE_COGWHEEL_ITEM.get());
             }).build());
 
     public Greatech(IEventBus modEventBus, ModContainer modContainer) {
@@ -49,6 +52,7 @@ public class Greatech {
 
         GreatechBlocks.register(modEventBus);
         GreatechBlockEntityTypes.register(modEventBus);
+        GreatechMenus.register(modEventBus);
         GreatechPlacementHelpers.init();
         CREATIVE_MODE_TABS.register(modEventBus);
         modEventBus.addListener(GreatechCapabilities::register);
@@ -68,8 +72,10 @@ public class Greatech {
             event.accept(GreatechBlocks.LV_SUCON_ITEM);
             event.accept(GreatechBlocks.MV_SUCON_ITEM);
             event.accept(GreatechBlocks.HV_SUCON_ITEM);
+            event.accept(GreatechBlocks.LV_FLUID_BRIDGE_ITEM);
             event.accept(GreatechBlocks.STEEL_SHAFT_ITEM);
             event.accept(GreatechBlocks.STEEL_COGWHEEL_ITEM);
+            event.accept(GreatechBlocks.STEEL_LARGE_COGWHEEL_ITEM);
         }
     }
 

@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "facing=down,active=false": {
+      "model": "minecraft:block/diamond_block"
+    },
+    "facing=up,active=false": {
+      "model": "minecraft:block/diamond_block"
+    },
+    "facing=north,active=false": {
+      "model": "minecraft:block/diamond_block"
+    },
+    "facing=south,active=false": {
+      "model": "minecraft:block/diamond_block"
+    },
+    "facing=west,active=false": {
+      "model": "minecraft:block/diamond_block"
+    },
+    "facing=east,active=false": {
+      "model": "minecraft:block/diamond_block"
+    },
+    "facing=down,active=true": {
+      "model": "minecraft:block/diamond_block"
+    },
+    "facing=up,active=true": {
+      "model": "minecraft:block/diamond_block"
+    },
+    "facing=north,active=true": {
+      "model": "minecraft:block/diamond_block"
+    },
+    "facing=south,active=true": {
+      "model": "minecraft:block/diamond_block"
+    },
+    "facing=west,active=true": {
+      "model": "minecraft:block/diamond_block"
+    },
+    "facing=east,active=true": {
+      "model": "minecraft:block/diamond_block"
+    }
+  }
+}

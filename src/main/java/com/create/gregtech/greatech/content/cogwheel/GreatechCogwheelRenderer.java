@@ -4,6 +4,8 @@ import com.create.gregtech.greatech.registry.GreatechPartialModels;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
+import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntity;
+import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
 
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
@@ -13,7 +15,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 
-public class GreatechCogwheelRenderer extends KineticBlockEntityRenderer<GreatechCogwheelBlockEntity> {
+public class GreatechCogwheelRenderer extends KineticBlockEntityRenderer<BracketedKineticBlockEntity> {
     private static final float HALF_PI = (float) Math.PI / 2.0F;
 
     public GreatechCogwheelRenderer(BlockEntityRendererProvider.Context context) {
@@ -21,11 +23,13 @@ public class GreatechCogwheelRenderer extends KineticBlockEntityRenderer<Greatec
     }
 
     @Override
-    protected void renderSafe(GreatechCogwheelBlockEntity blockEntity, float partialTicks, PoseStack poseStack,
+    protected void renderSafe(BracketedKineticBlockEntity blockEntity, float partialTicks, PoseStack poseStack,
             MultiBufferSource bufferSource, int light, int overlay) {
         Axis axis = getRotationAxisOf(blockEntity);
         SuperByteBuffer cogwheel = CachedBuffers.partial(
-                GreatechPartialModels.STEEL_COGWHEEL,
+                ICogWheel.isLargeCog(blockEntity.getBlockState())
+                        ? GreatechPartialModels.STEEL_LARGE_COGWHEEL
+                        : GreatechPartialModels.STEEL_COGWHEEL,
                 blockEntity.getBlockState());
         VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.solid());
 

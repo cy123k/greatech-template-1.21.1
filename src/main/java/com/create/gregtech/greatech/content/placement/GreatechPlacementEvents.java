@@ -54,8 +54,19 @@ public final class GreatechPlacementEvents {
             return GreatechPlacementHelpers.SHAFT;
         }
 
+        if (GreatechPlacementRegistry.canUseSmallOnLargeCogwheelHelper(targetState, stack)) {
+            return GreatechPlacementHelpers.SMALL_ON_LARGE_COGWHEEL;
+        }
+
+        if (GreatechPlacementRegistry.canUseLargeOnSmallCogwheelHelper(targetState, stack)) {
+            return GreatechPlacementHelpers.LARGE_ON_SMALL_COGWHEEL;
+        }
+
         if (GreatechPlacementRegistry.canUseSmallCogwheelHelper(targetState, stack)) {
             return GreatechPlacementHelpers.SMALL_COGWHEEL;
+        }
+        if (GreatechPlacementRegistry.canUseLargeCogwheelHelper(targetState, stack)) {
+            return GreatechPlacementHelpers.LARGE_COGWHEEL;
         }
 
         return -1;

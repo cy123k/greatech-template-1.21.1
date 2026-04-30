@@ -28,6 +28,8 @@ The currently registered blocks are:
 - `hv_sucon`
 - `steel_shaft`
 - `steel_cogwheel`
+- `steel_large_cogwheel`
+- `lv_fluid_bridge`
 
 Their role is:
 
@@ -38,10 +40,14 @@ Their role is:
 
 The current transmission parts behave like Create shaft/cogwheel parts while using Greatech block entity types, renderers, kinetic failure limits, and placement helpers.
 
+The current fluid bridge prototype links GTCEu-style fluid handlers and Create-style fluid pressure. Its two fluid ports are direction-controlled in the GUI, while the other sides can accept GTCEu energy. Passive fluid transfer is free; applying Create pipe pressure consumes EU.
+
 ## Near-Term Development Goals
 
 - validate the new custom art and active-state presentation in gameplay
 - validate Greatech placement helper previews against Create/Greatech transmission part combinations
+- validate `lv_fluid_bridge` behavior for GTCEu-to-Create and Create-to-GTCEu fluid direction
+- validate Create pressure refresh behavior so pressure does not stack every tick
 - finish `neoforge.mods.toml` dependency declarations
 - add recipe and progression balancing
 - expand debugging and testing workflow
