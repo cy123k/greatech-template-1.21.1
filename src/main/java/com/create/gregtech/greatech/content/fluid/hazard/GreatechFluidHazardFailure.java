@@ -12,6 +12,7 @@ import com.create.gregtech.greatech.content.fluid.pipe.GreatechFluidPipeConnecti
 import com.simibubi.create.content.fluids.FluidPropagator;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 
+import net.createmod.catnip.data.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -64,15 +65,17 @@ public final class GreatechFluidHazardFailure {
         }
 
         List<FluidHazardCandidate> candidates = new ArrayList<>();
-        List<BlockPos> frontier = new ArrayList<>();
+        List<Pair<Integer, BlockPos>> frontier = new ArrayList<>();
         Set<BlockPos> visited = new HashSet<>();
-        frontier.add(sourcePos.relative(startSide));
+        frontier.add(Pair.of(1, sourcePos.relative(startSide)));
 
         int maxDistance = FluidPropagator.getPumpRange();
         int maxNodes = Math.max(1, Config.fluidHazardMaxCreatePipeScanNodes());
 
         while (!frontier.isEmpty() && visited.size() < maxNodes) {
-            BlockPos currentPos = frontier.remove(0);
+            Pair<Integer, BlockPos> entry = frontier.remove(0);
+            int distance = entry.getFirst();
+            BlockPos currentPos = entry.getSecond();
             if (!level.isLoaded(currentPos) || !visited.add(currentPos)) {
                 continue;
             }
@@ -84,14 +87,14 @@ public final class GreatechFluidHazardFailure {
             }
 
             createCandidate(currentPos, hazard, CreatePipeSafetyProfile.defaultCreatePipe()).ifPresent(candidates::add);
-            if (visited.size() >= maxDistance) {
+            if (distance >= maxDistance) {
                 continue;
             }
 
             for (Direction side : FluidPropagator.getPipeConnections(currentState, pipe)) {
                 BlockPos connectedPos = currentPos.relative(side);
                 if (!visited.contains(connectedPos) && FluidPropagator.getPipe(level, connectedPos) != null) {
-                    frontier.add(connectedPos);
+                    frontier.add(Pair.of(distance + 1, connectedPos));
                 }
             }
         }

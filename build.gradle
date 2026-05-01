@@ -36,6 +36,28 @@ repositories {
         name = 'GTCEu Maven'
         url = 'https://maven.gtceu.com'
     }
+    maven {
+        name = 'Latvian Maven'
+        url = 'https://maven.latvian.dev/releases'
+        content {
+            includeGroup "dev.latvian.mods"
+            includeGroup "dev.latvian.apps"
+        }
+    }
+    maven {
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
+    maven {
+        name = 'JitPack'
+        url = 'https://jitpack.io'
+        content {
+            includeGroup "com.github.rtyley"
+        }
+    }
 }
 
 base {
@@ -135,6 +157,8 @@ dependencies {
         exclude group: "com.lowdragmc.ldlib", module: "ldlib-neoforge-${minecraft_version}"
         exclude group: "dev.toma.configuration", module: "configuration-${minecraft_version}"
     }
+    implementation("maven.modrinth:ldlib:${ldlib_modrinth_version}") { transitive = false }
+    implementation("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
     implementation(files(
             "libs/${ldlib_jar_name}",
             "libs/${configuration_jar_name}"

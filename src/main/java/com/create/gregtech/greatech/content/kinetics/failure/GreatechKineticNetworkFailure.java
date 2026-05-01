@@ -108,7 +108,7 @@ public final class GreatechKineticNetworkFailure {
             return new FailureCandidateType(Optional.of(Config.createBeltConnectorBreakStressLimit()), KineticFailureAction.BREAK_BELT_CONNECTOR);
         }
 
-        if (AllBlocks.SHAFT.has(state)) {
+        if (AllBlocks.SHAFT.has(state) || AllBlocks.POWERED_SHAFT.has(state)) {
             return new FailureCandidateType(Optional.of(Config.createShaftBreakStressLimit()), KineticFailureAction.DESTROY_BLOCK);
         }
 

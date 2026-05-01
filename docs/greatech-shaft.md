@@ -9,6 +9,7 @@ It behaves like a `Create` shaft, but it belongs to Greatech and participates in
 Current block:
 
 - `greatech:steel_shaft`
+- `greatech:powered_steel_shaft`
 
 Current prototype break limit:
 
@@ -21,6 +22,9 @@ Core classes:
 - [GreatechShaftBlock.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/shaft/GreatechShaftBlock.java)
 - [GreatechShaftBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/shaft/GreatechShaftBlockEntity.java)
 - [GreatechShaftRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/shaft/GreatechShaftRenderer.java)
+- [GreatechPoweredShaftBlock.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/steam/GreatechPoweredShaftBlock.java)
+- [GreatechPoweredShaftBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/steam/GreatechPoweredShaftBlockEntity.java)
+- [GreatechPoweredShaftRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/steam/GreatechPoweredShaftRenderer.java)
 
 Registration:
 
@@ -88,6 +92,10 @@ public BlockEntityType<? extends KineticBlockEntity> getBlockEntityType() {
     return GreatechBlockEntityTypes.STEEL_SHAFT.get();
 }
 ```
+
+`powered_steel_shaft` uses the same rule. It has a dedicated `GreatechPoweredShaftBlockEntity` because it extends Create's `GeneratingKineticBlockEntity` and acts as the generated-rotation side of the steam engine hatch prototype.
+
+The current powered shaft is not meant to be the final player-facing model. It reuses the steel shaft partial model and item, and `GreatechSteamEngineHatchMachine` converts a neighboring `steel_shaft` into `powered_steel_shaft` when the hatch is working and the shaft axis is perpendicular to the hatch front.
 
 ## Animation Pattern
 

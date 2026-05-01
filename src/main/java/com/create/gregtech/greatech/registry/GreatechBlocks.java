@@ -7,6 +7,7 @@ import com.create.gregtech.greatech.content.converter.SUEnergyConverterTier;
 import com.create.gregtech.greatech.content.fluid.ElectricFluidBridgeBlock;
 import com.create.gregtech.greatech.content.fluid.ElectricFluidBridgeTier;
 import com.create.gregtech.greatech.content.shaft.GreatechShaftBlock;
+import com.create.gregtech.greatech.content.steam.GreatechPoweredShaftBlock;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -28,6 +29,7 @@ public final class GreatechBlocks {
     public static final DeferredBlock<Block> HV_SUCON = registerSUEnergyConverter("hv_sucon", SUEnergyConverterTier.HV);
     public static final DeferredBlock<Block> LV_FLUID_BRIDGE = registerElectricFluidBridge("lv_fluid_bridge", ElectricFluidBridgeTier.LV);
     public static final DeferredBlock<Block> STEEL_SHAFT = registerGreatechShaft("steel_shaft", 2_048.0F);
+    public static final DeferredBlock<Block> POWERED_STEEL_SHAFT = registerGreatechPoweredShaft("powered_steel_shaft", 2_048.0F);
     public static final DeferredBlock<Block> STEEL_COGWHEEL = registerGreatechCogwheel("steel_cogwheel", false, 2_048.0F,
             () -> GreatechBlockEntityTypes.STEEL_COGWHEEL.get());
     public static final DeferredBlock<Block> STEEL_LARGE_COGWHEEL = registerGreatechCogwheel("steel_large_cogwheel", true, 4_096.0F,
@@ -38,6 +40,7 @@ public final class GreatechBlocks {
     public static final DeferredItem<BlockItem> HV_SUCON_ITEM = registerBlockItem("hv_sucon", HV_SUCON);
     public static final DeferredItem<BlockItem> LV_FLUID_BRIDGE_ITEM = registerBlockItem("lv_fluid_bridge", LV_FLUID_BRIDGE);
     public static final DeferredItem<BlockItem> STEEL_SHAFT_ITEM = registerBlockItem("steel_shaft", STEEL_SHAFT);
+    public static final DeferredItem<BlockItem> POWERED_STEEL_SHAFT_ITEM = registerBlockItem("powered_steel_shaft", POWERED_STEEL_SHAFT);
     public static final DeferredItem<BlockItem> STEEL_COGWHEEL_ITEM = registerBlockItem("steel_cogwheel", STEEL_COGWHEEL);
     public static final DeferredItem<BlockItem> STEEL_LARGE_COGWHEEL_ITEM = registerBlockItem("steel_large_cogwheel", STEEL_LARGE_COGWHEEL);
 
@@ -80,6 +83,16 @@ public final class GreatechBlocks {
         return BLOCKS.register(
                 name,
                 () -> new GreatechShaftBlock(BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.METAL)
+                        .strength(3.0F)
+                        .sound(SoundType.METAL)
+                        .requiresCorrectToolForDrops(), breakStressLimit));
+    }
+
+    private static DeferredBlock<Block> registerGreatechPoweredShaft(String name, float breakStressLimit) {
+        return BLOCKS.register(
+                name,
+                () -> new GreatechPoweredShaftBlock(BlockBehaviour.Properties.of()
                         .mapColor(MapColor.METAL)
                         .strength(3.0F)
                         .sound(SoundType.METAL)

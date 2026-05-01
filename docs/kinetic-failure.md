@@ -9,6 +9,8 @@ When a `Create` kinetic network contains a Greatech failure source, overloaded v
 The system currently affects:
 
 - `create:shaft`
+- `create:powered_shaft`
+- `greatech:powered_steel_shaft`
 - `create:cogwheel`
 - `create:large_cogwheel`
 - `create:belt` connections
@@ -27,6 +29,11 @@ Core implementation:
 Current failure source:
 
 - [SUEnergyConverterBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterBlockEntity.java)
+
+Current generated-rotation Greatech part:
+
+- [GreatechPoweredShaftBlock.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/steam/GreatechPoweredShaftBlock.java)
+- [GreatechPoweredShaftBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/steam/GreatechPoweredShaftBlockEntity.java)
 
 ## Behavior
 
@@ -47,7 +54,8 @@ If multiple Greatech failure sources are in the same network, only one source is
 
 Current defaults:
 
-- `create:shaft`: `512 SU`
+- `create:shaft` / `create:powered_shaft`: `512 SU`
+- `greatech:powered_steel_shaft`: `2048 SU`
 - `create:cogwheel`: `512 SU`
 - `create:large_cogwheel`: `1024 SU`
 - `create:belt` connection: `1024 SU`
@@ -85,7 +93,7 @@ Meaning:
 
 - `enableKineticFailures`: enables or disables the whole accident system
 - `keepKineticFailureDrops`: controls whether accident-broken parts drop items
-- `createShaftBreakStressLimit`: vanilla shaft break threshold
+- `createShaftBreakStressLimit`: vanilla shaft and powered shaft break threshold
 - `createCogwheelBreakStressLimit`: vanilla small cogwheel break threshold
 - `createLargeCogwheelBreakStressLimit`: vanilla large cogwheel break threshold
 - `createBeltConnectorBreakStressLimit`: vanilla belt connection break threshold

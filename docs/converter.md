@@ -61,7 +61,7 @@ When a converter is connected to a `Create` kinetic network, that network is eli
 
 Current vanilla Create defaults:
 
-- `create:shaft`: breaks above `512 SU`
+- `create:shaft` / `create:powered_shaft`: breaks above `512 SU`
 - `create:cogwheel`: breaks above `512 SU`
 - `create:large_cogwheel`: breaks above `1024 SU`
 

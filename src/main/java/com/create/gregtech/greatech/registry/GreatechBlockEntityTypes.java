@@ -6,6 +6,7 @@ import com.create.gregtech.greatech.content.cogwheel.GreatechLargeCogwheelBlockE
 import com.create.gregtech.greatech.content.converter.SUEnergyConverterBlockEntity;
 import com.create.gregtech.greatech.content.fluid.ElectricFluidBridgeBlockEntity;
 import com.create.gregtech.greatech.content.shaft.GreatechShaftBlockEntity;
+import com.create.gregtech.greatech.content.steam.GreatechPoweredShaftBlockEntity;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -35,6 +36,12 @@ public final class GreatechBlockEntityTypes {
             () -> BlockEntityType.Builder.of(
                     GreatechShaftBlockEntity::new,
                     GreatechBlocks.STEEL_SHAFT.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechPoweredShaftBlockEntity>> POWERED_STEEL_SHAFT = BLOCK_ENTITY_TYPES.register(
+            "powered_steel_shaft",
+            () -> BlockEntityType.Builder.of(
+                    GreatechPoweredShaftBlockEntity::new,
+                    GreatechBlocks.POWERED_STEEL_SHAFT.get()).build(null));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechCogwheelBlockEntity>> STEEL_COGWHEEL = BLOCK_ENTITY_TYPES.register(
             "steel_cogwheel",

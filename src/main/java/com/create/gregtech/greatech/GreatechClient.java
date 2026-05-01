@@ -5,6 +5,7 @@ import com.create.gregtech.greatech.content.converter.SUEnergyConverterRenderer;
 import com.create.gregtech.greatech.content.fluid.ElectricFluidBridgeRenderer;
 import com.create.gregtech.greatech.content.fluid.ElectricFluidBridgeScreen;
 import com.create.gregtech.greatech.content.shaft.GreatechShaftRenderer;
+import com.create.gregtech.greatech.content.steam.GreatechPoweredShaftRenderer;
 import com.create.gregtech.greatech.registry.GreatechBlockEntityTypes;
 import com.create.gregtech.greatech.registry.GreatechMenus;
 import com.create.gregtech.greatech.registry.GreatechPartialModels;
@@ -44,6 +45,7 @@ public class GreatechClient {
     static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.SU_ENERGY_CONVERTER.get(), SUEnergyConverterRenderer::new);
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_SHAFT.get(), GreatechShaftRenderer::new);
+        event.registerBlockEntityRenderer(GreatechBlockEntityTypes.POWERED_STEEL_SHAFT.get(), GreatechPoweredShaftRenderer::new);
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_COGWHEEL.get(), GreatechCogwheelRenderer::new);
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_LARGE_COGWHEEL.get(), GreatechCogwheelRenderer::new);
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.ELECTRIC_FLUID_BRIDGE.get(), ElectricFluidBridgeRenderer::new);

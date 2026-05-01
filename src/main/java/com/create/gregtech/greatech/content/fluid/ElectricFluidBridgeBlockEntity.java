@@ -499,6 +499,9 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
         long previousEnergy = energyStored;
         long nextEnergy = Math.max(0L, Math.min(previousEnergy + differenceAmount, getEnergyCapacity()));
         energyStored = nextEnergy;
+        if (nextEnergy != previousEnergy) {
+            setChanged();
+        }
         return nextEnergy - previousEnergy;
     }
 

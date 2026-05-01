@@ -5,6 +5,9 @@
   "block.greatech.hv_sucon": "HV SU Energy Converter",
   "block.greatech.lv_fluid_bridge": "LV Electric Fluid Bridge",
   "block.greatech.steel_shaft": "Steel Shaft",
+  "block.greatech.powered_steel_shaft": "Powered Steel Shaft",
+  "block.greatech.steam_engine_hatch": "Steam Engine Hatch",
+  "block.greatech.steam_engine_hatch.tooltip": "Consumes GTCEu steam to drive an adjacent steel shaft at a fixed speed.",
   "block.greatech.steel_cogwheel": "Steel Cogwheel",
   "block.greatech.steel_large_cogwheel": "Steel Large Cogwheel",
   "item.greatech.lv_sucon": "LV SU Energy Converter",
@@ -12,6 +15,8 @@
   "item.greatech.hv_sucon": "HV SU Energy Converter",
   "item.greatech.lv_fluid_bridge": "LV Electric Fluid Bridge",
   "item.greatech.steel_shaft": "Steel Shaft",
+  "item.greatech.powered_steel_shaft": "Powered Steel Shaft",
+  "item.greatech.steam_engine_hatch": "Steam Engine Hatch",
   "item.greatech.steel_cogwheel": "Steel Cogwheel",
   "item.greatech.steel_large_cogwheel": "Steel Large Cogwheel",
 

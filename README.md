@@ -6,9 +6,11 @@ The current prototype focuses on one core machine family:
 
 - `SU Energy Converter`
 - `Steel Shaft`
+- `Powered Steel Shaft`
 - `Steel Cogwheel`
 - `Steel Large Cogwheel`
 - `LV Electric Fluid Bridge`
+- `Steam Engine Hatch`
 
 These machines accept `Create` rotational power and output `GTCEu` `EU`.
 
@@ -37,6 +39,8 @@ Implemented so far:
 - Greatech placement helpers for shaft/cogwheel assisted placement, arrow indicators, mixed-size cogwheel offsets, and visible ghost previews
 - `lv_fluid_bridge` registration with GTCEu energy input, directional fluid ports, vanilla GUI, passive fluid bridge behavior, EU-powered Create fluid pressure, and BER-rendered pipe-style visuals
 - Greatech fluid hazard accidents for dangerous GTCEu fluids entering monitored Create fluid pipe networks
+- `powered_steel_shaft` registration with Create-style generated rotation, stress capacity, animated steel shaft rendering, and kinetic failure participation
+- `steam_engine_hatch` GTCEu machine registration as a fluid export part that accepts steam, can be recognized by GTCEu multiblocks through output-hatch style abilities, and drives an adjacent powered steel shaft at a fixed prototype RPM
 
 Still in progress:
 
@@ -114,10 +118,12 @@ Key code locations:
 - [Greatech fluid bridge code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid)
 - [Greatech fluid hazard system](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/hazard)
 - [Greatech fluid pipe helpers](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/pipe)
+- [Greatech steam engine hatch and powered shaft code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/steam)
 - [Greatech render helpers](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/client/render)
 - [Kinetic failure system](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/kinetics/failure)
 - [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
 - [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechMachines.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechMachines.java)
 - [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
 - [GreatechCapabilities.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechCapabilities.java)
 
@@ -135,7 +141,9 @@ Key resource locations:
 - [Greatech cogwheel block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/cogwheel)
 - [Greatech cogwheel textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/greatech_cogwheel)
 - [LV fluid bridge blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/lv_fluid_bridge.json)
+- [Steam engine hatch blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/steam_engine_hatch.json)
 - [Greatech fluid bridge block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/fluid/fluid_bridge)
+- [Greatech machine block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/machine)
 - [Greatech fluid bridge textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/greatech_fluid_bridge)
 - [LV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/lv_su_energy_converter)
 - [MV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/mv_su_energy_converter)
@@ -225,6 +233,8 @@ Project docs live in:
 - [docs/greatech-placement-helper.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-placement-helper.md)
 - [docs/greatech-fluidbridge.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-fluidbridge.md)
 - [docs/greatech-fluid-hazard.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-fluid-hazard.md)
+- [docs/steam-engine-hatch.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/steam-engine-hatch.md)
+- [docs/gtceu-machine-registration-tips.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/gtceu-machine-registration-tips.md)
 - [docs/create-fluid-tips.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/create-fluid-tips.md)
 - [docs/greatech-renderer-register.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-renderer-register.md)
 - [docs/dependencies.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/dependencies.md)

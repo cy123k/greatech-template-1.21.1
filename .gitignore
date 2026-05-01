@@ -29,6 +29,7 @@ bin/
 ### VS Code ###
 .vscode/
 .codex_tmp/
+.codex/
 ### Mac OS ###
 .DS_Store
 
