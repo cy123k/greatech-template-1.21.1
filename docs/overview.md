@@ -42,12 +42,15 @@ The current transmission parts behave like Create shaft/cogwheel parts while usi
 
 The current fluid bridge prototype links GTCEu-style fluid handlers and Create-style fluid pressure. Its two fluid ports are direction-controlled in the GUI, while the other sides can accept GTCEu energy. Passive fluid transfer is free; applying Create pipe pressure consumes EU.
 
+Dangerous GTCEu fluid traits can also follow fluids into monitored Create pipe networks. The first fluid hazard prototype lets Greatech machines treat Create fluid pipes as accident candidates when hot, gaseous, acidic, cryogenic, or plasma fluids are routed through them.
+
 ## Near-Term Development Goals
 
 - validate the new custom art and active-state presentation in gameplay
 - validate Greatech placement helper previews against Create/Greatech transmission part combinations
 - validate `lv_fluid_bridge` behavior for GTCEu-to-Create and Create-to-GTCEu fluid direction
 - validate Create pressure refresh behavior so pressure does not stack every tick
+- validate fluid hazard behavior for dangerous GTCEu fluids routed into Create pipes
 - finish `neoforge.mods.toml` dependency declarations
 - add recipe and progression balancing
 - expand debugging and testing workflow

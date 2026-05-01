@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Set;
 
 import com.create.gregtech.greatech.Config;
+import com.create.gregtech.greatech.content.fluid.hazard.FluidHazardSource;
+import com.create.gregtech.greatech.content.fluid.hazard.GreatechFluidHazardFailure;
+import com.create.gregtech.greatech.content.fluid.pipe.GreatechFluidPipeConnections;
 import com.create.gregtech.greatech.registry.GreatechBlockEntityTypes;
 import com.gregtechceu.gtceu.api.capability.IEnergyContainer;
 import com.simibubi.create.content.fluids.FluidPropagator;
@@ -34,7 +37,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
-public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEnergyContainer, MenuProvider {
+public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEnergyContainer, MenuProvider, FluidHazardSource {
     private static final int PRESSURE_REFRESH_INTERVAL = 20;
 
     private final FluidTank tank = new FluidTank(1) {
@@ -55,6 +58,10 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
     private int lastAppliedPressure;
     private boolean lastAppliedFlowReversed;
     private int pressureRefreshCooldown;
+    private FluidStack lastCreateHazardStack = FluidStack.EMPTY;
+    private Direction lastCreateHazardSide;
+    private int fluidHazardCooldown;
+    private boolean createHazardRecordedThisTick;
 
     public ElectricFluidBridgeBlockEntity(BlockPos pos, BlockState blockState) {
         super(GreatechBlockEntityTypes.ELECTRIC_FLUID_BRIDGE.get(), pos, blockState);
@@ -70,6 +77,7 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
         lastTransferredMb = 0;
         lastConsumedEu = 0;
         actualPressure = 0;
+        createHazardRecordedThisTick = false;
 
         if (shouldApplyCreatePressure()) {
             applyCreatePressure(level, state);
@@ -80,6 +88,8 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
             transferBetween(level, getInputPort(state), getOutputPort(state));
         }
         updateActiveState(state, lastTransferredMb > 0 || actualPressure > 0);
+        clearStaleCreateHazard();
+        GreatechFluidHazardFailure.tick(this);
     }
 
     private boolean shouldApplyCreatePressure() {
@@ -201,6 +211,9 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
         }
 
         int filled = target.fill(drained, IFluidHandler.FluidAction.EXECUTE);
+        if (filled > 0 && GreatechFluidPipeConnections.isCreateFluidPipeConnected(level, worldPosition, targetSide)) {
+            recordCreateHazard(drained, filled, targetSide);
+        }
         if (filled < drained.getAmount()) {
             FluidStack remainder = drained.copy();
             remainder.setAmount(drained.getAmount() - filled);
@@ -231,6 +244,9 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
 
         FluidStack drained = tank.drain(transferable, IFluidHandler.FluidAction.EXECUTE);
         int filled = output.fill(drained, IFluidHandler.FluidAction.EXECUTE);
+        if (filled > 0 && GreatechFluidPipeConnections.isCreateFluidPipeConnected(level, worldPosition, outputSide)) {
+            recordCreateHazard(drained, filled, outputSide);
+        }
         if (filled < drained.getAmount()) {
             FluidStack remainder = drained.copy();
             remainder.setAmount(drained.getAmount() - filled);
@@ -316,6 +332,34 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
         }
     }
 
+    private void recordCreateHazard(FluidStack stack, int amount, Direction side) {
+        if (stack.isEmpty() || amount <= 0) {
+            return;
+        }
+
+        FluidStack hazardStack = stack.copy();
+        hazardStack.setAmount(amount);
+        lastCreateHazardStack = hazardStack;
+        lastCreateHazardSide = side;
+        createHazardRecordedThisTick = true;
+        setChanged();
+    }
+
+    private void clearStaleCreateHazard() {
+        if (createHazardRecordedThisTick || lastCreateHazardStack.isEmpty()) {
+            return;
+        }
+
+        FluidStack currentFluid = tank.getFluid();
+        if (!currentFluid.isEmpty() && FluidStack.isSameFluidSameComponents(currentFluid, lastCreateHazardStack)) {
+            return;
+        }
+
+        lastCreateHazardStack = FluidStack.EMPTY;
+        lastCreateHazardSide = null;
+        setChanged();
+    }
+
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
@@ -324,6 +368,7 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
         tag.putInt("LastConsumedEu", lastConsumedEu);
         tag.putBoolean("FlowReversed", flowReversed);
         tag.putInt("TargetPressure", targetPressure);
+        tag.putInt("FluidHazardCooldown", fluidHazardCooldown);
         tag.put("Tank", tank.writeToNBT(registries, new CompoundTag()));
     }
 
@@ -335,6 +380,7 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
         lastConsumedEu = tag.getInt("LastConsumedEu");
         flowReversed = tag.getBoolean("FlowReversed");
         targetPressure = tag.getInt("TargetPressure");
+        fluidHazardCooldown = tag.getInt("FluidHazardCooldown");
         tank.setCapacity(Config.fluidBridgeCapacity(getTier()));
         tank.readFromNBT(registries, tag.getCompound("Tank"));
     }
@@ -489,6 +535,37 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
     @Override
     public long getOutputPerSec() {
         return 0;
+    }
+
+    @Override
+    public Level getFluidHazardLevel() {
+        return level;
+    }
+
+    @Override
+    public BlockPos getFluidHazardSourcePos() {
+        return worldPosition;
+    }
+
+    @Override
+    public Direction getFluidHazardStartSide() {
+        return lastCreateHazardSide;
+    }
+
+    @Override
+    public FluidStack getFluidHazardStack() {
+        return lastCreateHazardStack;
+    }
+
+    @Override
+    public int getFluidHazardCooldown() {
+        return fluidHazardCooldown;
+    }
+
+    @Override
+    public void setFluidHazardCooldown(int cooldown) {
+        fluidHazardCooldown = Math.max(0, cooldown);
+        setChanged();
     }
 
     private void distributePressureTo(Level level, Direction side, boolean pull, int pressure) {
@@ -710,6 +787,11 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
             FluidStack drained = tank.drain(limited, action);
             if (action.execute()) {
                 recordTransfer(drained.getAmount());
+                Direction side = getPort(getBlockState(), front);
+                if (level != null && drained.getAmount() > 0
+                        && GreatechFluidPipeConnections.isCreateFluidPipeConnected(level, worldPosition, side)) {
+                    recordCreateHazard(drained, drained.getAmount(), side);
+                }
             }
             return drained;
         }
@@ -723,6 +805,11 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
             FluidStack drained = tank.drain(maxDrain, action);
             if (action.execute()) {
                 recordTransfer(drained.getAmount());
+                Direction side = getPort(getBlockState(), front);
+                if (level != null && drained.getAmount() > 0
+                        && GreatechFluidPipeConnections.isCreateFluidPipeConnected(level, worldPosition, side)) {
+                    recordCreateHazard(drained, drained.getAmount(), side);
+                }
             }
             return drained;
         }

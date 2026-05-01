@@ -1,0 +1,26 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"ambientocclusion": false,
+	"texture_size": [32, 32],
+	"textures": {
+		"pipe": "greatech:block/greatech_fluid_bridge/lv_pipe",
+		"particle": "greatech:block/greatech_fluid_bridge/lv_pipe"
+	},
+	"elements": [
+		{
+			"name": "casing",
+			"from": [3, 3, 3],
+			"to": [13, 13, 13],
+			"faces": {
+				"north": {"uv": [1, 11, 6, 16], "texture": "#pipe"},
+				"east": {"uv": [1, 11, 6, 16], "texture": "#pipe"},
+				"south": {"uv": [1, 11, 6, 16], "texture": "#pipe"},
+				"west": {"uv": [1, 11, 6, 16], "texture": "#pipe"},
+				"up": {"uv": [1, 11, 6, 16], "texture": "#pipe"},
+				"down": {"uv": [1, 11, 6, 16], "texture": "#pipe"}
+			}
+		}
+	]
+}

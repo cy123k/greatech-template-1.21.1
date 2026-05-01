@@ -1,0 +1,8 @@
+{
+  "parent": "greatech:block/fluid/fluid_bridge/greatech_fluid_bridge",
+  "ambientocclusion": false,
+  "textures": {
+    "pipe": "greatech:block/greatech_fluid_bridge/lv_pipe",
+    "particle": "greatech:block/greatech_fluid_bridge/lv_pipe"
+  }
+}

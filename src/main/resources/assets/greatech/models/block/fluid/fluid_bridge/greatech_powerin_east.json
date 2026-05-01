@@ -1,0 +1,26 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"ambientocclusion": false,
+	"texture_size": [32, 32],
+	"textures": {
+		"pipe": "greatech:block/greatech_fluid_bridge/lv_pipe",
+		"particle": "greatech:block/greatech_fluid_bridge/lv_pipe"
+	},
+	"elements": [
+		{
+			"name": "power_in",
+			"from": [12.99, 5, 5],
+			"to": [15.99, 11, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [12.99, 5, 5]},
+			"faces": {
+				"north": {"uv": [14.5, 0, 16, 3], "texture": "#pipe"},
+				"east": {"uv": [10, 0, 13, 3], "texture": "#pipe"},
+				"south": {"uv": [14.5, 0, 16, 3], "texture": "#pipe"},
+				"up": {"uv": [16, 3, 14.5, 0], "texture": "#pipe"},
+				"down": {"uv": [16, 0, 14.5, 3], "texture": "#pipe"}
+			}
+		}
+	]
+}

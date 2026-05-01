@@ -12,6 +12,10 @@ public final class GreatechPartialModels {
     public static final PartialModel STEEL_SHAFT = block("shaft/steel_shaft");
     public static final PartialModel STEEL_COGWHEEL = block("cogwheel/small_cogwheel/steel_cogwheel");
     public static final PartialModel STEEL_LARGE_COGWHEEL = block("cogwheel/large_cogwheel/steel_large_cogwheel");
+    public static final PartialModel LV_FLUID_BRIDGE =
+            block("fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge");
+    public static final PartialModel LV_FLUID_BRIDGE_GTCEU_DRAIN =
+            block("fluid/fluid_bridge/lv_fluid_bridge/lv_drain_north");
 
     private GreatechPartialModels() {
     }

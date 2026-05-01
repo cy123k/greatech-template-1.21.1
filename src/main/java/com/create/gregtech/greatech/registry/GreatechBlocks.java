@@ -67,6 +67,11 @@ public final class GreatechBlocks {
                         .mapColor(MapColor.METAL)
                         .strength(3.5F)
                         .sound(SoundType.METAL)
+                        .dynamicShape()
+                        .noOcclusion()
+                        .isSuffocating((state, level, pos) -> false)
+                        .isViewBlocking((state, level, pos) -> false)
+                        .forceSolidOn()
                         .lightLevel(state -> state.getValue(ElectricFluidBridgeBlock.ACTIVE) ? 1 : 0)
                         .requiresCorrectToolForDrops(), tier));
     }

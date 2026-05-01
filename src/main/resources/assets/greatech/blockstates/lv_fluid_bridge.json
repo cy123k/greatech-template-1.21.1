@@ -1,40 +1,76 @@
 {
   "variants": {
-    "facing=down,active=false": {
-      "model": "minecraft:block/diamond_block"
+    "facing=down,active=false,gtceu_connected=false": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
     },
-    "facing=up,active=false": {
-      "model": "minecraft:block/diamond_block"
+    "facing=down,active=false,gtceu_connected=true": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
     },
-    "facing=north,active=false": {
-      "model": "minecraft:block/diamond_block"
+    "facing=down,active=true,gtceu_connected=false": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
     },
-    "facing=south,active=false": {
-      "model": "minecraft:block/diamond_block"
+    "facing=down,active=true,gtceu_connected=true": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
     },
-    "facing=west,active=false": {
-      "model": "minecraft:block/diamond_block"
+    "facing=up,active=false,gtceu_connected=false": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
     },
-    "facing=east,active=false": {
-      "model": "minecraft:block/diamond_block"
+    "facing=up,active=false,gtceu_connected=true": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
     },
-    "facing=down,active=true": {
-      "model": "minecraft:block/diamond_block"
+    "facing=up,active=true,gtceu_connected=false": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
     },
-    "facing=up,active=true": {
-      "model": "minecraft:block/diamond_block"
+    "facing=up,active=true,gtceu_connected=true": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
     },
-    "facing=north,active=true": {
-      "model": "minecraft:block/diamond_block"
+    "facing=north,active=false,gtceu_connected=false": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
     },
-    "facing=south,active=true": {
-      "model": "minecraft:block/diamond_block"
+    "facing=north,active=false,gtceu_connected=true": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
     },
-    "facing=west,active=true": {
-      "model": "minecraft:block/diamond_block"
+    "facing=north,active=true,gtceu_connected=false": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
     },
-    "facing=east,active=true": {
-      "model": "minecraft:block/diamond_block"
+    "facing=north,active=true,gtceu_connected=true": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
+    },
+    "facing=south,active=false,gtceu_connected=false": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
+    },
+    "facing=south,active=false,gtceu_connected=true": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
+    },
+    "facing=south,active=true,gtceu_connected=false": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
+    },
+    "facing=south,active=true,gtceu_connected=true": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
+    },
+    "facing=west,active=false,gtceu_connected=false": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
+    },
+    "facing=west,active=false,gtceu_connected=true": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
+    },
+    "facing=west,active=true,gtceu_connected=false": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
+    },
+    "facing=west,active=true,gtceu_connected=true": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
+    },
+    "facing=east,active=false,gtceu_connected=false": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
+    },
+    "facing=east,active=false,gtceu_connected=true": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
+    },
+    "facing=east,active=true,gtceu_connected=false": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
+    },
+    "facing=east,active=true,gtceu_connected=true": {
+      "model": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge_block"
     }
   }
 }

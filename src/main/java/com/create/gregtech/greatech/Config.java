@@ -33,6 +33,7 @@ public final class Config {
     private static final int[] DEFAULT_FLUID_BRIDGE_MAX_PRESSURE = {64, 256, 1024};
     private static final int[] DEFAULT_FLUID_BRIDGE_EU_PER_PRESSURE = {1, 1, 1};
     private static final int[] DEFAULT_FLUID_BRIDGE_MAX_PRESSURE_EU_PER_TICK = {32, 128, 512};
+    private static final int DEFAULT_CREATE_FLUID_PIPE_MAX_TEMPERATURE = 500;
 
     private static final ModConfigSpec.DoubleValue CREATE_SHAFT_BREAK_STRESS_LIMIT = BUILDER
             .comment("When a Create kinetic network contains a Greatech failure source, vanilla create:shaft blocks can break above this network stress.")
@@ -66,6 +67,32 @@ public final class Config {
     private static final ModConfigSpec.IntValue KINETIC_FAILURE_COOLDOWN = BUILDER
             .comment("Cooldown in ticks after a kinetic part breaks in a Greatech-monitored kinetic network.")
             .defineInRange("kineticFailureCooldown", 100, 0, Integer.MAX_VALUE);
+
+    private static final ModConfigSpec.BooleanValue ENABLE_FLUID_HAZARDS = BUILDER
+            .comment("Enables Greatech fluid hazard accidents in Create fluid pipe networks touched by Greatech fluid machines.")
+            .define("enableFluidHazards", true);
+
+    private static final ModConfigSpec.BooleanValue KEEP_FLUID_HAZARD_DROPS = BUILDER
+            .comment("Keeps block drops when a Create fluid pipe breaks from a Greatech fluid hazard accident.")
+            .define("keepFluidHazardDrops", false);
+
+    private static final ModConfigSpec.IntValue FLUID_HAZARD_CHECK_INTERVAL = BUILDER
+            .comment("How often, in ticks, each eligible Greatech fluid machine checks nearby Create fluid pipes for fluid hazards.")
+            .defineInRange("fluidHazardCheckInterval", 20, 1, Integer.MAX_VALUE);
+
+    private static final ModConfigSpec.IntValue FLUID_HAZARD_COOLDOWN = BUILDER
+            .comment("Cooldown in ticks after a Create fluid pipe breaks from a Greatech fluid hazard accident.")
+            .defineInRange("fluidHazardCooldown", 100, 0, Integer.MAX_VALUE);
+
+    private static final ModConfigSpec.IntValue FLUID_HAZARD_MAX_CREATE_PIPE_SCAN_NODES = BUILDER
+            .comment("Maximum number of Create fluid pipe blocks scanned from one Greatech fluid hazard source per check.")
+            .defineInRange("fluidHazardMaxCreatePipeScanNodes", 128, 1, Integer.MAX_VALUE);
+
+    private static final ModConfigSpec.IntValue CREATE_FLUID_PIPE_MAX_TEMPERATURE = BUILDER
+            .comment("Default maximum fluid temperature in Kelvin for Create fluid pipes monitored by Greatech fluid hazards.",
+                    "All Create fluid pipe variants currently share this value.",
+                    "Default Create pipe safety flags are gasProof=false, acidProof=false, cryoProof=false, plasmaProof=false.")
+            .defineInRange("createFluidPipeMaxTemperature", DEFAULT_CREATE_FLUID_PIPE_MAX_TEMPERATURE, 0, Integer.MAX_VALUE);
 
     private static final ModConfigSpec.ConfigValue<List<? extends Integer>> CONVERTER_CAPACITY = BUILDER
             .comment("Internal EU buffers for the SU converters.", TIER_ORDER)
@@ -168,6 +195,12 @@ public final class Config {
     private static boolean keepKineticFailureDrops;
     private static int kineticFailureCheckInterval;
     private static int kineticFailureCooldown;
+    private static boolean enableFluidHazards;
+    private static boolean keepFluidHazardDrops;
+    private static int fluidHazardCheckInterval;
+    private static int fluidHazardCooldown;
+    private static int fluidHazardMaxCreatePipeScanNodes;
+    private static int createFluidPipeMaxTemperature = DEFAULT_CREATE_FLUID_PIPE_MAX_TEMPERATURE;
 
     private Config() {
     }
@@ -199,6 +232,12 @@ public final class Config {
         keepKineticFailureDrops = KEEP_KINETIC_FAILURE_DROPS.get();
         kineticFailureCheckInterval = KINETIC_FAILURE_CHECK_INTERVAL.get();
         kineticFailureCooldown = KINETIC_FAILURE_COOLDOWN.get();
+        enableFluidHazards = ENABLE_FLUID_HAZARDS.get();
+        keepFluidHazardDrops = KEEP_FLUID_HAZARD_DROPS.get();
+        fluidHazardCheckInterval = FLUID_HAZARD_CHECK_INTERVAL.get();
+        fluidHazardCooldown = FLUID_HAZARD_COOLDOWN.get();
+        fluidHazardMaxCreatePipeScanNodes = FLUID_HAZARD_MAX_CREATE_PIPE_SCAN_NODES.get();
+        createFluidPipeMaxTemperature = CREATE_FLUID_PIPE_MAX_TEMPERATURE.get();
     }
 
     public static int converterCapacity(SUEnergyConverterTier tier) {
@@ -295,6 +334,30 @@ public final class Config {
 
     public static int kineticFailureCooldown() {
         return kineticFailureCooldown;
+    }
+
+    public static boolean enableFluidHazards() {
+        return enableFluidHazards;
+    }
+
+    public static boolean keepFluidHazardDrops() {
+        return keepFluidHazardDrops;
+    }
+
+    public static int fluidHazardCheckInterval() {
+        return fluidHazardCheckInterval;
+    }
+
+    public static int fluidHazardCooldown() {
+        return fluidHazardCooldown;
+    }
+
+    public static int fluidHazardMaxCreatePipeScanNodes() {
+        return fluidHazardMaxCreatePipeScanNodes;
+    }
+
+    public static int createFluidPipeMaxTemperature() {
+        return createFluidPipeMaxTemperature;
     }
 
     private static int[] readIntTierValues(List<? extends Integer> configured, int[] defaults) {

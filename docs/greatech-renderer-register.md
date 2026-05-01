@@ -23,6 +23,8 @@ Current renderer registrations:
 event.registerBlockEntityRenderer(GreatechBlockEntityTypes.SU_ENERGY_CONVERTER.get(), SUEnergyConverterRenderer::new);
 event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_SHAFT.get(), GreatechShaftRenderer::new);
 event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_COGWHEEL.get(), GreatechCogwheelRenderer::new);
+event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_LARGE_COGWHEEL.get(), GreatechCogwheelRenderer::new);
+event.registerBlockEntityRenderer(GreatechBlockEntityTypes.ELECTRIC_FLUID_BRIDGE.get(), ElectricFluidBridgeRenderer::new);
 ```
 
 Keep renderer classes client-safe. They can import Minecraft client rendering classes because `GreatechClient` is loaded only on the client distribution.
@@ -67,12 +69,66 @@ For `steel_cogwheel`, the same rule applies:
 
 Shaft and cogwheel blockstates also have `placement_ghost=true` variants. These are for Catnip placement previews only. Normal placed blocks use the empty model, while ghost states use the full model so the preview is visible.
 
+For `lv_fluid_bridge`, the whole world visual is BER-rendered:
+
+- static world model: `lv_fluid_bridge_block.json`, empty except particle texture
+- dynamic body partial: `lv_fluid_bridge.json`, rendered by `ElectricFluidBridgeRenderer`
+- dynamic GTCEu connector partial: `lv_drain_north.json`, rendered only when the back side connects to a GTCEu fluid pipe
+- item model: `models/item/lv_fluid_bridge.json`, uses the full bridge model for display
+
+This prevents the normal blockstate model from being face-culled or darkened by adjacent full blocks.
+
 For a machine with static casing and one moving rotor:
 
 - keep casing in the blockstate model
 - render only the rotor partial
 
 The converter follows this pattern.
+
+## Pipe-Like BER Pattern
+
+Pipe-like models can run into lighting and culling issues when ordinary baked world models sit flush against neighboring full blocks. For this case, use a BER composition similar to `lv_fluid_bridge`.
+
+The current Greatech pattern is:
+
+1. make the placed blockstate point to an empty model with a particle texture
+2. register one or more `PartialModel`s in [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
+3. register the BER in [GreatechClient.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/GreatechClient.java)
+4. render the base body every frame through `CachedBuffers.partial(...)`
+5. render conditional pieces after checking block state or nearby block entities
+6. use an expanded render bounding box if the model extends outside the block cube
+
+For `lv_fluid_bridge`:
+
+- body partial: `GreatechPartialModels.LV_FLUID_BRIDGE`
+- GTCEu drain partial: `GreatechPartialModels.LV_FLUID_BRIDGE_GTCEU_DRAIN`
+- renderer: [ElectricFluidBridgeRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
+
+The bridge block also uses non-occluding block properties and light overrides so the invisible world model does not behave like a full opaque cube.
+
+Relevant block-side settings:
+
+- `.dynamicShape()`
+- `.noOcclusion()`
+- `getLightBlock(...) == 0`
+- `supportsExternalFaceHiding(...) == false`
+- `useShapeForLightOcclusion(...) == false`
+- `propagatesSkylightDown(...) == true`
+
+These settings help the block stop shading its neighbors, while the BER handles the bridge's own visible lighting.
+
+## Neighbor Light Sampling
+
+When a BER-rendered part is close to a solid neighboring block, using the block entity's own packed light can still make one side look too dark. Greatech uses [GreatechLightSampler.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/client/render/GreatechLightSampler.java) for this case.
+
+The sampler:
+
+- tries nearby positions around the rendered side
+- skips unloaded positions
+- prefers non-occluding or transparent samples
+- falls back to the block's own light if no better sample is found
+
+Use this only for BER partials that are visually pipe-like or inset. For normal solid machines, vanilla packed light is usually more correct.
 
 ## Renderer Pattern
 

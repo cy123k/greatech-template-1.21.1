@@ -1,5 +1,6 @@
 package com.create.gregtech.greatech.content.fluid;
 
+import com.create.gregtech.greatech.content.fluid.pipe.GreatechFluidPipeConnections;
 import com.create.gregtech.greatech.registry.GreatechBlockEntityTypes;
 
 import net.minecraft.core.BlockPos;
@@ -23,10 +24,14 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ElectricFluidBridgeBlock extends Block implements EntityBlock {
+    private static final VoxelShape OCCLUSION_BOX = Block.box(3, 3, 3, 13, 13, 13);
+
     public static final DirectionProperty FACING = DirectionProperty.create("facing");
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
+    public static final BooleanProperty GTCEU_CONNECTED = BooleanProperty.create("gtceu_connected");
 
     private final ElectricFluidBridgeTier tier;
 
@@ -35,7 +40,8 @@ public class ElectricFluidBridgeBlock extends Block implements EntityBlock {
         this.tier = tier;
         registerDefaultState(defaultBlockState()
                 .setValue(FACING, Direction.NORTH)
-                .setValue(ACTIVE, false));
+                .setValue(ACTIVE, false)
+                .setValue(GTCEU_CONNECTED, false));
     }
 
     public ElectricFluidBridgeTier getTier() {
@@ -46,7 +52,25 @@ public class ElectricFluidBridgeBlock extends Block implements EntityBlock {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return defaultBlockState()
                 .setValue(FACING, context.getNearestLookingDirection().getOpposite())
-                .setValue(ACTIVE, false);
+                .setValue(ACTIVE, false)
+                .setValue(GTCEU_CONNECTED, false);
+    }
+
+    @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+        super.onPlace(state, level, pos, oldState, isMoving);
+        if (!level.isClientSide && !state.is(oldState.getBlock())) {
+            updatePipeConnections(state, level, pos);
+        }
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos,
+            boolean isMoving) {
+        super.neighborChanged(state, level, pos, block, fromPos, isMoving);
+        if (!level.isClientSide) {
+            updatePipeConnections(state, level, pos);
+        }
     }
 
     @Override
@@ -114,7 +138,43 @@ public class ElectricFluidBridgeBlock extends Block implements EntityBlock {
     }
 
     @Override
+    public boolean supportsExternalFaceHiding(BlockState state) {
+        return false;
+    }
+
+    @Override
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+        return OCCLUSION_BOX;
+    }
+
+    @Override
+    protected boolean useShapeForLightOcclusion(BlockState state) {
+        return false;
+    }
+
+    @Override
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+        return 1.0F;
+    }
+
+    @Override
+    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        return true;
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, ACTIVE);
+        builder.add(FACING, ACTIVE, GTCEU_CONNECTED);
+    }
+
+    private void updatePipeConnections(BlockState state, Level level, BlockPos pos) {
+        boolean gtceuConnected = isGtceuFluidPipeConnected(state, level, pos);
+        if (state.getValue(GTCEU_CONNECTED) != gtceuConnected) {
+            level.setBlock(pos, state.setValue(GTCEU_CONNECTED, gtceuConnected), 3);
+        }
+    }
+
+    public static boolean isGtceuFluidPipeConnected(BlockState state, BlockGetter level, BlockPos pos) {
+        return GreatechFluidPipeConnections.isGtceuFluidPipeConnected(level, pos, state.getValue(FACING).getOpposite());
     }
 }

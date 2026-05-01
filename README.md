@@ -35,7 +35,8 @@ Implemented so far:
 - `steel_cogwheel` registration with Create-style cogwheel behavior and animated rendering
 - `steel_large_cogwheel` registration with Create-style large cogwheel behavior and animated rendering
 - Greatech placement helpers for shaft/cogwheel assisted placement, arrow indicators, mixed-size cogwheel offsets, and visible ghost previews
-- `lv_fluid_bridge` registration with GTCEu energy input, directional fluid ports, vanilla GUI, passive fluid bridge behavior, and EU-powered Create fluid pressure
+- `lv_fluid_bridge` registration with GTCEu energy input, directional fluid ports, vanilla GUI, passive fluid bridge behavior, EU-powered Create fluid pressure, and BER-rendered pipe-style visuals
+- Greatech fluid hazard accidents for dangerous GTCEu fluids entering monitored Create fluid pipe networks
 
 Still in progress:
 
@@ -83,6 +84,12 @@ Tiered default prototype values:
 - `fluidBridgeMaxPressure = [64, 256, 1024]`
 - `fluidBridgeEuPerPressure = [1, 1, 1]`
 - `fluidBridgeMaxPressureEuPerTick = [32, 128, 512]`
+- `enableFluidHazards = true`
+- `keepFluidHazardDrops = false`
+- `fluidHazardCheckInterval = 20`
+- `fluidHazardCooldown = 100`
+- `fluidHazardMaxCreatePipeScanNodes = 128`
+- `createFluidPipeMaxTemperature = 500`
 
 That means, by default:
 
@@ -105,6 +112,9 @@ Key code locations:
 - [Greatech cogwheel code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/cogwheel)
 - [Greatech placement helper code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement)
 - [Greatech fluid bridge code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid)
+- [Greatech fluid hazard system](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/hazard)
+- [Greatech fluid pipe helpers](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/pipe)
+- [Greatech render helpers](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/client/render)
 - [Kinetic failure system](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/kinetics/failure)
 - [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
 - [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
@@ -125,6 +135,8 @@ Key resource locations:
 - [Greatech cogwheel block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/cogwheel)
 - [Greatech cogwheel textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/greatech_cogwheel)
 - [LV fluid bridge blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/lv_fluid_bridge.json)
+- [Greatech fluid bridge block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/fluid/fluid_bridge)
+- [Greatech fluid bridge textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/greatech_fluid_bridge)
 - [LV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/lv_su_energy_converter)
 - [MV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/mv_su_energy_converter)
 - [HV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/hv_su_energy_converter)
@@ -199,6 +211,8 @@ The kinetic failure config controls whether Greatech-monitored Create networks c
 
 The fluid bridge config controls internal fluid capacity, EU buffer, passive transfer rate, Create pressure limit, and EU cost per applied pressure. Passive transfer is currently free; EU is consumed when the machine applies Create fluid pressure.
 
+The fluid hazard config controls whether dangerous GTCEu fluids can damage monitored Create fluid pipe networks. In the first version all Create fluid pipe variants use the same Greatech safety profile: `maxTemperature = 500K`, `gasProof = false`, `acidProof = false`, `cryoProof = false`, and `plasmaProof = false`.
+
 ## Documentation
 
 Project docs live in:
@@ -209,8 +223,9 @@ Project docs live in:
 - [docs/greatech-shaft.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-shaft.md)
 - [docs/greatech-cogwheel.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-cogwheel.md)
 - [docs/greatech-placement-helper.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-placement-helper.md)
-- [docs/greatech-fluidbrigge.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-fluidbrigge.md)
-- [docs/create-fuild-tips.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/create-fuild-tips.md)
+- [docs/greatech-fluidbridge.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-fluidbridge.md)
+- [docs/greatech-fluid-hazard.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-fluid-hazard.md)
+- [docs/create-fluid-tips.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/create-fluid-tips.md)
 - [docs/greatech-renderer-register.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-renderer-register.md)
 - [docs/dependencies.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/dependencies.md)
 - [docs/art-direction.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/art-direction.md)

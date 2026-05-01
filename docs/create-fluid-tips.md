@@ -4,7 +4,7 @@
 
 This document collects implementation notes learned while integrating Greatech's electric fluid bridge with Create's fluid system.
 
-The filename follows the requested spelling, `create-fuild-tips.md`. The subject is Create fluid behavior.
+The subject is Create fluid behavior.
 
 ## Create Pipes Are Not GTCEu Pipes
 
@@ -143,6 +143,26 @@ Recommended rules for future fluid bridge work:
 - spend EU for Create pressure only
 - do not add pressure every tick without clearing or refresh gating
 - keep pressure max and EU cost configurable per tier
+
+## Pipe-Like Rendering Notes
+
+Create pipe visuals are not just a large static block model. Pipe blocks combine small model pieces with connection logic so that pipe rims and connectors can react to neighboring blocks.
+
+For Greatech pipe-like machines, the current preferred path is:
+
+- keep the ordinary world blockstate model empty or minimal
+- register visible parts as `PartialModel`s
+- render the parts with a BER
+- sample light from a nearby non-occluding position when a full block touches the model
+- keep the item model separate and point it at the full display model
+
+This is the approach used by `lv_fluid_bridge`. It replaced the earlier custom baked attachment wrapper idea with a simpler renderer-owned composition:
+
+- main body partial: always rendered
+- GTCEu drain partial: rendered only when the bridge back side connects to a GTCEu fluid pipe
+- Create-side connector: currently part of the base bridge body
+
+If future pipe-like machines need more conditional pieces, add more partials and renderer-side checks before introducing a broader baked model framework.
 
 ## Debugging Checklist
 

@@ -1,3 +1,3 @@
 {
-  "parent": "minecraft:block/diamond_block"
+  "parent": "greatech:block/fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge"
 }
