@@ -29,6 +29,26 @@ GreatechBlockEntityTypes.register(modEventBus);
 
 This order matters because GTCEu's `MachineBuilder` reads `ConfigHolder.INSTANCE` while constructing machine builders.
 
+The mod metadata should also declare that Greatech loads after GTCEu and Create:
+
+```toml
+[[dependencies.${mod_id}]]
+    modId="create"
+    type="required"
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="gtceu"
+    type="required"
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"
+```
+
+This is especially important for GTCEu machine render-state sync, because `MachineRenderState.CODEC` resolves machine definitions through `GTRegistries.MACHINES`.
+
 ## Register Event Listeners
 
 The GT registrate instance must register its event listeners:
@@ -111,6 +131,20 @@ Itemstack 1 greatech:steam_engine_hatch already exists in the tab's list
 
 For the current steam hatch, manual insertion was removed. The item is expected to appear through the GTRegistrate listener.
 
+That includes Greatech's own custom creative tab. If the machine item is already bound to that tab through GTRegistrate/Registrate, adding `GreatechMachines.STEAM_ENGINE_HATCH.asStack()` manually will duplicate the same entry and crash when the creative inventory rebuilds.
+
+For GTCEu machine items, Registrate can also leave the item on its default tab path while you add it to a custom tab path. In practice that can still produce a duplicate creative entry even when you are not manually calling `output.accept(...)`.
+
+For `steam_engine_hatch`, the working pattern is:
+
+```java
+.itemBuilder(item -> item
+        .removeTab(CreativeModeTabs.SEARCH)
+        .tab(Greatech.MAIN_TAB_KEY))
+```
+
+Use this when a machine item should appear in a custom Greatech tab instead of the default Registrate tab path.
+
 ## Common Crash Patterns
 
 `ConfigHolder.INSTANCE` is null:
@@ -140,7 +174,7 @@ IllegalStateException: Unregistered holder in ResourceKey[minecraft:root / gtceu
 ```
 
 - cause: machine definition or sync state is being used before the registry has the expected holder
-- first checks: GTRegistrate listeners are registered, `ConfigHolder.init()` runs early enough, and VS Code is not launching stale `bin/main` output
+- first checks: GTRegistrate listeners are registered, `ConfigHolder.init()` runs early enough, `neoforge.mods.toml` declares Greatech after GTCEu, and VS Code is not launching stale `bin/main` output
 
 ## VS Code Dev Launch Note
 
@@ -171,4 +205,3 @@ For machine registration work, stale `bin/main` can make a fixed source tree beh
 7. Run `compileJava`.
 8. Run `syncIdeBinMainModRoot` before testing through VS Code.
 9. Test startup, placed block rendering, creative tab opening, and item search.
-

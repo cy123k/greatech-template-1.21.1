@@ -41,9 +41,7 @@ public class GreatechPoweredShaftBlock extends AbstractShaftBlock implements Kin
 
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (level.getBlockEntity(pos) instanceof GreatechPoweredShaftBlockEntity shaft) {
-            shaft.updateGeneratedRotation();
-        }
+        // Disabled compatibility block: no generated rotation while the steam output is redesigned.
     }
 
     @Override

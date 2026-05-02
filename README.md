@@ -39,8 +39,8 @@ Implemented so far:
 - Greatech placement helpers for shaft/cogwheel assisted placement, arrow indicators, mixed-size cogwheel offsets, and visible ghost previews
 - `lv_fluid_bridge` registration with GTCEu energy input, directional fluid ports, vanilla GUI, passive fluid bridge behavior, EU-powered Create fluid pressure, and BER-rendered pipe-style visuals
 - Greatech fluid hazard accidents for dangerous GTCEu fluids entering monitored Create fluid pipe networks
-- `powered_steel_shaft` registration with Create-style generated rotation, stress capacity, animated steel shaft rendering, and kinetic failure participation
-- `steam_engine_hatch` GTCEu machine registration as a fluid export part that accepts steam, can be recognized by GTCEu multiblocks through output-hatch style abilities, and drives an adjacent powered steel shaft at a fixed prototype RPM
+- `powered_steel_shaft` registration with Create-style generated rotation, stress capacity, animated steel shaft rendering, kinetic failure participation, automatic conversion from valid `steel_shaft` placements, and automatic reversion when its hatch source is lost
+- `steam_engine_hatch` GTCEu machine registration as a fluid export part that accepts steam, can be recognized by GTCEu multiblocks through output-hatch style abilities, and lets an adjacent powered steel shaft pull fixed prototype RPM/stress output from steam
 
 Still in progress:
 

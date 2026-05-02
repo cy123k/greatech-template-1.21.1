@@ -95,7 +95,9 @@ public BlockEntityType<? extends KineticBlockEntity> getBlockEntityType() {
 
 `powered_steel_shaft` uses the same rule. It has a dedicated `GreatechPoweredShaftBlockEntity` because it extends Create's `GeneratingKineticBlockEntity` and acts as the generated-rotation side of the steam engine hatch prototype.
 
-The current powered shaft is not meant to be the final player-facing model. It reuses the steel shaft partial model and item, and `GreatechSteamEngineHatchMachine` converts a neighboring `steel_shaft` into `powered_steel_shaft` when the hatch is working and the shaft axis is perpendicular to the hatch front.
+The current powered shaft is not meant to be the final player-facing model. It reuses the steel shaft partial model and item. A neighboring `steam_engine_hatch` can convert a valid `steel_shaft` into `powered_steel_shaft`, but the powered shaft is the side that owns the actual Create source state: it scans adjacent perpendicular faces for a hatch, validates the hatch's output-facing side, requests steam power, and refreshes its own generated rotation. This keeps Create's kinetic network state centered on the `GeneratingKineticBlockEntity` that is actually providing stress capacity.
+
+When the powered shaft can no longer find a valid hatch, it clears its generated-rotation state and switches itself back to `steel_shaft`. That gives the network a clean kinetic source teardown before the block reverts to the passive transmission part.
 
 ## Animation Pattern
 

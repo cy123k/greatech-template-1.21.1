@@ -46,7 +46,7 @@ The current fluid bridge prototype links GTCEu-style fluid handlers and Create-s
 
 Dangerous GTCEu fluid traits can also follow fluids into monitored Create pipe networks. The first fluid hazard prototype lets Greatech machines treat Create fluid pipes as accident candidates when hot, gaseous, acidic, cryogenic, or plasma fluids are routed through them.
 
-The current steam prototype adds a `GTCEu` machine part, `steam_engine_hatch`, and a matching `Create` generator relay, `powered_steel_shaft`. The hatch behaves like a fluid export hatch for GTCEu multiblock recognition, stores only steam, consumes a fixed amount of steam each tick, and drives an adjacent steel shaft by replacing it with a powered steel shaft. The output is currently fixed at `32 RPM` and `512 SU` stress capacity while the API integration and balance are still being explored.
+The current steam prototype adds a `GTCEu` machine part, `steam_engine_hatch`, and a matching `Create` generator relay, `powered_steel_shaft`. The hatch behaves like a fluid export hatch for GTCEu multiblock recognition, stores only steam, and converts a valid neighboring `steel_shaft` into `powered_steel_shaft`. The powered shaft then acts as the actual `Create` kinetic source: it validates the adjacent hatch, requests steam power each tick, outputs a fixed `32 RPM` and `512 SU` prototype value, and automatically reverts back to `steel_shaft` when it no longer has a valid hatch source.
 
 ## Near-Term Development Goals
 

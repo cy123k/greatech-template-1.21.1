@@ -7,11 +7,14 @@ import com.create.gregtech.greatech.registry.GreatechBlocks;
 import com.create.gregtech.greatech.registry.GreatechCapabilities;
 import com.create.gregtech.greatech.registry.GreatechMachines;
 import com.create.gregtech.greatech.registry.GreatechMenus;
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.create.gregtech.greatech.content.placement.GreatechPlacementEvents;
 import com.create.gregtech.greatech.content.placement.GreatechPlacementHelpers;
 import com.mojang.logging.LogUtils;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -34,6 +37,8 @@ public class Greatech {
     public static final String MODID = "greatech";
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+    public static final ResourceKey<CreativeModeTab> MAIN_TAB_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB,
+            ResourceLocation.fromNamespaceAndPath(MODID, "main_tab"));
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN_TAB = CREATIVE_MODE_TABS.register("main_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.greatech"))
@@ -45,7 +50,6 @@ public class Greatech {
                 output.accept(GreatechBlocks.HV_SUCON_ITEM.get());
                 output.accept(GreatechBlocks.LV_FLUID_BRIDGE_ITEM.get());
                 output.accept(GreatechBlocks.STEEL_SHAFT_ITEM.get());
-                output.accept(GreatechBlocks.POWERED_STEEL_SHAFT_ITEM.get());
                 output.accept(GreatechBlocks.STEEL_COGWHEEL_ITEM.get());
                 output.accept(GreatechBlocks.STEEL_LARGE_COGWHEEL_ITEM.get());
             }).build());
@@ -70,6 +74,9 @@ public class Greatech {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         LOGGER.info("Initializing Greatech common setup");
+        if (GTRegistries.MACHINES.getKey(GreatechMachines.STEAM_ENGINE_HATCH) == null) {
+            LOGGER.error("Greatech Steam Engine Hatch was not registered in GTCEu's machine registry");
+        }
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
@@ -79,7 +86,6 @@ public class Greatech {
             event.accept(GreatechBlocks.HV_SUCON_ITEM);
             event.accept(GreatechBlocks.LV_FLUID_BRIDGE_ITEM);
             event.accept(GreatechBlocks.STEEL_SHAFT_ITEM);
-            event.accept(GreatechBlocks.POWERED_STEEL_SHAFT_ITEM);
             event.accept(GreatechBlocks.STEEL_COGWHEEL_ITEM);
             event.accept(GreatechBlocks.STEEL_LARGE_COGWHEEL_ITEM);
         }

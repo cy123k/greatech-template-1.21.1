@@ -2,23 +2,31 @@ package com.create.gregtech.greatech.content.steam;
 
 import java.util.List;
 
-import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
+import com.create.gregtech.greatech.Greatech;
+import com.create.gregtech.greatech.content.shaft.GreatechShaftBlock;
 import com.create.gregtech.greatech.registry.GreatechBlockEntityTypes;
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
+import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
 
-import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
+import org.jetbrains.annotations.Nullable;
+
 public class GreatechPoweredShaftBlockEntity extends GeneratingKineticBlockEntity {
+    @Nullable
     private BlockPos enginePos;
     private int movementDirection = 1;
     private boolean powered;
+    private int generatedRpm;
+    private float generatedStressCapacity;
 
     public GreatechPoweredShaftBlockEntity(BlockPos pos, BlockState state) {
         this(GreatechBlockEntityTypes.POWERED_STEEL_SHAFT.get(), pos, state);
@@ -28,27 +36,32 @@ public class GreatechPoweredShaftBlockEntity extends GeneratingKineticBlockEntit
         super(type, pos, state);
     }
 
-    public void update(BlockPos sourcePos, int direction, boolean powered) {
-        BlockPos key = worldPosition.subtract(sourcePos);
-        if (key.equals(enginePos) && movementDirection == direction && this.powered == powered) {
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (level == null || level.isClientSide) {
             return;
         }
 
-        enginePos = key;
-        movementDirection = direction;
-        this.powered = powered;
-        updateGeneratedRotation();
+        refreshPowerSource();
     }
 
-    public void remove(BlockPos sourcePos) {
-        if (!isPoweredBy(sourcePos)) {
+    public void refreshPowerSource() {
+        if (level == null || level.isClientSide) {
             return;
         }
 
-        enginePos = null;
-        movementDirection = 0;
-        powered = false;
-        updateGeneratedRotation();
+        AttachedEngine attachedEngine = findAttachedSteamEngine();
+        if (attachedEngine != null
+                && attachedEngine.hatch.tryProvideShaftPower(worldPosition, getBlockState().getValue(GreatechPoweredShaftBlock.AXIS))) {
+            applyPowerState(attachedEngine.pos, 1, true, attachedEngine.hatch.getGeneratedRpm(),
+                    attachedEngine.hatch.getGeneratedStressCapacity());
+            return;
+        }
+
+        clearPowerState();
+        revertToSteelShaft();
     }
 
     public boolean canBePoweredBy(BlockPos globalPos) {
@@ -56,18 +69,17 @@ public class GreatechPoweredShaftBlockEntity extends GeneratingKineticBlockEntit
     }
 
     public boolean isPoweredBy(BlockPos globalPos) {
-        BlockPos key = worldPosition.subtract(globalPos);
-        return key.equals(enginePos);
+        return globalPos.equals(enginePos);
     }
 
     @Override
     public float getGeneratedSpeed() {
-        return powered ? movementDirection * GreatechSteamEngineHatchMachine.FIXED_RPM : 0;
+        return powered ? movementDirection * generatedRpm : 0;
     }
 
     @Override
     public float calculateAddedStressCapacity() {
-        float capacity = powered ? GreatechSteamEngineHatchMachine.FIXED_STRESS_CAPACITY : 0;
+        float capacity = powered ? generatedStressCapacity : 0;
         lastCapacityProvided = capacity;
         return capacity;
     }
@@ -85,19 +97,93 @@ public class GreatechPoweredShaftBlockEntity extends GeneratingKineticBlockEntit
 
     @Override
     protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+        Greatech.LOGGER.info("[SteamEngineDiag] Powered shaft write at {}, clientPacket={}, engineOffset={}, direction={}, powered={}",
+                worldPosition, clientPacket, enginePos, movementDirection, powered);
+        if (enginePos != null) {
+            compound.putLong("EnginePos", enginePos.asLong());
+        }
         compound.putInt("Direction", movementDirection);
         compound.putBoolean("Powered", powered);
-        if (enginePos != null) {
-            compound.put("EnginePos", NbtUtils.writeBlockPos(enginePos));
-        }
+        compound.putInt("GeneratedRpm", generatedRpm);
+        compound.putFloat("GeneratedStressCapacity", generatedStressCapacity);
         super.write(compound, registries, clientPacket);
     }
 
     @Override
     protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(compound, registries, clientPacket);
+        enginePos = compound.contains("EnginePos") ? BlockPos.of(compound.getLong("EnginePos")) : null;
         movementDirection = compound.getInt("Direction");
         powered = compound.getBoolean("Powered");
-        enginePos = compound.contains("EnginePos") ? NBTHelper.readBlockPos(compound, "EnginePos") : null;
+        generatedRpm = compound.getInt("GeneratedRpm");
+        generatedStressCapacity = compound.getFloat("GeneratedStressCapacity");
+        Greatech.LOGGER.info("[SteamEngineDiag] Powered shaft read at {}, clientPacket={}, engineOffset={}, direction={}, powered={}",
+                worldPosition, clientPacket, enginePos, movementDirection, powered);
+    }
+
+    @Nullable
+    private AttachedEngine findAttachedSteamEngine() {
+        Axis shaftAxis = getBlockState().getValue(GreatechPoweredShaftBlock.AXIS);
+
+        for (Direction direction : Direction.values()) {
+            if (direction.getAxis() == shaftAxis) {
+                continue;
+            }
+
+            BlockPos candidatePos = worldPosition.relative(direction);
+            if (!(MetaMachine.getMachine(level, candidatePos) instanceof GreatechSteamEngineHatchMachine hatch)) {
+                continue;
+            }
+            if (hatch.getOutputFacing() != direction.getOpposite()) {
+                continue;
+            }
+            if (!canBePoweredBy(candidatePos)) {
+                continue;
+            }
+            return new AttachedEngine(candidatePos, hatch);
+        }
+
+        return null;
+    }
+
+    private void applyPowerState(BlockPos sourcePos, int direction, boolean newPowered, int rpm, float stressCapacity) {
+        if (sourcePos.equals(enginePos) && movementDirection == direction && powered == newPowered
+                && generatedRpm == rpm && Float.compare(generatedStressCapacity, stressCapacity) == 0) {
+            return;
+        }
+
+        enginePos = sourcePos;
+        movementDirection = direction;
+        powered = newPowered;
+        generatedRpm = rpm;
+        generatedStressCapacity = stressCapacity;
+        setChanged();
+        updateGeneratedRotation();
+    }
+
+    private void clearPowerState() {
+        if (enginePos == null && movementDirection == 0 && !powered && generatedRpm == 0
+                && Float.compare(generatedStressCapacity, 0) == 0) {
+            return;
+        }
+
+        enginePos = null;
+        movementDirection = 0;
+        powered = false;
+        generatedRpm = 0;
+        generatedStressCapacity = 0;
+        setChanged();
+        updateGeneratedRotation();
+    }
+
+    private void revertToSteelShaft() {
+        if (level == null || level.isClientSide || isRemoved()) {
+            return;
+        }
+
+        KineticBlockEntity.switchToBlockState(level, worldPosition, GreatechShaftBlock.getEquivalent(getBlockState()));
+    }
+
+    private record AttachedEngine(BlockPos pos, GreatechSteamEngineHatchMachine hatch) {
     }
 }
