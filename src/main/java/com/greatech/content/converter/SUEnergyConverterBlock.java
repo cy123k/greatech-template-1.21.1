@@ -10,16 +10,20 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class SUEnergyConverterBlock extends DirectionalKineticBlock implements IBE<SUEnergyConverterBlockEntity> {
+    private static final VoxelShape OCCLUSION_BOX = Block.box(1, 1, 1, 15, 15, 15);
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
     private final SUEnergyConverterTier tier;
 
@@ -38,6 +42,36 @@ public class SUEnergyConverterBlock extends DirectionalKineticBlock implements I
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
+    }
+
+    @Override
+    public int getLightBlock(BlockState state, BlockGetter level, BlockPos pos) {
+        return 0;
+    }
+
+    @Override
+    public boolean supportsExternalFaceHiding(BlockState state) {
+        return false;
+    }
+
+    @Override
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+        return OCCLUSION_BOX;
+    }
+
+    @Override
+    protected boolean useShapeForLightOcclusion(BlockState state) {
+        return false;
+    }
+
+    @Override
+    protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+        return 1.0F;
+    }
+
+    @Override
+    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        return true;
     }
 
     @Override

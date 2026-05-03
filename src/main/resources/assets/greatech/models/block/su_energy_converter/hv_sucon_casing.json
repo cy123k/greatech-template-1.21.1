@@ -1,9 +1,10 @@
-﻿{
-  "parent": "greatech:block/su_energy_converter/sucon_casing",
+{
+  "parent": "greatech:block/su_energy_converter/greatech_su_converner_casing",
   "textures": {
-    "0": "greatech:block/hv_su_energy_converter/hv_sucon_casing",
-    "2": "greatech:block/hv_su_energy_converter/hv_sucon_casing_2",
-    "particle": "greatech:block/hv_su_energy_converter/hv_sucon_casing"
+    "0": "greatech:block/greatech_machine/lv_machine/lv_casing",
+    "1": "greatech:block/greatech_machine/lv_machine/lv_kioutput",
+    "2": "greatech:block/greatech_machine/lv_machine/lv_powerout",
+    "3": "greatech:block/greatech_machine/lv_machine/lv_su_converter_panel_off",
+    "particle": "greatech:block/greatech_machine/lv_machine/lv_casing"
   }
 }
-

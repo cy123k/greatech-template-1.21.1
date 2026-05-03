@@ -1,8 +1,7 @@
-﻿{
-  "parent": "greatech:block/su_energy_converter/sucon_rotor",
+{
+  "parent": "greatech:block/su_energy_converter/greatech_su_converner_rotor",
   "textures": {
-    "0": "greatech:block/mv_su_energy_converter/mv_sucon_rotor",
-    "particle": "greatech:block/mv_su_energy_converter/mv_sucon_rotor"
+    "5": "greatech:block/greatech_machine/lv_machine/lv_rotor",
+    "particle": "greatech:block/greatech_machine/lv_machine/lv_rotor"
   }
 }
-

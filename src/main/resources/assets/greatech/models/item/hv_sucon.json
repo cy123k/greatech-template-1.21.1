@@ -1,4 +1,11 @@
-﻿{
-  "parent": "greatech:item/su_energy_converter/hv_sucon"
+{
+  "parent": "greatech:item/greatech_su_converner",
+  "textures": {
+    "0": "greatech:block/greatech_machine/lv_machine/lv_casing",
+    "1": "greatech:block/greatech_machine/lv_machine/lv_kioutput",
+    "2": "greatech:block/greatech_machine/lv_machine/lv_powerout",
+    "3": "greatech:block/greatech_machine/lv_machine/lv_su_converter_panel_off",
+    "5": "greatech:block/greatech_machine/lv_machine/lv_rotor",
+    "particle": "greatech:block/greatech_machine/lv_machine/lv_casing"
+  }
 }
-

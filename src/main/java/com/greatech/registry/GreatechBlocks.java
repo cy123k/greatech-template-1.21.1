@@ -69,6 +69,9 @@ public final class GreatechBlocks {
                         .mapColor(MapColor.METAL)
                         .strength(3.5F)
                         .sound(SoundType.METAL)
+                        .noOcclusion()
+                        .isSuffocating((state, level, pos) -> false)
+                        .isViewBlocking((state, level, pos) -> false)
                         .lightLevel(state -> state.getValue(SUEnergyConverterBlock.ACTIVE) ? 1 : 0)
                         .requiresCorrectToolForDrops(), tier));
     }

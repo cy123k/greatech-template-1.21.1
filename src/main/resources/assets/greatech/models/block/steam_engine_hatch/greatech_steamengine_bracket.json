@@ -1,9 +1,9 @@
 {
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
-	"parent": "block",
+	"parent": "block/block",
 	"textures": {
-		"2": "greatech:block/machine/lv_kioutput"
+		"2": "greatech:block/greatech_machine/lv_machine/lv_kioutput"
 	},
 	"elements": [
 		{
