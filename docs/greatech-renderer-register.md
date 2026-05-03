@@ -17,13 +17,17 @@ Client-only renderer registration happens in:
 
 - [GreatechClient.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/GreatechClient.java)
 
-Current renderer registrations:
+Current renderer registrations are moving toward family iteration rather than one hardcoded steel list:
 
 ```java
 event.registerBlockEntityRenderer(GreatechBlockEntityTypes.SU_ENERGY_CONVERTER.get(), SUEnergyConverterRenderer::new);
-event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_SHAFT.get(), GreatechShaftRenderer::new);
-event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_COGWHEEL.get(), GreatechCogwheelRenderer::new);
-event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_LARGE_COGWHEEL.get(), GreatechCogwheelRenderer::new);
+for (var family : GreatechBlockEntityTypes.families()) {
+    event.registerBlockEntityRenderer(family.shaft().get(), GreatechShaftRenderer::new);
+    event.registerBlockEntityRenderer(family.poweredShaft().get(), GreatechPoweredShaftRenderer::new);
+    event.registerBlockEntityRenderer(family.cogwheel().get(), GreatechCogwheelRenderer::new);
+    event.registerBlockEntityRenderer(family.poweredCogwheel().get(), GreatechPoweredCogwheelRenderer::new);
+    event.registerBlockEntityRenderer(family.largeCogwheel().get(), GreatechCogwheelRenderer::new);
+}
 event.registerBlockEntityRenderer(GreatechBlockEntityTypes.ELECTRIC_FLUID_BRIDGE.get(), ElectricFluidBridgeRenderer::new);
 ```
 
@@ -35,7 +39,7 @@ Partial models are declared in:
 
 - [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
 
-Example:
+Current steel example:
 
 ```java
 public static final PartialModel STEEL_SHAFT = block("shaft/steel_shaft");

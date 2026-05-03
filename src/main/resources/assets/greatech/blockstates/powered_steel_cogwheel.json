@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "axis=x,placement_ghost=false": {
+      "model": "greatech:block/cogwheel/small_cogwheel/steel_cogwheel_block",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y,placement_ghost=false": {
+      "model": "greatech:block/cogwheel/small_cogwheel/steel_cogwheel_block"
+    },
+    "axis=z,placement_ghost=false": {
+      "model": "greatech:block/cogwheel/small_cogwheel/steel_cogwheel_block",
+      "x": 90,
+      "y": 180
+    },
+    "axis=x,placement_ghost=true": {
+      "model": "greatech:block/cogwheel/small_cogwheel/steel_cogwheel",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y,placement_ghost=true": {
+      "model": "greatech:block/cogwheel/small_cogwheel/steel_cogwheel"
+    },
+    "axis=z,placement_ghost=true": {
+      "model": "greatech:block/cogwheel/small_cogwheel/steel_cogwheel",
+      "x": 90,
+      "y": 180
+    }
+  }
+}

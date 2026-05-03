@@ -1,5 +1,6 @@
 package com.create.gregtech.greatech.content.steam;
 
+import com.create.gregtech.greatech.Config;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IControllable;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -20,10 +21,9 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 
 public class GreatechSteamEngineHatchMachine extends MultiblockPartMachine implements IControllable {
-    public static final int FIXED_RPM = 32;
-    public static final float FIXED_STRESS_CAPACITY = 512.0F;
-    public static final int STEAM_PER_TICK = 40;
     public static final int STEAM_TANK_CAPACITY = 8 * FluidType.BUCKET_VOLUME;
+
+    private final SteamEngineHatchTier tier;
 
     @SaveField
     public final NotifiableFluidTank steamTank;
@@ -34,8 +34,9 @@ public class GreatechSteamEngineHatchMachine extends MultiblockPartMachine imple
     @RerenderOnChanged
     private boolean workingEnabled = true;
 
-    public GreatechSteamEngineHatchMachine(BlockEntityCreationInfo info) {
+    public GreatechSteamEngineHatchMachine(BlockEntityCreationInfo info, SteamEngineHatchTier tier) {
         super(info);
+        this.tier = tier;
         steamTank = new NotifiableFluidTank(this, 1, STEAM_TANK_CAPACITY, IO.OUT);
         FluidStack steam = GTMaterials.Steam.getFluid(1);
         steamTank.setLocked(true, steam);
@@ -68,11 +69,19 @@ public class GreatechSteamEngineHatchMachine extends MultiblockPartMachine imple
         return getFrontFacing();
     }
 
+    public SteamEngineHatchTier getTier() {
+        return tier;
+    }
+
     public int getGeneratedRpm() {
-        return FIXED_RPM;
+        return Config.steamEngineHatchRpm(tier);
     }
 
     public float getGeneratedStressCapacity() {
-        return FIXED_STRESS_CAPACITY;
+        return Config.steamEngineHatchStressCapacity(tier);
+    }
+
+    public int getSteamPerTick() {
+        return Config.steamEngineHatchSteamPerTick(tier);
     }
 }

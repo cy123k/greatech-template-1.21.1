@@ -1,10 +1,10 @@
 package com.create.gregtech.greatech.content.steam;
 
-import com.create.gregtech.greatech.Greatech;
+import com.create.gregtech.greatech.content.kinetics.SteamConvertibleKineticBlock;
+import com.create.gregtech.greatech.content.kinetics.SteamPoweredKineticBlock;
 import com.create.gregtech.greatech.content.shaft.GreatechShaftBlock;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
-import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.trait.MachineTrait;
 import com.gregtechceu.gtceu.api.machine.trait.MachineTraitType;
@@ -23,6 +23,7 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 
@@ -61,13 +62,11 @@ public class GreatechSteamEngineTrait extends MachineTrait implements IInteracti
 
     @Override
     public void onMachineLoad() {
-        Greatech.LOGGER.info("[SteamEngineDiag] Hatch trait load at {}, shaft-driven output enabled", getBlockPos());
         onHatchStateChanged();
     }
 
     @Override
     public void onMachineUnload() {
-        Greatech.LOGGER.info("[SteamEngineDiag] Hatch trait unload at {}, engineSub={}", getBlockPos(), engineSubs != null);
         stopEngineSubscription();
         setOutput(false);
     }
@@ -86,14 +85,34 @@ public class GreatechSteamEngineTrait extends MachineTrait implements IInteracti
     }
 
     public void onHatchStateChanged() {
-        ensureFrontPoweredShaft();
+        ensureFrontPoweredKinetic();
         updateEngineSubscription();
+    }
+
+    public static boolean canConvertShaft(Level level, BlockPos shaftPos, BlockState shaftState) {
+        if (!(shaftState.getBlock() instanceof GreatechShaftBlock)) {
+            return false;
+        }
+
+        return canConvertKinetic(level, shaftPos, shaftState);
+    }
+
+    public static boolean canConvertKinetic(Level level, BlockPos kineticPos, BlockState kineticState) {
+        if (!(kineticState.getBlock() instanceof SteamConvertibleKineticBlock)) {
+            return false;
+        }
+        if (!kineticState.hasProperty(BlockStateProperties.AXIS)) {
+            return false;
+        }
+
+        Axis kineticAxis = kineticState.getValue(BlockStateProperties.AXIS);
+        return findValidHatch(level, kineticPos, kineticAxis) != null;
     }
 
     @Nullable
     public static GreatechSteamEngineHatchMachine findValidHatch(Level level, BlockPos shaftPos, Axis shaftAxis) {
         for (Direction direction : Direction.values()) {
-            if (direction.getAxis() == shaftAxis) {
+            if (direction.getAxis() != shaftAxis) {
                 continue;
             }
 
@@ -101,10 +120,7 @@ public class GreatechSteamEngineTrait extends MachineTrait implements IInteracti
             if (!(MetaMachine.getMachine(level, hatchPos) instanceof GreatechSteamEngineHatchMachine hatch)) {
                 continue;
             }
-            if (hatch.getOutputFacing() != direction.getOpposite()) {
-                continue;
-            }
-            if (hatch.getOutputFacing().getAxis() == shaftAxis) {
+            if (!isHatchFacingShaft(hatch, shaftPos, shaftAxis)) {
                 continue;
             }
             return hatch;
@@ -114,14 +130,15 @@ public class GreatechSteamEngineTrait extends MachineTrait implements IInteracti
     }
 
     public boolean tryProvideShaftPower(BlockPos shaftPos, Axis shaftAxis) {
-        if (!isShaftConnectionValid(shaftPos, shaftAxis)) {
+        if (!isPoweredKineticConnectionValid(shaftPos, shaftAxis)) {
             setOutput(false);
             return false;
         }
 
-        FluidStack requested = GTMaterials.Steam.getFluid(GreatechSteamEngineHatchMachine.STEAM_PER_TICK);
+        int steamPerTick = hatch.getSteamPerTick();
+        FluidStack requested = GTMaterials.Steam.getFluid(steamPerTick);
         FluidStack drained = steamTank.drainInternal(requested, FluidAction.EXECUTE);
-        if (drained.getAmount() < GreatechSteamEngineHatchMachine.STEAM_PER_TICK) {
+        if (drained.getAmount() < steamPerTick) {
             updateEngineSubscription();
             setOutput(false);
             return false;
@@ -140,10 +157,6 @@ public class GreatechSteamEngineTrait extends MachineTrait implements IInteracti
         }
 
         if (hatch.isWorkingEnabled() && !steamTank.isEmpty()) {
-            if (engineSubs == null) {
-                Greatech.LOGGER.info("[SteamEngineDiag] Start direct SU output subscription at {}, steam={} mB",
-                        getBlockPos(), steamTank.getFluidInTank(0).getAmount());
-            }
             engineSubs = subscribeServerTick(engineSubs, this::tickSteamEngine);
         } else {
             stopEngineSubscription();
@@ -168,14 +181,13 @@ public class GreatechSteamEngineTrait extends MachineTrait implements IInteracti
         if (engineSubs == null) {
             return;
         }
-        Greatech.LOGGER.info("[SteamEngineDiag] Stop direct SU output subscription at {}", getBlockPos());
         engineSubs.unsubscribe();
         engineSubs = null;
     }
 
     private void setOutput(boolean active) {
-        float stressCapacity = active ? GreatechSteamEngineHatchMachine.FIXED_STRESS_CAPACITY : 0;
-        int rpm = active ? GreatechSteamEngineHatchMachine.FIXED_RPM : 0;
+        float stressCapacity = active ? hatch.getGeneratedStressCapacity() : 0;
+        int rpm = active ? hatch.getGeneratedRpm() : 0;
         if (outputtingStress == active && lastStressCapacity == stressCapacity && lastRpm == rpm) {
             return;
         }
@@ -188,26 +200,22 @@ public class GreatechSteamEngineTrait extends MachineTrait implements IInteracti
         syncDataHolder.markClientSyncFieldDirty("lastRpm");
     }
 
-    private boolean isShaftConnectionValid(BlockPos shaftPos, Axis shaftAxis) {
+    private boolean isPoweredKineticConnectionValid(BlockPos shaftPos, Axis shaftAxis) {
         if (getLevel() == null || isRemote() || !hatch.isWorkingEnabled()) {
             return false;
         }
 
-        Direction outputFacing = hatch.getOutputFacing();
-        if (outputFacing == null || outputFacing.getAxis() == shaftAxis) {
-            return false;
-        }
-
-        if (!hatch.getBlockPos().relative(outputFacing).equals(shaftPos)) {
+        if (!isHatchFacingShaft(hatch, shaftPos, shaftAxis)) {
             return false;
         }
 
         BlockState shaftState = getLevel().getBlockState(shaftPos);
-        return shaftState.getBlock() instanceof GreatechPoweredShaftBlock
-                && shaftState.getValue(ShaftBlock.AXIS) == shaftAxis;
+        return shaftState.getBlock() instanceof SteamPoweredKineticBlock
+                && shaftState.hasProperty(BlockStateProperties.AXIS)
+                && shaftState.getValue(BlockStateProperties.AXIS) == shaftAxis;
     }
 
-    private void ensureFrontPoweredShaft() {
+    private void ensureFrontPoweredKinetic() {
         Level level = getLevel();
         if (level == null || level.isClientSide) {
             return;
@@ -215,15 +223,21 @@ public class GreatechSteamEngineTrait extends MachineTrait implements IInteracti
 
         BlockPos shaftPos = hatch.getBlockPos().relative(hatch.getOutputFacing());
         BlockState shaftState = level.getBlockState(shaftPos);
-        if (!(shaftState.getBlock() instanceof GreatechShaftBlock)) {
+        if (!canConvertKinetic(level, shaftPos, shaftState)) {
+            return;
+        }
+        if (!(shaftState.getBlock() instanceof SteamConvertibleKineticBlock convertibleBlock)) {
             return;
         }
 
-        if (shaftState.getValue(ShaftBlock.AXIS) == hatch.getOutputFacing().getAxis()) {
-            return;
-        }
+        KineticBlockEntity.switchToBlockState(level, shaftPos, convertibleBlock.getPoweredEquivalent(shaftState));
+    }
 
-        KineticBlockEntity.switchToBlockState(level, shaftPos, GreatechPoweredShaftBlock.getEquivalent(shaftState));
+    private static boolean isHatchFacingShaft(GreatechSteamEngineHatchMachine hatch, BlockPos shaftPos, Axis shaftAxis) {
+        Direction outputFacing = hatch.getOutputFacing();
+        return outputFacing != null
+                && outputFacing.getAxis() == shaftAxis
+                && hatch.getBlockPos().relative(outputFacing).equals(shaftPos);
     }
 
     private Component createStatusMessage() {

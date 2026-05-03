@@ -6,7 +6,7 @@ The current steam prototype connects a `GTCEu` boiler-style multiblock output pa
 
 It is intentionally small and conservative:
 
-- `greatech:steam_engine_hatch` is the GTCEu-facing machine part
+- `greatech:lv_steam_engine_hatch`, `greatech:mv_steam_engine_hatch`, and `greatech:hv_steam_engine_hatch` are the GTCEu-facing machine parts
 - `greatech:powered_steel_shaft` is the Create-facing generated-rotation block
 - the hatch currently uses a temporary diamond-block model
 - the powered shaft currently reuses the steel shaft visual
@@ -33,9 +33,13 @@ Shared registration:
 
 Resources:
 
-- `assets/greatech/blockstates/steam_engine_hatch.json`
+- `assets/greatech/blockstates/lv_steam_engine_hatch.json`
+- `assets/greatech/blockstates/mv_steam_engine_hatch.json`
+- `assets/greatech/blockstates/hv_steam_engine_hatch.json`
 - `assets/greatech/models/block/machine/steam_engine_hatch.json`
-- `assets/greatech/models/item/steam_engine_hatch.json`
+- `assets/greatech/models/item/lv_steam_engine_hatch.json`
+- `assets/greatech/models/item/mv_steam_engine_hatch.json`
+- `assets/greatech/models/item/hv_steam_engine_hatch.json`
 - `assets/greatech/blockstates/powered_steel_shaft.json`
 - `assets/greatech/models/item/powered_steel_shaft.json`
 
@@ -52,21 +56,14 @@ It no longer extends `FluidHatchPartMachine`. The machine part identity, steam s
 Current machine registration:
 
 ```java
-REGISTRATE
-        .machine("steam_engine_hatch", GreatechSteamEngineHatchMachine::new)
-        .rotationState(RotationState.ALL)
-        .tier(0)
-        .abilities(PartAbility.EXPORT_FLUIDS, PartAbility.EXPORT_FLUIDS_1X)
-        .appearanceBlock(() -> Blocks.DIAMOND_BLOCK)
-        .blockModel((ctx, provider) -> provider.simpleBlock(ctx.get(), provider.models()
-                .cubeAll(ctx.getName(), provider.mcLoc("block/diamond_block"))))
-        .allowCoverOnFront(true)
-        .register();
+registerSteamEngineHatch("lv_steam_engine_hatch", "LV Steam Engine Hatch", SteamEngineHatchTier.LV, 0);
+registerSteamEngineHatch("mv_steam_engine_hatch", "MV Steam Engine Hatch", SteamEngineHatchTier.MV, 1);
+registerSteamEngineHatch("hv_steam_engine_hatch", "HV Steam Engine Hatch", SteamEngineHatchTier.HV, 2);
 ```
 
 Creative-tab note:
 
-`steam_engine_hatch` is a GTRegistrate machine item, so custom creative-tab assignment should happen through the machine's `itemBuilder(...)` path rather than through manual `displayItems(...)` insertion in Greatech's tab builder. The current safe pattern is:
+Each `*_steam_engine_hatch` is a GTRegistrate machine item, so custom creative-tab assignment should happen through the machine's `itemBuilder(...)` path rather than through manual `displayItems(...)` insertion in Greatech's tab builder. The current safe pattern is:
 
 ```java
 .itemBuilder(item -> item
@@ -101,12 +98,12 @@ Right-clicking with an empty hand is handled by `GreatechSteamEngineTrait` and p
 
 ## Steam to Rotation Flow
 
-Current fixed values:
+Current default tier values:
 
 ```text
-FIXED_RPM = 32
-FIXED_STRESS_CAPACITY = 512 SU
-STEAM_PER_TICK = 40 mB/t
+LV: 16 RPM, 16 SU, 40 mB/t
+MV: 16 RPM, 64 SU, 60 mB/t
+HV: 16 RPM, 256 SU, 80 mB/t
 ```
 
 Current control flow is intentionally centered on the powered shaft rather than the hatch. This avoids stale Create source/network state when blocks change, unload, or reattach.
@@ -114,15 +111,15 @@ Current control flow is intentionally centered on the powered shaft rather than 
 Hatch-side behavior:
 
 1. The hatch watches the block in front of its GTCEu front-facing side.
-2. If that block is a `steel_shaft`, and the shaft axis is perpendicular to the hatch front, it is replaced with `powered_steel_shaft`.
+2. If that block is a valid Greatech steam-convertible kinetic part, it is replaced with that material family's powered variant. The current concrete prototype still uses `steel_shaft` and `powered_steel_shaft` as the first example pair.
 3. The hatch exposes a query method that validates the shaft position/axis and, if valid, drains `40 mB` of GTCEu steam for that tick.
 
 Powered shaft behavior:
 
 1. Each server tick, `powered_steel_shaft` scans adjacent sides that are perpendicular to its own shaft axis.
-2. It looks for a neighboring `steam_engine_hatch` whose front-facing side points back at the shaft.
+2. It looks for a neighboring steam engine hatch tier whose front-facing side points back at the shaft.
 3. If a valid hatch is found, the shaft asks the hatch for power for that tick.
-4. On success, the shaft updates its own generated RPM and stress-capacity state and calls Create's `updateGeneratedRotation()`.
+4. On success, the shaft updates its own generated RPM and stress-capacity state from the hatch tier config and calls Create's `updateGeneratedRotation()`.
 5. If no valid hatch is found or steam is unavailable, the shaft clears its own source state, drops back to `0 RPM`, and then switches itself back to `steel_shaft`.
 
 The axis rule is important:
@@ -200,7 +197,7 @@ When GTCEu updates from the current snapshot to a stable API, revisit these area
 3. Replace the hatch's manual steam-availability subscription behavior if GTCEu exposes a cleaner machine-part ticking or tank-change API.
 4. Re-check whether output hatch tanks should be locked using the same `tank.setLocked` and `tank.setFilter` calls.
 5. Re-test multiblock recognition with a real large boiler pattern.
-6. Re-test creative tab insertion. GTRegistrate currently inserts machine items automatically, so Greatech should not manually add `steam_engine_hatch` to custom tab output unless the GT API changes.
+6. Re-test creative tab insertion. GTRegistrate currently inserts machine items automatically, so Greatech should not manually add any `*_steam_engine_hatch` item to custom tab output unless the GT API changes.
 7. Replace temporary runtime JSON resources with generated resources only after datagen output is confirmed to be present in the dev and packaged runtime.
 8. Move fixed values to config or derive them from multiblock state after the boiler API is stable.
 
@@ -215,10 +212,10 @@ Likely future formula inputs:
 - shaft material
 - Create network load
 
-A conservative next step is to make the current constants configurable before deriving them from GTCEu internals:
+A conservative next step is to keep the current tier defaults configurable before deriving them from GTCEu internals:
 
 ```text
-steamEngineFixedRpm = 32
-steamEngineStressCapacity = 512
-steamEngineSteamPerTick = 40
+steamEngineHatchRpm = [16, 16, 16]
+steamEngineHatchStressCapacity = [16, 64, 256]
+steamEngineHatchSteamPerTick = [40, 60, 80]
 ```

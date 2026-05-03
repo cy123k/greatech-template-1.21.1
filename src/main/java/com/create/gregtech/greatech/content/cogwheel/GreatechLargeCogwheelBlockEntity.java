@@ -8,6 +8,6 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class GreatechLargeCogwheelBlockEntity extends BracketedKineticBlockEntity {
     public GreatechLargeCogwheelBlockEntity(BlockPos pos, BlockState state) {
-        super(GreatechBlockEntityTypes.STEEL_LARGE_COGWHEEL.get(), pos, state);
+        super(GreatechBlockEntityTypes.largeCogwheel(state), pos, state);
     }
 }

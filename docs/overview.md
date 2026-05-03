@@ -30,8 +30,11 @@ The currently registered blocks are:
 - `powered_steel_shaft`
 - `steel_cogwheel`
 - `steel_large_cogwheel`
+- `powered_steel_cogwheel`
 - `lv_fluid_bridge`
-- `steam_engine_hatch`
+- `lv_steam_engine_hatch`
+- `mv_steam_engine_hatch`
+- `hv_steam_engine_hatch`
 
 Their role is:
 
@@ -40,13 +43,13 @@ Their role is:
 - generate `GTCEu` `EU`
 - export energy through `GTCEu` capabilities
 
-The current transmission parts behave like Create shaft/cogwheel parts while using Greatech block entity types, renderers, kinetic failure limits, and placement helpers.
+The current transmission parts behave like Create shaft/cogwheel parts while using Greatech block entity types, renderers, kinetic failure limits, and placement helpers. Their code is now being reorganized around kinetic material families so future materials can reuse the same shaft/cogwheel/large-cogwheel pattern.
 
 The current fluid bridge prototype links GTCEu-style fluid handlers and Create-style fluid pressure. Its two fluid ports are direction-controlled in the GUI, while the other sides can accept GTCEu energy. Passive fluid transfer is free; applying Create pipe pressure consumes EU.
 
 Dangerous GTCEu fluid traits can also follow fluids into monitored Create pipe networks. The first fluid hazard prototype lets Greatech machines treat Create fluid pipes as accident candidates when hot, gaseous, acidic, cryogenic, or plasma fluids are routed through them.
 
-The current steam prototype adds a `GTCEu` machine part, `steam_engine_hatch`, and a matching `Create` generator relay, `powered_steel_shaft`. The hatch behaves like a fluid export hatch for GTCEu multiblock recognition, stores only steam, and converts a valid neighboring `steel_shaft` into `powered_steel_shaft`. The powered shaft then acts as the actual `Create` kinetic source: it validates the adjacent hatch, requests steam power each tick, outputs a fixed `32 RPM` and `512 SU` prototype value, and automatically reverts back to `steel_shaft` when it no longer has a valid hatch source.
+The current steam prototype adds three `GTCEu` machine parts, `lv_steam_engine_hatch`, `mv_steam_engine_hatch`, and `hv_steam_engine_hatch`, plus a matching `Create` generator relay, `powered_steel_shaft`. Each hatch behaves like a fluid export hatch for GTCEu multiblock recognition, stores only steam, and converts a valid neighboring `steel_shaft` into `powered_steel_shaft`. The powered shaft then acts as the actual `Create` kinetic source: it validates the adjacent hatch, requests steam power each tick, outputs a fixed `32 RPM` and `512 SU` prototype value, and automatically reverts back to `steel_shaft` when it no longer has a valid hatch source.
 
 ## Near-Term Development Goals
 
@@ -55,7 +58,7 @@ The current steam prototype adds a `GTCEu` machine part, `steam_engine_hatch`, a
 - validate `lv_fluid_bridge` behavior for GTCEu-to-Create and Create-to-GTCEu fluid direction
 - validate Create pressure refresh behavior so pressure does not stack every tick
 - validate fluid hazard behavior for dangerous GTCEu fluids routed into Create pipes
-- validate `steam_engine_hatch` recognition in GTCEu large boiler structures
+- validate `lv_steam_engine_hatch` / `mv_steam_engine_hatch` / `hv_steam_engine_hatch` recognition in GTCEu large boiler structures
 - replace the temporary diamond-block hatch model with final art
 - replace fixed steam engine RPM and stress values with configurable or recipe/multiblock-derived values
 - finish `neoforge.mods.toml` dependency declarations

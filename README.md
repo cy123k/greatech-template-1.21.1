@@ -9,8 +9,11 @@ The current prototype focuses on one core machine family:
 - `Powered Steel Shaft`
 - `Steel Cogwheel`
 - `Steel Large Cogwheel`
+- `Powered Steel Cogwheel`
 - `LV Electric Fluid Bridge`
-- `Steam Engine Hatch`
+- `LV Steam Engine Hatch`
+- `MV Steam Engine Hatch`
+- `HV Steam Engine Hatch`
 
 These machines accept `Create` rotational power and output `GTCEu` `EU`.
 
@@ -36,11 +39,12 @@ Implemented so far:
 - `steel_shaft` registration with Create-style kinetic behavior and animated rendering
 - `steel_cogwheel` registration with Create-style cogwheel behavior and animated rendering
 - `steel_large_cogwheel` registration with Create-style large cogwheel behavior and animated rendering
+- `powered_steel_cogwheel` registration with Create-style generated rotation, stress capacity, animated cogwheel rendering, kinetic failure participation, automatic conversion from valid `steel_cogwheel` placements, and automatic reversion when its hatch source is lost
 - Greatech placement helpers for shaft/cogwheel assisted placement, arrow indicators, mixed-size cogwheel offsets, and visible ghost previews
 - `lv_fluid_bridge` registration with GTCEu energy input, directional fluid ports, vanilla GUI, passive fluid bridge behavior, EU-powered Create fluid pressure, and BER-rendered pipe-style visuals
 - Greatech fluid hazard accidents for dangerous GTCEu fluids entering monitored Create fluid pipe networks
 - `powered_steel_shaft` registration with Create-style generated rotation, stress capacity, animated steel shaft rendering, kinetic failure participation, automatic conversion from valid `steel_shaft` placements, and automatic reversion when its hatch source is lost
-- `steam_engine_hatch` GTCEu machine registration as a fluid export part that accepts steam, can be recognized by GTCEu multiblocks through output-hatch style abilities, and lets an adjacent powered steel shaft pull fixed prototype RPM/stress output from steam
+- `lv_steam_engine_hatch`, `mv_steam_engine_hatch`, and `hv_steam_engine_hatch` GTCEu machine registrations as fluid export parts that accept steam, can be recognized by GTCEu multiblocks through output-hatch style abilities, and let an adjacent powered steel shaft pull fixed prototype RPM/stress output from steam
 
 Still in progress:
 
@@ -141,7 +145,9 @@ Key resource locations:
 - [Greatech cogwheel block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/cogwheel)
 - [Greatech cogwheel textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/greatech_cogwheel)
 - [LV fluid bridge blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/lv_fluid_bridge.json)
-- [Steam engine hatch blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/steam_engine_hatch.json)
+- [LV steam engine hatch blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/lv_steam_engine_hatch.json)
+- [MV steam engine hatch blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/mv_steam_engine_hatch.json)
+- [HV steam engine hatch blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/hv_steam_engine_hatch.json)
 - [Greatech fluid bridge block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/fluid/fluid_bridge)
 - [Greatech machine block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/machine)
 - [Greatech fluid bridge textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/greatech_fluid_bridge)
@@ -221,6 +227,36 @@ The fluid bridge config controls internal fluid capacity, EU buffer, passive tra
 
 The fluid hazard config controls whether dangerous GTCEu fluids can damage monitored Create fluid pipe networks. In the first version all Create fluid pipe variants use the same Greatech safety profile: `maxTemperature = 500K`, `gasProof = false`, `acidProof = false`, `cryoProof = false`, and `plasmaProof = false`.
 
+## Kinetic Family Naming
+
+Greatech's transmission-part code is being reorganized around material families rather than one-off steel-only registrations.
+
+The intended naming rule for shaft and cogwheel families is:
+
+- normal shaft: `<material>_shaft`
+- powered shaft: `powered_<material>_shaft`
+- normal small cogwheel: `<material>_cogwheel`
+- powered small cogwheel: `powered_<material>_cogwheel`
+- normal large cogwheel: `<material>_large_cogwheel`
+
+For example, an aluminum family should be named:
+
+- `aluminum_shaft`
+- `powered_aluminum_shaft`
+- `aluminum_cogwheel`
+- `powered_aluminum_cogwheel`
+- `aluminum_large_cogwheel`
+
+The same ids should be reused consistently across:
+
+- block registrations
+- block entity type registrations
+- blockstate file names
+- item model file names
+- loot table file names
+
+Current steel resources still serve as the first concrete implementation, but future materials should follow the same `<material>` template instead of introducing one-off naming patterns.
+
 ## Documentation
 
 Project docs live in:
@@ -233,7 +269,7 @@ Project docs live in:
 - [docs/greatech-placement-helper.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-placement-helper.md)
 - [docs/greatech-fluidbridge.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-fluidbridge.md)
 - [docs/greatech-fluid-hazard.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-fluid-hazard.md)
-- [docs/steam-engine-hatch.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/steam-engine-hatch.md)
+- [docs/greatech-steam-engine-hatch.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/steam-engine-hatch.md)
 - [docs/gtceu-machine-registration-tips.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/gtceu-machine-registration-tips.md)
 - [docs/create-fluid-tips.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/create-fluid-tips.md)
 - [docs/greatech-renderer-register.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-renderer-register.md)

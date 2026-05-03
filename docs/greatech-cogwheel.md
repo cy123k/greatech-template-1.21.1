@@ -6,6 +6,7 @@ Greatech currently has two Create-style cogwheel transmission parts:
 
 - `greatech:steel_cogwheel`
 - `greatech:steel_large_cogwheel`
+- `greatech:powered_steel_cogwheel`
 
 They behave like Create small and large cogwheels, but they belong to Greatech and participate in Greatech's kinetic failure system with higher break limits than vanilla Create transmission parts.
 
@@ -60,12 +61,34 @@ public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechL
 ```
 
 `GreatechCogwheelBlock` receives the matching block entity type supplier during block registration, so the same block class can support both sizes without returning the wrong type.
+The family-based path keeps the same rule but routes the final block entity type through `GreatechBlockEntityTypes.getFamily(material)`.
 
 ## Resource Layout
+
+Current resource naming rule:
+
+- small cogwheel block ids: `<material>_cogwheel`, `powered_<material>_cogwheel`
+- large cogwheel block ids: `<material>_large_cogwheel`
+- blockstates: same as block ids
+- item models: same as block ids
+- loot tables: same as block ids
+- small wrapper models: `models/block/cogwheel/small_cogwheel/<material>_cogwheel*.json`
+- large wrapper models: `models/block/cogwheel/large_cogwheel/<material>_large_cogwheel*.json`
+- textures: `textures/block/greatech_cogwheel/<material>_*.png`
+
+Example future aluminum naming:
+
+- `aluminum_cogwheel`
+- `powered_aluminum_cogwheel`
+- `aluminum_large_cogwheel`
+- `assets/greatech/blockstates/aluminum_cogwheel.json`
+- `assets/greatech/models/item/aluminum_cogwheel.json`
+- `data/greatech/loot_table/blocks/aluminum_cogwheel.json`
 
 Current small cogwheel resources:
 
 - `assets/greatech/blockstates/steel_cogwheel.json`
+- `assets/greatech/blockstates/powered_steel_cogwheel.json`
 - `assets/greatech/models/block/cogwheel/greatech_cogwheel.json`
 - `assets/greatech/models/block/cogwheel/greatech_cogwheel_shaftless.json`
 - `assets/greatech/models/block/cogwheel/greatech_cogwheel_shaft.json`
@@ -74,7 +97,9 @@ Current small cogwheel resources:
 - `assets/greatech/models/block/cogwheel/small_cogwheel/steel_cogwheel_shaft.json`
 - `assets/greatech/models/block/cogwheel/small_cogwheel/steel_cogwheel_block.json`
 - `assets/greatech/models/item/steel_cogwheel.json`
+- `assets/greatech/models/item/powered_steel_cogwheel.json`
 - `data/greatech/loot_table/blocks/steel_cogwheel.json`
+- `data/greatech/loot_table/blocks/powered_steel_cogwheel.json`
 
 Current large cogwheel resources:
 
@@ -158,31 +183,25 @@ This keeps Catnip preview filtering accurate and avoids a broad cogwheel helper 
 
 See [greatech-placement-helper.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-placement-helper.md) for the reusable placement design.
 
-## Adding More Cogwheel Tiers
+## Adding More Cogwheel Materials
 
-For another small cogwheel tier:
+For another small cogwheel material such as aluminum:
 
-1. Add textures under `textures/block/greatech_cogwheel/`.
-2. Add wrapper models under `models/block/cogwheel/small_cogwheel/`.
-3. Add a root item model under `models/item/`.
-4. Add a blockstate file with `axis=x/y/z` and `placement_ghost=true/false`.
-5. Register the block and item in `GreatechBlocks` with `large=false`.
-6. Register a valid block entity type in `GreatechBlockEntityTypes`.
-7. Register a partial in `GreatechPartialModels`.
-8. Register the renderer in `GreatechClient` if it uses a new block entity type.
-9. Register the tier with the Greatech placement registry if it should support assisted placement.
-10. Add a loot table and lang entries.
+1. Add the material entry in `GreatechKineticMaterial`.
+2. Register the family in `GreatechBlocks` and `GreatechBlockEntityTypes`.
+3. Add textures under `textures/block/greatech_cogwheel/`.
+4. Add wrapper models under `models/block/cogwheel/small_cogwheel/`.
+5. Add a root item model under `models/item/`.
+6. Add a blockstate file with `axis=x/y/z` and `placement_ghost=true/false`.
+7. Add a loot table and lang entries.
+8. Register placement-helper support if the new family should support assisted placement.
 
-For another large cogwheel tier:
+For another large cogwheel material:
 
-1. Add textures under `textures/block/greatech_cogwheel/`.
-2. Add wrapper models under `models/block/cogwheel/large_cogwheel/`.
-3. Add a root item model under `models/item/`.
-4. Add a blockstate file with `axis=x/y/z` and `placement_ghost=true/false`.
-5. Register the block and item in `GreatechBlocks` with `large=true`.
-6. Register a valid block entity type in `GreatechBlockEntityTypes`.
-7. Register a partial in `GreatechPartialModels`.
-8. Register the renderer in `GreatechClient` if it uses a new block entity type.
-9. Register the tier with large and mixed cogwheel placement predicates if it should support assisted placement.
-10. Check render bounds in game because large cogwheel geometry extends outside one block.
-11. Add a loot table and lang entries.
+1. Reuse the same family registration.
+2. Add large-cogwheel textures under `textures/block/greatech_cogwheel/`.
+3. Add wrapper models under `models/block/cogwheel/large_cogwheel/`.
+4. Add a root item model under `models/item/`.
+5. Add a blockstate file with `axis=x/y/z` and `placement_ghost=true/false`.
+6. Check render bounds in game because large cogwheel geometry extends outside one block.
+7. Add a loot table and lang entries.

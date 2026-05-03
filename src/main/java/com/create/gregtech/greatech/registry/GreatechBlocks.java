@@ -2,11 +2,15 @@ package com.create.gregtech.greatech.registry;
 
 import com.create.gregtech.greatech.Greatech;
 import com.create.gregtech.greatech.content.cogwheel.GreatechCogwheelBlock;
+import com.create.gregtech.greatech.content.cogwheel.GreatechSteamConvertibleCogwheelBlock;
 import com.create.gregtech.greatech.content.converter.SUEnergyConverterBlock;
 import com.create.gregtech.greatech.content.converter.SUEnergyConverterTier;
 import com.create.gregtech.greatech.content.fluid.ElectricFluidBridgeBlock;
 import com.create.gregtech.greatech.content.fluid.ElectricFluidBridgeTier;
+import com.create.gregtech.greatech.content.kinetics.GreatechKineticFamily;
+import com.create.gregtech.greatech.content.kinetics.GreatechKineticMaterial;
 import com.create.gregtech.greatech.content.shaft.GreatechShaftBlock;
+import com.create.gregtech.greatech.content.steam.GreatechPoweredCogwheelBlock;
 import com.create.gregtech.greatech.content.steam.GreatechPoweredShaftBlock;
 
 import net.minecraft.world.item.BlockItem;
@@ -28,21 +32,27 @@ public final class GreatechBlocks {
     public static final DeferredBlock<Block> MV_SUCON = registerSUEnergyConverter("mv_sucon", SUEnergyConverterTier.MV);
     public static final DeferredBlock<Block> HV_SUCON = registerSUEnergyConverter("hv_sucon", SUEnergyConverterTier.HV);
     public static final DeferredBlock<Block> LV_FLUID_BRIDGE = registerElectricFluidBridge("lv_fluid_bridge", ElectricFluidBridgeTier.LV);
-    public static final DeferredBlock<Block> STEEL_SHAFT = registerGreatechShaft("steel_shaft", 2_048.0F);
-    public static final DeferredBlock<Block> POWERED_STEEL_SHAFT = registerGreatechPoweredShaft("powered_steel_shaft", 2_048.0F);
-    public static final DeferredBlock<Block> STEEL_COGWHEEL = registerGreatechCogwheel("steel_cogwheel", false, 2_048.0F,
-            () -> GreatechBlockEntityTypes.STEEL_COGWHEEL.get());
-    public static final DeferredBlock<Block> STEEL_LARGE_COGWHEEL = registerGreatechCogwheel("steel_large_cogwheel", true, 4_096.0F,
+    public static final GreatechKineticFamily STEEL_FAMILY = registerKineticFamily(
+            GreatechKineticMaterial.STEEL,
+            () -> GreatechBlockEntityTypes.STEEL_COGWHEEL.get(),
+            () -> GreatechBlockEntityTypes.POWERED_STEEL_COGWHEEL.get(),
             () -> GreatechBlockEntityTypes.STEEL_LARGE_COGWHEEL.get());
+
+    public static final DeferredBlock<Block> STEEL_SHAFT = STEEL_FAMILY.shaft();
+    public static final DeferredBlock<Block> POWERED_STEEL_SHAFT = STEEL_FAMILY.poweredShaft();
+    public static final DeferredBlock<Block> STEEL_COGWHEEL = STEEL_FAMILY.cogwheel();
+    public static final DeferredBlock<Block> POWERED_STEEL_COGWHEEL = STEEL_FAMILY.poweredCogwheel();
+    public static final DeferredBlock<Block> STEEL_LARGE_COGWHEEL = STEEL_FAMILY.largeCogwheel();
 
     public static final DeferredItem<BlockItem> LV_SUCON_ITEM = registerBlockItem("lv_sucon", LV_SUCON);
     public static final DeferredItem<BlockItem> MV_SUCON_ITEM = registerBlockItem("mv_sucon", MV_SUCON);
     public static final DeferredItem<BlockItem> HV_SUCON_ITEM = registerBlockItem("hv_sucon", HV_SUCON);
     public static final DeferredItem<BlockItem> LV_FLUID_BRIDGE_ITEM = registerBlockItem("lv_fluid_bridge", LV_FLUID_BRIDGE);
-    public static final DeferredItem<BlockItem> STEEL_SHAFT_ITEM = registerBlockItem("steel_shaft", STEEL_SHAFT);
-    public static final DeferredItem<BlockItem> POWERED_STEEL_SHAFT_ITEM = registerBlockItem("powered_steel_shaft", POWERED_STEEL_SHAFT);
-    public static final DeferredItem<BlockItem> STEEL_COGWHEEL_ITEM = registerBlockItem("steel_cogwheel", STEEL_COGWHEEL);
-    public static final DeferredItem<BlockItem> STEEL_LARGE_COGWHEEL_ITEM = registerBlockItem("steel_large_cogwheel", STEEL_LARGE_COGWHEEL);
+    public static final DeferredItem<BlockItem> STEEL_SHAFT_ITEM = STEEL_FAMILY.shaftItem();
+    public static final DeferredItem<BlockItem> POWERED_STEEL_SHAFT_ITEM = STEEL_FAMILY.poweredShaftItem();
+    public static final DeferredItem<BlockItem> STEEL_COGWHEEL_ITEM = STEEL_FAMILY.cogwheelItem();
+    public static final DeferredItem<BlockItem> POWERED_STEEL_COGWHEEL_ITEM = STEEL_FAMILY.poweredCogwheelItem();
+    public static final DeferredItem<BlockItem> STEEL_LARGE_COGWHEEL_ITEM = STEEL_FAMILY.largeCogwheelItem();
 
     private GreatechBlocks() {
     }
@@ -79,35 +89,105 @@ public final class GreatechBlocks {
                         .requiresCorrectToolForDrops(), tier));
     }
 
-    private static DeferredBlock<Block> registerGreatechShaft(String name, float breakStressLimit) {
+    public static Block getShaft(GreatechKineticMaterial material) {
+        return getFamily(material).shaft().get();
+    }
+
+    public static Block getPoweredShaft(GreatechKineticMaterial material) {
+        return getFamily(material).poweredShaft().get();
+    }
+
+    public static Block getCogwheel(GreatechKineticMaterial material, boolean large) {
+        GreatechKineticFamily family = getFamily(material);
+        return large ? family.largeCogwheel().get() : family.cogwheel().get();
+    }
+
+    public static Block getPoweredCogwheel(GreatechKineticMaterial material, boolean large) {
+        GreatechKineticFamily family = getFamily(material);
+        return large ? family.largeCogwheel().get() : family.poweredCogwheel().get();
+    }
+
+    public static GreatechKineticFamily getFamily(GreatechKineticMaterial material) {
+        return switch (material) {
+            case STEEL -> STEEL_FAMILY;
+        };
+    }
+
+    private static DeferredBlock<Block> registerGreatechShaft(GreatechKineticMaterial material) {
         return BLOCKS.register(
-                name,
-                () -> new GreatechShaftBlock(BlockBehaviour.Properties.of()
+                material.id() + "_shaft",
+                () -> new GreatechShaftBlock(material, BlockBehaviour.Properties.of()
                         .mapColor(MapColor.METAL)
                         .strength(3.0F)
                         .sound(SoundType.METAL)
-                        .requiresCorrectToolForDrops(), breakStressLimit));
+                        .requiresCorrectToolForDrops(), material.shaftBreakStressLimit()));
     }
 
-    private static DeferredBlock<Block> registerGreatechPoweredShaft(String name, float breakStressLimit) {
+    private static DeferredBlock<Block> registerGreatechPoweredShaft(GreatechKineticMaterial material) {
         return BLOCKS.register(
-                name,
-                () -> new GreatechPoweredShaftBlock(BlockBehaviour.Properties.of()
+                "powered_" + material.id() + "_shaft",
+                () -> new GreatechPoweredShaftBlock(material, BlockBehaviour.Properties.of()
                         .mapColor(MapColor.METAL)
                         .strength(3.0F)
                         .sound(SoundType.METAL)
-                        .requiresCorrectToolForDrops(), breakStressLimit));
+                        .noOcclusion()
+                        .isSuffocating((state, level, pos) -> false)
+                        .isViewBlocking((state, level, pos) -> false)
+                        .requiresCorrectToolForDrops(), material.shaftBreakStressLimit()));
     }
 
-    private static DeferredBlock<Block> registerGreatechCogwheel(String name, boolean large, float breakStressLimit,
+    private static DeferredBlock<Block> registerGreatechCogwheel(GreatechKineticMaterial material, boolean large,
             java.util.function.Supplier<net.minecraft.world.level.block.entity.BlockEntityType<? extends com.simibubi.create.content.kinetics.base.KineticBlockEntity>> blockEntityType) {
         return BLOCKS.register(
-                name,
-                () -> new GreatechCogwheelBlock(large, BlockBehaviour.Properties.of()
+                large ? material.id() + "_large_cogwheel" : material.id() + "_cogwheel",
+                () -> new GreatechSteamConvertibleCogwheelBlock(material, large, BlockBehaviour.Properties.of()
                         .mapColor(MapColor.METAL)
                         .strength(3.0F)
                         .sound(SoundType.METAL)
-                        .requiresCorrectToolForDrops(), breakStressLimit, blockEntityType));
+                        .requiresCorrectToolForDrops(),
+                        large ? material.largeCogwheelBreakStressLimit() : material.smallCogwheelBreakStressLimit(),
+                        blockEntityType));
+    }
+
+    private static DeferredBlock<Block> registerGreatechPoweredCogwheel(GreatechKineticMaterial material, boolean large,
+            java.util.function.Supplier<net.minecraft.world.level.block.entity.BlockEntityType<? extends com.simibubi.create.content.kinetics.base.KineticBlockEntity>> blockEntityType) {
+        return BLOCKS.register(
+                large ? "powered_" + material.id() + "_large_cogwheel" : "powered_" + material.id() + "_cogwheel",
+                () -> new GreatechPoweredCogwheelBlock(material, large, BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.METAL)
+                        .strength(3.0F)
+                        .sound(SoundType.METAL)
+                        .noOcclusion()
+                        .isSuffocating((state, level, pos) -> false)
+                        .isViewBlocking((state, level, pos) -> false)
+                        .requiresCorrectToolForDrops(),
+                        large ? material.largeCogwheelBreakStressLimit() : material.smallCogwheelBreakStressLimit(),
+                        blockEntityType));
+    }
+
+    private static GreatechKineticFamily registerKineticFamily(
+            GreatechKineticMaterial material,
+            java.util.function.Supplier<net.minecraft.world.level.block.entity.BlockEntityType<? extends com.simibubi.create.content.kinetics.base.KineticBlockEntity>> smallCogwheelBlockEntityType,
+            java.util.function.Supplier<net.minecraft.world.level.block.entity.BlockEntityType<? extends com.simibubi.create.content.kinetics.base.KineticBlockEntity>> poweredSmallCogwheelBlockEntityType,
+            java.util.function.Supplier<net.minecraft.world.level.block.entity.BlockEntityType<? extends com.simibubi.create.content.kinetics.base.KineticBlockEntity>> largeCogwheelBlockEntityType) {
+        DeferredBlock<Block> shaft = registerGreatechShaft(material);
+        DeferredBlock<Block> poweredShaft = registerGreatechPoweredShaft(material);
+        DeferredBlock<Block> cogwheel = registerGreatechCogwheel(material, false, smallCogwheelBlockEntityType);
+        DeferredBlock<Block> poweredCogwheel = registerGreatechPoweredCogwheel(material, false, poweredSmallCogwheelBlockEntityType);
+        DeferredBlock<Block> largeCogwheel = registerGreatechCogwheel(material, true, largeCogwheelBlockEntityType);
+
+        return new GreatechKineticFamily(
+                material,
+                shaft,
+                poweredShaft,
+                cogwheel,
+                poweredCogwheel,
+                largeCogwheel,
+                registerBlockItem(material.id() + "_shaft", shaft),
+                registerBlockItem("powered_" + material.id() + "_shaft", poweredShaft),
+                registerBlockItem(material.id() + "_cogwheel", cogwheel),
+                registerBlockItem("powered_" + material.id() + "_cogwheel", poweredCogwheel),
+                registerBlockItem(material.id() + "_large_cogwheel", largeCogwheel));
     }
 
     private static DeferredItem<BlockItem> registerBlockItem(String name, DeferredBlock<Block> block) {

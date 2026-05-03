@@ -25,7 +25,7 @@ public class GreatechShaftRenderer extends KineticBlockEntityRenderer<GreatechSh
             MultiBufferSource bufferSource, int light, int overlay) {
         Axis axis = getRotationAxisOf(blockEntity);
         SuperByteBuffer shaft = CachedBuffers.partial(
-                GreatechPartialModels.STEEL_SHAFT,
+                GreatechPartialModels.shaft(blockEntity.getBlockState()),
                 blockEntity.getBlockState());
         VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.solid());
 

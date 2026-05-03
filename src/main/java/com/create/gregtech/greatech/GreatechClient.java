@@ -5,6 +5,7 @@ import com.create.gregtech.greatech.content.converter.SUEnergyConverterRenderer;
 import com.create.gregtech.greatech.content.fluid.ElectricFluidBridgeRenderer;
 import com.create.gregtech.greatech.content.fluid.ElectricFluidBridgeScreen;
 import com.create.gregtech.greatech.content.shaft.GreatechShaftRenderer;
+import com.create.gregtech.greatech.content.steam.GreatechPoweredCogwheelRenderer;
 import com.create.gregtech.greatech.content.steam.GreatechPoweredShaftRenderer;
 import com.create.gregtech.greatech.registry.GreatechBlockEntityTypes;
 import com.create.gregtech.greatech.registry.GreatechMenus;
@@ -44,10 +45,13 @@ public class GreatechClient {
     @SubscribeEvent
     static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.SU_ENERGY_CONVERTER.get(), SUEnergyConverterRenderer::new);
-        event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_SHAFT.get(), GreatechShaftRenderer::new);
-        event.registerBlockEntityRenderer(GreatechBlockEntityTypes.POWERED_STEEL_SHAFT.get(), GreatechPoweredShaftRenderer::new);
-        event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_COGWHEEL.get(), GreatechCogwheelRenderer::new);
-        event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEEL_LARGE_COGWHEEL.get(), GreatechCogwheelRenderer::new);
+        for (var family : GreatechBlockEntityTypes.families()) {
+            event.registerBlockEntityRenderer(family.shaft().get(), GreatechShaftRenderer::new);
+            event.registerBlockEntityRenderer(family.poweredShaft().get(), GreatechPoweredShaftRenderer::new);
+            event.registerBlockEntityRenderer(family.cogwheel().get(), GreatechCogwheelRenderer::new);
+            event.registerBlockEntityRenderer(family.poweredCogwheel().get(), GreatechPoweredCogwheelRenderer::new);
+            event.registerBlockEntityRenderer(family.largeCogwheel().get(), GreatechCogwheelRenderer::new);
+        }
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.ELECTRIC_FLUID_BRIDGE.get(), ElectricFluidBridgeRenderer::new);
     }
 

@@ -1,10 +1,13 @@
 package com.create.gregtech.greatech.content.shaft;
 
-import com.create.gregtech.greatech.content.steam.GreatechPoweredShaftBlock;
 import com.create.gregtech.greatech.content.steam.GreatechSteamEngineTrait;
+import com.create.gregtech.greatech.content.kinetics.GreatechKineticMaterial;
+import com.create.gregtech.greatech.content.kinetics.MaterialKineticBlock;
+import com.create.gregtech.greatech.content.kinetics.SteamConvertibleKineticBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.create.gregtech.greatech.content.kinetics.failure.KineticBreakable;
 import com.create.gregtech.greatech.registry.GreatechBlockEntityTypes;
+import com.create.gregtech.greatech.registry.GreatechBlocks;
 import com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock;
 
 import net.minecraft.core.BlockPos;
@@ -17,15 +20,23 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
-public class GreatechShaftBlock extends ShaftBlock implements KineticBreakable {
+public class GreatechShaftBlock extends ShaftBlock
+        implements KineticBreakable, MaterialKineticBlock, SteamConvertibleKineticBlock {
     public static final BooleanProperty PLACEMENT_GHOST = BooleanProperty.create("placement_ghost");
 
+    private final GreatechKineticMaterial material;
     private final float breakStressLimit;
 
-    public GreatechShaftBlock(Properties properties, float breakStressLimit) {
+    public GreatechShaftBlock(GreatechKineticMaterial material, Properties properties, float breakStressLimit) {
         super(properties);
+        this.material = material;
         this.breakStressLimit = breakStressLimit;
         registerDefaultState(defaultBlockState().setValue(PLACEMENT_GHOST, false));
+    }
+
+    @Override
+    public GreatechKineticMaterial getMaterial() {
+        return material;
     }
 
     @Override
@@ -35,7 +46,7 @@ public class GreatechShaftBlock extends ShaftBlock implements KineticBreakable {
 
     @Override
     public BlockEntityType<? extends KineticBlockEntity> getBlockEntityType() {
-        return GreatechBlockEntityTypes.STEEL_SHAFT.get();
+        return GreatechBlockEntityTypes.getFamily(material).shaft().get();
     }
 
     @Override
@@ -57,15 +68,24 @@ public class GreatechShaftBlock extends ShaftBlock implements KineticBreakable {
             return;
         }
 
-        if (GreatechSteamEngineTrait.findValidHatch(level, pos, state.getValue(AXIS)) == null) {
+        if (!GreatechSteamEngineTrait.canConvertKinetic(level, pos, state)) {
             return;
         }
 
-        KineticBlockEntity.switchToBlockState(level, pos, GreatechPoweredShaftBlock.getEquivalent(state));
+        KineticBlockEntity.switchToBlockState(level, pos, getPoweredEquivalent(state));
+    }
+
+    @Override
+    public BlockState getPoweredEquivalent(BlockState stateForPlacement) {
+        return GreatechBlocks.getPoweredShaft(material).defaultBlockState()
+                .setValue(AXIS, stateForPlacement.getValue(AXIS));
     }
 
     public static BlockState getEquivalent(BlockState stateForPlacement) {
-        return com.create.gregtech.greatech.registry.GreatechBlocks.STEEL_SHAFT.get().defaultBlockState()
+        GreatechKineticMaterial material = stateForPlacement.getBlock() instanceof MaterialKineticBlock materialBlock
+                ? materialBlock.getMaterial()
+                : GreatechKineticMaterial.STEEL;
+        return GreatechBlocks.getShaft(material).defaultBlockState()
                 .setValue(AXIS, stateForPlacement.getValue(AXIS))
                 .setValue(PLACEMENT_GHOST, false);
     }

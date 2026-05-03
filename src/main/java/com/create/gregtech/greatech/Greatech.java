@@ -74,8 +74,14 @@ public class Greatech {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         LOGGER.info("Initializing Greatech common setup");
-        if (GTRegistries.MACHINES.getKey(GreatechMachines.STEAM_ENGINE_HATCH) == null) {
-            LOGGER.error("Greatech Steam Engine Hatch was not registered in GTCEu's machine registry");
+        logMissingSteamEngineHatch(GreatechMachines.LV_STEAM_ENGINE_HATCH);
+        logMissingSteamEngineHatch(GreatechMachines.MV_STEAM_ENGINE_HATCH);
+        logMissingSteamEngineHatch(GreatechMachines.HV_STEAM_ENGINE_HATCH);
+    }
+
+    private void logMissingSteamEngineHatch(com.gregtechceu.gtceu.api.machine.MachineDefinition definition) {
+        if (GTRegistries.MACHINES.getKey(definition) == null) {
+            LOGGER.error("Greatech machine {} was not registered in GTCEu's machine registry", definition.getId());
         }
     }
 

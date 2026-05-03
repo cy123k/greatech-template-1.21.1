@@ -1,0 +1,9 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "greatech:block/machine/steam_engine_hatch"
+      }
+    }
+  ]
+}

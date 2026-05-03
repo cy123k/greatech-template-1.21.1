@@ -3,6 +3,7 @@ package com.create.gregtech.greatech.content.cogwheel;
 import com.create.gregtech.greatech.registry.GreatechPartialModels;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
@@ -25,11 +26,14 @@ public class GreatechCogwheelRenderer extends KineticBlockEntityRenderer<Bracket
     @Override
     protected void renderSafe(BracketedKineticBlockEntity blockEntity, float partialTicks, PoseStack poseStack,
             MultiBufferSource bufferSource, int light, int overlay) {
+        renderCogwheel(blockEntity, poseStack, bufferSource, light);
+    }
+
+    public static void renderCogwheel(KineticBlockEntity blockEntity, PoseStack poseStack,
+            MultiBufferSource bufferSource, int light) {
         Axis axis = getRotationAxisOf(blockEntity);
         SuperByteBuffer cogwheel = CachedBuffers.partial(
-                ICogWheel.isLargeCog(blockEntity.getBlockState())
-                        ? GreatechPartialModels.STEEL_LARGE_COGWHEEL
-                        : GreatechPartialModels.STEEL_COGWHEEL,
+                GreatechPartialModels.cogwheel(blockEntity.getBlockState(), ICogWheel.isLargeCog(blockEntity.getBlockState())),
                 blockEntity.getBlockState());
         VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.solid());
 

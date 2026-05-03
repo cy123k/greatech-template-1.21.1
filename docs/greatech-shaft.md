@@ -11,6 +11,12 @@ Current block:
 - `greatech:steel_shaft`
 - `greatech:powered_steel_shaft`
 
+Current code direction:
+
+- `steel` is the first `GreatechKineticMaterial`
+- shaft and powered shaft registrations now sit inside a kinetic family structure
+- future materials should reuse the same naming template instead of duplicating steel-specific registration logic
+
 Current prototype break limit:
 
 - `2048 SU`
@@ -34,6 +40,23 @@ Registration:
 - [Greatech placement helpers](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement)
 
 ## Resource Layout
+
+Current resource naming rule:
+
+- block ids: `<material>_shaft`, `powered_<material>_shaft`
+- blockstates: `<material>_shaft.json`, `powered_<material>_shaft.json`
+- item models: `<material>_shaft.json`, `powered_<material>_shaft.json`
+- loot tables: `<material>_shaft.json`, `powered_<material>_shaft.json`
+- wrapper models: `models/block/shaft/<material>_shaft*.json`
+- textures: `textures/block/greatech_shaft/<material>_axis*.png`
+
+Example future aluminum naming:
+
+- `aluminum_shaft`
+- `powered_aluminum_shaft`
+- `assets/greatech/blockstates/aluminum_shaft.json`
+- `assets/greatech/models/item/aluminum_shaft.json`
+- `data/greatech/loot_table/blocks/aluminum_shaft.json`
 
 Current resources:
 
@@ -84,12 +107,12 @@ public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechS
                 GreatechBlocks.STEEL_SHAFT.get()).build(null));
 ```
 
-Then make the block return that type:
+Then make the block return that type or, in the new family-based setup, return the type selected from the current material family:
 
 ```java
 @Override
 public BlockEntityType<? extends KineticBlockEntity> getBlockEntityType() {
-    return GreatechBlockEntityTypes.STEEL_SHAFT.get();
+    return GreatechBlockEntityTypes.getFamily(material).shaft().get();
 }
 ```
 
@@ -144,20 +167,19 @@ The helper lives under:
 
 See [greatech-placement-helper.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-placement-helper.md) for the reusable placement design.
 
-## Adding More Shaft Tiers
+## Adding More Shaft Materials
 
-For another shaft tier:
+For another shaft material such as aluminum:
 
-1. Add textures under `textures/block/greatech_shaft/`.
-2. Add a wrapper model under `models/block/shaft/`.
-3. Add a root item model under `models/item/`.
-4. Add a blockstate file with `axis=x/y/z`.
-5. Register the block and item in `GreatechBlocks`.
-6. Register a valid block entity type in `GreatechBlockEntityTypes`.
-7. Register a partial in `GreatechPartialModels`.
-8. Register a renderer in `GreatechClient`.
-9. Register the tier with the Greatech placement registry if it should support assisted placement.
-10. Add `placement_ghost` blockstate variants if the world model is empty and the preview needs full geometry.
-11. Add a loot table and lang entries.
+1. Add the material entry in `GreatechKineticMaterial`.
+2. Register a new kinetic family in `GreatechBlocks`.
+3. Register a matching block entity family in `GreatechBlockEntityTypes`.
+4. Add textures under `textures/block/greatech_shaft/`.
+5. Add a wrapper model under `models/block/shaft/`.
+6. Add a root item model under `models/item/`.
+7. Add a blockstate file named after the block id.
+8. Add `placement_ghost` blockstate variants if the world model is empty and the preview needs full geometry.
+9. Add a loot table and lang entries.
+10. Register placement-helper support if the new family should support assisted placement.
 
-If multiple shaft tiers share the same runtime behavior, consider generalizing the block entity type after the tier list settles. For the current prototype, one explicit `STEEL_SHAFT` path is easier to debug.
+The intended result is that `steel_shaft`, `aluminum_shaft`, and later materials all share the same runtime pattern and differ mainly by family registration and resources.

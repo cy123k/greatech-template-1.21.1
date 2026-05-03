@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.create.gregtech.greatech.content.converter.SUEnergyConverterTier;
 import com.create.gregtech.greatech.content.fluid.ElectricFluidBridgeTier;
+import com.create.gregtech.greatech.content.steam.SteamEngineHatchTier;
 
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -33,6 +34,9 @@ public final class Config {
     private static final int[] DEFAULT_FLUID_BRIDGE_MAX_PRESSURE = {64, 256, 1024};
     private static final int[] DEFAULT_FLUID_BRIDGE_EU_PER_PRESSURE = {1, 1, 1};
     private static final int[] DEFAULT_FLUID_BRIDGE_MAX_PRESSURE_EU_PER_TICK = {32, 128, 512};
+    private static final int[] DEFAULT_STEAM_ENGINE_HATCH_RPM = {32, 32, 32};
+    private static final double[] DEFAULT_STEAM_ENGINE_HATCH_STRESS_CAPACITY = {16.0D, 64.0D, 256.0D};
+    private static final int[] DEFAULT_STEAM_ENGINE_HATCH_STEAM_PER_TICK = {40, 60, 80};
     private static final int DEFAULT_CREATE_FLUID_PIPE_MAX_TEMPERATURE = 500;
 
     private static final ModConfigSpec.DoubleValue CREATE_SHAFT_BREAK_STRESS_LIMIT = BUILDER
@@ -168,6 +172,21 @@ public final class Config {
             .comment("Maximum EU/t each electric fluid bridge tier may spend on Create fluid pressure.", TIER_ORDER)
             .defineList("fluidBridgeMaxPressureEuPerTick", List.of(32, 128, 512), Config::isNonNegativeInteger);
 
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> STEAM_ENGINE_HATCH_RPM = BUILDER
+            .comment("Generated shaft RPM for steam engine hatches.", TIER_ORDER,
+                    "Current default keeps all tiers at 16 RPM so tier progression comes from efficiency and stress capacity.")
+            .defineList("steamEngineHatchRpm", List.of(16, 16, 16), Config::isNonNegativeInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Double>> STEAM_ENGINE_HATCH_STRESS_CAPACITY = BUILDER
+            .comment("Generated Create stress capacity for steam engine hatches.", TIER_ORDER,
+                    "Defaults align with the LV/MV/HV SU converter stress impacts.")
+            .defineList("steamEngineHatchStressCapacity", List.of(16.0D, 64.0D, 256.0D), Config::isNonNegativeDouble);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> STEAM_ENGINE_HATCH_STEAM_PER_TICK = BUILDER
+            .comment("Steam consumed each tick by steam engine hatches, in mB/t.", TIER_ORDER,
+                    "Defaults are tuned so higher tiers gain steam efficiency instead of only higher steam throughput.")
+            .defineList("steamEngineHatchSteamPerTick", List.of(40, 60, 80), Config::isNonNegativeInteger);
+
     static final ModConfigSpec SPEC = BUILDER.build();
 
     private static int[] converterCapacity = DEFAULT_CONVERTER_CAPACITY.clone();
@@ -186,6 +205,9 @@ public final class Config {
     private static int[] fluidBridgeMaxPressure = DEFAULT_FLUID_BRIDGE_MAX_PRESSURE.clone();
     private static int[] fluidBridgeEuPerPressure = DEFAULT_FLUID_BRIDGE_EU_PER_PRESSURE.clone();
     private static int[] fluidBridgeMaxPressureEuPerTick = DEFAULT_FLUID_BRIDGE_MAX_PRESSURE_EU_PER_TICK.clone();
+    private static int[] steamEngineHatchRpm = DEFAULT_STEAM_ENGINE_HATCH_RPM.clone();
+    private static double[] steamEngineHatchStressCapacity = DEFAULT_STEAM_ENGINE_HATCH_STRESS_CAPACITY.clone();
+    private static int[] steamEngineHatchSteamPerTick = DEFAULT_STEAM_ENGINE_HATCH_STEAM_PER_TICK.clone();
     public static double converterMinimumSpeed;
     private static float createShaftBreakStressLimit;
     private static float createCogwheelBreakStressLimit;
@@ -223,6 +245,11 @@ public final class Config {
         fluidBridgeMaxPressure = readIntTierValues(FLUID_BRIDGE_MAX_PRESSURE.get(), DEFAULT_FLUID_BRIDGE_MAX_PRESSURE);
         fluidBridgeEuPerPressure = readIntTierValues(FLUID_BRIDGE_EU_PER_PRESSURE.get(), DEFAULT_FLUID_BRIDGE_EU_PER_PRESSURE);
         fluidBridgeMaxPressureEuPerTick = readIntTierValues(FLUID_BRIDGE_MAX_PRESSURE_EU_PER_TICK.get(), DEFAULT_FLUID_BRIDGE_MAX_PRESSURE_EU_PER_TICK);
+        steamEngineHatchRpm = readIntTierValues(STEAM_ENGINE_HATCH_RPM.get(), DEFAULT_STEAM_ENGINE_HATCH_RPM);
+        steamEngineHatchStressCapacity = readDoubleTierValues(STEAM_ENGINE_HATCH_STRESS_CAPACITY.get(),
+                DEFAULT_STEAM_ENGINE_HATCH_STRESS_CAPACITY);
+        steamEngineHatchSteamPerTick = readIntTierValues(STEAM_ENGINE_HATCH_STEAM_PER_TICK.get(),
+                DEFAULT_STEAM_ENGINE_HATCH_STEAM_PER_TICK);
         converterMinimumSpeed = CONVERTER_MINIMUM_SPEED.get();
         createShaftBreakStressLimit = CREATE_SHAFT_BREAK_STRESS_LIMIT.get().floatValue();
         createCogwheelBreakStressLimit = CREATE_COGWHEEL_BREAK_STRESS_LIMIT.get().floatValue();
@@ -302,6 +329,18 @@ public final class Config {
 
     public static int fluidBridgeMaxPressureEuPerTick(ElectricFluidBridgeTier tier) {
         return fluidBridgeMaxPressureEuPerTick[tier.configIndex()];
+    }
+
+    public static int steamEngineHatchRpm(SteamEngineHatchTier tier) {
+        return steamEngineHatchRpm[tier.configIndex()];
+    }
+
+    public static float steamEngineHatchStressCapacity(SteamEngineHatchTier tier) {
+        return (float) steamEngineHatchStressCapacity[tier.configIndex()];
+    }
+
+    public static int steamEngineHatchSteamPerTick(SteamEngineHatchTier tier) {
+        return steamEngineHatchSteamPerTick[tier.configIndex()];
     }
 
     public static float createShaftBreakStressLimit() {
