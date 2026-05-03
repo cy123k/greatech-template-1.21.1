@@ -1,4 +1,4 @@
-# Greatech Shaft
+﻿# Greatech Shaft
 
 ## Purpose
 
@@ -25,19 +25,19 @@ Current prototype break limit:
 
 Core classes:
 
-- [GreatechShaftBlock.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/shaft/GreatechShaftBlock.java)
-- [GreatechShaftBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/shaft/GreatechShaftBlockEntity.java)
-- [GreatechShaftRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/shaft/GreatechShaftRenderer.java)
-- [GreatechPoweredShaftBlock.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/steam/GreatechPoweredShaftBlock.java)
-- [GreatechPoweredShaftBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/steam/GreatechPoweredShaftBlockEntity.java)
-- [GreatechPoweredShaftRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/steam/GreatechPoweredShaftRenderer.java)
+- [GreatechShaftBlock.java](../src/main/java/com/greatech/content/shaft/GreatechShaftBlock.java)
+- [GreatechShaftBlockEntity.java](../src/main/java/com/greatech/content/shaft/GreatechShaftBlockEntity.java)
+- [GreatechShaftRenderer.java](../src/main/java/com/greatech/content/shaft/GreatechShaftRenderer.java)
+- [GreatechPoweredShaftBlock.java](../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlock.java)
+- [GreatechPoweredShaftBlockEntity.java](../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlockEntity.java)
+- [GreatechPoweredShaftRenderer.java](../src/main/java/com/greatech/content/steam/GreatechPoweredShaftRenderer.java)
 
 Registration:
 
-- [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
-- [Greatech placement helpers](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement)
+- [GreatechBlocks.java](../src/main/java/com/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechPartialModels.java](../src/main/java/com/greatech/registry/GreatechPartialModels.java)
+- [Greatech placement helpers](../src/main/java/com/greatech/content/placement)
 
 ## Resource Layout
 
@@ -161,11 +161,11 @@ Current behavior:
 
 The helper lives under:
 
-- [GreatechPlacementRegistry.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement/GreatechPlacementRegistry.java)
-- [GreatechShaftPlacementHelper.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement/GreatechShaftPlacementHelper.java)
-- [GreatechPlacementGhosts.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement/GreatechPlacementGhosts.java)
+- [GreatechPlacementRegistry.java](../src/main/java/com/greatech/content/placement/GreatechPlacementRegistry.java)
+- [GreatechShaftPlacementHelper.java](../src/main/java/com/greatech/content/placement/GreatechShaftPlacementHelper.java)
+- [GreatechPlacementGhosts.java](../src/main/java/com/greatech/content/placement/GreatechPlacementGhosts.java)
 
-See [greatech-placement-helper.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-placement-helper.md) for the reusable placement design.
+See [greatech-placement-helper.md](./greatech-placement-helper.md) for the reusable placement design.
 
 ## Adding More Shaft Materials
 
@@ -183,3 +183,5 @@ For another shaft material such as aluminum:
 10. Register placement-helper support if the new family should support assisted placement.
 
 The intended result is that `steel_shaft`, `aluminum_shaft`, and later materials all share the same runtime pattern and differ mainly by family registration and resources.
+
+

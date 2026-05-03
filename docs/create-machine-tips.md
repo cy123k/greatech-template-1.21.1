@@ -1,4 +1,4 @@
-# Tips for Registering Create Machines
+﻿# Tips for Registering Create Machines
 
 This note collects practical patterns from the current `SU Energy Converter` implementation.
 
@@ -23,7 +23,7 @@ Tip:
 - do not add `FACING` again in `createBlockStateDefinition`
 - only append your own extra properties such as `ACTIVE`
 
-The current converter does this in [SUEnergyConverterBlock.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterBlock.java).
+The current converter does this in [SUEnergyConverterBlock.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterBlock.java).
 
 ## 2. Keep Orientation Rules Explicit
 
@@ -56,9 +56,9 @@ This avoids:
 
 The converter uses shared geometry plus tier texture wrappers:
 
-- [sucon_casing.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/su_energy_converter/sucon_casing.json)
-- [sucon_rotor.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/su_energy_converter/sucon_rotor.json)
-- tier wrappers such as [lv_sucon_casing.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/su_energy_converter/lv_sucon_casing.json)
+- [sucon_casing.json](../src/main/resources/assets/greatech/models/block/su_energy_converter/sucon_casing.json)
+- [sucon_rotor.json](../src/main/resources/assets/greatech/models/block/su_energy_converter/sucon_rotor.json)
+- tier wrappers such as [lv_sucon_casing.json](../src/main/resources/assets/greatech/models/block/su_energy_converter/lv_sucon_casing.json)
 
 ## 4. Register the Block, Block Entity, and Capabilities Together
 
@@ -71,10 +71,10 @@ For a functional Create machine, treat these as one bundle:
 
 In this project the relevant locations are:
 
-- [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechCapabilities.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechCapabilities.java)
-- [GreatechClient.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/GreatechClient.java)
+- [GreatechBlocks.java](../src/main/java/com/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechCapabilities.java](../src/main/java/com/greatech/registry/GreatechCapabilities.java)
+- [GreatechClient.java](../src/main/java/com/greatech/GreatechClient.java)
 
 If one of these is missing, the machine often appears to "half work".
 
@@ -90,7 +90,7 @@ Typical server tick flow:
 4. push to adjacent targets
 5. update presentation state such as `ACTIVE`
 
-The current example lives in [SUEnergyConverterBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterBlockEntity.java).
+The current example lives in [SUEnergyConverterBlockEntity.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterBlockEntity.java).
 
 ## 6. Use BER First for One Moving Part
 
@@ -102,7 +102,7 @@ Why this is a good starting point:
 - it is easier to debug than jumping straight into a more advanced visual pipeline
 - it lets you verify orientation and lighting before optimizing
 
-The current example is [SUEnergyConverterRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterRenderer.java).
+The current example is [SUEnergyConverterRenderer.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterRenderer.java).
 
 ## 7. Understand Create's SU Network Model
 
@@ -159,7 +159,7 @@ If you use a rotating partial model, register it before model bake timing become
 
 In this project:
 
-- partials are declared in [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
+- partials are declared in [GreatechPartialModels.java](../src/main/java/com/greatech/registry/GreatechPartialModels.java)
 - `GreatechClient` calls `GreatechPartialModels.init()` during client construction
 
 This avoids "missing model" problems where the code compiles but the in-game dynamic part renders as missing.
@@ -203,8 +203,8 @@ For early development, Option A is often better:
 The current converter uses:
 
 - `ACTIVE` property on the block
-- `active=true` variants in tier blockstates such as [lv_sucon.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/lv_sucon.json)
-- active wrappers such as [lv_sucon_active.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/su_energy_converter/lv_sucon_active.json)
+- `active=true` variants in tier blockstates such as [lv_sucon.json](../src/main/resources/assets/greatech/blockstates/lv_sucon.json)
+- active wrappers such as [lv_sucon_active.json](../src/main/resources/assets/greatech/models/block/su_energy_converter/lv_sucon_active.json)
 - a low block light level while active
 
 ## 12. Add Item Display Models Deliberately
@@ -278,9 +278,9 @@ If your placed block uses an empty world model because a BER renders the visible
 - `placement_ghost=false`: normal placed block, empty static model
 - `placement_ghost=true`: ghost preview, full static model
 
-Then set that property on the ghost state before returning the placement offset. Greatech does this in [GreatechPlacementGhosts.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement/GreatechPlacementGhosts.java).
+Then set that property on the ghost state before returning the placement offset. Greatech does this in [GreatechPlacementGhosts.java](../src/main/java/com/greatech/content/placement/GreatechPlacementGhosts.java).
 
-See [greatech-placement-helper.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-placement-helper.md) for the current reusable implementation.
+See [greatech-placement-helper.md](./greatech-placement-helper.md) for the current reusable implementation.
 
 ## 14. Overlay Advice if You Revisit It Later
 
@@ -334,3 +334,5 @@ For new Create-style machines, this order has worked well:
 10. do balance and UX polish after the machine already works
 
 This keeps logic and art moving together without forcing you to solve rendering and gameplay at the same time.
+
+

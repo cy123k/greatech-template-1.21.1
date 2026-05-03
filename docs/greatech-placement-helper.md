@@ -1,4 +1,4 @@
-# Greatech Placement Helper
+﻿# Greatech Placement Helper
 
 ## Purpose
 
@@ -21,18 +21,18 @@ Current supported parts:
 
 Core classes:
 
-- [GreatechPlacementRegistry.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement/GreatechPlacementRegistry.java)
-- [GreatechPlacementHelpers.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement/GreatechPlacementHelpers.java)
-- [GreatechPlacementEvents.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement/GreatechPlacementEvents.java)
-- [GreatechPlacementGhosts.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement/GreatechPlacementGhosts.java)
-- [GreatechShaftPlacementHelper.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement/GreatechShaftPlacementHelper.java)
-- [GreatechSmallCogwheelPlacementHelper.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement/GreatechSmallCogwheelPlacementHelper.java)
-- [GreatechLargeCogwheelPlacementHelper.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement/GreatechLargeCogwheelPlacementHelper.java)
-- [GreatechMixedCogwheelPlacementHelper.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement/GreatechMixedCogwheelPlacementHelper.java)
+- [GreatechPlacementRegistry.java](../src/main/java/com/greatech/content/placement/GreatechPlacementRegistry.java)
+- [GreatechPlacementHelpers.java](../src/main/java/com/greatech/content/placement/GreatechPlacementHelpers.java)
+- [GreatechPlacementEvents.java](../src/main/java/com/greatech/content/placement/GreatechPlacementEvents.java)
+- [GreatechPlacementGhosts.java](../src/main/java/com/greatech/content/placement/GreatechPlacementGhosts.java)
+- [GreatechShaftPlacementHelper.java](../src/main/java/com/greatech/content/placement/GreatechShaftPlacementHelper.java)
+- [GreatechSmallCogwheelPlacementHelper.java](../src/main/java/com/greatech/content/placement/GreatechSmallCogwheelPlacementHelper.java)
+- [GreatechLargeCogwheelPlacementHelper.java](../src/main/java/com/greatech/content/placement/GreatechLargeCogwheelPlacementHelper.java)
+- [GreatechMixedCogwheelPlacementHelper.java](../src/main/java/com/greatech/content/placement/GreatechMixedCogwheelPlacementHelper.java)
 
 Initialization happens in:
 
-- [Greatech.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/Greatech.java)
+- [Greatech.java](../src/main/java/com/greatech/Greatech.java)
 
 `GreatechPlacementHelpers.init()` forces helper registration, and `GreatechPlacementEvents::onRightClickBlock` is registered on the NeoForge event bus.
 
@@ -193,3 +193,5 @@ For another large cogwheel tier:
 5. Register the item predicate with `registerGreatechLargeCogwheelItem(...)`.
 
 If a future part needs a different placement geometry, create a new helper class and register it from `GreatechPlacementHelpers`.
+
+

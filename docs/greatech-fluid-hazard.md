@@ -1,4 +1,4 @@
-# Greatech Fluid Hazard
+﻿# Greatech Fluid Hazard
 
 ## Purpose
 
@@ -17,17 +17,17 @@ This mirrors the design style of the kinetic failure system: a Greatech source m
 
 Core classes:
 
-- [FluidHazardSource.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/hazard/FluidHazardSource.java)
-- [FluidHazardProfile.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/hazard/FluidHazardProfile.java)
-- [CreatePipeSafetyProfile.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/hazard/CreatePipeSafetyProfile.java)
-- [FluidHazardCandidate.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/hazard/FluidHazardCandidate.java)
-- [FluidHazardAction.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/hazard/FluidHazardAction.java)
-- [GreatechFluidHazardFailure.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/hazard/GreatechFluidHazardFailure.java)
-- [GreatechFluidPipeConnections.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/pipe/GreatechFluidPipeConnections.java)
+- [FluidHazardSource.java](../src/main/java/com/greatech/content/fluid/hazard/FluidHazardSource.java)
+- [FluidHazardProfile.java](../src/main/java/com/greatech/content/fluid/hazard/FluidHazardProfile.java)
+- [CreatePipeSafetyProfile.java](../src/main/java/com/greatech/content/fluid/hazard/CreatePipeSafetyProfile.java)
+- [FluidHazardCandidate.java](../src/main/java/com/greatech/content/fluid/hazard/FluidHazardCandidate.java)
+- [FluidHazardAction.java](../src/main/java/com/greatech/content/fluid/hazard/FluidHazardAction.java)
+- [GreatechFluidHazardFailure.java](../src/main/java/com/greatech/content/fluid/hazard/GreatechFluidHazardFailure.java)
+- [GreatechFluidPipeConnections.java](../src/main/java/com/greatech/content/fluid/pipe/GreatechFluidPipeConnections.java)
 
 Current source:
 
-- [ElectricFluidBridgeBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/ElectricFluidBridgeBlockEntity.java)
+- [ElectricFluidBridgeBlockEntity.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeBlockEntity.java)
 
 ## Source Contract
 
@@ -112,7 +112,7 @@ Future versions can add particles, entity damage, fire placement, explosions, fl
 
 ## Config
 
-Fluid hazard config lives in [Config.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/Config.java).
+Fluid hazard config lives in [Config.java](../src/main/java/com/greatech/Config.java).
 
 Current defaults:
 
@@ -144,3 +144,5 @@ Possible future extensions:
 The system does not make all Create pipe networks hazardous by default. A Create pipe network is checked only when a Greatech source provides a recent hazardous fluid and a side connected to Create pipes.
 
 For `lv_fluid_bridge`, old hazard state is cleared when the bridge no longer has matching fluid and did not route new fluid into Create pipes during the current tick. Empty bridges should not continue damaging pipes from stale state.
+
+

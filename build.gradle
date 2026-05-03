@@ -26,6 +26,10 @@ sourceSets.main.resources {
     exclude("src/generated/**/.cache") // datagen cache files
 }
 
+sourceSets.main.java {
+    include("com/greatech/**")
+}
+
 repositories {
     // Add here additional repositories if required by some of the dependencies below.
     maven { url = "https://neoforged.forgecdn.net/releases" } // NeoForged mirror

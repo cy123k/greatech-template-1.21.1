@@ -1,4 +1,4 @@
-# Greatech Fluid Bridge
+﻿# Greatech Fluid Bridge
 
 ## Purpose
 
@@ -17,30 +17,30 @@ The in-game feature should be referred to as the `Electric Fluid Bridge`.
 
 Core classes:
 
-- [ElectricFluidBridgeBlock.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/ElectricFluidBridgeBlock.java)
-- [ElectricFluidBridgeBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/ElectricFluidBridgeBlockEntity.java)
-- [ElectricFluidBridgeRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
-- [ElectricFluidBridgeMenu.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/ElectricFluidBridgeMenu.java)
-- [ElectricFluidBridgeScreen.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/ElectricFluidBridgeScreen.java)
-- [ElectricFluidBridgeTier.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/ElectricFluidBridgeTier.java)
-- [Fluid hazard system](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/hazard)
-- [GreatechFluidPipeConnections.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/pipe/GreatechFluidPipeConnections.java)
-- [GreatechLightSampler.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/client/render/GreatechLightSampler.java)
+- [ElectricFluidBridgeBlock.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeBlock.java)
+- [ElectricFluidBridgeBlockEntity.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeBlockEntity.java)
+- [ElectricFluidBridgeRenderer.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
+- [ElectricFluidBridgeMenu.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeMenu.java)
+- [ElectricFluidBridgeScreen.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeScreen.java)
+- [ElectricFluidBridgeTier.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeTier.java)
+- [Fluid hazard system](../src/main/java/com/greatech/content/fluid/hazard)
+- [GreatechFluidPipeConnections.java](../src/main/java/com/greatech/content/fluid/pipe/GreatechFluidPipeConnections.java)
+- [GreatechLightSampler.java](../src/main/java/com/greatech/client/render/GreatechLightSampler.java)
 
 Registry hooks:
 
-- [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechMenus.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechMenus.java)
-- [GreatechCapabilities.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechCapabilities.java)
+- [GreatechBlocks.java](../src/main/java/com/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechMenus.java](../src/main/java/com/greatech/registry/GreatechMenus.java)
+- [GreatechCapabilities.java](../src/main/java/com/greatech/registry/GreatechCapabilities.java)
 
 Resources:
 
-- [lv_fluid_bridge.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/lv_fluid_bridge.json)
-- [fluid bridge block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/fluid/fluid_bridge)
-- [fluid bridge textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/greatech_fluid_bridge)
-- [lv_fluid_bridge item model](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/item/lv_fluid_bridge.json)
-- [lv_fluid_bridge loot table](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/data/greatech/loot_table/blocks/lv_fluid_bridge.json)
+- [lv_fluid_bridge.json](../src/main/resources/assets/greatech/blockstates/lv_fluid_bridge.json)
+- [fluid bridge block models](../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge)
+- [fluid bridge textures](../src/main/resources/assets/greatech/textures/block/greatech_fluid_bridge)
+- [lv_fluid_bridge item model](../src/main/resources/assets/greatech/models/item/lv_fluid_bridge.json)
+- [lv_fluid_bridge loot table](../src/main/resources/data/greatech/loot_table/blocks/lv_fluid_bridge.json)
 
 ## Rendering
 
@@ -49,10 +49,10 @@ Resources:
 Current rendering structure:
 
 - the blockstate points to `lv_fluid_bridge_block.json`, an empty model with only a particle texture
-- the full bridge body is rendered by [ElectricFluidBridgeRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
+- the full bridge body is rendered by [ElectricFluidBridgeRenderer.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
 - the GTCEu drain connector is rendered as an extra partial only when the back side is connected to a GTCEu `FluidPipeBlockEntity`
-- partial models are declared in [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
-- light is sampled through [GreatechLightSampler.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/client/render/GreatechLightSampler.java)
+- partial models are declared in [GreatechPartialModels.java](../src/main/java/com/greatech/registry/GreatechPartialModels.java)
+- light is sampled through [GreatechLightSampler.java](../src/main/java/com/greatech/client/render/GreatechLightSampler.java)
 
 This avoids two problems seen with ordinary blockstate model composition:
 
@@ -65,20 +65,20 @@ The renderer treats the source model as north-facing, then rotates it to `Electr
 
 Generic model fragments live in:
 
-- [greatech_fluid_bridge.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_fluid_bridge.json)
-- [greatech_drain_north.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_drain_north.json)
-- [greatech_fluid_bridge_casing.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_fluid_bridge_casing.json)
-- [greatech_rim_north.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_rim_north.json)
-- [greatech_rim_connector_north.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_rim_connector_north.json)
-- [greatech_powerin_east.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_powerin_east.json)
+- [greatech_fluid_bridge.json](../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_fluid_bridge.json)
+- [greatech_drain_north.json](../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_drain_north.json)
+- [greatech_fluid_bridge_casing.json](../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_fluid_bridge_casing.json)
+- [greatech_rim_north.json](../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_rim_north.json)
+- [greatech_rim_connector_north.json](../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_rim_connector_north.json)
+- [greatech_powerin_east.json](../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_powerin_east.json)
 
 Tier-specific LV wrapper models live in:
 
-- [lv_fluid_bridge model folder](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/lv_fluid_bridge)
+- [lv_fluid_bridge model folder](../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/lv_fluid_bridge)
 
 The LV wrapper models reference the generic geometry and bind the LV texture:
 
-- [lv_pipe.png](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/greatech_fluid_bridge/lv_pipe.png)
+- [lv_pipe.png](../src/main/resources/assets/greatech/textures/block/greatech_fluid_bridge/lv_pipe.png)
 
 This mirrors the shaft/cogwheel model strategy: generic geometry is reusable, while tier folders provide texture-bound model variants.
 
@@ -130,7 +130,7 @@ Current rule:
 - the other four sides can accept GTCEu energy
 - the machine does not output EU
 
-The energy capability is registered in [GreatechCapabilities.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechCapabilities.java).
+The energy capability is registered in [GreatechCapabilities.java](../src/main/java/com/greatech/registry/GreatechCapabilities.java).
 
 ## Passive Transfer
 
@@ -194,11 +194,11 @@ The recorded hazard stores:
 
 Old hazard state is cleared when the bridge has no matching fluid left in its internal tank and no new fluid was routed into a Create pipe during the current tick. This prevents an empty bridge from continuing to damage Create pipes based on an old transfer.
 
-See [greatech-fluid-hazard.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-fluid-hazard.md) for the shared hazard system design.
+See [greatech-fluid-hazard.md](./greatech-fluid-hazard.md) for the shared hazard system design.
 
 ## Config
 
-Fluid bridge config lives in [Config.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/Config.java).
+Fluid bridge config lives in [Config.java](../src/main/java/com/greatech/Config.java).
 
 Current defaults are ordered as `[LV, MV, HV]`, even though only the LV block is registered right now:
 
@@ -254,3 +254,5 @@ Important boundaries:
 - MV/HV visual wrappers are not registered yet
 
 Future polish should decide whether the bridge should become a Create `SmartBlockEntity` with a `FluidTransportBehaviour`, or whether the current direct pressure propagation remains the preferred approach.
+
+

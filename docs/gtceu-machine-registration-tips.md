@@ -1,4 +1,4 @@
-# GTCEu Machine Registration Tips
+﻿# GTCEu Machine Registration Tips
 
 ## Purpose
 
@@ -16,7 +16,7 @@ public static final GTRegistrate REGISTRATE = GTRegistrate.create(Greatech.MODID
 
 Machine registration lives in:
 
-- [GreatechMachines.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechMachines.java)
+- [GreatechMachines.java](../src/main/java/com/greatech/registry/GreatechMachines.java)
 
 Mod construction initializes GTCEu config before touching the machine builder:
 
@@ -205,3 +205,5 @@ For machine registration work, stale `bin/main` can make a fixed source tree beh
 7. Run `compileJava`.
 8. Run `syncIdeBinMainModRoot` before testing through VS Code.
 9. Test startup, placed block rendering, creative tab opening, and item search.
+
+

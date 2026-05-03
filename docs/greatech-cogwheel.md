@@ -1,4 +1,4 @@
-# Greatech Cogwheels
+﻿# Greatech Cogwheels
 
 ## Purpose
 
@@ -19,17 +19,17 @@ Current prototype break limits:
 
 Core classes:
 
-- [GreatechCogwheelBlock.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/cogwheel/GreatechCogwheelBlock.java)
-- [GreatechCogwheelBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/cogwheel/GreatechCogwheelBlockEntity.java)
-- [GreatechLargeCogwheelBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/cogwheel/GreatechLargeCogwheelBlockEntity.java)
-- [GreatechCogwheelRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/cogwheel/GreatechCogwheelRenderer.java)
+- [GreatechCogwheelBlock.java](../src/main/java/com/greatech/content/cogwheel/GreatechCogwheelBlock.java)
+- [GreatechCogwheelBlockEntity.java](../src/main/java/com/greatech/content/cogwheel/GreatechCogwheelBlockEntity.java)
+- [GreatechLargeCogwheelBlockEntity.java](../src/main/java/com/greatech/content/cogwheel/GreatechLargeCogwheelBlockEntity.java)
+- [GreatechCogwheelRenderer.java](../src/main/java/com/greatech/content/cogwheel/GreatechCogwheelRenderer.java)
 
 Registration:
 
-- [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
-- [Greatech placement helpers](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement)
+- [GreatechBlocks.java](../src/main/java/com/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechPartialModels.java](../src/main/java/com/greatech/registry/GreatechPartialModels.java)
+- [Greatech placement helpers](../src/main/java/com/greatech/content/placement)
 
 ## Block and BlockEntity Pattern
 
@@ -181,7 +181,7 @@ The mixed helper is registered as two precise Catnip helper instances:
 
 This keeps Catnip preview filtering accurate and avoids a broad cogwheel helper stealing same-size previews.
 
-See [greatech-placement-helper.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-placement-helper.md) for the reusable placement design.
+See [greatech-placement-helper.md](./greatech-placement-helper.md) for the reusable placement design.
 
 ## Adding More Cogwheel Materials
 
@@ -205,3 +205,5 @@ For another large cogwheel material:
 5. Add a blockstate file with `axis=x/y/z` and `placement_ghost=true/false`.
 6. Check render bounds in game because large cogwheel geometry extends outside one block.
 7. Add a loot table and lang entries.
+
+

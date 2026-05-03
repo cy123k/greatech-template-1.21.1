@@ -1,4 +1,4 @@
-# Greatech Renderer Registration
+﻿# Greatech Renderer Registration
 
 ## Purpose
 
@@ -15,7 +15,7 @@ It is especially relevant for future:
 
 Client-only renderer registration happens in:
 
-- [GreatechClient.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/GreatechClient.java)
+- [GreatechClient.java](../src/main/java/com/greatech/GreatechClient.java)
 
 Current renderer registrations are moving toward family iteration rather than one hardcoded steel list:
 
@@ -37,7 +37,7 @@ Keep renderer classes client-safe. They can import Minecraft client rendering cl
 
 Partial models are declared in:
 
-- [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
+- [GreatechPartialModels.java](../src/main/java/com/greatech/registry/GreatechPartialModels.java)
 
 Current steel example:
 
@@ -96,8 +96,8 @@ Pipe-like models can run into lighting and culling issues when ordinary baked wo
 The current Greatech pattern is:
 
 1. make the placed blockstate point to an empty model with a particle texture
-2. register one or more `PartialModel`s in [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
-3. register the BER in [GreatechClient.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/GreatechClient.java)
+2. register one or more `PartialModel`s in [GreatechPartialModels.java](../src/main/java/com/greatech/registry/GreatechPartialModels.java)
+3. register the BER in [GreatechClient.java](../src/main/java/com/greatech/GreatechClient.java)
 4. render the base body every frame through `CachedBuffers.partial(...)`
 5. render conditional pieces after checking block state or nearby block entities
 6. use an expanded render bounding box if the model extends outside the block cube
@@ -106,7 +106,7 @@ For `lv_fluid_bridge`:
 
 - body partial: `GreatechPartialModels.LV_FLUID_BRIDGE`
 - GTCEu drain partial: `GreatechPartialModels.LV_FLUID_BRIDGE_GTCEU_DRAIN`
-- renderer: [ElectricFluidBridgeRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
+- renderer: [ElectricFluidBridgeRenderer.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
 
 The bridge block also uses non-occluding block properties and light overrides so the invisible world model does not behave like a full opaque cube.
 
@@ -123,7 +123,7 @@ These settings help the block stop shading its neighbors, while the BER handles 
 
 ## Neighbor Light Sampling
 
-When a BER-rendered part is close to a solid neighboring block, using the block entity's own packed light can still make one side look too dark. Greatech uses [GreatechLightSampler.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/client/render/GreatechLightSampler.java) for this case.
+When a BER-rendered part is close to a solid neighboring block, using the block entity's own packed light can still make one side look too dark. Greatech uses [GreatechLightSampler.java](../src/main/java/com/greatech/client/render/GreatechLightSampler.java) for this case.
 
 The sampler:
 
@@ -189,3 +189,5 @@ For a future Greatech cogwheel:
 - implement `KineticBreakable` if it should have a custom accident limit
 
 For large cogwheels, be extra careful with model bounds and render bounding boxes. If the animated geometry extends outside the normal block cube, the block entity may need an expanded render bounding box like Create's simple kinetic entities use.
+
+

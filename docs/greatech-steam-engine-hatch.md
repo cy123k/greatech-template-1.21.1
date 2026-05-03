@@ -1,4 +1,4 @@
-# Steam Engine Hatch and Powered Steel Shaft
+﻿# Steam Engine Hatch and Powered Steel Shaft
 
 ## Purpose
 
@@ -16,20 +16,20 @@ It is intentionally small and conservative:
 
 Steam hatch:
 
-- [GreatechSteamEngineHatchMachine.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/steam/GreatechSteamEngineHatchMachine.java)
-- [GreatechMachines.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechMachines.java)
+- [GreatechSteamEngineHatchMachine.java](../src/main/java/com/greatech/content/steam/GreatechSteamEngineHatchMachine.java)
+- [GreatechMachines.java](../src/main/java/com/greatech/registry/GreatechMachines.java)
 
 Powered shaft:
 
-- [GreatechPoweredShaftBlock.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/steam/GreatechPoweredShaftBlock.java)
-- [GreatechPoweredShaftBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/steam/GreatechPoweredShaftBlockEntity.java)
-- [GreatechPoweredShaftRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/steam/GreatechPoweredShaftRenderer.java)
+- [GreatechPoweredShaftBlock.java](../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlock.java)
+- [GreatechPoweredShaftBlockEntity.java](../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlockEntity.java)
+- [GreatechPoweredShaftRenderer.java](../src/main/java/com/greatech/content/steam/GreatechPoweredShaftRenderer.java)
 
 Shared registration:
 
-- [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechClient.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/GreatechClient.java)
+- [GreatechBlocks.java](../src/main/java/com/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechClient.java](../src/main/java/com/greatech/GreatechClient.java)
 
 Resources:
 
@@ -219,3 +219,5 @@ steamEngineHatchRpm = [16, 16, 16]
 steamEngineHatchStressCapacity = [16, 64, 256]
 steamEngineHatchSteamPerTick = [40, 60, 80]
 ```
+
+

@@ -1,4 +1,4 @@
-# Greatech
+﻿# Greatech
 
 `Greatech` is a NeoForge mod for Minecraft `1.21.1` that aims to bridge the mechanical systems of `Create` with the electrical systems of `GregTechCEu Modern`.
 
@@ -109,51 +109,51 @@ That means, by default:
 
 Key code locations:
 
-- [Greatech.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/Greatech.java)
-- [GreatechClient.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/GreatechClient.java)
-- [Config.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/Config.java)
-- [SUEnergyConverterBlock.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterBlock.java)
-- [SUEnergyConverterBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterBlockEntity.java)
-- [SUEnergyConverterRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterRenderer.java)
-- [SUEnergyConverterTier.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterTier.java)
-- [Greatech shaft code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/shaft)
-- [Greatech cogwheel code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/cogwheel)
-- [Greatech placement helper code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/placement)
-- [Greatech fluid bridge code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid)
-- [Greatech fluid hazard system](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/hazard)
-- [Greatech fluid pipe helpers](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/fluid/pipe)
-- [Greatech steam engine hatch and powered shaft code](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/steam)
-- [Greatech render helpers](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/client/render)
-- [Kinetic failure system](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/kinetics/failure)
-- [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechMachines.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechMachines.java)
-- [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
-- [GreatechCapabilities.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechCapabilities.java)
+- [Greatech.java](src/main/java/com/greatech/Greatech.java)
+- [GreatechClient.java](src/main/java/com/greatech/GreatechClient.java)
+- [Config.java](src/main/java/com/greatech/Config.java)
+- [SUEnergyConverterBlock.java](src/main/java/com/greatech/content/converter/SUEnergyConverterBlock.java)
+- [SUEnergyConverterBlockEntity.java](src/main/java/com/greatech/content/converter/SUEnergyConverterBlockEntity.java)
+- [SUEnergyConverterRenderer.java](src/main/java/com/greatech/content/converter/SUEnergyConverterRenderer.java)
+- [SUEnergyConverterTier.java](src/main/java/com/greatech/content/converter/SUEnergyConverterTier.java)
+- [Greatech shaft code](src/main/java/com/greatech/content/shaft)
+- [Greatech cogwheel code](src/main/java/com/greatech/content/cogwheel)
+- [Greatech placement helper code](src/main/java/com/greatech/content/placement)
+- [Greatech fluid bridge code](src/main/java/com/greatech/content/fluid)
+- [Greatech fluid hazard system](src/main/java/com/greatech/content/fluid/hazard)
+- [Greatech fluid pipe helpers](src/main/java/com/greatech/content/fluid/pipe)
+- [Greatech steam engine hatch and powered shaft code](src/main/java/com/greatech/content/steam)
+- [Greatech render helpers](src/main/java/com/greatech/client/render)
+- [Kinetic failure system](src/main/java/com/greatech/content/kinetics/failure)
+- [GreatechBlocks.java](src/main/java/com/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechMachines.java](src/main/java/com/greatech/registry/GreatechMachines.java)
+- [GreatechPartialModels.java](src/main/java/com/greatech/registry/GreatechPartialModels.java)
+- [GreatechCapabilities.java](src/main/java/com/greatech/registry/GreatechCapabilities.java)
 
 Key resource locations:
 
-- [neoforge.mods.toml](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/templates/META-INF/neoforge.mods.toml)
-- [en_us.json](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/lang/en_us.json)
-- [lv_sucon blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/lv_sucon.json)
-- [mv_sucon blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/mv_sucon.json)
-- [hv_sucon blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/hv_sucon.json)
-- [SU converter block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/su_energy_converter)
-- [SU converter item models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/item/su_energy_converter)
-- [Greatech shaft block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/shaft)
-- [Greatech shaft textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/greatech_shaft)
-- [Greatech cogwheel block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/cogwheel)
-- [Greatech cogwheel textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/greatech_cogwheel)
-- [LV fluid bridge blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/lv_fluid_bridge.json)
-- [LV steam engine hatch blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/lv_steam_engine_hatch.json)
-- [MV steam engine hatch blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/mv_steam_engine_hatch.json)
-- [HV steam engine hatch blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/hv_steam_engine_hatch.json)
-- [Greatech fluid bridge block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/fluid/fluid_bridge)
-- [Greatech machine block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/machine)
-- [Greatech fluid bridge textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/greatech_fluid_bridge)
-- [LV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/lv_su_energy_converter)
-- [MV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/mv_su_energy_converter)
-- [HV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/hv_su_energy_converter)
+- [neoforge.mods.toml](src/main/templates/META-INF/neoforge.mods.toml)
+- [en_us.json](src/main/resources/assets/greatech/lang/en_us.json)
+- [lv_sucon blockstate](src/main/resources/assets/greatech/blockstates/lv_sucon.json)
+- [mv_sucon blockstate](src/main/resources/assets/greatech/blockstates/mv_sucon.json)
+- [hv_sucon blockstate](src/main/resources/assets/greatech/blockstates/hv_sucon.json)
+- [SU converter block models](src/main/resources/assets/greatech/models/block/su_energy_converter)
+- [SU converter item models](src/main/resources/assets/greatech/models/item/su_energy_converter)
+- [Greatech shaft block models](src/main/resources/assets/greatech/models/block/shaft)
+- [Greatech shaft textures](src/main/resources/assets/greatech/textures/block/greatech_shaft)
+- [Greatech cogwheel block models](src/main/resources/assets/greatech/models/block/cogwheel)
+- [Greatech cogwheel textures](src/main/resources/assets/greatech/textures/block/greatech_cogwheel)
+- [LV fluid bridge blockstate](src/main/resources/assets/greatech/blockstates/lv_fluid_bridge.json)
+- [LV steam engine hatch blockstate](src/main/resources/assets/greatech/blockstates/lv_steam_engine_hatch.json)
+- [MV steam engine hatch blockstate](src/main/resources/assets/greatech/blockstates/mv_steam_engine_hatch.json)
+- [HV steam engine hatch blockstate](src/main/resources/assets/greatech/blockstates/hv_steam_engine_hatch.json)
+- [Greatech fluid bridge block models](src/main/resources/assets/greatech/models/block/fluid/fluid_bridge)
+- [Greatech machine block models](src/main/resources/assets/greatech/models/block/machine)
+- [Greatech fluid bridge textures](src/main/resources/assets/greatech/textures/block/greatech_fluid_bridge)
+- [LV textures](src/main/resources/assets/greatech/textures/block/lv_su_energy_converter)
+- [MV textures](src/main/resources/assets/greatech/textures/block/mv_su_energy_converter)
+- [HV textures](src/main/resources/assets/greatech/textures/block/hv_su_energy_converter)
 
 ## Build Notes
 
@@ -170,7 +170,7 @@ Due to repository availability issues during development, two `GTCEu` transitive
 - `ldlib`
 - `configuration`
 
-See [docs/dependencies.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/dependencies.md) for the current dependency strategy.
+See [docs/dependencies.md](docs/dependencies.md) for the current dependency strategy.
 
 ## Build Commands
 
@@ -208,14 +208,14 @@ This sync task copies compiled Java classes, `src/main/resources`, and generated
 Important:
 
 - do not use a resource-only `Sync` task for `bin/main`; `Sync` deletes files not declared as inputs, which can remove `.class` files and make Greatech load metadata without registering items or blocks
-- if the game starts but Greatech items disappear, check whether `bin/main/com/create/gregtech/greatech/Greatech.class` still exists
+- if the game starts but Greatech items disappear, check whether `bin/main/com/greatech/Greatech.class` still exists
 - `./gradlew runClient` remains the most reliable launch path when VS Code launch files are being regenerated
 
 ## Configuration
 
 Common config values are defined in:
 
-- [Config.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/Config.java)
+- [Config.java](src/main/java/com/greatech/Config.java)
 
 They are exposed as a standard NeoForge common config and can be tuned by players or pack makers.
 
@@ -261,18 +261,20 @@ Current steel resources still serve as the first concrete implementation, but fu
 
 Project docs live in:
 
-- [docs/overview.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/overview.md)
-- [docs/converter.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/converter.md)
-- [docs/kinetic-failure.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/kinetic-failure.md)
-- [docs/greatech-shaft.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-shaft.md)
-- [docs/greatech-cogwheel.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-cogwheel.md)
-- [docs/greatech-placement-helper.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-placement-helper.md)
-- [docs/greatech-fluidbridge.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-fluidbridge.md)
-- [docs/greatech-fluid-hazard.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-fluid-hazard.md)
-- [docs/greatech-steam-engine-hatch.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/steam-engine-hatch.md)
-- [docs/gtceu-machine-registration-tips.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/gtceu-machine-registration-tips.md)
-- [docs/create-fluid-tips.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/create-fluid-tips.md)
-- [docs/greatech-renderer-register.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/greatech-renderer-register.md)
-- [docs/dependencies.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/dependencies.md)
-- [docs/art-direction.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/art-direction.md)
-- [docs/create-machine-tips.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/create-machine-tips.md)
+- [docs/overview.md](docs/overview.md)
+- [docs/converter.md](docs/converter.md)
+- [docs/kinetic-failure.md](docs/kinetic-failure.md)
+- [docs/greatech-shaft.md](docs/greatech-shaft.md)
+- [docs/greatech-cogwheel.md](docs/greatech-cogwheel.md)
+- [docs/greatech-placement-helper.md](docs/greatech-placement-helper.md)
+- [docs/greatech-fluidbridge.md](docs/greatech-fluidbridge.md)
+- [docs/greatech-fluid-hazard.md](docs/greatech-fluid-hazard.md)
+- [docs/greatech-steam-engine-hatch.md](docs/greatech-steam-engine-hatch.md)
+- [docs/gtceu-machine-registration-tips.md](docs/gtceu-machine-registration-tips.md)
+- [docs/create-fluid-tips.md](docs/create-fluid-tips.md)
+- [docs/greatech-renderer-register.md](docs/greatech-renderer-register.md)
+- [docs/dependencies.md](docs/dependencies.md)
+- [docs/art-direction.md](docs/art-direction.md)
+- [docs/create-machine-tips.md](docs/create-machine-tips.md)
+
+

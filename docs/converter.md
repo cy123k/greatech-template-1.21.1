@@ -1,4 +1,4 @@
-# SU Energy Converter
+﻿# SU Energy Converter
 
 ## Purpose
 
@@ -19,28 +19,28 @@ The currently registered tiers are:
 
 Main classes:
 
-- [SUEnergyConverterBlock.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterBlock.java)
-- [SUEnergyConverterBlockEntity.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterBlockEntity.java)
-- [SUEnergyConverterRenderer.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterRenderer.java)
-- [SUEnergyConverterTier.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/content/converter/SUEnergyConverterTier.java)
+- [SUEnergyConverterBlock.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterBlock.java)
+- [SUEnergyConverterBlockEntity.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterBlockEntity.java)
+- [SUEnergyConverterRenderer.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterRenderer.java)
+- [SUEnergyConverterTier.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterTier.java)
 
 Supporting registration:
 
-- [GreatechBlocks.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechPartialModels.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechPartialModels.java)
-- [GreatechCapabilities.java](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/java/com/create/gregtech/greatech/registry/GreatechCapabilities.java)
+- [GreatechBlocks.java](../src/main/java/com/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechPartialModels.java](../src/main/java/com/greatech/registry/GreatechPartialModels.java)
+- [GreatechCapabilities.java](../src/main/java/com/greatech/registry/GreatechCapabilities.java)
 
 Main resources:
 
-- [lv_sucon blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/lv_sucon.json)
-- [mv_sucon blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/mv_sucon.json)
-- [hv_sucon blockstate](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/blockstates/hv_sucon.json)
-- [SU converter block models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/block/su_energy_converter)
-- [SU converter item models](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/models/item/su_energy_converter)
-- [LV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/lv_su_energy_converter)
-- [MV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/mv_su_energy_converter)
-- [HV textures](D:/SatisMinectory/mod/greatech-template-1.21.1/src/main/resources/assets/greatech/textures/block/hv_su_energy_converter)
+- [lv_sucon blockstate](../src/main/resources/assets/greatech/blockstates/lv_sucon.json)
+- [mv_sucon blockstate](../src/main/resources/assets/greatech/blockstates/mv_sucon.json)
+- [hv_sucon blockstate](../src/main/resources/assets/greatech/blockstates/hv_sucon.json)
+- [SU converter block models](../src/main/resources/assets/greatech/models/block/su_energy_converter)
+- [SU converter item models](../src/main/resources/assets/greatech/models/item/su_energy_converter)
+- [LV textures](../src/main/resources/assets/greatech/textures/block/lv_su_energy_converter)
+- [MV textures](../src/main/resources/assets/greatech/textures/block/mv_su_energy_converter)
+- [HV textures](../src/main/resources/assets/greatech/textures/block/hv_su_energy_converter)
 
 ## Mechanical Model
 
@@ -72,7 +72,7 @@ The relevant config switches are:
 - `kineticFailureCheckInterval = 20`
 - `kineticFailureCooldown = 100`
 
-See [kinetic-failure.md](D:/SatisMinectory/mod/greatech-template-1.21.1/docs/kinetic-failure.md) for the full accident system.
+See [kinetic-failure.md](./kinetic-failure.md) for the full accident system.
 
 ## Electrical Model
 
@@ -192,3 +192,5 @@ This is still prototype debug UX and can be replaced later with proper goggles, 
 - consider a future GT-style emissive or overlay layer once base gameplay stabilizes
 - add recipes and progression balancing
 - balance pass after in-game testing
+
+
