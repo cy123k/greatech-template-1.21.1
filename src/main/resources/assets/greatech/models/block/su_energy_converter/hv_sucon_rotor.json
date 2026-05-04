@@ -1,5 +1,5 @@
 {
-  "parent": "greatech:block/su_energy_converter/greatech_su_converner_rotor",
+  "parent": "greatech:block/su_energy_converter/greatech_su_converter_rotor",
   "textures": {
     "5": "greatech:block/greatech_machine/lv_machine/lv_rotor",
     "particle": "greatech:block/greatech_machine/lv_machine/lv_rotor"

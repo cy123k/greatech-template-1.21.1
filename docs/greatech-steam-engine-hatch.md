@@ -8,8 +8,8 @@ It is intentionally small and conservative:
 
 - `greatech:lv_steam_engine_hatch`, `greatech:mv_steam_engine_hatch`, and `greatech:hv_steam_engine_hatch` are the GTCEu-facing machine parts
 - `greatech:powered_steel_shaft` is the Create-facing generated-rotation block
-- the hatch currently uses a temporary diamond-block model
-- the powered shaft currently reuses the steel shaft visual
+- the hatch now has a custom unformed tiered model and a separate formed machine-model path
+- the powered shaft currently still reuses the steel shaft visual
 - RPM, steam cost, and stress capacity are fixed prototype values
 
 ## Main Code
@@ -36,7 +36,14 @@ Resources:
 - `assets/greatech/blockstates/lv_steam_engine_hatch.json`
 - `assets/greatech/blockstates/mv_steam_engine_hatch.json`
 - `assets/greatech/blockstates/hv_steam_engine_hatch.json`
-- `assets/greatech/models/block/machine/steam_engine_hatch.json`
+- `assets/greatech/models/block/machine/lv_steam_engine_hatch.json`
+- `assets/greatech/models/block/machine/mv_steam_engine_hatch.json`
+- `assets/greatech/models/block/machine/hv_steam_engine_hatch.json`
+- `assets/greatech/models/block/machine/hatch/greatech_hatch.json`
+- `assets/greatech/models/block/machine/hatch/lv_steam_engine_hatch.json`
+- `assets/greatech/models/block/machine/hatch/mv_steam_engine_hatch.json`
+- `assets/greatech/models/block/machine/hatch/hv_steam_engine_hatch.json`
+- `assets/greatech/models/block/machine/template/part/hatch_machine_no_glow.json`
 - `assets/greatech/models/item/lv_steam_engine_hatch.json`
 - `assets/greatech/models/item/mv_steam_engine_hatch.json`
 - `assets/greatech/models/item/hv_steam_engine_hatch.json`
@@ -60,6 +67,12 @@ registerSteamEngineHatch("lv_steam_engine_hatch", "LV Steam Engine Hatch", Steam
 registerSteamEngineHatch("mv_steam_engine_hatch", "MV Steam Engine Hatch", SteamEngineHatchTier.MV, 1);
 registerSteamEngineHatch("hv_steam_engine_hatch", "HV Steam Engine Hatch", SteamEngineHatchTier.HV, 2);
 ```
+
+Current registration notes:
+
+- `rotationState(RotationState.ALL)` keeps the hatch compatible with all six GTCEu-facing directions
+- `.hasBER(false)` stays set, because we register our own block-entity renderer instead of using GTCEu's generic BER path
+- `.appearanceBlock(() -> Blocks.IRON_BLOCK)` plus a plain `.blockModel(...)` lambda are still intentional dev-environment workarounds to avoid GTCEu model static-init crashes
 
 Creative-tab note:
 
@@ -158,27 +171,46 @@ For rendering, `GreatechPoweredShaftRenderer` reuses `GreatechPartialModels.STEE
 
 ## Resource Notes
 
-The hatch needs a real runtime blockstate file even though `MachineBuilder.blockModel(...)` describes datagen behavior.
+The hatch now uses a split visual path:
 
-The current blockstate uses unconditional multipart:
+- unformed world body: BER partial from `models/block/machine/hatch/<tier>_steam_engine_hatch.json`
+- formed world body: `gtceu:machine` model from `models/block/machine/<tier>_steam_engine_hatch.json`
+- item/display body: the same shared hatch geometry through the item model wrappers
 
-```json
-{
-  "multipart": [
-    {
-      "apply": {
-        "model": "greatech:block/machine/steam_engine_hatch"
-      }
-    }
-  ]
-}
-```
+The shared parent model is:
 
-This is safer than a bare `variants: { "": ... }` for GTCEu machine blocks because the block can have facing or rotation properties. An unconditional multipart applies to all block states.
+- `models/block/machine/hatch/greatech_hatch.json`
+
+It defines a complete cube-style hatch body where:
+
+- `north` is the visible `steamout` face
+- the other five faces use the tier casing texture
+
+Each tier wrapper only swaps textures:
+
+- `lv`: `lv_steamout` + `lv_casing`
+- `mv`: `mv_steamout` + `mv_casing`
+- `hv`: currently reuses `lv_steamout` + `lv_casing`
+
+The unformed world model does not rely on `gtceu:machine` to rotate the custom full-cube geometry. Instead:
+
+- `models/block/machine/<tier>_steam_engine_hatch.json` uses an empty shell model for `is_formed=false`
+- [GreatechSteamEngineHatchRenderer.java](../src/main/java/com/greatech/content/steam/GreatechSteamEngineHatchRenderer.java) renders the custom hatch body with BER
+
+The formed world model still uses `gtceu:machine`, but with a local non-emissive parent:
+
+- `models/block/machine/template/part/hatch_machine_no_glow.json`
+
+That local parent exists for three reasons:
+
+- remove GTCEu's default emissive front layer
+- keep the formed `steamout` front overlay non-emissive
+- define `particle: #side` so formed break particles use the casing texture instead of a missing-model purple/black particle
+
+The item models now inherit the shared hatch geometry, and [greatech_hatch.json](../src/main/resources/assets/greatech/models/block/machine/hatch/greatech_hatch.json) carries block-style `display` transforms so GUI and hand-held views show the full cube instead of a face-on sprite.
 
 ## Current Limitations
 
-- The hatch uses a temporary diamond-block model.
 - The powered shaft uses the steel shaft model.
 - RPM is fixed instead of deriving from boiler size, steam amount, heat, or configuration.
 - Stress capacity is fixed.
@@ -187,6 +219,7 @@ This is safer than a bare `variants: { "": ... }` for GTCEu machine blocks becau
 - The movement direction is currently hard-coded to `1`.
 - The powered shaft always reverts to plain `steel_shaft` when its hatch source is lost, so there is not yet a separate "idle powered shaft" presentation.
 - The implementation is coupled to current GTCEu snapshot APIs.
+- When the hatch faces `up/down`, the front/back visual roll is not fully solved yet for the custom unformed BER model.
 
 ## GTCEu API Update Plan
 

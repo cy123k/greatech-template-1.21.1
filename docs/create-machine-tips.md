@@ -35,8 +35,9 @@ Before making art or renderer code, write down three things:
 
 For the converter:
 
-- front = `FACING`
-- shaft input = `FACING.getOpposite()`
+- shaft input = `FACING`
+- `EU` output = `FACING.getOpposite()`
+- panel = `FACING.getCounterClockWise()`
 - rotation axis = `FACING.getAxis()`
 
 This one decision keeps model work, blockstate rotation, and renderer transforms aligned.
@@ -56,8 +57,8 @@ This avoids:
 
 The converter uses shared geometry plus tier texture wrappers:
 
-- [sucon_casing.json](../src/main/resources/assets/greatech/models/block/su_energy_converter/sucon_casing.json)
-- [sucon_rotor.json](../src/main/resources/assets/greatech/models/block/su_energy_converter/sucon_rotor.json)
+- [greatech_su_converter_casing.json](../src/main/resources/assets/greatech/models/block/su_energy_converter/greatech_su_converter_casing.json)
+- [greatech_su_converter_rotor.json](../src/main/resources/assets/greatech/models/block/su_energy_converter/greatech_su_converter_rotor.json)
 - tier wrappers such as [lv_sucon_casing.json](../src/main/resources/assets/greatech/models/block/su_energy_converter/lv_sucon_casing.json)
 
 ## 4. Register the Block, Block Entity, and Capabilities Together
@@ -238,6 +239,14 @@ The converter item model only customizes `fixed`, following the Create clutch st
 ```
 
 Leaving `gui`, `ground`, `firstperson`, and `thirdperson` to the default block transforms helps avoid item models that are too large or show only a flat front face.
+
+The important implementation detail is that the shared custom element item model should inherit:
+
+```json
+"parent": "block/block"
+```
+
+Without that parent, Minecraft will not inherit the ordinary block-style item transforms, and a full 3D machine model can look like a single face in GUI or display contexts.
 
 ## 13. Reuse Placement Helpers Deliberately
 

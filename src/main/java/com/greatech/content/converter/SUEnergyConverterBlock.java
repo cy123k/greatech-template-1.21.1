@@ -39,6 +39,18 @@ public class SUEnergyConverterBlock extends DirectionalKineticBlock implements I
         return tier;
     }
 
+    public static Direction getShaftInputSide(BlockState state) {
+        return state.getValue(FACING);
+    }
+
+    public static Direction getEnergyOutputSide(BlockState state) {
+        return getShaftInputSide(state).getOpposite();
+    }
+
+    public static Direction getPanelSide(BlockState state) {
+        return getShaftInputSide(state).getCounterClockWise();
+    }
+
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
@@ -76,12 +88,12 @@ public class SUEnergyConverterBlock extends DirectionalKineticBlock implements I
 
     @Override
     public Axis getRotationAxis(BlockState state) {
-        return state.getValue(FACING).getAxis();
+        return getShaftInputSide(state).getAxis();
     }
 
     @Override
     public boolean hasShaftTowards(net.minecraft.world.level.LevelReader world, net.minecraft.core.BlockPos pos, BlockState state, Direction face) {
-        return face == state.getValue(FACING).getOpposite();
+        return face == getShaftInputSide(state);
     }
 
     @Override

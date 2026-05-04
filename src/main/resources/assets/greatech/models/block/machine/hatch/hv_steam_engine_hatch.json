@@ -1,0 +1,8 @@
+{
+  "parent": "greatech:block/machine/hatch/greatech_hatch",
+  "textures": {
+    "0": "greatech:block/greatech_machine/lv_machine/lv_steamout",
+    "1": "greatech:block/greatech_machine/lv_machine/lv_casing",
+    "particle": "greatech:block/greatech_machine/lv_machine/lv_steamout"
+  }
+}

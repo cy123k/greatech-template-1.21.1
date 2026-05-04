@@ -47,12 +47,19 @@ The converter is a directional kinetic machine.
 
 Current orientation rules:
 
-- machine front: `FACING`
-- shaft input side: `FACING.getOpposite()`
+- `FACING` is the `SU` input side
+- `EU` output side: `FACING.getOpposite()`
+- panel side: `FACING.getCounterClockWise()`
 - rotation axis: `FACING.getAxis()`
 - running state: `ACTIVE=true` while the machine generated power during the last server tick
 
-This means the visible shaft/rotor side should be treated as the back of the machine, while the front is the electrical/control face.
+The current base model is authored around these fixed face roles:
+
+- `north`: `SU` input
+- `south`: `EU` output
+- `west`: status panel
+
+Renderer orientation maps that authored model onto the runtime `FACING` side.
 
 ## Mechanical Behavior
 
@@ -96,8 +103,8 @@ Each server tick the block entity currently:
 1. reads current speed
 2. computes generated `EU/t`
 3. stores power internally up to the tier capacity
-4. skips the shaft input side
-5. tries to push energy into neighboring `GTCEu` `IEnergyContainer`s
+4. exposes `GTCEu` output only on the configured `EU` output side
+5. tries to push energy into the neighboring `GTCEu` `IEnergyContainer` on that side
 
 This is still a prototype machine flow, but the Create-side and GTCEu-side integration path is already live.
 
@@ -124,9 +131,10 @@ See [kinetic-failure.md](./kinetic-failure.md) for the full accident model.
 
 The converter uses a split visual model:
 
-- static casing in the blockstate model
-- dynamic rotor in a BER partial
-- active-state casing swap through blockstate variants
+- empty world model in the blockstate
+- BER-rendered casing partial
+- BER-rendered rotating rotor partial
+- active-state casing swap through tier wrapper partials selected in the renderer
 
 Renderer class:
 
@@ -135,11 +143,13 @@ Renderer class:
 Important current renderer details:
 
 - it extends `KineticBlockEntityRenderer`
+- the placed blockstate points at an empty `*_sucon_block.json` model
+- both casing and rotor are rendered through `CachedBuffers.partialFacing(...)`
 - the rotor partial is chosen from the block tier
-- the rotor is rendered through `CachedBuffers.partialFacing(...)`
-- inset rotor light is sampled from `pos.above()` instead of relying on the block's own packed light
+- the casing partial is also chosen from the block tier and `ACTIVE` state
+- BER light is sampled with `GreatechLightSampler` from the shaft-input side rather than relying on the block's own packed light
 
-That top-neighbor light sampling is the current fix for the recessed moving-part darkening described in [create-machine-tips.md](./create-machine-tips.md).
+This keeps the converter on the same general lighting path as `lv_fluid_bridge`, while still using Create's kinetic rotation helper for the rotor.
 
 ## Lighting And Occlusion
 
@@ -175,24 +185,27 @@ Current block model folder:
 
 Current shared geometry files:
 
-- `greatech_su_converner_casing.json`
-- `greatech_su_converner_rotor.json`
+- `greatech_su_converter_casing.json`
+- `greatech_su_converter_rotor.json`
 
 Current tier wrappers:
 
+- `lv_sucon_block.json`
 - `lv_sucon_casing.json`
 - `lv_sucon_active.json`
 - `lv_sucon_rotor.json`
+- `mv_sucon_block.json`
 - `mv_sucon_casing.json`
 - `mv_sucon_active.json`
 - `mv_sucon_rotor.json`
+- `hv_sucon_block.json`
 - `hv_sucon_casing.json`
 - `hv_sucon_active.json`
 - `hv_sucon_rotor.json`
 
 The current shared item display model is:
 
-- [models/item/greatech_su_converner.json](../src/main/resources/assets/greatech/models/item/greatech_su_converner.json)
+- [models/item/greatech_su_converter.json](../src/main/resources/assets/greatech/models/item/greatech_su_converter.json)
 
 The item-id root models remain:
 
@@ -200,7 +213,7 @@ The item-id root models remain:
 - [models/item/mv_sucon.json](../src/main/resources/assets/greatech/models/item/mv_sucon.json)
 - [models/item/hv_sucon.json](../src/main/resources/assets/greatech/models/item/hv_sucon.json)
 
-Those root item models now point directly to the shared full item model and bind their textures there.
+Those root item models now point directly to the shared full item model and bind their textures there. The shared item model inherits `"parent": "block/block"` and keeps a custom `fixed` transform so item display entities render the full machine instead of showing only a single face.
 
 ## Texture State
 
@@ -208,13 +221,16 @@ The current converter art pipeline is mid-transition.
 
 At the moment:
 
-- the shared model files use the newer `greatech_su_converner_*` geometry
-- tier wrappers still exist and remain the resource ids used by blockstates and partial registration
-- the repository currently exposes the machine textures under `textures/block/greatech_machine/lv_machine`
+- the shared model files use `greatech_su_converter_*` geometry
+- tier wrappers remain the resource ids used by blockstates, partial registration, and item roots
+- `lv` and `mv` have distinct texture sets
+- `hv` currently reuses the `lv` texture family until dedicated `hv` art is added
 
-So the visual structure is tier-aware, but the committed texture set is still effectively LV-first.
+So the visual structure is tier-aware, but the committed art state is currently:
 
-That is why the current wrappers bind the same `greatech_machine/lv_machine/*` texture family until distinct MV/HV art is added.
+- `lv`: dedicated textures
+- `mv`: dedicated textures
+- `hv`: temporary `lv` texture reuse
 
 ## Debugging
 
@@ -231,12 +247,13 @@ This is still prototype UX, not final player-facing interaction.
 - balance is still prototype-only
 - no final recipes yet
 - active-state visuals still use a full casing texture swap instead of a layered GT-style overlay
-- item display and world display now use separate responsibilities, but MV/HV still share the currently committed texture family
+- item display and world display now use separate responsibilities
+- `hv` still reuses the currently committed `lv` texture family
 - config files generated from older defaults can preserve stale values until edited or regenerated
 
 ## Recommended Next Steps
 
-- add distinct MV/HV converter texture sets once the shape direction is stable
+- add a distinct `hv` converter texture set once the shape direction is stable
 - validate the new casing light/occlusion settings in dense machine rooms
 - decide whether the right-click debug output should remain or become a tool/goggle interaction
 - revisit active-state visuals later with overlay or emissive layering

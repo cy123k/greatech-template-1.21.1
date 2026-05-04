@@ -1,10 +1,10 @@
 {
-  "parent": "greatech:item/greatech_su_converner",
+  "parent": "greatech:item/greatech_su_converter",
   "textures": {
     "0": "greatech:block/greatech_machine/lv_machine/lv_casing",
     "1": "greatech:block/greatech_machine/lv_machine/lv_kioutput",
-    "2": "greatech:block/greatech_machine/lv_machine/lv_powerout",
-    "3": "greatech:block/greatech_machine/lv_machine/lv_su_converter_panel_off",
+    "2": "greatech:block/greatech_machine/lv_machine/lv_su_converter_panel_off",
+    "3": "greatech:block/greatech_machine/lv_machine/lv_powerout",
     "5": "greatech:block/greatech_machine/lv_machine/lv_rotor",
     "particle": "greatech:block/greatech_machine/lv_machine/lv_casing"
   }

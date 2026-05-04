@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "greatech:block/greatech_machine/mv_machine/mv_casing"
+  }
+}

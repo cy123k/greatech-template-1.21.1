@@ -116,6 +116,18 @@ Use unconditional multipart for machine blocks with unknown or changing state pr
 
 This applies the model to every block state, including states with facing or extended rotation properties.
 
+For the current `steam_engine_hatch`, the runtime resource layout is more explicit:
+
+- `blockstates/<machine>.json`: outer blockstate-facing rotation
+- `models/block/machine/<machine>.json`: `gtceu:machine` state split such as `is_formed` / `is_painted`
+- `models/block/machine/hatch/*.json`: shared custom unformed geometry and tier wrappers
+- `models/item/<machine>.json`: item/display wrappers
+
+When a machine uses custom full-cube geometry for only one state, keep the state split clear:
+
+- `is_formed=false`: own the custom body yourself, often with BER
+- `is_formed=true`: let `gtceu:machine` own the casing-style multiblock appearance
+
 ## Creative Tab Behavior
 
 GTRegistrate can add registered machine items to creative tab contents by itself.
@@ -194,6 +206,58 @@ This copies compiled classes, resources, and expanded metadata into `bin/main`.
 
 For machine registration work, stale `bin/main` can make a fixed source tree behave like the old broken version in-game.
 
+## Registering a Machine That Blends Into a GTCEu Multiblock
+
+If a new Greatech machine should visually merge into a GTCEu multiblock after formation, treat it as two separate visual problems:
+
+1. unformed local machine identity
+2. formed multiblock casing appearance
+
+For the current `steam_engine_hatch`, the working pattern is:
+
+- keep the machine registered through `MachineBuilder`
+- keep `is_formed` and `is_painted` as explicit model properties
+- let `models/block/machine/<machine>.json` branch on `is_formed`
+- use a custom Greatech parent for the formed overlay when GTCEu's stock parent has the wrong emissive or particle behavior
+
+The key design rule is:
+
+- do not force one single model parent to solve both unformed custom geometry and formed multiblock casing visuals
+
+Instead:
+
+- `unformed`: custom Greatech hatch body
+- `formed`: GTCEu-style casing with a controlled front overlay
+
+This keeps the multiblock-facing look close to GTCEu while still allowing the standalone machine to have its own identity.
+
+## Overlay and Formed-Material Cautions
+
+When adding a machine that should blend into a GTCEu multiblock, watch these details:
+
+1. `particle` must exist on your local formed parent.
+   If you clone a GTCEu parent and remove layers, remember to keep a `particle` texture. Otherwise breaking particles can become purple/black missing textures.
+
+2. GTCEu stock parents may contain more than one front layer.
+   `hatch_machine` includes both a regular pipe/front layer and another overlay layer. If you only want a non-emissive overlay, copy the parent locally and trim the extra layer there instead of editing GTCEu assets.
+
+3. The formed overlay should usually live on a local Greatech parent, not directly in GTCEu's stock parent.
+   This gives you control over:
+   - emissive vs non-emissive behavior
+   - particle texture
+   - front-layer stack order
+
+4. Blockstate rotation and machine-state branching are different layers.
+   - `blockstates/*.json` rotates the whole machine model by `facing`
+   - `models/block/machine/*.json` decides which model the machine uses for `is_formed` / `is_painted`
+   Do not try to solve both problems in only one of these layers.
+
+5. If custom unformed geometry does not follow GTCEu's standard front-overlay assumptions, prefer BER.
+   A full custom cube model often does not rotate cleanly through `gtceu:machine` alone. In that case:
+   - use an empty or minimal unformed world model
+   - render the custom body in BER
+   - keep formed multiblock visuals in `gtceu:machine`
+
 ## Checklist for Adding a New GTCEu Machine
 
 1. Add the machine definition in a dedicated registry class.
@@ -201,9 +265,14 @@ For machine registration work, stale `bin/main` can make a fixed source tree beh
 3. Register the `GTRegistrate` event listeners on the mod event bus.
 4. Avoid GTCEu static model helpers if they initialize unstable snapshot model tables.
 5. Add runtime blockstate, block model, and item model JSON unless datagen output is definitely packaged.
-6. Check whether GTRegistrate already inserts the item into creative tabs before adding it manually.
-7. Run `compileJava`.
-8. Run `syncIdeBinMainModRoot` before testing through VS Code.
-9. Test startup, placed block rendering, creative tab opening, and item search.
+6. If the machine has custom unformed geometry, decide early whether that state should be rendered by BER instead of pure `gtceu:machine`.
+7. If the machine should blend into a GTCEu multiblock when formed, split the resources into:
+   - unformed custom model path
+   - formed casing/overlay model path
+8. If you clone a GTCEu formed parent, keep `particle` valid and verify whether GTCEu's original parent had emissive front layers you no longer want.
+9. Check whether GTRegistrate already inserts the item into creative tabs before adding it manually.
+10. Run `compileJava`.
+11. Run `syncIdeBinMainModRoot` before testing through VS Code.
+12. Test startup, placed block rendering, formed rendering, break particles, creative tab opening, and item search.
 
 

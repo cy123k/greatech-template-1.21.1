@@ -1,0 +1,44 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "gtceu:machine",
+  "machine": "greatech:lv_steam_engine_hatch",
+  "replaceable_textures": [
+    "bottom",
+    "top",
+    "side"
+  ],
+  "variants": {
+    "is_formed=false,is_painted=false": {
+      "model": {
+        "parent": "greatech:block/machine/hatch/lv_steam_engine_hatch_block"
+      }
+    },
+    "is_formed=false,is_painted=true": {
+      "model": {
+        "parent": "greatech:block/machine/hatch/lv_steam_engine_hatch_block"
+      }
+    },
+    "is_formed=true,is_painted=false": {
+      "model": {
+        "parent": "greatech:block/machine/template/part/hatch_machine_no_glow",
+        "textures": {
+          "bottom": "gtceu:block/casings/steam/bronze/bottom",
+          "overlay": "greatech:block/greatech_machine/lv_machine/lv_steamout",
+          "side": "gtceu:block/casings/steam/bronze/side",
+          "top": "gtceu:block/casings/steam/bronze/top"
+        }
+      }
+    },
+    "is_formed=true,is_painted=true": {
+      "model": {
+        "parent": "greatech:block/machine/template/part/hatch_machine_no_glow",
+        "textures": {
+          "bottom": "gtceu:block/casings/steam/bronze/bottom",
+          "overlay": "greatech:block/greatech_machine/lv_machine/lv_steamout",
+          "side": "gtceu:block/casings/steam/bronze/side",
+          "top": "gtceu:block/casings/steam/bronze/top"
+        }
+      }
+    }
+  }
+}

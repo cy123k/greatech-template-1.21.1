@@ -111,7 +111,7 @@ public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements 
     }
 
     public IEnergyContainer getEnergyContainer(Direction side) {
-        return side != null && isShaftInput(side) ? null : this;
+        return side != null && side == getEnergyOutputSide() ? this : null;
     }
 
     public int getLastGeneratedEu() {
@@ -145,7 +145,7 @@ public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements 
 
     @Override
     public boolean outputsEnergy(Direction side) {
-        return side != null && !isShaftInput(side);
+        return side != null && side == getEnergyOutputSide();
     }
 
     @Override
@@ -211,7 +211,7 @@ public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements 
         }
 
         for (Direction direction : Direction.values()) {
-            if (remainingAmperage <= 0 || isShaftInput(direction)) {
+            if (remainingAmperage <= 0 || direction != getEnergyOutputSide()) {
                 continue;
             }
 
@@ -234,8 +234,8 @@ public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements 
         }
     }
 
-    private boolean isShaftInput(Direction side) {
-        return side == getBlockState().getValue(SUEnergyConverterBlock.FACING).getOpposite();
+    private Direction getEnergyOutputSide() {
+        return SUEnergyConverterBlock.getEnergyOutputSide(getBlockState());
     }
 
     private SUEnergyConverterTier getTier() {

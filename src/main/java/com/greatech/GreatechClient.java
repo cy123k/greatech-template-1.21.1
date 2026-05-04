@@ -9,7 +9,9 @@ import com.greatech.content.fluid.ElectricFluidBridgeScreen;
 import com.greatech.content.shaft.GreatechShaftRenderer;
 import com.greatech.content.steam.GreatechPoweredCogwheelRenderer;
 import com.greatech.content.steam.GreatechPoweredShaftRenderer;
+import com.greatech.content.steam.GreatechSteamEngineHatchRenderer;
 import com.greatech.registry.GreatechBlockEntityTypes;
+import com.greatech.registry.GreatechMachines;
 import com.greatech.registry.GreatechMenus;
 import com.greatech.registry.GreatechPartialModels;
 import com.mojang.logging.LogUtils;
@@ -58,6 +60,9 @@ public class GreatechClient {
             event.registerBlockEntityRenderer(family.largeCogwheel().get(), GreatechCogwheelRenderer::new);
         }
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.ELECTRIC_FLUID_BRIDGE.get(), ElectricFluidBridgeRenderer::new);
+        event.registerBlockEntityRenderer(GreatechMachines.LV_STEAM_ENGINE_HATCH.getBlockEntityType(), GreatechSteamEngineHatchRenderer::new);
+        event.registerBlockEntityRenderer(GreatechMachines.MV_STEAM_ENGINE_HATCH.getBlockEntityType(), GreatechSteamEngineHatchRenderer::new);
+        event.registerBlockEntityRenderer(GreatechMachines.HV_STEAM_ENGINE_HATCH.getBlockEntityType(), GreatechSteamEngineHatchRenderer::new);
     }
 
     @SubscribeEvent

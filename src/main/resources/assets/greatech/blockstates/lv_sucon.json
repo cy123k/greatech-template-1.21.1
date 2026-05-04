@@ -1,50 +1,40 @@
 ﻿{
   "variants": {
     "facing=down,active=false": {
-      "model": "greatech:block/su_energy_converter/lv_sucon_casing",
-      "x": 90
+      "model": "greatech:block/su_energy_converter/lv_sucon_block"
     },
     "facing=up,active=false": {
-      "model": "greatech:block/su_energy_converter/lv_sucon_casing",
-      "x": 270
+      "model": "greatech:block/su_energy_converter/lv_sucon_block"
     },
     "facing=north,active=false": {
-      "model": "greatech:block/su_energy_converter/lv_sucon_casing"
+      "model": "greatech:block/su_energy_converter/lv_sucon_block"
     },
     "facing=south,active=false": {
-      "model": "greatech:block/su_energy_converter/lv_sucon_casing",
-      "y": 180
+      "model": "greatech:block/su_energy_converter/lv_sucon_block"
     },
     "facing=west,active=false": {
-      "model": "greatech:block/su_energy_converter/lv_sucon_casing",
-      "y": 270
+      "model": "greatech:block/su_energy_converter/lv_sucon_block"
     },
     "facing=east,active=false": {
-      "model": "greatech:block/su_energy_converter/lv_sucon_casing",
-      "y": 90
+      "model": "greatech:block/su_energy_converter/lv_sucon_block"
     },
     "facing=down,active=true": {
-      "model": "greatech:block/su_energy_converter/lv_sucon_active",
-      "x": 90
+      "model": "greatech:block/su_energy_converter/lv_sucon_block"
     },
     "facing=up,active=true": {
-      "model": "greatech:block/su_energy_converter/lv_sucon_active",
-      "x": 270
+      "model": "greatech:block/su_energy_converter/lv_sucon_block"
     },
     "facing=north,active=true": {
-      "model": "greatech:block/su_energy_converter/lv_sucon_active"
+      "model": "greatech:block/su_energy_converter/lv_sucon_block"
     },
     "facing=south,active=true": {
-      "model": "greatech:block/su_energy_converter/lv_sucon_active",
-      "y": 180
+      "model": "greatech:block/su_energy_converter/lv_sucon_block"
     },
     "facing=west,active=true": {
-      "model": "greatech:block/su_energy_converter/lv_sucon_active",
-      "y": 270
+      "model": "greatech:block/su_energy_converter/lv_sucon_block"
     },
     "facing=east,active=true": {
-      "model": "greatech:block/su_energy_converter/lv_sucon_active",
-      "y": 90
+      "model": "greatech:block/su_energy_converter/lv_sucon_block"
     }
   }
 }

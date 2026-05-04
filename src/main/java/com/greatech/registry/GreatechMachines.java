@@ -8,6 +8,7 @@ import com.greatech.content.steam.SteamEngineHatchTier;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 
@@ -56,9 +57,15 @@ public final class GreatechMachines {
                 .rotationState(RotationState.ALL)
                 .tier(machineTier)
                 .abilities(PartAbility.EXPORT_FLUIDS, PartAbility.EXPORT_FLUIDS_1X)
-                .appearanceBlock(() -> Blocks.DIAMOND_BLOCK)
+                // We provide the actual gtceu:machine json manually in assets, so only the
+                // render-state properties need to exist here. Calling GTCEu's steam model
+                // helper during static init can crash in this dev environment.
+                .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+                .modelProperty(GTMachineModelProperties.IS_PAINTED, false)
+                .hasBER(false)
+                .appearanceBlock(() -> Blocks.IRON_BLOCK)
                 .blockModel((ctx, provider) -> provider.simpleBlock(ctx.get(), provider.models()
-                        .cubeAll(ctx.getName(), provider.mcLoc("block/diamond_block"))))
+                        .cubeAll(ctx.getName(), provider.mcLoc("block/iron_block"))))
                 .itemBuilder(item -> item.removeTab(CreativeModeTabs.SEARCH).tab(Greatech.MAIN_TAB_KEY))
                 .tooltips(Component.translatable("block.greatech." + name + ".tooltip"))
                 .allowCoverOnFront(true)

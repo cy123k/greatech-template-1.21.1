@@ -48,6 +48,9 @@ Implemented so far:
 - Greatech-owned fluid hazard monitoring for dangerous fluids entering Create pipe networks
 - `powered_steel_shaft` generated-rotation relay behavior for the steam prototype
 - `lv_steam_engine_hatch`, `mv_steam_engine_hatch`, and `hv_steam_engine_hatch` GTCEu machine-part registrations
+- custom unformed `steam engine hatch` tier textures and item display models
+- BER-rendered unformed `steam engine hatch` body with front-facing alignment
+- formed `steam engine hatch` casing/overlay runtime models with non-emissive `steamout` front overlay
 
 Still in progress:
 
@@ -55,6 +58,7 @@ Still in progress:
 - balance
 - higher-fidelity MV/HV machine art
 - broader machine roster
+- final `up/down` hatch visual roll behavior
 
 ## Gameplay Direction
 
@@ -68,6 +72,10 @@ The current `SU Energy Converter` uses:
 - fixed stress impact
 - `rpm -> EU/t` conversion
 - voltage/amperage-limited `GTCEu` output
+- a fixed face-role model layout:
+  - `north`: `SU` input
+  - `south`: `EU` output
+  - `west`: status panel
 
 Current formula:
 
@@ -119,6 +127,8 @@ Important resource locations:
 - [shaft block models](src/main/resources/assets/greatech/models/block/shaft)
 - [cogwheel block models](src/main/resources/assets/greatech/models/block/cogwheel)
 - [fluid bridge block models](src/main/resources/assets/greatech/models/block/fluid/fluid_bridge)
+- [steam hatch machine models](src/main/resources/assets/greatech/models/block/machine)
+- [steam hatch shared hatch models](src/main/resources/assets/greatech/models/block/machine/hatch)
 - [machine textures](src/main/resources/assets/greatech/textures/block/greatech_machine)
 - [shaft textures](src/main/resources/assets/greatech/textures/block/greatech_shaft)
 - [cogwheel textures](src/main/resources/assets/greatech/textures/block/greatech_cogwheel)
@@ -128,18 +138,48 @@ Important resource locations:
 
 The current converter visual stack uses:
 
-- static casing in the blockstate model
-- dynamic rotor in a BER partial
-- active-state blockstate wrappers
+- empty world model in the blockstate
+- BER-rendered casing and rotor partials
+- active-state casing wrappers chosen in the renderer
 - a shared full item model for inventory and hand display
 
 Current shared converter geometry files are:
 
-- `models/block/su_energy_converter/greatech_su_converner_casing.json`
-- `models/block/su_energy_converter/greatech_su_converner_rotor.json`
-- `models/item/greatech_su_converner.json`
+- `models/block/su_energy_converter/greatech_su_converter_casing.json`
+- `models/block/su_energy_converter/greatech_su_converter_rotor.json`
+- `models/item/greatech_su_converter.json`
 
-The current file names intentionally match the resources already committed, including the existing `converner` spelling in those model filenames.
+The current world render path now matches the fluid bridge pattern more closely:
+
+- `lv/mv/hv_sucon.json` blockstates point at empty `*_sucon_block.json` models
+- `SUEnergyConverterRenderer` renders both casing and rotor through BER partials
+- BER light is sampled with `GreatechLightSampler`
+- the item model inherits `block/block` transforms and keeps a custom `fixed` transform so display entities do not collapse into a face-on view
+
+## Steam Hatch Visual Notes
+
+The current `steam_engine_hatch` visual stack is split by machine state:
+
+- `is_formed=false`: world body is rendered by [GreatechSteamEngineHatchRenderer.java](src/main/java/com/greatech/content/steam/GreatechSteamEngineHatchRenderer.java)
+- `is_formed=true`: casing and front overlay come from `gtceu:machine` runtime JSON
+- item/display uses the shared [greatech_hatch.json](src/main/resources/assets/greatech/models/block/machine/hatch/greatech_hatch.json) model with block-style `display` transforms
+
+Current key steam hatch model files are:
+
+- `models/block/machine/hatch/greatech_hatch.json`
+- `models/block/machine/hatch/lv_steam_engine_hatch.json`
+- `models/block/machine/hatch/mv_steam_engine_hatch.json`
+- `models/block/machine/hatch/hv_steam_engine_hatch.json`
+- `models/block/machine/template/part/hatch_machine_no_glow.json`
+- `models/block/machine/lv_steam_engine_hatch.json`
+- `models/block/machine/mv_steam_engine_hatch.json`
+- `models/block/machine/hv_steam_engine_hatch.json`
+
+Current tier material state:
+
+- `lv` uses dedicated `lv_casing` / `lv_steamout`
+- `mv` uses dedicated `mv_casing` / `mv_steamout`
+- `hv` currently reuses `lv` art
 
 ## Build Notes
 
