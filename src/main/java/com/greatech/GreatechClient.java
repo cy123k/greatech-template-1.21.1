@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 
 import com.greatech.content.cogwheel.GreatechCogwheelRenderer;
 import com.greatech.content.converter.SUEnergyConverterRenderer;
+import com.greatech.content.equipment.hud.GreatechGoggleOverlayRenderer;
 import com.greatech.content.fluid.ElectricFluidBridgeRenderer;
 import com.greatech.content.fluid.ElectricFluidBridgeScreen;
 import com.greatech.content.shaft.GreatechShaftRenderer;
@@ -23,9 +24,11 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
 // This class will not load on dedicated servers. Accessing client side code from here is safe.
 @Mod(value = "greatech", dist = Dist.CLIENT)
@@ -68,5 +71,11 @@ public class GreatechClient {
     @SubscribeEvent
     static void registerMenuScreens(RegisterMenuScreensEvent event) {
         event.register(GreatechMenus.ELECTRIC_FLUID_BRIDGE.get(), ElectricFluidBridgeScreen::new);
+    }
+
+    @SubscribeEvent
+    static void registerGuiLayers(RegisterGuiLayersEvent event) {
+        event.registerAbove(VanillaGuiLayers.CROSSHAIR, GreatechGoggleOverlayRenderer.ID,
+                GreatechGoggleOverlayRenderer.LAYER);
     }
 }

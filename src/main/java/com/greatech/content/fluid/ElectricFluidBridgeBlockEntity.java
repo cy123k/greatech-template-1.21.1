@@ -410,6 +410,10 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
         return tank.getCapacity();
     }
 
+    public FluidStack getFluidStack() {
+        return tank.getFluid().copy();
+    }
+
     public int getEnergyCapacityValue() {
         return (int) Math.min(Integer.MAX_VALUE, getEnergyCapacity());
     }

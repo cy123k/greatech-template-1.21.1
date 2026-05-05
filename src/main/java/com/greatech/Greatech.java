@@ -2,9 +2,11 @@ package com.greatech;
 
 import org.slf4j.Logger;
 
+import com.greatech.network.GreatechNetworking;
 import com.greatech.registry.GreatechBlockEntityTypes;
 import com.greatech.registry.GreatechBlocks;
 import com.greatech.registry.GreatechCapabilities;
+import com.greatech.registry.GreatechItems;
 import com.greatech.registry.GreatechMachines;
 import com.greatech.registry.GreatechMenus;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
@@ -52,12 +54,14 @@ public class Greatech {
                 output.accept(GreatechBlocks.STEEL_SHAFT_ITEM.get());
                 output.accept(GreatechBlocks.STEEL_COGWHEEL_ITEM.get());
                 output.accept(GreatechBlocks.STEEL_LARGE_COGWHEEL_ITEM.get());
+                output.accept(GreatechItems.GOGGLES.get());
             }).build());
 
     public Greatech(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
 
         GreatechBlocks.register(modEventBus);
+        GreatechItems.register(modEventBus);
         ConfigHolder.init();
         GreatechMachines.init(modEventBus);
         GreatechBlockEntityTypes.register(modEventBus);
@@ -65,6 +69,7 @@ public class Greatech {
         GreatechPlacementHelpers.init();
         CREATIVE_MODE_TABS.register(modEventBus);
         modEventBus.addListener(GreatechCapabilities::register);
+        modEventBus.addListener(GreatechNetworking::register);
 
         NeoForge.EVENT_BUS.register(this);
         NeoForge.EVENT_BUS.addListener(GreatechPlacementEvents::onRightClickBlock);
@@ -94,6 +99,7 @@ public class Greatech {
             event.accept(GreatechBlocks.STEEL_SHAFT_ITEM);
             event.accept(GreatechBlocks.STEEL_COGWHEEL_ITEM);
             event.accept(GreatechBlocks.STEEL_LARGE_COGWHEEL_ITEM);
+            event.accept(GreatechItems.GOGGLES);
         }
     }
 
