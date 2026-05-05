@@ -59,7 +59,12 @@ This avoids two problems seen with ordinary blockstate model composition:
 - full-cube neighbor faces could darken the bridge model when directly touching it
 - item/display and world rendering needed different model responsibilities
 
-The renderer treats the source model as north-facing, then rotates it to `ElectricFluidBridgeBlock.FACING`. The GTCEu drain model is also north-facing by default and is rotated to the bridge back side.
+The renderer now follows the same helper-based facing rule as the converter and steam hatch:
+
+- the source body model is authored with its front on `north`
+- runtime orientation uses `CachedBuffers.partialFacing(...)`
+- the body passes `FACING.getOpposite()` as its model-facing transform input
+- the GTCEu drain partial also uses `partialFacing(...)`, with the drain transform derived from the bridge back side
 
 ## Model Layout
 

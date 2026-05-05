@@ -16,9 +16,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
 public class ElectricFluidBridgeRenderer extends SafeBlockEntityRenderer<ElectricFluidBridgeBlockEntity> {
-    private static final float HALF_PI = (float) Math.PI / 2.0F;
-    private static final float PI = (float) Math.PI;
-
     public ElectricFluidBridgeRenderer(BlockEntityRendererProvider.Context context) {
     }
 
@@ -31,12 +28,13 @@ public class ElectricFluidBridgeRenderer extends SafeBlockEntityRenderer<Electri
 
         BlockState state = blockEntity.getBlockState();
         Direction facing = state.getValue(ElectricFluidBridgeBlock.FACING);
+        Direction modelFacing = facing.getOpposite();
         VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.solid());
 
-        SuperByteBuffer body = CachedBuffers.partial(
+        SuperByteBuffer body = CachedBuffers.partialFacing(
                 GreatechPartialModels.LV_FLUID_BRIDGE,
-                state);
-        orientNorthModelTo(body, facing);
+                state,
+                modelFacing);
         body.light(GreatechLightSampler.sample(blockEntity.getLevel(), blockEntity.getBlockPos(), facing));
         body.overlay(overlay);
         body.renderInto(poseStack, vertexConsumer);
@@ -47,10 +45,10 @@ public class ElectricFluidBridgeRenderer extends SafeBlockEntityRenderer<Electri
             return;
         }
 
-        SuperByteBuffer drain = CachedBuffers.partial(
+        SuperByteBuffer drain = CachedBuffers.partialFacing(
                 GreatechPartialModels.LV_FLUID_BRIDGE_GTCEU_DRAIN,
-                state);
-        orientNorthModelTo(drain, back);
+                state,
+                back.getOpposite());
         drain.light(GreatechLightSampler.sample(blockEntity.getLevel(), blockEntity.getBlockPos(), back));
         drain.overlay(overlay);
 
@@ -60,17 +58,5 @@ public class ElectricFluidBridgeRenderer extends SafeBlockEntityRenderer<Electri
     @Override
     public AABB getRenderBoundingBox(ElectricFluidBridgeBlockEntity blockEntity) {
         return new AABB(blockEntity.getBlockPos()).inflate(1.0D);
-    }
-
-    private static void orientNorthModelTo(SuperByteBuffer buffer, Direction side) {
-        switch (side) {
-            case SOUTH -> buffer.rotateYCentered(PI);
-            case EAST -> buffer.rotateYCentered(HALF_PI);
-            case WEST -> buffer.rotateYCentered(3.0F * HALF_PI);
-            case UP -> buffer.rotateXCentered(3.0F * HALF_PI);
-            case DOWN -> buffer.rotateXCentered(HALF_PI);
-            default -> {
-            }
-        }
     }
 }

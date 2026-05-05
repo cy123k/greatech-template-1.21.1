@@ -71,6 +71,7 @@ registerSteamEngineHatch("hv_steam_engine_hatch", "HV Steam Engine Hatch", Steam
 Current registration notes:
 
 - `rotationState(RotationState.ALL)` keeps the hatch compatible with all six GTCEu-facing directions
+- a custom [GreatechSteamEngineHatchBlock.java](../src/main/java/com/greatech/content/steam/GreatechSteamEngineHatchBlock.java) now makes hatch placement follow the same explicit `context.getNearestLookingDirection().getOpposite()` rule used by Greatech's other directional machines
 - `.hasBER(false)` stays set, because we register our own block-entity renderer instead of using GTCEu's generic BER path
 - `.appearanceBlock(() -> Blocks.IRON_BLOCK)` plus a plain `.blockModel(...)` lambda are still intentional dev-environment workarounds to avoid GTCEu model static-init crashes
 
@@ -138,10 +139,10 @@ Powered shaft behavior:
 The axis rule is important:
 
 ```text
-hatch front axis != shaft axis
+hatch front axis == shaft axis
 ```
 
-This mirrors the idea that the engine attaches to the side of a shaft, not the shaft end.
+This matches the current implementation in [GreatechSteamEngineTrait.java](../src/main/java/com/greatech/content/steam/GreatechSteamEngineTrait.java) and [AbstractPoweredSteamKineticBlockEntity.java](../src/main/java/com/greatech/content/steam/AbstractPoweredSteamKineticBlockEntity.java): the hatch currently validates a powered shaft directly in front of its own front-facing side.
 
 ## Powered Shaft Behavior
 
@@ -197,6 +198,12 @@ The unformed world model does not rely on `gtceu:machine` to rotate the custom f
 - `models/block/machine/<tier>_steam_engine_hatch.json` uses an empty shell model for `is_formed=false`
 - [GreatechSteamEngineHatchRenderer.java](../src/main/java/com/greatech/content/steam/GreatechSteamEngineHatchRenderer.java) renders the custom hatch body with BER
 
+The current unformed BER path now follows the same facing helper pattern as Greatech's other BER-owned machines:
+
+- the source hatch model is authored with its visible `steamout` face on `north`
+- runtime orientation uses `CachedBuffers.partialFacing(...)`
+- the renderer passes `front.getOpposite()` as the model-facing transform input, matching the current converter and fluid bridge conventions
+
 The formed world model still uses `gtceu:machine`, but with a local non-emissive parent:
 
 - `models/block/machine/template/part/hatch_machine_no_glow.json`
@@ -219,7 +226,6 @@ The item models now inherit the shared hatch geometry, and [greatech_hatch.json]
 - The movement direction is currently hard-coded to `1`.
 - The powered shaft always reverts to plain `steel_shaft` when its hatch source is lost, so there is not yet a separate "idle powered shaft" presentation.
 - The implementation is coupled to current GTCEu snapshot APIs.
-- When the hatch faces `up/down`, the front/back visual roll is not fully solved yet for the custom unformed BER model.
 
 ## GTCEu API Update Plan
 

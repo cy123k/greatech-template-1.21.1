@@ -51,6 +51,8 @@ Dangerous GTCEu fluid traits can also follow fluids into monitored Create pipe n
 
 The current steam prototype adds three `GTCEu` machine parts, `lv_steam_engine_hatch`, `mv_steam_engine_hatch`, and `hv_steam_engine_hatch`, plus a matching `Create` generator relay, `powered_steel_shaft`. Each hatch behaves like a fluid export hatch for GTCEu multiblock recognition, stores only steam, and converts a valid neighboring `steel_shaft` into `powered_steel_shaft`. The powered shaft then acts as the actual `Create` kinetic source: it validates the adjacent hatch, requests steam power each tick, outputs a fixed `32 RPM` and `512 SU` prototype value, and automatically reverts back to `steel_shaft` when it no longer has a valid hatch source.
 
+Because Greatech mixes Create-style blocks and GTCEu machine definitions, new machine work should follow a documented ownership split for registration, facing, rendering, and capability exposure. See [greatech-machine-registration-tips.md](./greatech-machine-registration-tips.md).
+
 ## Near-Term Development Goals
 
 - validate the new custom art and active-state presentation in gameplay

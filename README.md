@@ -58,7 +58,6 @@ Still in progress:
 - balance
 - higher-fidelity MV/HV machine art
 - broader machine roster
-- final `up/down` hatch visual roll behavior
 
 ## Gameplay Direction
 
@@ -263,18 +262,26 @@ Current steel resources are the first concrete family and should be treated as t
 
 Project docs live in:
 
+- [docs/machines/README.md](docs/machines/README.md)
+- [docs/guides/README.md](docs/guides/README.md)
+- [docs/systems/README.md](docs/systems/README.md)
+- [docs/reference/README.md](docs/reference/README.md)
+
+Direct doc links:
+
 - [docs/overview.md](docs/overview.md)
 - [docs/greatech-converter.md](docs/greatech-converter.md)
-- [docs/kinetic-failure.md](docs/kinetic-failure.md)
+- [docs/greatech-fluidbridge.md](docs/greatech-fluidbridge.md)
+- [docs/greatech-steam-engine-hatch.md](docs/greatech-steam-engine-hatch.md)
 - [docs/greatech-shaft.md](docs/greatech-shaft.md)
 - [docs/greatech-cogwheel.md](docs/greatech-cogwheel.md)
-- [docs/greatech-placement-helper.md](docs/greatech-placement-helper.md)
-- [docs/greatech-fluidbridge.md](docs/greatech-fluidbridge.md)
+- [docs/kinetic-failure.md](docs/kinetic-failure.md)
 - [docs/greatech-fluid-hazard.md](docs/greatech-fluid-hazard.md)
-- [docs/greatech-steam-engine-hatch.md](docs/greatech-steam-engine-hatch.md)
+- [docs/greatech-placement-helper.md](docs/greatech-placement-helper.md)
+- [docs/greatech-machine-registration-tips.md](docs/greatech-machine-registration-tips.md)
 - [docs/gtceu-machine-registration-tips.md](docs/gtceu-machine-registration-tips.md)
+- [docs/create-machine-tips.md](docs/create-machine-tips.md)
 - [docs/create-fluid-tips.md](docs/create-fluid-tips.md)
 - [docs/greatech-renderer-register.md](docs/greatech-renderer-register.md)
-- [docs/dependencies.md](docs/dependencies.md)
 - [docs/art-direction.md](docs/art-direction.md)
-- [docs/create-machine-tips.md](docs/create-machine-tips.md)
+- [docs/dependencies.md](docs/dependencies.md)

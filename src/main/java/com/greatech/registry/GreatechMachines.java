@@ -3,6 +3,7 @@ package com.greatech.registry;
 import com.google.common.collect.Table;
 
 import com.greatech.Greatech;
+import com.greatech.content.steam.GreatechSteamEngineHatchBlock;
 import com.greatech.content.steam.GreatechSteamEngineHatchMachine;
 import com.greatech.content.steam.SteamEngineHatchTier;
 import com.gregtechceu.gtceu.api.data.RotationState;
@@ -11,6 +12,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
+import com.gregtechceu.gtceu.api.item.MetaMachineItem;
 
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
@@ -52,7 +54,8 @@ public final class GreatechMachines {
     private static MachineDefinition registerSteamEngineHatch(String name, String langValue, SteamEngineHatchTier tier,
             int machineTier) {
         return REGISTRATE
-                .machine(name, holder -> new GreatechSteamEngineHatchMachine(holder, tier))
+                .machine(name, MachineDefinition::new, GreatechSteamEngineHatchBlock::new, MetaMachineItem::new,
+                        holder -> new GreatechSteamEngineHatchMachine(holder, tier))
                 .langValue(langValue)
                 .rotationState(RotationState.ALL)
                 .tier(machineTier)

@@ -18,9 +18,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 
 public class GreatechSteamEngineHatchRenderer extends SafeBlockEntityRenderer<BlockEntity> {
-    private static final float HALF_PI = (float) Math.PI / 2.0F;
-    private static final float PI = (float) Math.PI;
-
     public GreatechSteamEngineHatchRenderer(BlockEntityRendererProvider.Context context) {
     }
 
@@ -37,10 +34,10 @@ public class GreatechSteamEngineHatchRenderer extends SafeBlockEntityRenderer<Bl
         }
 
         Direction front = hatch.getFrontFacing();
+        Direction modelFacing = front.getOpposite();
         VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.solid());
         PartialModel partial = GreatechPartialModels.steamEngineHatch(hatch);
-        SuperByteBuffer body = CachedBuffers.partial(partial, hatch.getBlockState());
-        orientNorthModelTo(body, front);
+        SuperByteBuffer body = CachedBuffers.partialFacing(partial, hatch.getBlockState(), modelFacing);
         body.light(GreatechLightSampler.sample(hatch.getLevel(), hatch.getBlockPos(), front));
         body.overlay(overlay);
         body.renderInto(poseStack, vertexConsumer);
@@ -49,17 +46,5 @@ public class GreatechSteamEngineHatchRenderer extends SafeBlockEntityRenderer<Bl
     @Override
     public AABB getRenderBoundingBox(BlockEntity blockEntity) {
         return new AABB(blockEntity.getBlockPos()).inflate(1.0D);
-    }
-
-    private static void orientNorthModelTo(SuperByteBuffer buffer, Direction side) {
-        switch (side) {
-            case SOUTH -> buffer.rotateYCentered(PI);
-            case EAST -> buffer.rotateYCentered(3.0F * HALF_PI);
-            case WEST -> buffer.rotateYCentered(HALF_PI);
-            case UP -> buffer.rotateXCentered(3.0F * HALF_PI);
-            case DOWN -> buffer.rotateXCentered(HALF_PI);
-            default -> {
-            }
-        }
     }
 }

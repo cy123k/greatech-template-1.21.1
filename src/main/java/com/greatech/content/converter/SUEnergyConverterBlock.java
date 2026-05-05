@@ -10,6 +10,7 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RenderShape;
@@ -49,6 +50,13 @@ public class SUEnergyConverterBlock extends DirectionalKineticBlock implements I
 
     public static Direction getPanelSide(BlockState state) {
         return getShaftInputSide(state).getCounterClockWise();
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return defaultBlockState()
+                .setValue(FACING, context.getNearestLookingDirection().getOpposite())
+                .setValue(ACTIVE, false);
     }
 
     @Override

@@ -134,7 +134,7 @@ The current Greatech pattern is:
 1. make the placed blockstate point to an empty model with a particle texture
 2. register one or more `PartialModel`s in [GreatechPartialModels.java](../src/main/java/com/greatech/registry/GreatechPartialModels.java)
 3. register the BER in [GreatechClient.java](../src/main/java/com/greatech/GreatechClient.java)
-4. render the base body every frame through `CachedBuffers.partial(...)`
+4. render the base body every frame through `CachedBuffers.partialFacing(...)` when it has a directional front
 5. render conditional pieces after checking block state or nearby block entities
 6. use an expanded render bounding box if the model extends outside the block cube
 
@@ -143,6 +143,20 @@ For `lv_fluid_bridge`:
 - body partial: `GreatechPartialModels.LV_FLUID_BRIDGE`
 - GTCEu drain partial: `GreatechPartialModels.LV_FLUID_BRIDGE_GTCEU_DRAIN`
 - renderer: [ElectricFluidBridgeRenderer.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
+
+Current direction convention for BER-owned directional bodies:
+
+- author the source model with its visible front on `north`
+- derive a runtime `modelFacing` from the machine's logical front
+- prefer `CachedBuffers.partialFacing(...)` over handwritten `rotateXCentered(...)` / `rotateYCentered(...)` matrices
+
+For Greatech's current directional BER machines, the runtime transform usually uses:
+
+```java
+Direction modelFacing = logicalFront.getOpposite();
+```
+
+This matches the current converter, fluid bridge, and unformed steam hatch renderers.
 
 The bridge block also uses non-occluding block properties and light overrides so the invisible world model does not behave like a full opaque cube.
 
