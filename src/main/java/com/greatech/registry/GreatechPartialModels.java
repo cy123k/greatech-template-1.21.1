@@ -19,13 +19,16 @@ public final class GreatechPartialModels {
     public static final PartialModel HV_SUCON_ACTIVE_CASING = block("su_energy_converter/hv_sucon_active");
     public static final PartialModel HV_SUCON_ROTOR = block("su_energy_converter/hv_sucon_rotor");
     public static final PartialModel STEEL_SHAFT = block("shaft/steel_shaft");
+    public static final PartialModel ALUMINIUM_SHAFT = block("shaft/aluminium_shaft");
     public static final PartialModel STEAM_ENGINE_BRACKET =
             block("steam_engine_hatch/greatech_steamengine_bracket");
     public static final PartialModel LV_STEAM_ENGINE_HATCH = block("machine/hatch/lv_steam_engine_hatch");
     public static final PartialModel MV_STEAM_ENGINE_HATCH = block("machine/hatch/mv_steam_engine_hatch");
     public static final PartialModel HV_STEAM_ENGINE_HATCH = block("machine/hatch/hv_steam_engine_hatch");
     public static final PartialModel STEEL_COGWHEEL = block("cogwheel/small_cogwheel/steel_cogwheel");
+    public static final PartialModel ALUMINIUM_COGWHEEL = block("cogwheel/small_cogwheel/aluminium_cogwheel");
     public static final PartialModel STEEL_LARGE_COGWHEEL = block("cogwheel/large_cogwheel/steel_large_cogwheel");
+    public static final PartialModel ALUMINIUM_LARGE_COGWHEEL = block("cogwheel/large_cogwheel/aluminium_large_cogwheel");
     public static final PartialModel LV_FLUID_BRIDGE =
             block("fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge");
     public static final PartialModel LV_FLUID_BRIDGE_GTCEU_DRAIN =
@@ -48,6 +51,7 @@ public final class GreatechPartialModels {
     public static PartialModel shaft(GreatechKineticMaterial material) {
         return switch (material) {
             case STEEL -> STEEL_SHAFT;
+            case ALUMINIUM -> ALUMINIUM_SHAFT;
         };
     }
 
@@ -58,6 +62,7 @@ public final class GreatechPartialModels {
     public static PartialModel cogwheel(GreatechKineticMaterial material, boolean large) {
         return switch (material) {
             case STEEL -> large ? STEEL_LARGE_COGWHEEL : STEEL_COGWHEEL;
+            case ALUMINIUM -> large ? ALUMINIUM_LARGE_COGWHEEL : ALUMINIUM_COGWHEEL;
         };
     }
 

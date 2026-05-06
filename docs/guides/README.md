@@ -5,6 +5,7 @@ This folder groups implementation guides and registration tips.
 Current guide docs:
 
 - [Greatech Machine Registration Tips](./greatech-machine-registration-tips.md)
+- [Greatech Datagen Tips](./greatech-datagen-tips.md)
 - [GTCEu Machine Registration Tips](./gtceu-machine-registration-tips.md)
 - [Create Machine Tips](./create-machine-tips.md)
 - [Create Fluid Tips](./create-fluid-tips.md)

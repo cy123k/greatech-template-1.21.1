@@ -222,10 +222,14 @@ neoForge.ideSyncTask generateModMetadata
 // Java class output must be included here as well as resources.
 var syncIdeBinMainModRoot = tasks.register("syncIdeBinMainModRoot", Sync) {
     dependsOn compileJava
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(tasks.named("compileJava", JavaCompile).map { it.destinationDirectory })
     from("src/main/resources") {
         exclude("**/*.bbmodel")
         exclude("src/generated/**/.cache")
+    }
+    from("src/generated/resources") {
+        exclude("**/.cache/**")
     }
     from(generateModMetadata)
     into layout.projectDirectory.dir("bin/main")
@@ -248,6 +252,10 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+tasks.withType(ProcessResources).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.

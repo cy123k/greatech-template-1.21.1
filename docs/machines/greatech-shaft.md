@@ -10,16 +10,25 @@ Current block:
 
 - `greatech:steel_shaft`
 - `greatech:powered_steel_shaft`
+- `greatech:aluminium_shaft`
+- `greatech:powered_aluminium_shaft`
 
 Current code direction:
 
 - `steel` is the first `GreatechKineticMaterial`
+- `aluminium` is the current higher-tier material family
 - shaft and powered shaft registrations now sit inside a kinetic family structure
-- future materials should reuse the same naming template instead of duplicating steel-specific registration logic
+- transmission-family `blockstates`, item models, and loot tables are now generated from NeoForge datagen providers
+- future materials should reuse the same naming template and datagen path instead of duplicating steel-specific resources
 
 Current prototype break limit:
 
 - `2048 SU`
+
+Current material progression:
+
+- `steel_shaft`: `2048 SU`
+- `aluminium_shaft`: `4096 SU`
 
 ## Main Code
 
@@ -60,23 +69,30 @@ Example future aluminum naming:
 
 Current resources:
 
-- `assets/greatech/blockstates/steel_shaft.json`
 - `assets/greatech/models/block/shaft/greatech_shaft.json`
 - `assets/greatech/models/block/shaft/steel_shaft.json`
+- `assets/greatech/models/block/shaft/aluminium_shaft.json`
 - `assets/greatech/models/block/shaft/steel_shaft_block.json`
-- `assets/greatech/models/item/steel_shaft.json`
+- `assets/greatech/models/block/shaft/aluminium_shaft_block.json`
 - `assets/greatech/textures/block/greatech_shaft/steel_axis.png`
 - `assets/greatech/textures/block/greatech_shaft/steel_axis_top.png`
-- `data/greatech/loot_table/blocks/steel_shaft.json`
+- `assets/greatech/textures/block/greatech_shaft/aluminium_axis.png`
+- `assets/greatech/textures/block/greatech_shaft/aluminium_axis_top.png`
+- `generated/assets/greatech/blockstates/<material>_shaft.json`
+- `generated/assets/greatech/blockstates/powered_<material>_shaft.json`
+- `generated/assets/greatech/models/item/<material>_shaft.json`
+- `generated/assets/greatech/models/item/powered_<material>_shaft.json`
+- `generated/data/greatech/loot_table/blocks/<material>_shaft.json`
+- `generated/data/greatech/loot_table/blocks/powered_<material>_shaft.json`
 
 The split is intentional:
 
 - `greatech_shaft.json`: shared shaft geometry
-- `steel_shaft.json`: steel texture wrapper and animated partial source
-- `steel_shaft_block.json`: empty world block model used to avoid static/dynamic overlap
-- `models/item/steel_shaft.json`: item model using the full shaft geometry
+- `<material>_shaft.json`: material texture wrapper and animated partial source
+- `<material>_shaft_block.json`: empty world block model used to avoid static/dynamic overlap
+- generated item roots under `src/generated/resources`: item model entry points using the full shaft geometry
 
-`steel_shaft.json` blockstates also include `placement_ghost=true` variants. Normal placed blocks use `placement_ghost=false` and the empty `steel_shaft_block.json` model. Placement preview ghost states use `placement_ghost=true` and point to the full `steel_shaft.json` model so Catnip can render a visible translucent preview without reintroducing a static world model.
+The generated shaft blockstates include `placement_ghost=true` variants. Normal placed blocks use `placement_ghost=false` and the empty `<material>_shaft_block.json` model. Placement preview ghost states use `placement_ghost=true` and point to the full `<material>_shaft.json` model so Catnip can render a visible translucent preview without reintroducing a static world model.
 
 ## Block and BlockEntity Pattern
 
@@ -182,6 +198,6 @@ For another shaft material such as aluminum:
 9. Add a loot table and lang entries.
 10. Register placement-helper support if the new family should support assisted placement.
 
-The intended result is that `steel_shaft`, `aluminum_shaft`, and later materials all share the same runtime pattern and differ mainly by family registration and resources.
+The intended result is that `steel_shaft`, `aluminium_shaft`, and later materials all share the same runtime pattern and differ mainly by family registration, wrapper textures/models, and generated resources.
 
 

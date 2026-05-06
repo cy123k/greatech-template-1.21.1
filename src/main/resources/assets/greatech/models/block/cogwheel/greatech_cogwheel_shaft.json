@@ -3,9 +3,9 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
-		"0": "texture/steel_axis_top",
-		"1": "texture/steel_cogwheel_axis",
-		"particle": "texture/steel_axis_top"
+		"0": "#0",
+		"1": "#1",
+		"particle": "#particle"
 	},
 	"elements": [
 		{

@@ -16,9 +16,14 @@ Currently registered machines and transmission parts:
 - `hv_sucon`
 - `steel_shaft`
 - `powered_steel_shaft`
+- `aluminium_shaft`
+- `powered_aluminium_shaft`
 - `steel_cogwheel`
 - `steel_large_cogwheel`
 - `powered_steel_cogwheel`
+- `aluminium_cogwheel`
+- `aluminium_large_cogwheel`
+- `powered_aluminium_cogwheel`
 - `lv_fluid_bridge`
 - `lv_steam_engine_hatch`
 - `mv_steam_engine_hatch`
@@ -41,12 +46,17 @@ Implemented so far:
 - converter block-side light and occlusion overrides for custom machine geometry
 - shared Greatech kinetic failure monitoring for Create transmission networks
 - `steel_shaft` registration with Greatech-owned block entity and renderer
+- `aluminium_shaft` registration as the higher-tier kinetic material family
 - `steel_cogwheel` and `steel_large_cogwheel` registration with Greatech-owned rendering and behavior
+- `aluminium_cogwheel` and `aluminium_large_cogwheel` registration with Greatech-owned rendering and behavior
 - `powered_steel_cogwheel` steam-conversion relay behavior
+- `powered_aluminium_cogwheel` compatibility registration through the shared kinetic family path
 - shaft/cogwheel placement helper support and placement ghost previews
+- transmission-family `blockstates`, item models, and loot tables generated through NeoForge datagen
 - `lv_fluid_bridge` with GTCEu energy input, directional fluid ports, GUI, passive transfer, and EU-driven Create-style pressure
 - Greatech-owned fluid hazard monitoring for dangerous fluids entering Create pipe networks
 - `powered_steel_shaft` generated-rotation relay behavior for the steam prototype
+- `powered_aluminium_shaft` compatibility registration through the shared kinetic family path
 - `lv_steam_engine_hatch`, `mv_steam_engine_hatch`, and `hv_steam_engine_hatch` GTCEu machine-part registrations
 - custom unformed `steam engine hatch` tier textures and item display models
 - BER-rendered unformed `steam engine hatch` body with front-facing alignment
@@ -105,6 +115,7 @@ Important code locations:
 - [Greatech.java](src/main/java/com/greatech/Greatech.java)
 - [GreatechClient.java](src/main/java/com/greatech/GreatechClient.java)
 - [Config.java](src/main/java/com/greatech/Config.java)
+- [datagen code](src/main/java/com/greatech/datagen)
 - [converter code](src/main/java/com/greatech/content/converter)
 - [shaft code](src/main/java/com/greatech/content/shaft)
 - [cogwheel code](src/main/java/com/greatech/content/cogwheel)
@@ -121,8 +132,10 @@ Important code locations:
 Important resource locations:
 
 - [blockstates](src/main/resources/assets/greatech/blockstates)
+- [generated blockstates](src/generated/resources/assets/greatech/blockstates)
 - [converter block models](src/main/resources/assets/greatech/models/block/su_energy_converter)
 - [converter item models](src/main/resources/assets/greatech/models/item)
+- [generated item models](src/generated/resources/assets/greatech/models/item)
 - [shaft block models](src/main/resources/assets/greatech/models/block/shaft)
 - [cogwheel block models](src/main/resources/assets/greatech/models/block/cogwheel)
 - [fluid bridge block models](src/main/resources/assets/greatech/models/block/fluid/fluid_bridge)
@@ -203,9 +216,12 @@ Typical commands:
 
 ```powershell
 ./gradlew compileJava --refresh-dependencies --no-daemon
+./gradlew runData --no-daemon
 ./gradlew runClient
 ./gradlew runServer
 ```
+
+`runData` currently generates the transmission-family `blockstates`, item models, and loot tables into `src/generated/resources`.
 
 If Gradle fights over locks with IDE background tasks:
 
@@ -224,11 +240,12 @@ This project includes:
 ./gradlew syncIdeBinMainModRoot --no-daemon
 ```
 
-That task copies compiled Java classes, `src/main/resources`, and generated `META-INF/neoforge.mods.toml` into `bin/main`.
+That task copies compiled Java classes, `src/main/resources`, `src/generated/resources`, and generated `META-INF/neoforge.mods.toml` into `bin/main`.
 
 Important note:
 
 - avoid replacing that workflow with a resource-only `Sync` task, because it can delete compiled classes from `bin/main`
+- if runtime item or block models are generated through datagen, make sure `syncIdeBinMainModRoot` continues to include `src/generated/resources` so IDE-launched dev runs can resolve those assets
 
 ## Configuration
 
@@ -283,5 +300,6 @@ Direct doc links:
 - [docs/create-machine-tips.md](docs/create-machine-tips.md)
 - [docs/create-fluid-tips.md](docs/create-fluid-tips.md)
 - [docs/greatech-renderer-register.md](docs/greatech-renderer-register.md)
+- [docs/greatech-datagen-tips.md](docs/greatech-datagen-tips.md)
 - [docs/art-direction.md](docs/art-direction.md)
 - [docs/dependencies.md](docs/dependencies.md)

@@ -1,0 +1,30 @@
+{
+    "variants": {
+        "axis=x,placement_ghost=false": {
+            "model": "greatech:block/shaft/aluminium_shaft_block",
+            "x": 90,
+            "y": 90
+        },
+        "axis=x,placement_ghost=true": {
+            "model": "greatech:block/shaft/aluminium_shaft",
+            "x": 90,
+            "y": 90
+        },
+        "axis=y,placement_ghost=false": {
+            "model": "greatech:block/shaft/aluminium_shaft_block"
+        },
+        "axis=y,placement_ghost=true": {
+            "model": "greatech:block/shaft/aluminium_shaft"
+        },
+        "axis=z,placement_ghost=false": {
+            "model": "greatech:block/shaft/aluminium_shaft_block",
+            "x": 90,
+            "y": 180
+        },
+        "axis=z,placement_ghost=true": {
+            "model": "greatech:block/shaft/aluminium_shaft",
+            "x": 90,
+            "y": 180
+        }
+    }
+}

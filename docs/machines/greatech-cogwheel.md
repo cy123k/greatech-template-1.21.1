@@ -7,6 +7,9 @@ Greatech currently has two Create-style cogwheel transmission parts:
 - `greatech:steel_cogwheel`
 - `greatech:steel_large_cogwheel`
 - `greatech:powered_steel_cogwheel`
+- `greatech:aluminium_cogwheel`
+- `greatech:aluminium_large_cogwheel`
+- `greatech:powered_aluminium_cogwheel`
 
 They behave like Create small and large cogwheels, but they belong to Greatech and participate in Greatech's kinetic failure system with higher break limits than vanilla Create transmission parts.
 
@@ -14,6 +17,13 @@ Current prototype break limits:
 
 - `steel_cogwheel`: `2048 SU`
 - `steel_large_cogwheel`: `4096 SU`
+
+Current material progression:
+
+- `steel_cogwheel`: `2048 SU`
+- `aluminium_cogwheel`: `4096 SU`
+- `steel_large_cogwheel`: `4096 SU`
+- `aluminium_large_cogwheel`: `8192 SU`
 
 ## Main Code
 
@@ -63,6 +73,13 @@ public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechL
 `GreatechCogwheelBlock` receives the matching block entity type supplier during block registration, so the same block class can support both sizes without returning the wrong type.
 The family-based path keeps the same rule but routes the final block entity type through `GreatechBlockEntityTypes.getFamily(material)`.
 
+Current code direction:
+
+- `steel` is the baseline transmission family
+- `aluminium` is the current higher-tier transmission family
+- transmission-family `blockstates`, item models, and loot tables are now generated from NeoForge datagen providers
+- future materials should extend the same family and datagen path instead of duplicating per-block resource roots
+
 ## Resource Layout
 
 Current resource naming rule:
@@ -87,31 +104,39 @@ Example future aluminum naming:
 
 Current small cogwheel resources:
 
-- `assets/greatech/blockstates/steel_cogwheel.json`
-- `assets/greatech/blockstates/powered_steel_cogwheel.json`
 - `assets/greatech/models/block/cogwheel/greatech_cogwheel.json`
 - `assets/greatech/models/block/cogwheel/greatech_cogwheel_shaftless.json`
 - `assets/greatech/models/block/cogwheel/greatech_cogwheel_shaft.json`
 - `assets/greatech/models/block/cogwheel/small_cogwheel/steel_cogwheel.json`
+- `assets/greatech/models/block/cogwheel/small_cogwheel/aluminium_cogwheel.json`
 - `assets/greatech/models/block/cogwheel/small_cogwheel/steel_cogwheel_shaftless.json`
+- `assets/greatech/models/block/cogwheel/small_cogwheel/aluminium_cogwheel_shaftless.json`
 - `assets/greatech/models/block/cogwheel/small_cogwheel/steel_cogwheel_shaft.json`
+- `assets/greatech/models/block/cogwheel/small_cogwheel/aluminium_cogwheel_shaft.json`
 - `assets/greatech/models/block/cogwheel/small_cogwheel/steel_cogwheel_block.json`
-- `assets/greatech/models/item/steel_cogwheel.json`
-- `assets/greatech/models/item/powered_steel_cogwheel.json`
-- `data/greatech/loot_table/blocks/steel_cogwheel.json`
-- `data/greatech/loot_table/blocks/powered_steel_cogwheel.json`
+- `assets/greatech/models/block/cogwheel/small_cogwheel/aluminium_cogwheel_block.json`
+- `generated/assets/greatech/blockstates/<material>_cogwheel.json`
+- `generated/assets/greatech/blockstates/powered_<material>_cogwheel.json`
+- `generated/assets/greatech/models/item/<material>_cogwheel.json`
+- `generated/assets/greatech/models/item/powered_<material>_cogwheel.json`
+- `generated/data/greatech/loot_table/blocks/<material>_cogwheel.json`
+- `generated/data/greatech/loot_table/blocks/powered_<material>_cogwheel.json`
 
 Current large cogwheel resources:
 
-- `assets/greatech/blockstates/steel_large_cogwheel.json`
 - `assets/greatech/models/block/cogwheel/greatech_large_cogwheel.json`
 - `assets/greatech/models/block/cogwheel/greatech_large_cogwheel_shaftless.json`
 - `assets/greatech/models/block/cogwheel/large_cogwheel/steel_large_cogwheel.json`
+- `assets/greatech/models/block/cogwheel/large_cogwheel/aluminium_large_cogwheel.json`
 - `assets/greatech/models/block/cogwheel/large_cogwheel/steel_large_cogwheel_shaftless.json`
+- `assets/greatech/models/block/cogwheel/large_cogwheel/aluminium_large_cogwheel_shaftless.json`
 - `assets/greatech/models/block/cogwheel/large_cogwheel/steel_large_cogwheel_block.json`
-- `assets/greatech/models/item/steel_large_cogwheel.json`
+- `assets/greatech/models/block/cogwheel/large_cogwheel/aluminium_large_cogwheel_block.json`
 - `assets/greatech/textures/block/greatech_cogwheel/steel_large_cogwheel.png`
-- `data/greatech/loot_table/blocks/steel_large_cogwheel.json`
+- `assets/greatech/textures/block/greatech_cogwheel/aluminium_large_cogwheel.png`
+- `generated/assets/greatech/blockstates/<material>_large_cogwheel.json`
+- `generated/assets/greatech/models/item/<material>_large_cogwheel.json`
+- `generated/data/greatech/loot_table/blocks/<material>_large_cogwheel.json`
 
 Shared textures:
 
@@ -124,12 +149,12 @@ The split is intentional:
 
 - `greatech_cogwheel*.json`: shared small cogwheel geometry
 - `greatech_large_cogwheel*.json`: shared large cogwheel geometry
-- `small_cogwheel/steel_cogwheel*.json`: small steel texture wrappers and animated partial sources
-- `large_cogwheel/steel_large_cogwheel*.json`: large steel texture wrappers and animated partial sources
+- `small_cogwheel/<material>_cogwheel*.json`: small material texture wrappers and animated partial sources
+- `large_cogwheel/<material>_large_cogwheel*.json`: large material texture wrappers and animated partial sources
 - `*_block.json`: empty world block models used to avoid static/dynamic overlap
-- root item model files under `models/item/`: item-id entry points
+- generated root item model files under `src/generated/resources/assets/greatech/models/item/`: item-id entry points
 
-`steel_cogwheel.json` and `steel_large_cogwheel.json` blockstates include `placement_ghost=true` variants. Normal placed blocks use `placement_ghost=false` and empty static models. Placement preview states use `placement_ghost=true` and point to the full wrapper model so Catnip can render a visible translucent preview.
+The generated cogwheel blockstates include `placement_ghost=true` variants. Normal placed blocks use `placement_ghost=false` and empty static models. Placement preview states use `placement_ghost=true` and point to the full wrapper model so Catnip can render a visible translucent preview.
 
 Blockbench exports may contain placeholder texture paths such as `Mymodel/texture/...`. Replace them with valid lowercase Minecraft resource locations before running the game. Invalid texture paths in a parent model can make all child wrapper models bake as missing models.
 

@@ -54,6 +54,9 @@ public class Greatech {
                 output.accept(GreatechBlocks.STEEL_SHAFT_ITEM.get());
                 output.accept(GreatechBlocks.STEEL_COGWHEEL_ITEM.get());
                 output.accept(GreatechBlocks.STEEL_LARGE_COGWHEEL_ITEM.get());
+                output.accept(GreatechBlocks.ALUMINIUM_SHAFT_ITEM.get());
+                output.accept(GreatechBlocks.ALUMINIUM_COGWHEEL_ITEM.get());
+                output.accept(GreatechBlocks.ALUMINIUM_LARGE_COGWHEEL_ITEM.get());
                 output.accept(GreatechItems.GOGGLES.get());
             }).build());
 
@@ -99,6 +102,9 @@ public class Greatech {
             event.accept(GreatechBlocks.STEEL_SHAFT_ITEM);
             event.accept(GreatechBlocks.STEEL_COGWHEEL_ITEM);
             event.accept(GreatechBlocks.STEEL_LARGE_COGWHEEL_ITEM);
+            event.accept(GreatechBlocks.ALUMINIUM_SHAFT_ITEM);
+            event.accept(GreatechBlocks.ALUMINIUM_COGWHEEL_ITEM);
+            event.accept(GreatechBlocks.ALUMINIUM_LARGE_COGWHEEL_ITEM);
             event.accept(GreatechItems.GOGGLES);
         }
     }

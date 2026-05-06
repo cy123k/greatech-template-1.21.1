@@ -1,7 +1,8 @@
 package com.greatech.content.kinetics;
 
 public enum GreatechKineticMaterial {
-    STEEL("steel", 2_048.0F, 2_048.0F, 4_096.0F);
+    STEEL("steel", 2_048.0F, 2_048.0F, 4_096.0F),
+    ALUMINIUM("aluminium", 4_096.0F, 4_096.0F, 8_192.0F);
 
     private final String id;
     private final float shaftBreakStressLimit;

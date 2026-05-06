@@ -38,6 +38,8 @@ public final class GreatechBlockEntityTypes {
 
     public static final GreatechKineticBlockEntityFamily STEEL_BE_FAMILY =
             registerKineticFamily(GreatechKineticMaterial.STEEL);
+    public static final GreatechKineticBlockEntityFamily ALUMINIUM_BE_FAMILY =
+            registerKineticFamily(GreatechKineticMaterial.ALUMINIUM);
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechShaftBlockEntity>> STEEL_SHAFT =
             STEEL_BE_FAMILY.shaft();
@@ -53,6 +55,20 @@ public final class GreatechBlockEntityTypes {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechLargeCogwheelBlockEntity>> STEEL_LARGE_COGWHEEL =
             STEEL_BE_FAMILY.largeCogwheel();
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechShaftBlockEntity>> ALUMINIUM_SHAFT =
+            ALUMINIUM_BE_FAMILY.shaft();
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechPoweredShaftBlockEntity>> POWERED_ALUMINIUM_SHAFT =
+            ALUMINIUM_BE_FAMILY.poweredShaft();
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechCogwheelBlockEntity>> ALUMINIUM_COGWHEEL =
+            ALUMINIUM_BE_FAMILY.cogwheel();
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechPoweredCogwheelBlockEntity>> POWERED_ALUMINIUM_COGWHEEL =
+            ALUMINIUM_BE_FAMILY.poweredCogwheel();
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechLargeCogwheelBlockEntity>> ALUMINIUM_LARGE_COGWHEEL =
+            ALUMINIUM_BE_FAMILY.largeCogwheel();
 
     private GreatechBlockEntityTypes() {
     }
@@ -64,11 +80,12 @@ public final class GreatechBlockEntityTypes {
     public static GreatechKineticBlockEntityFamily getFamily(GreatechKineticMaterial material) {
         return switch (material) {
             case STEEL -> STEEL_BE_FAMILY;
+            case ALUMINIUM -> ALUMINIUM_BE_FAMILY;
         };
     }
 
     public static Iterable<GreatechKineticBlockEntityFamily> families() {
-        return java.util.List.of(STEEL_BE_FAMILY);
+        return java.util.List.of(STEEL_BE_FAMILY, ALUMINIUM_BE_FAMILY);
     }
 
     public static BlockEntityType<GreatechShaftBlockEntity> shaft(BlockState state) {
