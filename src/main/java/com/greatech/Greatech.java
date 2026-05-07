@@ -3,6 +3,7 @@ package com.greatech;
 import org.slf4j.Logger;
 
 import com.greatech.network.GreatechNetworking;
+import com.greatech.content.heat.HeatChamberPlacementEvents;
 import com.greatech.registry.GreatechBlockEntityTypes;
 import com.greatech.registry.GreatechBlocks;
 import com.greatech.registry.GreatechCapabilities;
@@ -50,6 +51,9 @@ public class Greatech {
                 output.accept(GreatechBlocks.MV_SUCON_ITEM.get());
                 output.accept(GreatechBlocks.HV_SUCON_ITEM.get());
                 output.accept(GreatechBlocks.LV_FLUID_BRIDGE_ITEM.get());
+                output.accept(GreatechBlocks.HEAT_CHAMBER_CASING_ITEM.get());
+                output.accept(GreatechBlocks.HEAT_CHAMBER_GLASS_ITEM.get());
+                output.accept(GreatechBlocks.HEAT_CHAMBER_CONTROLLER_ITEM.get());
                 output.accept(GreatechBlocks.STEEL_SHAFT_ITEM.get());
                 output.accept(GreatechBlocks.STEEL_COGWHEEL_ITEM.get());
                 output.accept(GreatechBlocks.STEEL_LARGE_COGWHEEL_ITEM.get());
@@ -76,6 +80,7 @@ public class Greatech {
         modEventBus.addListener(GreatechNetworking::register);
 
         NeoForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.addListener(HeatChamberPlacementEvents::onBlockPlace);
         NeoForge.EVENT_BUS.addListener(GreatechPlacementEvents::onRightClickBlock);
         modEventBus.addListener(this::addCreative);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
@@ -100,6 +105,9 @@ public class Greatech {
             event.accept(GreatechBlocks.MV_SUCON_ITEM);
             event.accept(GreatechBlocks.HV_SUCON_ITEM);
             event.accept(GreatechBlocks.LV_FLUID_BRIDGE_ITEM);
+            event.accept(GreatechBlocks.HEAT_CHAMBER_CASING_ITEM);
+            event.accept(GreatechBlocks.HEAT_CHAMBER_GLASS_ITEM);
+            event.accept(GreatechBlocks.HEAT_CHAMBER_CONTROLLER_ITEM);
             event.accept(GreatechBlocks.STEEL_SHAFT_ITEM);
             event.accept(GreatechBlocks.STEEL_COGWHEEL_ITEM);
             event.accept(GreatechBlocks.STEEL_LARGE_COGWHEEL_ITEM);

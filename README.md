@@ -33,6 +33,9 @@ Currently registered machines and transmission parts:
 - `lv_steam_engine_hatch`
 - `mv_steam_engine_hatch`
 - `hv_steam_engine_hatch`
+- `heat_chamber_casing`
+- `heat_chamber_glass`
+- `heat_chamber_controller`
 
 ## Current Status
 
@@ -66,12 +69,16 @@ Implemented so far:
 - custom unformed `steam engine hatch` tier textures and item display models
 - BER-rendered unformed `steam engine hatch` body with front-facing alignment
 - formed `steam engine hatch` casing/overlay runtime models with non-emissive `steamout` front overlay
+- first-pass Greatech-owned heat chamber blocks, controller block entity, sealed-space scanner, and runtime heat environment
+- Create-style heat source recognition for heat chamber temperature updates
+- configurable heat chamber casing, glass, port, and interior compatibility patterns
 
 Still in progress:
 
 - recipes
 - balance
 - higher-fidelity MV/HV machine art
+- production heat chamber art and machine integration
 - broader machine roster
 
 ## Gameplay Direction
@@ -125,6 +132,7 @@ Important code locations:
 - [shaft code](src/main/java/com/greatech/content/shaft)
 - [cogwheel code](src/main/java/com/greatech/content/cogwheel)
 - [steam prototype code](src/main/java/com/greatech/content/steam)
+- [heat chamber code](src/main/java/com/greatech/content/heat)
 - [fluid bridge code](src/main/java/com/greatech/content/fluid)
 - [fluid hazard code](src/main/java/com/greatech/content/fluid/hazard)
 - [placement helper code](src/main/java/com/greatech/content/placement)
@@ -150,6 +158,28 @@ Important resource locations:
 - [shaft textures](src/main/resources/assets/greatech/textures/block/greatech_shaft)
 - [cogwheel textures](src/main/resources/assets/greatech/textures/block/greatech_cogwheel)
 - [fluid bridge textures](src/main/resources/assets/greatech/textures/block/greatech_fluid_bridge)
+
+## Heat Chamber Prototype
+
+The current heat chamber is a Greatech-owned environmental multiblock prototype. It is intentionally separate from GTCEu multiblock internals while still being able to provide work conditions to future Greatech or GTCEu-style machines.
+
+Current blocks:
+
+- `greatech:heat_chamber_casing`
+- `greatech:heat_chamber_glass`
+- `greatech:heat_chamber_controller`
+
+Current structure behavior:
+
+- minimum outside size is `5x5x5`
+- non-cubic sealed shapes are supported
+- casing, glass, and ports are matched through config-driven id patterns
+- ordinary blocks may exist inside as occupied volume
+- ordinary internal blocks do not count as shell and do not invalidate placement by themselves
+- the controller caches successful structure scans and rescans when marked dirty
+- runtime heat scanning runs against the cached interior
+
+The first heat model accepts recognized heat sources such as Create blaze burners and selected vanilla heat blocks. See [docs/systems/greatech-heat-chamber.md](docs/systems/greatech-heat-chamber.md) for the full design notes.
 
 ## Converter Visual Notes
 
@@ -266,6 +296,7 @@ Current high-level config areas:
 - fluid bridge tank, EU capacity, transfer, fixed pressure, and fixed EU/t settings
 - fluid hazard timing and Create pipe safety profile
 - steam hatch RPM, stress capacity, and steam consumption
+- heat chamber casing, glass, port, and interior compatibility id patterns
 
 ## Naming
 
@@ -299,6 +330,7 @@ Direct doc links:
 - [docs/machines/greatech-shaft.md](docs/machines/greatech-shaft.md)
 - [docs/machines/greatech-cogwheel.md](docs/machines/greatech-cogwheel.md)
 - [docs/systems/greatech-kinetic-failure.md](docs/systems/greatech-kinetic-failure.md)
+- [docs/systems/greatech-heat-chamber.md](docs/systems/greatech-heat-chamber.md)
 - [docs/systems/greatech-fluid-hazard.md](docs/systems/greatech-fluid-hazard.md)
 - [docs/systems/greatech-placement-helper.md](docs/systems/greatech-placement-helper.md)
 - [docs/guides/greatech-machine-registration-tips.md](docs/guides/greatech-machine-registration-tips.md)

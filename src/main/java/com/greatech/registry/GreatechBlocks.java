@@ -7,6 +7,7 @@ import com.greatech.content.converter.SUEnergyConverterBlock;
 import com.greatech.content.converter.SUEnergyConverterTier;
 import com.greatech.content.fluid.ElectricFluidBridgeBlock;
 import com.greatech.content.fluid.ElectricFluidBridgeTier;
+import com.greatech.content.heat.HeatChamberControllerBlock;
 import com.greatech.content.kinetics.GreatechKineticFamily;
 import com.greatech.content.kinetics.GreatechKineticMaterial;
 import com.greatech.content.shaft.GreatechShaftBlock;
@@ -32,6 +33,9 @@ public final class GreatechBlocks {
     public static final DeferredBlock<Block> MV_SUCON = registerSUEnergyConverter("mv_sucon", SUEnergyConverterTier.MV);
     public static final DeferredBlock<Block> HV_SUCON = registerSUEnergyConverter("hv_sucon", SUEnergyConverterTier.HV);
     public static final DeferredBlock<Block> LV_FLUID_BRIDGE = registerElectricFluidBridge("lv_fluid_bridge", ElectricFluidBridgeTier.LV);
+    public static final DeferredBlock<Block> HEAT_CHAMBER_CASING = registerHeatChamberCasing("heat_chamber_casing");
+    public static final DeferredBlock<Block> HEAT_CHAMBER_GLASS = registerHeatChamberGlass("heat_chamber_glass");
+    public static final DeferredBlock<Block> HEAT_CHAMBER_CONTROLLER = registerHeatChamberController("heat_chamber_controller");
     public static final GreatechKineticFamily STEEL_FAMILY = registerKineticFamily(
             GreatechKineticMaterial.STEEL,
             () -> GreatechBlockEntityTypes.STEEL_COGWHEEL.get(),
@@ -68,6 +72,12 @@ public final class GreatechBlocks {
     public static final DeferredItem<BlockItem> MV_SUCON_ITEM = registerBlockItem("mv_sucon", MV_SUCON);
     public static final DeferredItem<BlockItem> HV_SUCON_ITEM = registerBlockItem("hv_sucon", HV_SUCON);
     public static final DeferredItem<BlockItem> LV_FLUID_BRIDGE_ITEM = registerBlockItem("lv_fluid_bridge", LV_FLUID_BRIDGE);
+    public static final DeferredItem<BlockItem> HEAT_CHAMBER_CASING_ITEM =
+            registerBlockItem("heat_chamber_casing", HEAT_CHAMBER_CASING);
+    public static final DeferredItem<BlockItem> HEAT_CHAMBER_GLASS_ITEM =
+            registerBlockItem("heat_chamber_glass", HEAT_CHAMBER_GLASS);
+    public static final DeferredItem<BlockItem> HEAT_CHAMBER_CONTROLLER_ITEM =
+            registerBlockItem("heat_chamber_controller", HEAT_CHAMBER_CONTROLLER);
     public static final DeferredItem<BlockItem> STEEL_SHAFT_ITEM = STEEL_FAMILY.shaftItem();
     public static final DeferredItem<BlockItem> POWERED_STEEL_SHAFT_ITEM = STEEL_FAMILY.poweredShaftItem();
     public static final DeferredItem<BlockItem> STEEL_COGWHEEL_ITEM = STEEL_FAMILY.cogwheelItem();
@@ -120,6 +130,39 @@ public final class GreatechBlocks {
                         .forceSolidOn()
                         .lightLevel(state -> state.getValue(ElectricFluidBridgeBlock.ACTIVE) ? 1 : 0)
                         .requiresCorrectToolForDrops(), tier));
+    }
+
+    private static DeferredBlock<Block> registerHeatChamberCasing(String name) {
+        return BLOCKS.register(
+                name,
+                () -> new Block(BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.METAL)
+                        .strength(3.5F)
+                        .sound(SoundType.METAL)
+                        .requiresCorrectToolForDrops()));
+    }
+
+    private static DeferredBlock<Block> registerHeatChamberGlass(String name) {
+        return BLOCKS.register(
+                name,
+                () -> new Block(BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.COLOR_GRAY)
+                        .strength(3.0F)
+                        .sound(SoundType.GLASS)
+                        .noOcclusion()
+                        .isSuffocating((state, level, pos) -> false)
+                        .isViewBlocking((state, level, pos) -> false)
+                        .requiresCorrectToolForDrops()));
+    }
+
+    private static DeferredBlock<Block> registerHeatChamberController(String name) {
+        return BLOCKS.register(
+                name,
+                () -> new HeatChamberControllerBlock(BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.METAL)
+                        .strength(3.5F)
+                        .sound(SoundType.METAL)
+                        .requiresCorrectToolForDrops()));
     }
 
     public static Block getShaft(GreatechKineticMaterial material) {

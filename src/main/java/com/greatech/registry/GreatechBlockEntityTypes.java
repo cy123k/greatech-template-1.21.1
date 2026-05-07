@@ -5,6 +5,7 @@ import com.greatech.content.cogwheel.GreatechCogwheelBlockEntity;
 import com.greatech.content.cogwheel.GreatechLargeCogwheelBlockEntity;
 import com.greatech.content.converter.SUEnergyConverterBlockEntity;
 import com.greatech.content.fluid.ElectricFluidBridgeBlockEntity;
+import com.greatech.content.heat.HeatChamberControllerBlockEntity;
 import com.greatech.content.kinetics.MaterialKineticBlock;
 import com.greatech.content.kinetics.GreatechKineticBlockEntityFamily;
 import com.greatech.content.kinetics.GreatechKineticMaterial;
@@ -35,6 +36,12 @@ public final class GreatechBlockEntityTypes {
             () -> BlockEntityType.Builder.of(
                     ElectricFluidBridgeBlockEntity::new,
                     GreatechBlocks.LV_FLUID_BRIDGE.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HeatChamberControllerBlockEntity>> HEAT_CHAMBER_CONTROLLER = BLOCK_ENTITY_TYPES.register(
+            "heat_chamber_controller",
+            () -> BlockEntityType.Builder.of(
+                    HeatChamberControllerBlockEntity::new,
+                    GreatechBlocks.HEAT_CHAMBER_CONTROLLER.get()).build(null));
 
     public static final GreatechKineticBlockEntityFamily STEEL_BE_FAMILY =
             registerKineticFamily(GreatechKineticMaterial.STEEL);

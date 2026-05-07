@@ -6,6 +6,7 @@ Current system docs:
 
 - [Overview](./overview.md)
 - [Greatech HUD System](./greatech-hud-system.md)
+- [Greatech Heat Chamber](./greatech-heat-chamber.md)
 - [Kinetic Failure](./greatech-kinetic-failure.md)
 - [Greatech Fluid Hazard](./greatech-fluid-hazard.md)
 - [Greatech Placement Helper](./greatech-placement-helper.md)

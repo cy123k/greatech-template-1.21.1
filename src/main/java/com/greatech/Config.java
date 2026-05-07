@@ -35,6 +35,23 @@ public final class Config {
     private static final double[] DEFAULT_STEAM_ENGINE_HATCH_STRESS_CAPACITY = {16.0D, 64.0D, 256.0D};
     private static final int[] DEFAULT_STEAM_ENGINE_HATCH_STEAM_PER_TICK = {40, 60, 80};
     private static final int DEFAULT_CREATE_FLUID_PIPE_MAX_TEMPERATURE = 500;
+    private static final List<String> DEFAULT_HEAT_CHAMBER_CASING_BLOCKS = List.of(
+            "greatech:heat_chamber_casing",
+            "greatech:heat_chamber_controller");
+    private static final List<String> DEFAULT_HEAT_CHAMBER_GLASS_BLOCKS = List.of(
+            "greatech:heat_chamber_glass");
+    private static final List<String> DEFAULT_HEAT_CHAMBER_PORT_BLOCKS = List.of(
+            "minecraft:iron_door",
+            "gtceu:*_diode",
+            "gtceu:*_passthrough_hatch");
+    private static final List<String> DEFAULT_HEAT_CHAMBER_INTERIOR_ALLOWED_BLOCKS = List.of(
+            "minecraft:*_button",
+            "greatech:steel_*",
+            "greatech:aluminium_*",
+            "greatech:stainless_*",
+            "gtceu:*_wire",
+            "gtceu:*_cable",
+            "gtceu:*_pipe");
 
     private static final ModConfigSpec.DoubleValue CREATE_SHAFT_BREAK_STRESS_LIMIT = BUILDER
             .comment("When a Create kinetic network contains a Greatech failure source, vanilla create:shaft blocks can break above this network stress.")
@@ -94,6 +111,27 @@ public final class Config {
                     "All Create fluid pipe variants currently share this value.",
                     "Default Create pipe safety flags are gasProof=false, acidProof=false, cryoProof=false, plasmaProof=false.")
             .defineInRange("createFluidPipeMaxTemperature", DEFAULT_CREATE_FLUID_PIPE_MAX_TEMPERATURE, 0, Integer.MAX_VALUE);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> HEAT_CHAMBER_CASING_BLOCKS = BUILDER
+            .comment("Block id patterns accepted as Heat Chamber casing/shell blocks.",
+                    "Patterns use resource locations and may include '*' as a wildcard, for example 'minecraft:*_bricks'.")
+            .defineList("heatChamberCasingBlocks", DEFAULT_HEAT_CHAMBER_CASING_BLOCKS, Config::isStringValue);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> HEAT_CHAMBER_GLASS_BLOCKS = BUILDER
+            .comment("Block id patterns accepted as Heat Chamber glass/shell blocks.",
+                    "Glass blocks currently have lower temperature limits and higher heat loss than casing blocks.")
+            .defineList("heatChamberGlassBlocks", DEFAULT_HEAT_CHAMBER_GLASS_BLOCKS, Config::isStringValue);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> HEAT_CHAMBER_PORT_BLOCKS = BUILDER
+            .comment("Block id patterns accepted as Heat Chamber boundary ports.",
+                    "Ports count as valid shell boundary blocks and can be used for doors, hatches, and passthrough parts.")
+            .defineList("heatChamberPortBlocks", DEFAULT_HEAT_CHAMBER_PORT_BLOCKS, Config::isStringValue);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> HEAT_CHAMBER_INTERIOR_ALLOWED_BLOCKS = BUILDER
+            .comment("Block id patterns allowed inside a Heat Chamber without invalidating the structure.",
+                    "These do not count as shell or ports; they are interior occupants such as buttons, wires, cables, pipes, or shafts.")
+            .defineList("heatChamberInteriorAllowedBlocks", DEFAULT_HEAT_CHAMBER_INTERIOR_ALLOWED_BLOCKS,
+                    Config::isStringValue);
 
     private static final ModConfigSpec.ConfigValue<List<? extends Integer>> CONVERTER_CAPACITY = BUILDER
             .comment("Internal EU buffers for the SU converters.", TIER_ORDER)
@@ -205,6 +243,10 @@ public final class Config {
     private static int fluidHazardCooldown;
     private static int fluidHazardMaxCreatePipeScanNodes;
     private static int createFluidPipeMaxTemperature = DEFAULT_CREATE_FLUID_PIPE_MAX_TEMPERATURE;
+    private static List<String> heatChamberCasingBlocks = DEFAULT_HEAT_CHAMBER_CASING_BLOCKS;
+    private static List<String> heatChamberGlassBlocks = DEFAULT_HEAT_CHAMBER_GLASS_BLOCKS;
+    private static List<String> heatChamberPortBlocks = DEFAULT_HEAT_CHAMBER_PORT_BLOCKS;
+    private static List<String> heatChamberInteriorAllowedBlocks = DEFAULT_HEAT_CHAMBER_INTERIOR_ALLOWED_BLOCKS;
 
     private Config() {
     }
@@ -244,6 +286,14 @@ public final class Config {
         fluidHazardCooldown = FLUID_HAZARD_COOLDOWN.get();
         fluidHazardMaxCreatePipeScanNodes = FLUID_HAZARD_MAX_CREATE_PIPE_SCAN_NODES.get();
         createFluidPipeMaxTemperature = CREATE_FLUID_PIPE_MAX_TEMPERATURE.get();
+        heatChamberCasingBlocks = readStringValues(HEAT_CHAMBER_CASING_BLOCKS.get(),
+                DEFAULT_HEAT_CHAMBER_CASING_BLOCKS);
+        heatChamberGlassBlocks = readStringValues(HEAT_CHAMBER_GLASS_BLOCKS.get(),
+                DEFAULT_HEAT_CHAMBER_GLASS_BLOCKS);
+        heatChamberPortBlocks = readStringValues(HEAT_CHAMBER_PORT_BLOCKS.get(),
+                DEFAULT_HEAT_CHAMBER_PORT_BLOCKS);
+        heatChamberInteriorAllowedBlocks = readStringValues(HEAT_CHAMBER_INTERIOR_ALLOWED_BLOCKS.get(),
+                DEFAULT_HEAT_CHAMBER_INTERIOR_ALLOWED_BLOCKS);
     }
 
     public static int converterCapacity(SUEnergyConverterTier tier) {
@@ -366,6 +416,22 @@ public final class Config {
         return createFluidPipeMaxTemperature;
     }
 
+    public static List<String> heatChamberCasingBlocks() {
+        return heatChamberCasingBlocks;
+    }
+
+    public static List<String> heatChamberGlassBlocks() {
+        return heatChamberGlassBlocks;
+    }
+
+    public static List<String> heatChamberPortBlocks() {
+        return heatChamberPortBlocks;
+    }
+
+    public static List<String> heatChamberInteriorAllowedBlocks() {
+        return heatChamberInteriorAllowedBlocks;
+    }
+
     private static int[] readIntTierValues(List<? extends Integer> configured, int[] defaults) {
         int[] values = defaults.clone();
         for (int i = 0; i < values.length && i < configured.size(); i++) {
@@ -382,6 +448,17 @@ public final class Config {
         return values;
     }
 
+    private static List<String> readStringValues(List<? extends String> configured, List<String> defaults) {
+        if (configured == null || configured.isEmpty()) {
+            return List.copyOf(defaults);
+        }
+
+        return configured.stream()
+                .filter(value -> value != null && !value.isBlank())
+                .map(String::trim)
+                .toList();
+    }
+
     private static boolean isNonNegativeInteger(Object value) {
         return value instanceof Integer integer && integer >= 0;
     }
@@ -392,5 +469,9 @@ public final class Config {
 
     private static boolean isNonNegativeDouble(Object value) {
         return value instanceof Double number && number >= 0.0D;
+    }
+
+    private static boolean isStringValue(Object value) {
+        return value instanceof String string && !string.isBlank();
     }
 }
