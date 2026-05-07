@@ -51,7 +51,9 @@ public class GreatechFluidBridgeGoggleInfoProvider implements GreatechGoggleInfo
         GreatechGoggleTooltipHelper.addLabelValue(tooltip, "greatech.goggles.flow",
                 Component.literal(payload.flowDirection()));
         GreatechGoggleTooltipHelper.addLabelValue(tooltip, "greatech.goggles.pressure",
-                GreatechGoggleTooltipHelper.formatPressure(payload.actualPressure(), payload.targetPressure()));
+                GreatechGoggleTooltipHelper.formatPressure(payload.actualPressure(), payload.fixedPressure()));
+        GreatechGoggleTooltipHelper.addLabelValue(tooltip, "greatech.goggles.fixed_eu_use",
+                GreatechGoggleTooltipHelper.formatEuPerTick(payload.fixedEuPerTick()));
         GreatechGoggleTooltipHelper.addLabelValue(tooltip, "greatech.goggles.transfer_rate",
                 GreatechGoggleTooltipHelper.formatMillibucketsPerTick(payload.transferredMb()));
         GreatechGoggleTooltipHelper.addLabelValue(tooltip, "greatech.goggles.eu_use",

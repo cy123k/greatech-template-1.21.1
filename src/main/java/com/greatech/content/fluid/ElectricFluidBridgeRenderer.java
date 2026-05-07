@@ -39,20 +39,24 @@ public class ElectricFluidBridgeRenderer extends SafeBlockEntityRenderer<Electri
         body.overlay(overlay);
         body.renderInto(poseStack, vertexConsumer);
 
-        Direction back = state.getValue(ElectricFluidBridgeBlock.FACING).getOpposite();
-        if (!state.getValue(ElectricFluidBridgeBlock.GTCEU_CONNECTED)
-                || !ElectricFluidBridgeBlock.isGtceuFluidPipeConnected(state, blockEntity.getLevel(), blockEntity.getBlockPos())) {
+        if (!state.getValue(ElectricFluidBridgeBlock.GTCEU_CONNECTED)) {
             return;
         }
 
-        SuperByteBuffer drain = CachedBuffers.partialFacing(
-                GreatechPartialModels.LV_FLUID_BRIDGE_GTCEU_DRAIN,
-                state,
-                back.getOpposite());
-        drain.light(GreatechLightSampler.sample(blockEntity.getLevel(), blockEntity.getBlockPos(), back));
-        drain.overlay(overlay);
+        for (Direction side : ElectricFluidBridgeBlock.getFluidPorts(state)) {
+            if (!ElectricFluidBridgeBlock.isGtceuFluidPipeConnectedOnSide(blockEntity.getLevel(), blockEntity.getBlockPos(), side)) {
+                continue;
+            }
 
-        drain.renderInto(poseStack, vertexConsumer);
+            SuperByteBuffer drain = CachedBuffers.partialFacing(
+                    GreatechPartialModels.LV_FLUID_BRIDGE_GTCEU_DRAIN,
+                    state,
+                    side.getOpposite());
+            drain.light(GreatechLightSampler.sample(blockEntity.getLevel(), blockEntity.getBlockPos(), side));
+            drain.overlay(overlay);
+
+            drain.renderInto(poseStack, vertexConsumer);
+        }
     }
 
     @Override

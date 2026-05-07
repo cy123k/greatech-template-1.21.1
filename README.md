@@ -18,12 +18,17 @@ Currently registered machines and transmission parts:
 - `powered_steel_shaft`
 - `aluminium_shaft`
 - `powered_aluminium_shaft`
+- `stainless_shaft`
+- `powered_stainless_shaft`
 - `steel_cogwheel`
 - `steel_large_cogwheel`
 - `powered_steel_cogwheel`
 - `aluminium_cogwheel`
 - `aluminium_large_cogwheel`
 - `powered_aluminium_cogwheel`
+- `stainless_cogwheel`
+- `stainless_large_cogwheel`
+- `powered_stainless_cogwheel`
 - `lv_fluid_bridge`
 - `lv_steam_engine_hatch`
 - `mv_steam_engine_hatch`
@@ -41,22 +46,22 @@ Implemented so far:
 - GTCEu energy capability exposure for the converter
 - custom converter casing and rotor art
 - BER-rendered animated converter rotor
-- active-state casing swap for the converter
+- active-state full-bright panel overlay for the converter
 - custom converter item display model
 - converter block-side light and occlusion overrides for custom machine geometry
 - shared Greatech kinetic failure monitoring for Create transmission networks
 - `steel_shaft` registration with Greatech-owned block entity and renderer
-- `aluminium_shaft` registration as the higher-tier kinetic material family
+- `aluminium_shaft` and `stainless_shaft` registration as higher-tier kinetic material families
 - `steel_cogwheel` and `steel_large_cogwheel` registration with Greatech-owned rendering and behavior
-- `aluminium_cogwheel` and `aluminium_large_cogwheel` registration with Greatech-owned rendering and behavior
+- `aluminium_cogwheel`, `aluminium_large_cogwheel`, `stainless_cogwheel`, and `stainless_large_cogwheel` registration with Greatech-owned rendering and behavior
 - `powered_steel_cogwheel` steam-conversion relay behavior
-- `powered_aluminium_cogwheel` compatibility registration through the shared kinetic family path
+- `powered_aluminium_cogwheel` and `powered_stainless_cogwheel` compatibility registration through the shared kinetic family path
 - shaft/cogwheel placement helper support and placement ghost previews
 - transmission-family `blockstates`, item models, and loot tables generated through NeoForge datagen
-- `lv_fluid_bridge` with GTCEu energy input, directional fluid ports, GUI, passive transfer, and EU-driven Create-style pressure
+- `lv_fluid_bridge` with GTCEu energy input, directional fluid ports, wrench-toggled flow direction, internal fluid buffering, and fixed EU-driven Create-style pressure
 - Greatech-owned fluid hazard monitoring for dangerous fluids entering Create pipe networks
 - `powered_steel_shaft` generated-rotation relay behavior for the steam prototype
-- `powered_aluminium_shaft` compatibility registration through the shared kinetic family path
+- `powered_aluminium_shaft` and `powered_stainless_shaft` compatibility registration through the shared kinetic family path
 - `lv_steam_engine_hatch`, `mv_steam_engine_hatch`, and `hv_steam_engine_hatch` GTCEu machine-part registrations
 - custom unformed `steam engine hatch` tier textures and item display models
 - BER-rendered unformed `steam engine hatch` body with front-facing alignment
@@ -152,13 +157,14 @@ The current converter visual stack uses:
 
 - empty world model in the blockstate
 - BER-rendered casing and rotor partials
-- active-state casing wrappers chosen in the renderer
+- active-state full-bright panel overlay rendered above the casing
 - a shared full item model for inventory and hand display
 
 Current shared converter geometry files are:
 
 - `models/block/su_energy_converter/greatech_su_converter_casing.json`
 - `models/block/su_energy_converter/greatech_su_converter_rotor.json`
+- `models/block/su_energy_converter/greatech_su_converter_panel_overlay.json`
 - `models/item/greatech_su_converter.json`
 
 The current world render path now matches the fluid bridge pattern more closely:
@@ -191,7 +197,7 @@ Current tier material state:
 
 - `lv` uses dedicated `lv_casing` / `lv_steamout`
 - `mv` uses dedicated `mv_casing` / `mv_steamout`
-- `hv` currently reuses `lv` art
+- `hv` currently reuses `lv_casing` / `lv_steamout`
 
 ## Build Notes
 
@@ -208,7 +214,7 @@ Two `GTCEu` transitive dependencies are currently resolved from local jars in `l
 - `ldlib`
 - `configuration`
 
-See [docs/dependencies.md](docs/dependencies.md) for the current dependency setup.
+See [docs/reference/dependencies.md](docs/reference/dependencies.md) for the current dependency setup.
 
 ## Build Commands
 
@@ -257,7 +263,7 @@ Current high-level config areas:
 
 - converter capacity, efficiency, voltage, amperage, and stress
 - kinetic failure behavior and break limits
-- fluid bridge tank, EU, transfer, and pressure settings
+- fluid bridge tank, EU capacity, transfer, fixed pressure, and fixed EU/t settings
 - fluid hazard timing and Create pipe safety profile
 - steam hatch RPM, stress capacity, and steam consumption
 
@@ -273,7 +279,7 @@ The intended naming pattern is:
 - powered small cogwheel: `powered_<material>_cogwheel`
 - normal large cogwheel: `<material>_large_cogwheel`
 
-Current steel resources are the first concrete family and should be treated as the template for later materials.
+Current steel resources are the baseline family. `aluminium` and `stainless` use the same family registration, renderer, placement-helper, and datagen path.
 
 ## Documentation
 
@@ -286,20 +292,20 @@ Project docs live in:
 
 Direct doc links:
 
-- [docs/overview.md](docs/overview.md)
-- [docs/greatech-converter.md](docs/greatech-converter.md)
-- [docs/greatech-fluidbridge.md](docs/greatech-fluidbridge.md)
-- [docs/greatech-steam-engine-hatch.md](docs/greatech-steam-engine-hatch.md)
-- [docs/greatech-shaft.md](docs/greatech-shaft.md)
-- [docs/greatech-cogwheel.md](docs/greatech-cogwheel.md)
-- [docs/kinetic-failure.md](docs/kinetic-failure.md)
-- [docs/greatech-fluid-hazard.md](docs/greatech-fluid-hazard.md)
-- [docs/greatech-placement-helper.md](docs/greatech-placement-helper.md)
-- [docs/greatech-machine-registration-tips.md](docs/greatech-machine-registration-tips.md)
-- [docs/gtceu-machine-registration-tips.md](docs/gtceu-machine-registration-tips.md)
-- [docs/create-machine-tips.md](docs/create-machine-tips.md)
-- [docs/create-fluid-tips.md](docs/create-fluid-tips.md)
-- [docs/greatech-renderer-register.md](docs/greatech-renderer-register.md)
-- [docs/greatech-datagen-tips.md](docs/greatech-datagen-tips.md)
-- [docs/art-direction.md](docs/art-direction.md)
-- [docs/dependencies.md](docs/dependencies.md)
+- [docs/systems/overview.md](docs/systems/overview.md)
+- [docs/machines/greatech-converter.md](docs/machines/greatech-converter.md)
+- [docs/machines/greatech-fluidbridge.md](docs/machines/greatech-fluidbridge.md)
+- [docs/machines/greatech-steam-engine-hatch.md](docs/machines/greatech-steam-engine-hatch.md)
+- [docs/machines/greatech-shaft.md](docs/machines/greatech-shaft.md)
+- [docs/machines/greatech-cogwheel.md](docs/machines/greatech-cogwheel.md)
+- [docs/systems/greatech-kinetic-failure.md](docs/systems/greatech-kinetic-failure.md)
+- [docs/systems/greatech-fluid-hazard.md](docs/systems/greatech-fluid-hazard.md)
+- [docs/systems/greatech-placement-helper.md](docs/systems/greatech-placement-helper.md)
+- [docs/guides/greatech-machine-registration-tips.md](docs/guides/greatech-machine-registration-tips.md)
+- [docs/guides/gtceu-machine-registration-tips.md](docs/guides/gtceu-machine-registration-tips.md)
+- [docs/guides/create-machine-tips.md](docs/guides/create-machine-tips.md)
+- [docs/guides/create-fluid-tips.md](docs/guides/create-fluid-tips.md)
+- [docs/guides/greatech-renderer-register.md](docs/guides/greatech-renderer-register.md)
+- [docs/guides/greatech-datagen-tips.md](docs/guides/greatech-datagen-tips.md)
+- [docs/reference/art-direction.md](docs/reference/art-direction.md)
+- [docs/reference/dependencies.md](docs/reference/dependencies.md)

@@ -28,9 +28,19 @@ The currently registered blocks are:
 - `hv_sucon`
 - `steel_shaft`
 - `powered_steel_shaft`
+- `aluminium_shaft`
+- `powered_aluminium_shaft`
+- `stainless_shaft`
+- `powered_stainless_shaft`
 - `steel_cogwheel`
 - `steel_large_cogwheel`
 - `powered_steel_cogwheel`
+- `aluminium_cogwheel`
+- `aluminium_large_cogwheel`
+- `powered_aluminium_cogwheel`
+- `stainless_cogwheel`
+- `stainless_large_cogwheel`
+- `powered_stainless_cogwheel`
 - `lv_fluid_bridge`
 - `lv_steam_engine_hatch`
 - `mv_steam_engine_hatch`
@@ -45,19 +55,19 @@ Their role is:
 
 The current transmission parts behave like Create shaft/cogwheel parts while using Greatech block entity types, renderers, kinetic failure limits, and placement helpers. Their code is now being reorganized around kinetic material families so future materials can reuse the same shaft/cogwheel/large-cogwheel pattern.
 
-The current fluid bridge prototype links GTCEu-style fluid handlers and Create-style fluid pressure. Its two fluid ports are direction-controlled in the GUI, while the other sides can accept GTCEu energy. Passive fluid transfer is free; applying Create pipe pressure consumes EU.
+The current fluid bridge prototype links GTCEu-style fluid handlers and Create-style fluid pressure. Its two fluid ports are direction-controlled with a Create wrench, while the other sides can accept GTCEu energy. It now behaves as a fixed electric pump: fixed pressure and fixed EU/t are configured per tier, with no GUI or target-pressure slider.
 
 Dangerous GTCEu fluid traits can also follow fluids into monitored Create pipe networks. The first fluid hazard prototype lets Greatech machines treat Create fluid pipes as accident candidates when hot, gaseous, acidic, cryogenic, or plasma fluids are routed through them.
 
 The current steam prototype adds three `GTCEu` machine parts, `lv_steam_engine_hatch`, `mv_steam_engine_hatch`, and `hv_steam_engine_hatch`, plus a matching `Create` generator relay, `powered_steel_shaft`. Each hatch behaves like a fluid export hatch for GTCEu multiblock recognition, stores only steam, and converts a valid neighboring `steel_shaft` into `powered_steel_shaft`. The powered shaft then acts as the actual `Create` kinetic source: it validates the adjacent hatch, requests steam power each tick, outputs a fixed `32 RPM` and `512 SU` prototype value, and automatically reverts back to `steel_shaft` when it no longer has a valid hatch source.
 
-Because Greatech mixes Create-style blocks and GTCEu machine definitions, new machine work should follow a documented ownership split for registration, facing, rendering, and capability exposure. See [greatech-machine-registration-tips.md](./greatech-machine-registration-tips.md).
+Because Greatech mixes Create-style blocks and GTCEu machine definitions, new machine work should follow a documented ownership split for registration, facing, rendering, and capability exposure. See [greatech-machine-registration-tips.md](../guides/greatech-machine-registration-tips.md).
 
 ## Near-Term Development Goals
 
 - validate the new custom art and active-state presentation in gameplay
 - validate Greatech placement helper previews against Create/Greatech transmission part combinations
-- validate `lv_fluid_bridge` behavior for GTCEu-to-Create and Create-to-GTCEu fluid direction
+- validate `lv_fluid_bridge` fixed pump behavior for GTCEu-to-Create and Create-to-GTCEu fluid direction
 - validate Create pressure refresh behavior so pressure does not stack every tick
 - validate fluid hazard behavior for dangerous GTCEu fluids routed into Create pipes
 - validate `lv_steam_engine_hatch` / `mv_steam_engine_hatch` / `hv_steam_engine_hatch` recognition in GTCEu large boiler structures

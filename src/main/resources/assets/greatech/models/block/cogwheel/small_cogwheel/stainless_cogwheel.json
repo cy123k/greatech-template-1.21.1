@@ -1,0 +1,9 @@
+{
+  "parent": "greatech:block/cogwheel/greatech_cogwheel",
+  "textures": {
+    "0": "greatech:block/greatech_cogwheel/stainless_axis_top",
+    "1": "greatech:block/greatech_cogwheel/stainless_cogwheel_axis",
+    "2": "greatech:block/greatech_cogwheel/stainless_cogwheel",
+    "particle": "greatech:block/greatech_cogwheel/stainless_cogwheel"
+  }
+}

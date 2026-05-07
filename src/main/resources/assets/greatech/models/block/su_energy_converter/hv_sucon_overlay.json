@@ -1,0 +1,7 @@
+{
+  "parent": "greatech:block/su_energy_converter/greatech_su_converter_panel_overlay",
+  "textures": {
+    "overlay": "greatech:block/greatech_machine/hv_machine/panel_on_overlay",
+    "particle": "greatech:block/greatech_machine/hv_machine/panel_on_overlay"
+  }
+}

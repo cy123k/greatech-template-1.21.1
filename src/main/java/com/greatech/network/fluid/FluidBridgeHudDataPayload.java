@@ -20,7 +20,8 @@ public record FluidBridgeHudDataPayload(
         int transferredMb,
         int consumedEu,
         int actualPressure,
-        int targetPressure,
+        int fixedPressure,
+        int fixedEuPerTick,
         String flowDirection,
         long gameTime) implements CustomPacketPayload {
     public static final Type<FluidBridgeHudDataPayload> TYPE = new Type<>(
@@ -49,6 +50,7 @@ public record FluidBridgeHudDataPayload(
                     buf.readVarInt(),
                     buf.readVarInt(),
                     buf.readVarInt(),
+                    buf.readVarInt(),
                     buf.readUtf(),
                     buf.readLong());
         }
@@ -70,7 +72,8 @@ public record FluidBridgeHudDataPayload(
             buf.writeVarInt(payload.transferredMb());
             buf.writeVarInt(payload.consumedEu());
             buf.writeVarInt(payload.actualPressure());
-            buf.writeVarInt(payload.targetPressure());
+            buf.writeVarInt(payload.fixedPressure());
+            buf.writeVarInt(payload.fixedEuPerTick());
             buf.writeUtf(payload.flowDirection());
             buf.writeLong(payload.gameTime());
         }

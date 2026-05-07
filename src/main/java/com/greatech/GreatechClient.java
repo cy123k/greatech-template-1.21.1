@@ -6,14 +6,12 @@ import com.greatech.content.cogwheel.GreatechCogwheelRenderer;
 import com.greatech.content.converter.SUEnergyConverterRenderer;
 import com.greatech.content.equipment.hud.GreatechGoggleOverlayRenderer;
 import com.greatech.content.fluid.ElectricFluidBridgeRenderer;
-import com.greatech.content.fluid.ElectricFluidBridgeScreen;
 import com.greatech.content.shaft.GreatechShaftRenderer;
 import com.greatech.content.steam.GreatechPoweredCogwheelRenderer;
 import com.greatech.content.steam.GreatechPoweredShaftRenderer;
 import com.greatech.content.steam.GreatechSteamEngineHatchRenderer;
 import com.greatech.registry.GreatechBlockEntityTypes;
 import com.greatech.registry.GreatechMachines;
-import com.greatech.registry.GreatechMenus;
 import com.greatech.registry.GreatechPartialModels;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -25,7 +23,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
@@ -66,11 +63,6 @@ public class GreatechClient {
         event.registerBlockEntityRenderer(GreatechMachines.LV_STEAM_ENGINE_HATCH.getBlockEntityType(), GreatechSteamEngineHatchRenderer::new);
         event.registerBlockEntityRenderer(GreatechMachines.MV_STEAM_ENGINE_HATCH.getBlockEntityType(), GreatechSteamEngineHatchRenderer::new);
         event.registerBlockEntityRenderer(GreatechMachines.HV_STEAM_ENGINE_HATCH.getBlockEntityType(), GreatechSteamEngineHatchRenderer::new);
-    }
-
-    @SubscribeEvent
-    static void registerMenuScreens(RegisterMenuScreensEvent event) {
-        event.register(GreatechMenus.ELECTRIC_FLUID_BRIDGE.get(), ElectricFluidBridgeScreen::new);
     }
 
     @SubscribeEvent

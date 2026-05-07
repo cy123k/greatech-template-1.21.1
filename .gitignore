@@ -30,6 +30,7 @@ bin/
 .vscode/
 .codex_tmp/
 .codex/
+libs/
 ### Mac OS ###
 .DS_Store
 

@@ -9,6 +9,7 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import net.createmod.catnip.render.CachedBuffers;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
@@ -48,19 +49,40 @@ public class SUEnergyConverterRenderer extends KineticBlockEntityRenderer<SUEner
         rotor.overlay(overlay);
 
         renderRotatingBuffer(blockEntity, rotor, poseStack, vertexConsumer, rotorLight);
+
+        if (state.getValue(SUEnergyConverterBlock.ACTIVE)) {
+            var panelOverlay = CachedBuffers.partialFacing(
+                    getOverlayPartial(blockEntity),
+                    state,
+                    modelFacing);
+            panelOverlay.light(LightTexture.FULL_BRIGHT);
+            panelOverlay.overlay(overlay);
+            panelOverlay.renderInto(poseStack, bufferSource.getBuffer(RenderType.cutout()));
+        }
     }
 
     private PartialModel getCasingPartial(SUEnergyConverterBlockEntity blockEntity) {
         if (blockEntity.getBlockState().getBlock() instanceof SUEnergyConverterBlock converterBlock) {
-            boolean active = blockEntity.getBlockState().getValue(SUEnergyConverterBlock.ACTIVE);
             return switch (converterBlock.getTier()) {
-                case LV -> active ? GreatechPartialModels.LV_SUCON_ACTIVE_CASING : GreatechPartialModels.LV_SUCON_CASING;
-                case MV -> active ? GreatechPartialModels.MV_SUCON_ACTIVE_CASING : GreatechPartialModels.MV_SUCON_CASING;
-                case HV -> active ? GreatechPartialModels.HV_SUCON_ACTIVE_CASING : GreatechPartialModels.HV_SUCON_CASING;
+                case LV -> GreatechPartialModels.LV_SUCON_CASING;
+                case MV -> GreatechPartialModels.MV_SUCON_CASING;
+                case HV -> GreatechPartialModels.HV_SUCON_CASING;
             };
         }
 
         return GreatechPartialModels.LV_SUCON_CASING;
+    }
+
+    private PartialModel getOverlayPartial(SUEnergyConverterBlockEntity blockEntity) {
+        if (blockEntity.getBlockState().getBlock() instanceof SUEnergyConverterBlock converterBlock) {
+            return switch (converterBlock.getTier()) {
+                case LV -> GreatechPartialModels.LV_SUCON_OVERLAY;
+                case MV -> GreatechPartialModels.MV_SUCON_OVERLAY;
+                case HV -> GreatechPartialModels.HV_SUCON_OVERLAY;
+            };
+        }
+
+        return GreatechPartialModels.LV_SUCON_OVERLAY;
     }
 
     private PartialModel getRotorPartial(SUEnergyConverterBlockEntity blockEntity) {

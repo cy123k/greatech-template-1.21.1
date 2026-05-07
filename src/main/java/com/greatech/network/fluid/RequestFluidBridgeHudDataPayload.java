@@ -64,7 +64,8 @@ public record RequestFluidBridgeHudDataPayload(BlockPos pos) implements CustomPa
                 bridge.getLastTransferredMb(),
                 bridge.getLastConsumedEu(),
                 bridge.getActualPressure(),
-                bridge.getTargetPressure(),
+                bridge.getFixedPressure(),
+                bridge.getFixedEuPerTick(),
                 bridge.getFlowDirectionName(),
                 level.getGameTime()));
     }

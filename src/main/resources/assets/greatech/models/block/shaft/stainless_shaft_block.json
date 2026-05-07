@@ -1,0 +1,7 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "greatech:block/greatech_shaft/stainless_axis"
+  },
+  "elements": []
+}

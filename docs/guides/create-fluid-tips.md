@@ -130,7 +130,7 @@ In the original pump code, pressure is divided by a branch count:
 pressure / parallelBranches
 ```
 
-This means a higher pressure setting may be needed for wide pipe trees. For balance, Greatech should expose pressure as a configurable tier-limited value rather than assuming one pressure value fits every network.
+This means a higher pressure value may be needed for wide pipe trees. Greatech currently keeps bridge pressure fixed per tier through config instead of exposing an in-world slider.
 
 ## Compatibility Rules For Greatech
 
@@ -139,10 +139,9 @@ Recommended rules for future fluid bridge work:
 - use fixed input/output ports for GTCEu compatibility
 - expose fluid capability only on the two bridge ports
 - expose EU input only on non-fluid sides
-- do not spend EU for passive handler transfer unless that becomes an explicit balance goal
-- spend EU for Create pressure only
+- spend a fixed EU/t cost while applying Create pressure
 - do not add pressure every tick without clearing or refresh gating
-- keep pressure max and EU cost configurable per tier
+- keep fixed pressure and fixed EU/t configurable per tier
 
 ## Pipe-Like Rendering Notes
 
@@ -159,7 +158,7 @@ For Greatech pipe-like machines, the current preferred path is:
 This is the approach used by `lv_fluid_bridge`. It replaced the earlier custom baked attachment wrapper idea with a simpler renderer-owned composition:
 
 - main body partial: always rendered
-- GTCEu drain partial: rendered only when the bridge back side connects to a GTCEu fluid pipe
+- GTCEu drain partial: rendered on any fluid port connected to a GTCEu fluid pipe
 - Create-side connector: currently part of the base bridge body
 
 If future pipe-like machines need more conditional pieces, add more partials and renderer-side checks before introducing a broader baked model framework.
@@ -169,7 +168,7 @@ If future pipe-like machines need more conditional pieces, add more partials and
 When Create to GTCEu transfer fails:
 
 - confirm the bridge output side is connected to the GTCEu fluid handler side
-- confirm the GUI direction points from Create side to GT side
+- confirm the wrench-selected flow direction points from Create side to GT side
 - confirm the output port exposes `drain`
 - confirm the input port exposes `fill`
 - confirm the internal tank is not blocked by a mismatched fluid
@@ -180,12 +179,12 @@ When GTCEu to Create transfer fails:
 - confirm Create pipe graph has a valid endpoint
 - confirm the bridge input side accepts `fill`
 - confirm the bridge output side can be pulled by Create
-- confirm pressure is not `0` when expecting Create pressure behavior
-- confirm EU is present if target pressure is greater than `0`
+- confirm fixed pressure is not `0` when expecting Create pressure behavior
+- confirm enough EU is present to pay the fixed EU/t cost
 
 When transfer is too fast:
 
 - look for repeated additive pressure writes
 - verify old pressure is cleared when direction or pressure changes
-- verify actual pressure is capped by tier and EU budget
+- verify actual pressure matches the fixed tier pressure
 - verify branch splitting is still applied

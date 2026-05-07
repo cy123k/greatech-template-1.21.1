@@ -1,0 +1,32 @@
+{
+  "format_version": "1.21.11",
+  "credit": "Made with Blockbench",
+  "textures": {
+    "overlay": "texture/panel_on_overlay",
+    "particle": "texture/panel_on_overlay"
+  },
+  "elements": [
+    {
+      "name": "panel_overlay_lower",
+      "from": [-0.04, 1, 1],
+      "to": [-0.02, 8, 16],
+      "faces": {
+        "west": {
+          "uv": [1, 7, 16, 14],
+          "texture": "#overlay"
+        }
+      }
+    },
+    {
+      "name": "panel_overlay_upper",
+      "from": [-0.04, 8, 7],
+      "to": [-0.02, 15, 16],
+      "faces": {
+        "west": {
+          "uv": [7, 1, 16, 8],
+          "texture": "#overlay"
+        }
+      }
+    }
+  ]
+}

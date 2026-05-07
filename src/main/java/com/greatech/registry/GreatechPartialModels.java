@@ -1,6 +1,5 @@
 package com.greatech.registry;
 
-import com.greatech.Greatech;
 import com.greatech.content.kinetics.GreatechKineticMaterial;
 import com.greatech.content.kinetics.MaterialKineticBlock;
 
@@ -9,17 +8,20 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 
 public final class GreatechPartialModels {
+    private static final String MODID = "greatech";
+
     public static final PartialModel LV_SUCON_CASING = block("su_energy_converter/lv_sucon_casing");
-    public static final PartialModel LV_SUCON_ACTIVE_CASING = block("su_energy_converter/lv_sucon_active");
+    public static final PartialModel LV_SUCON_OVERLAY = block("su_energy_converter/lv_sucon_overlay");
     public static final PartialModel LV_SUCON_ROTOR = block("su_energy_converter/lv_sucon_rotor");
     public static final PartialModel MV_SUCON_CASING = block("su_energy_converter/mv_sucon_casing");
-    public static final PartialModel MV_SUCON_ACTIVE_CASING = block("su_energy_converter/mv_sucon_active");
+    public static final PartialModel MV_SUCON_OVERLAY = block("su_energy_converter/mv_sucon_overlay");
     public static final PartialModel MV_SUCON_ROTOR = block("su_energy_converter/mv_sucon_rotor");
     public static final PartialModel HV_SUCON_CASING = block("su_energy_converter/hv_sucon_casing");
-    public static final PartialModel HV_SUCON_ACTIVE_CASING = block("su_energy_converter/hv_sucon_active");
+    public static final PartialModel HV_SUCON_OVERLAY = block("su_energy_converter/hv_sucon_overlay");
     public static final PartialModel HV_SUCON_ROTOR = block("su_energy_converter/hv_sucon_rotor");
     public static final PartialModel STEEL_SHAFT = block("shaft/steel_shaft");
     public static final PartialModel ALUMINIUM_SHAFT = block("shaft/aluminium_shaft");
+    public static final PartialModel STAINLESS_SHAFT = block("shaft/stainless_shaft");
     public static final PartialModel STEAM_ENGINE_BRACKET =
             block("steam_engine_hatch/greatech_steamengine_bracket");
     public static final PartialModel LV_STEAM_ENGINE_HATCH = block("machine/hatch/lv_steam_engine_hatch");
@@ -27,8 +29,11 @@ public final class GreatechPartialModels {
     public static final PartialModel HV_STEAM_ENGINE_HATCH = block("machine/hatch/hv_steam_engine_hatch");
     public static final PartialModel STEEL_COGWHEEL = block("cogwheel/small_cogwheel/steel_cogwheel");
     public static final PartialModel ALUMINIUM_COGWHEEL = block("cogwheel/small_cogwheel/aluminium_cogwheel");
+    public static final PartialModel STAINLESS_COGWHEEL = block("cogwheel/small_cogwheel/stainless_cogwheel");
     public static final PartialModel STEEL_LARGE_COGWHEEL = block("cogwheel/large_cogwheel/steel_large_cogwheel");
     public static final PartialModel ALUMINIUM_LARGE_COGWHEEL = block("cogwheel/large_cogwheel/aluminium_large_cogwheel");
+    public static final PartialModel STAINLESS_LARGE_COGWHEEL =
+            block("cogwheel/large_cogwheel/stainless_large_cogwheel");
     public static final PartialModel LV_FLUID_BRIDGE =
             block("fluid/fluid_bridge/lv_fluid_bridge/lv_fluid_bridge");
     public static final PartialModel LV_FLUID_BRIDGE_GTCEU_DRAIN =
@@ -38,7 +43,7 @@ public final class GreatechPartialModels {
     }
 
     private static PartialModel block(String path) {
-        return PartialModel.of(ResourceLocation.fromNamespaceAndPath(Greatech.MODID, "block/" + path));
+        return PartialModel.of(ResourceLocation.fromNamespaceAndPath(MODID, "block/" + path));
     }
 
     public static void init() {
@@ -52,6 +57,7 @@ public final class GreatechPartialModels {
         return switch (material) {
             case STEEL -> STEEL_SHAFT;
             case ALUMINIUM -> ALUMINIUM_SHAFT;
+            case STAINLESS -> STAINLESS_SHAFT;
         };
     }
 
@@ -63,6 +69,7 @@ public final class GreatechPartialModels {
         return switch (material) {
             case STEEL -> large ? STEEL_LARGE_COGWHEEL : STEEL_COGWHEEL;
             case ALUMINIUM -> large ? ALUMINIUM_LARGE_COGWHEEL : ALUMINIUM_COGWHEEL;
+            case STAINLESS -> large ? STAINLESS_LARGE_COGWHEEL : STAINLESS_COGWHEEL;
         };
     }
 

@@ -21,25 +21,25 @@ The currently registered tiers are:
 
 Core classes:
 
-- [SUEnergyConverterBlock.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterBlock.java)
-- [SUEnergyConverterBlockEntity.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterBlockEntity.java)
-- [SUEnergyConverterRenderer.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterRenderer.java)
-- [SUEnergyConverterTier.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterTier.java)
+- [SUEnergyConverterBlock.java](../../src/main/java/com/greatech/content/converter/SUEnergyConverterBlock.java)
+- [SUEnergyConverterBlockEntity.java](../../src/main/java/com/greatech/content/converter/SUEnergyConverterBlockEntity.java)
+- [SUEnergyConverterRenderer.java](../../src/main/java/com/greatech/content/converter/SUEnergyConverterRenderer.java)
+- [SUEnergyConverterTier.java](../../src/main/java/com/greatech/content/converter/SUEnergyConverterTier.java)
 
 Registry hooks:
 
-- [GreatechBlocks.java](../src/main/java/com/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechCapabilities.java](../src/main/java/com/greatech/registry/GreatechCapabilities.java)
-- [GreatechPartialModels.java](../src/main/java/com/greatech/registry/GreatechPartialModels.java)
-- [GreatechClient.java](../src/main/java/com/greatech/GreatechClient.java)
+- [GreatechBlocks.java](../../src/main/java/com/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](../../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechCapabilities.java](../../src/main/java/com/greatech/registry/GreatechCapabilities.java)
+- [GreatechPartialModels.java](../../src/main/java/com/greatech/registry/GreatechPartialModels.java)
+- [GreatechClient.java](../../src/main/java/com/greatech/GreatechClient.java)
 
 Main docs that explain surrounding patterns:
 
-- [create-machine-tips.md](./create-machine-tips.md)
-- [greatech-renderer-register.md](./greatech-renderer-register.md)
-- [kinetic-failure.md](./kinetic-failure.md)
-- [art-direction.md](./art-direction.md)
+- [create-machine-tips.md](../guides/create-machine-tips.md)
+- [greatech-renderer-register.md](../guides/greatech-renderer-register.md)
+- [kinetic-failure.md](../systems/greatech-kinetic-failure.md)
+- [art-direction.md](../reference/art-direction.md)
 
 ## Runtime Model
 
@@ -78,7 +78,7 @@ The current output formula is:
 EU/t = min(converterMaxOutput, abs(rpm) * converterEfficiency)
 ```
 
-Current default tier lists in [Config.java](../src/main/java/com/greatech/Config.java) are ordered as `[LV, MV, HV]`.
+Current default tier lists in [Config.java](../../src/main/java/com/greatech/Config.java) are ordered as `[LV, MV, HV]`.
 
 Default values:
 
@@ -125,7 +125,7 @@ Relevant config values:
 - `kineticFailureCheckInterval = 20`
 - `kineticFailureCooldown = 100`
 
-See [kinetic-failure.md](./kinetic-failure.md) for the full accident model.
+See [kinetic-failure.md](../systems/greatech-kinetic-failure.md) for the full accident model.
 
 ## Rendering
 
@@ -134,11 +134,11 @@ The converter uses a split visual model:
 - empty world model in the blockstate
 - BER-rendered casing partial
 - BER-rendered rotating rotor partial
-- active-state casing swap through tier wrapper partials selected in the renderer
+- active-state full-bright panel overlay partial rendered above the casing
 
 Renderer class:
 
-- [SUEnergyConverterRenderer.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterRenderer.java)
+- [SUEnergyConverterRenderer.java](../../src/main/java/com/greatech/content/converter/SUEnergyConverterRenderer.java)
 
 Important current renderer details:
 
@@ -146,7 +146,8 @@ Important current renderer details:
 - the placed blockstate points at an empty `*_sucon_block.json` model
 - both casing and rotor are rendered through `CachedBuffers.partialFacing(...)`
 - the rotor partial is chosen from the block tier
-- the casing partial is also chosen from the block tier and `ACTIVE` state
+- the casing partial is chosen from the block tier
+- when `ACTIVE=true`, the renderer draws the tier overlay partial with `LightTexture.FULL_BRIGHT` and `RenderType.cutout()`
 - BER light is sampled with `GreatechLightSampler` from the shaft-input side rather than relying on the block's own packed light
 
 This keeps the converter on the same general lighting path as `lv_fluid_bridge`, while still using Create's kinetic rotation helper for the rotor.
@@ -169,49 +170,50 @@ Current static-model and block-side handling includes:
 
 This was added because the current custom casing geometry was picking up overly heavy world shading when treated like a standard solid block.
 
-For the general pattern, see [greatech-fluidbridge.md](./greatech-fluidbridge.md) and [greatech-renderer-register.md](./greatech-renderer-register.md).
+For the general pattern, see [greatech-fluidbridge.md](./greatech-fluidbridge.md) and [greatech-renderer-register.md](../guides/greatech-renderer-register.md).
 
 ## Asset Layout
 
 Current blockstate files:
 
-- [lv_sucon.json](../src/main/resources/assets/greatech/blockstates/lv_sucon.json)
-- [mv_sucon.json](../src/main/resources/assets/greatech/blockstates/mv_sucon.json)
-- [hv_sucon.json](../src/main/resources/assets/greatech/blockstates/hv_sucon.json)
+- [lv_sucon.json](../../src/main/resources/assets/greatech/blockstates/lv_sucon.json)
+- [mv_sucon.json](../../src/main/resources/assets/greatech/blockstates/mv_sucon.json)
+- [hv_sucon.json](../../src/main/resources/assets/greatech/blockstates/hv_sucon.json)
 
 Current block model folder:
 
-- [models/block/su_energy_converter](../src/main/resources/assets/greatech/models/block/su_energy_converter)
+- [models/block/su_energy_converter](../../src/main/resources/assets/greatech/models/block/su_energy_converter)
 
 Current shared geometry files:
 
 - `greatech_su_converter_casing.json`
 - `greatech_su_converter_rotor.json`
+- `greatech_su_converter_panel_overlay.json`
 
 Current tier wrappers:
 
 - `lv_sucon_block.json`
 - `lv_sucon_casing.json`
-- `lv_sucon_active.json`
+- `lv_sucon_overlay.json`
 - `lv_sucon_rotor.json`
 - `mv_sucon_block.json`
 - `mv_sucon_casing.json`
-- `mv_sucon_active.json`
+- `mv_sucon_overlay.json`
 - `mv_sucon_rotor.json`
 - `hv_sucon_block.json`
 - `hv_sucon_casing.json`
-- `hv_sucon_active.json`
+- `hv_sucon_overlay.json`
 - `hv_sucon_rotor.json`
 
 The current shared item display model is:
 
-- [models/item/greatech_su_converter.json](../src/main/resources/assets/greatech/models/item/greatech_su_converter.json)
+- [models/item/greatech_su_converter.json](../../src/main/resources/assets/greatech/models/item/greatech_su_converter.json)
 
 The item-id root models remain:
 
-- [models/item/lv_sucon.json](../src/main/resources/assets/greatech/models/item/lv_sucon.json)
-- [models/item/mv_sucon.json](../src/main/resources/assets/greatech/models/item/mv_sucon.json)
-- [models/item/hv_sucon.json](../src/main/resources/assets/greatech/models/item/hv_sucon.json)
+- [models/item/lv_sucon.json](../../src/main/resources/assets/greatech/models/item/lv_sucon.json)
+- [models/item/mv_sucon.json](../../src/main/resources/assets/greatech/models/item/mv_sucon.json)
+- [models/item/hv_sucon.json](../../src/main/resources/assets/greatech/models/item/hv_sucon.json)
 
 Those root item models now point directly to the shared full item model and bind their textures there. The shared item model inherits `"parent": "block/block"` and keeps a custom `fixed` transform so item display entities render the full machine instead of showing only a single face.
 
@@ -224,13 +226,13 @@ At the moment:
 - the shared model files use `greatech_su_converter_*` geometry
 - tier wrappers remain the resource ids used by blockstates, partial registration, and item roots
 - `lv` and `mv` have distinct texture sets
-- `hv` currently reuses the `lv` texture family until dedicated `hv` art is added
+- `hv` has dedicated `hv_machine` texture wrappers for its casing, rotor, item, and active panel overlay
 
 So the visual structure is tier-aware, but the committed art state is currently:
 
 - `lv`: dedicated textures
 - `mv`: dedicated textures
-- `hv`: temporary `lv` texture reuse
+- `hv`: dedicated texture bindings under the `hv_machine` family
 
 ## Debugging
 
@@ -246,15 +248,13 @@ This is still prototype UX, not final player-facing interaction.
 
 - balance is still prototype-only
 - no final recipes yet
-- active-state visuals still use a full casing texture swap instead of a layered GT-style overlay
+- active-state visuals now use a layered overlay, but the overlay art and brightness may still need in-game polish
 - item display and world display now use separate responsibilities
-- `hv` still reuses the currently committed `lv` texture family
 - config files generated from older defaults can preserve stale values until edited or regenerated
 
 ## Recommended Next Steps
 
-- add a distinct `hv` converter texture set once the shape direction is stable
 - validate the new casing light/occlusion settings in dense machine rooms
 - decide whether the right-click debug output should remain or become a tool/goggle interaction
-- revisit active-state visuals later with overlay or emissive layering
+- tune active-state overlay art after more in-game checks
 - continue recipe and progression work after in-game visual validation

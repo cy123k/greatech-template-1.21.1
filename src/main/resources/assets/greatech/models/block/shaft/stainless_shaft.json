@@ -1,0 +1,8 @@
+{
+  "parent": "greatech:block/shaft/greatech_shaft",
+  "textures": {
+    "0": "greatech:block/greatech_shaft/stainless_axis",
+    "1": "greatech:block/greatech_shaft/stainless_axis_top",
+    "particle": "greatech:block/greatech_shaft/stainless_axis"
+  }
+}

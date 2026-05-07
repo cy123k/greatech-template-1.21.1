@@ -42,6 +42,11 @@ public final class GreatechBlocks {
             () -> GreatechBlockEntityTypes.ALUMINIUM_COGWHEEL.get(),
             () -> GreatechBlockEntityTypes.POWERED_ALUMINIUM_COGWHEEL.get(),
             () -> GreatechBlockEntityTypes.ALUMINIUM_LARGE_COGWHEEL.get());
+    public static final GreatechKineticFamily STAINLESS_FAMILY = registerKineticFamily(
+            GreatechKineticMaterial.STAINLESS,
+            () -> GreatechBlockEntityTypes.STAINLESS_COGWHEEL.get(),
+            () -> GreatechBlockEntityTypes.POWERED_STAINLESS_COGWHEEL.get(),
+            () -> GreatechBlockEntityTypes.STAINLESS_LARGE_COGWHEEL.get());
 
     public static final DeferredBlock<Block> STEEL_SHAFT = STEEL_FAMILY.shaft();
     public static final DeferredBlock<Block> POWERED_STEEL_SHAFT = STEEL_FAMILY.poweredShaft();
@@ -53,6 +58,11 @@ public final class GreatechBlocks {
     public static final DeferredBlock<Block> ALUMINIUM_COGWHEEL = ALUMINIUM_FAMILY.cogwheel();
     public static final DeferredBlock<Block> POWERED_ALUMINIUM_COGWHEEL = ALUMINIUM_FAMILY.poweredCogwheel();
     public static final DeferredBlock<Block> ALUMINIUM_LARGE_COGWHEEL = ALUMINIUM_FAMILY.largeCogwheel();
+    public static final DeferredBlock<Block> STAINLESS_SHAFT = STAINLESS_FAMILY.shaft();
+    public static final DeferredBlock<Block> POWERED_STAINLESS_SHAFT = STAINLESS_FAMILY.poweredShaft();
+    public static final DeferredBlock<Block> STAINLESS_COGWHEEL = STAINLESS_FAMILY.cogwheel();
+    public static final DeferredBlock<Block> POWERED_STAINLESS_COGWHEEL = STAINLESS_FAMILY.poweredCogwheel();
+    public static final DeferredBlock<Block> STAINLESS_LARGE_COGWHEEL = STAINLESS_FAMILY.largeCogwheel();
 
     public static final DeferredItem<BlockItem> LV_SUCON_ITEM = registerBlockItem("lv_sucon", LV_SUCON);
     public static final DeferredItem<BlockItem> MV_SUCON_ITEM = registerBlockItem("mv_sucon", MV_SUCON);
@@ -68,6 +78,11 @@ public final class GreatechBlocks {
     public static final DeferredItem<BlockItem> ALUMINIUM_COGWHEEL_ITEM = ALUMINIUM_FAMILY.cogwheelItem();
     public static final DeferredItem<BlockItem> POWERED_ALUMINIUM_COGWHEEL_ITEM = ALUMINIUM_FAMILY.poweredCogwheelItem();
     public static final DeferredItem<BlockItem> ALUMINIUM_LARGE_COGWHEEL_ITEM = ALUMINIUM_FAMILY.largeCogwheelItem();
+    public static final DeferredItem<BlockItem> STAINLESS_SHAFT_ITEM = STAINLESS_FAMILY.shaftItem();
+    public static final DeferredItem<BlockItem> POWERED_STAINLESS_SHAFT_ITEM = STAINLESS_FAMILY.poweredShaftItem();
+    public static final DeferredItem<BlockItem> STAINLESS_COGWHEEL_ITEM = STAINLESS_FAMILY.cogwheelItem();
+    public static final DeferredItem<BlockItem> POWERED_STAINLESS_COGWHEEL_ITEM = STAINLESS_FAMILY.poweredCogwheelItem();
+    public static final DeferredItem<BlockItem> STAINLESS_LARGE_COGWHEEL_ITEM = STAINLESS_FAMILY.largeCogwheelItem();
 
     private GreatechBlocks() {
     }
@@ -129,6 +144,7 @@ public final class GreatechBlocks {
         return switch (material) {
             case STEEL -> STEEL_FAMILY;
             case ALUMINIUM -> ALUMINIUM_FAMILY;
+            case STAINLESS -> STAINLESS_FAMILY;
         };
     }
 

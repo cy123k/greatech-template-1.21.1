@@ -8,7 +8,6 @@ import com.greatech.registry.GreatechBlocks;
 import com.greatech.registry.GreatechCapabilities;
 import com.greatech.registry.GreatechItems;
 import com.greatech.registry.GreatechMachines;
-import com.greatech.registry.GreatechMenus;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.greatech.content.placement.GreatechPlacementEvents;
@@ -57,6 +56,9 @@ public class Greatech {
                 output.accept(GreatechBlocks.ALUMINIUM_SHAFT_ITEM.get());
                 output.accept(GreatechBlocks.ALUMINIUM_COGWHEEL_ITEM.get());
                 output.accept(GreatechBlocks.ALUMINIUM_LARGE_COGWHEEL_ITEM.get());
+                output.accept(GreatechBlocks.STAINLESS_SHAFT_ITEM.get());
+                output.accept(GreatechBlocks.STAINLESS_COGWHEEL_ITEM.get());
+                output.accept(GreatechBlocks.STAINLESS_LARGE_COGWHEEL_ITEM.get());
                 output.accept(GreatechItems.GOGGLES.get());
             }).build());
 
@@ -68,7 +70,6 @@ public class Greatech {
         ConfigHolder.init();
         GreatechMachines.init(modEventBus);
         GreatechBlockEntityTypes.register(modEventBus);
-        GreatechMenus.register(modEventBus);
         GreatechPlacementHelpers.init();
         CREATIVE_MODE_TABS.register(modEventBus);
         modEventBus.addListener(GreatechCapabilities::register);
@@ -105,6 +106,9 @@ public class Greatech {
             event.accept(GreatechBlocks.ALUMINIUM_SHAFT_ITEM);
             event.accept(GreatechBlocks.ALUMINIUM_COGWHEEL_ITEM);
             event.accept(GreatechBlocks.ALUMINIUM_LARGE_COGWHEEL_ITEM);
+            event.accept(GreatechBlocks.STAINLESS_SHAFT_ITEM);
+            event.accept(GreatechBlocks.STAINLESS_COGWHEEL_ITEM);
+            event.accept(GreatechBlocks.STAINLESS_LARGE_COGWHEEL_ITEM);
             event.accept(GreatechItems.GOGGLES);
         }
     }

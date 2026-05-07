@@ -12,41 +12,41 @@ Current block:
 - `greatech:powered_steel_shaft`
 - `greatech:aluminium_shaft`
 - `greatech:powered_aluminium_shaft`
+- `greatech:stainless_shaft`
+- `greatech:powered_stainless_shaft`
 
 Current code direction:
 
-- `steel` is the first `GreatechKineticMaterial`
-- `aluminium` is the current higher-tier material family
+- `steel` is the baseline `GreatechKineticMaterial`
+- `aluminium` is the next material family
+- `stainless` is the current tier above aluminium
 - shaft and powered shaft registrations now sit inside a kinetic family structure
 - transmission-family `blockstates`, item models, and loot tables are now generated from NeoForge datagen providers
 - future materials should reuse the same naming template and datagen path instead of duplicating steel-specific resources
-
-Current prototype break limit:
-
-- `2048 SU`
 
 Current material progression:
 
 - `steel_shaft`: `2048 SU`
 - `aluminium_shaft`: `4096 SU`
+- `stainless_shaft`: `8192 SU`
 
 ## Main Code
 
 Core classes:
 
-- [GreatechShaftBlock.java](../src/main/java/com/greatech/content/shaft/GreatechShaftBlock.java)
-- [GreatechShaftBlockEntity.java](../src/main/java/com/greatech/content/shaft/GreatechShaftBlockEntity.java)
-- [GreatechShaftRenderer.java](../src/main/java/com/greatech/content/shaft/GreatechShaftRenderer.java)
-- [GreatechPoweredShaftBlock.java](../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlock.java)
-- [GreatechPoweredShaftBlockEntity.java](../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlockEntity.java)
-- [GreatechPoweredShaftRenderer.java](../src/main/java/com/greatech/content/steam/GreatechPoweredShaftRenderer.java)
+- [GreatechShaftBlock.java](../../src/main/java/com/greatech/content/shaft/GreatechShaftBlock.java)
+- [GreatechShaftBlockEntity.java](../../src/main/java/com/greatech/content/shaft/GreatechShaftBlockEntity.java)
+- [GreatechShaftRenderer.java](../../src/main/java/com/greatech/content/shaft/GreatechShaftRenderer.java)
+- [GreatechPoweredShaftBlock.java](../../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlock.java)
+- [GreatechPoweredShaftBlockEntity.java](../../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlockEntity.java)
+- [GreatechPoweredShaftRenderer.java](../../src/main/java/com/greatech/content/steam/GreatechPoweredShaftRenderer.java)
 
 Registration:
 
-- [GreatechBlocks.java](../src/main/java/com/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechPartialModels.java](../src/main/java/com/greatech/registry/GreatechPartialModels.java)
-- [Greatech placement helpers](../src/main/java/com/greatech/content/placement)
+- [GreatechBlocks.java](../../src/main/java/com/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](../../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechPartialModels.java](../../src/main/java/com/greatech/registry/GreatechPartialModels.java)
+- [Greatech placement helpers](../../src/main/java/com/greatech/content/placement)
 
 ## Resource Layout
 
@@ -59,25 +59,29 @@ Current resource naming rule:
 - wrapper models: `models/block/shaft/<material>_shaft*.json`
 - textures: `textures/block/greatech_shaft/<material>_axis*.png`
 
-Example future aluminum naming:
+Example material naming:
 
-- `aluminum_shaft`
-- `powered_aluminum_shaft`
-- `assets/greatech/blockstates/aluminum_shaft.json`
-- `assets/greatech/models/item/aluminum_shaft.json`
-- `data/greatech/loot_table/blocks/aluminum_shaft.json`
+- `stainless_shaft`
+- `powered_stainless_shaft`
+- `assets/greatech/blockstates/stainless_shaft.json`
+- `assets/greatech/models/item/stainless_shaft.json`
+- `data/greatech/loot_table/blocks/stainless_shaft.json`
 
 Current resources:
 
 - `assets/greatech/models/block/shaft/greatech_shaft.json`
 - `assets/greatech/models/block/shaft/steel_shaft.json`
 - `assets/greatech/models/block/shaft/aluminium_shaft.json`
+- `assets/greatech/models/block/shaft/stainless_shaft.json`
 - `assets/greatech/models/block/shaft/steel_shaft_block.json`
 - `assets/greatech/models/block/shaft/aluminium_shaft_block.json`
+- `assets/greatech/models/block/shaft/stainless_shaft_block.json`
 - `assets/greatech/textures/block/greatech_shaft/steel_axis.png`
 - `assets/greatech/textures/block/greatech_shaft/steel_axis_top.png`
 - `assets/greatech/textures/block/greatech_shaft/aluminium_axis.png`
 - `assets/greatech/textures/block/greatech_shaft/aluminium_axis_top.png`
+- `assets/greatech/textures/block/greatech_shaft/stainless_axis.png`
+- `assets/greatech/textures/block/greatech_shaft/stainless_axis_top.png`
 - `generated/assets/greatech/blockstates/<material>_shaft.json`
 - `generated/assets/greatech/blockstates/powered_<material>_shaft.json`
 - `generated/assets/greatech/models/item/<material>_shaft.json`
@@ -166,22 +170,22 @@ This keeps horizontal shafts rotating around the correct visual axis.
 
 ## Placement Helper
 
-`steel_shaft` participates in the Greatech placement helper system.
+Greatech shafts participate in the Greatech placement helper system.
 
 Current behavior:
 
-- hand item `greatech:steel_shaft` can extend Greatech and Create shaft targets
+- hand items such as `greatech:steel_shaft`, `greatech:aluminium_shaft`, and `greatech:stainless_shaft` can extend Greatech and Create shaft targets
 - hand item `create:shaft` can extend Greatech shaft targets
 - `create:shaft` on `create:shaft` remains handled by Create's original helper
 - the helper provides Catnip arrow indicators and a visible ghost preview
 
 The helper lives under:
 
-- [GreatechPlacementRegistry.java](../src/main/java/com/greatech/content/placement/GreatechPlacementRegistry.java)
-- [GreatechShaftPlacementHelper.java](../src/main/java/com/greatech/content/placement/GreatechShaftPlacementHelper.java)
-- [GreatechPlacementGhosts.java](../src/main/java/com/greatech/content/placement/GreatechPlacementGhosts.java)
+- [GreatechPlacementRegistry.java](../../src/main/java/com/greatech/content/placement/GreatechPlacementRegistry.java)
+- [GreatechShaftPlacementHelper.java](../../src/main/java/com/greatech/content/placement/GreatechShaftPlacementHelper.java)
+- [GreatechPlacementGhosts.java](../../src/main/java/com/greatech/content/placement/GreatechPlacementGhosts.java)
 
-See [greatech-placement-helper.md](./greatech-placement-helper.md) for the reusable placement design.
+See [greatech-placement-helper.md](../systems/greatech-placement-helper.md) for the reusable placement design.
 
 ## Adding More Shaft Materials
 
@@ -198,6 +202,6 @@ For another shaft material such as aluminum:
 9. Add a loot table and lang entries.
 10. Register placement-helper support if the new family should support assisted placement.
 
-The intended result is that `steel_shaft`, `aluminium_shaft`, and later materials all share the same runtime pattern and differ mainly by family registration, wrapper textures/models, and generated resources.
+The intended result is that `steel_shaft`, `aluminium_shaft`, `stainless_shaft`, and later materials all share the same runtime pattern and differ mainly by family registration, wrapper textures/models, and generated resources.
 
 

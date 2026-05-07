@@ -8,7 +8,7 @@ The block currently has three jobs:
 
 - expose a directional NeoForge fluid handler to GTCEu and other capability-based fluid systems
 - expose a fluid endpoint that Create pipes can push to or pull from
-- optionally spend `EU` to apply Create-style fluid pressure to nearby Create pipe networks
+- spend a fixed `EU/t` to apply fixed Create-style fluid pressure to nearby Create pipe networks
 - act as a Greatech fluid hazard source when dangerous fluids are actually routed into Create pipes
 
 The in-game feature should be referred to as the `Electric Fluid Bridge`.
@@ -17,30 +17,27 @@ The in-game feature should be referred to as the `Electric Fluid Bridge`.
 
 Core classes:
 
-- [ElectricFluidBridgeBlock.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeBlock.java)
-- [ElectricFluidBridgeBlockEntity.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeBlockEntity.java)
-- [ElectricFluidBridgeRenderer.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
-- [ElectricFluidBridgeMenu.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeMenu.java)
-- [ElectricFluidBridgeScreen.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeScreen.java)
-- [ElectricFluidBridgeTier.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeTier.java)
-- [Fluid hazard system](../src/main/java/com/greatech/content/fluid/hazard)
-- [GreatechFluidPipeConnections.java](../src/main/java/com/greatech/content/fluid/pipe/GreatechFluidPipeConnections.java)
-- [GreatechLightSampler.java](../src/main/java/com/greatech/client/render/GreatechLightSampler.java)
+- [ElectricFluidBridgeBlock.java](../../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeBlock.java)
+- [ElectricFluidBridgeBlockEntity.java](../../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeBlockEntity.java)
+- [ElectricFluidBridgeRenderer.java](../../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
+- [ElectricFluidBridgeTier.java](../../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeTier.java)
+- [Fluid hazard system](../../src/main/java/com/greatech/content/fluid/hazard)
+- [GreatechFluidPipeConnections.java](../../src/main/java/com/greatech/content/fluid/pipe/GreatechFluidPipeConnections.java)
+- [GreatechLightSampler.java](../../src/main/java/com/greatech/client/render/GreatechLightSampler.java)
 
 Registry hooks:
 
-- [GreatechBlocks.java](../src/main/java/com/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechMenus.java](../src/main/java/com/greatech/registry/GreatechMenus.java)
-- [GreatechCapabilities.java](../src/main/java/com/greatech/registry/GreatechCapabilities.java)
+- [GreatechBlocks.java](../../src/main/java/com/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](../../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechCapabilities.java](../../src/main/java/com/greatech/registry/GreatechCapabilities.java)
 
 Resources:
 
-- [lv_fluid_bridge.json](../src/main/resources/assets/greatech/blockstates/lv_fluid_bridge.json)
-- [fluid bridge block models](../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge)
-- [fluid bridge textures](../src/main/resources/assets/greatech/textures/block/greatech_fluid_bridge)
-- [lv_fluid_bridge item model](../src/main/resources/assets/greatech/models/item/lv_fluid_bridge.json)
-- [lv_fluid_bridge loot table](../src/main/resources/data/greatech/loot_table/blocks/lv_fluid_bridge.json)
+- [lv_fluid_bridge.json](../../src/main/resources/assets/greatech/blockstates/lv_fluid_bridge.json)
+- [fluid bridge block models](../../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge)
+- [fluid bridge textures](../../src/main/resources/assets/greatech/textures/block/greatech_fluid_bridge)
+- [lv_fluid_bridge item model](../../src/main/resources/assets/greatech/models/item/lv_fluid_bridge.json)
+- [lv_fluid_bridge loot table](../../src/main/resources/data/greatech/loot_table/blocks/lv_fluid_bridge.json)
 
 ## Rendering
 
@@ -49,10 +46,10 @@ Resources:
 Current rendering structure:
 
 - the blockstate points to `lv_fluid_bridge_block.json`, an empty model with only a particle texture
-- the full bridge body is rendered by [ElectricFluidBridgeRenderer.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
-- the GTCEu drain connector is rendered as an extra partial only when the back side is connected to a GTCEu `FluidPipeBlockEntity`
-- partial models are declared in [GreatechPartialModels.java](../src/main/java/com/greatech/registry/GreatechPartialModels.java)
-- light is sampled through [GreatechLightSampler.java](../src/main/java/com/greatech/client/render/GreatechLightSampler.java)
+- the full bridge body is rendered by [ElectricFluidBridgeRenderer.java](../../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
+- the GTCEu drain connector is rendered as an extra partial on any fluid port connected to a GTCEu `FluidPipeBlockEntity`
+- partial models are declared in [GreatechPartialModels.java](../../src/main/java/com/greatech/registry/GreatechPartialModels.java)
+- light is sampled through [GreatechLightSampler.java](../../src/main/java/com/greatech/client/render/GreatechLightSampler.java)
 
 This avoids two problems seen with ordinary blockstate model composition:
 
@@ -64,26 +61,26 @@ The renderer now follows the same helper-based facing rule as the converter and 
 - the source body model is authored with its front on `north`
 - runtime orientation uses `CachedBuffers.partialFacing(...)`
 - the body passes `FACING.getOpposite()` as its model-facing transform input
-- the GTCEu drain partial also uses `partialFacing(...)`, with the drain transform derived from the bridge back side
+- the GTCEu drain partial also uses `partialFacing(...)`, with the drain transform derived from each connected fluid port
 
 ## Model Layout
 
 Generic model fragments live in:
 
-- [greatech_fluid_bridge.json](../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_fluid_bridge.json)
-- [greatech_drain_north.json](../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_drain_north.json)
-- [greatech_fluid_bridge_casing.json](../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_fluid_bridge_casing.json)
-- [greatech_rim_north.json](../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_rim_north.json)
-- [greatech_rim_connector_north.json](../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_rim_connector_north.json)
-- [greatech_powerin_east.json](../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_powerin_east.json)
+- [greatech_fluid_bridge.json](../../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_fluid_bridge.json)
+- [greatech_drain_north.json](../../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_drain_north.json)
+- [greatech_fluid_bridge_casing.json](../../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_fluid_bridge_casing.json)
+- [greatech_rim_north.json](../../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_rim_north.json)
+- [greatech_rim_connector_north.json](../../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_rim_connector_north.json)
+- [greatech_powerin_east.json](../../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/greatech_powerin_east.json)
 
 Tier-specific LV wrapper models live in:
 
-- [lv_fluid_bridge model folder](../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/lv_fluid_bridge)
+- [lv_fluid_bridge model folder](../../src/main/resources/assets/greatech/models/block/fluid/fluid_bridge/lv_fluid_bridge)
 
 The LV wrapper models reference the generic geometry and bind the LV texture:
 
-- [lv_pipe.png](../src/main/resources/assets/greatech/textures/block/greatech_fluid_bridge/lv_pipe.png)
+- [lv_pipe.png](../../src/main/resources/assets/greatech/textures/block/greatech_fluid_bridge/lv_pipe.png)
 
 This mirrors the shaft/cogwheel model strategy: generic geometry is reusable, while tier folders provide texture-bound model variants.
 
@@ -96,10 +93,10 @@ Two opposite faces are fluid ports:
 - `front`: `FACING`
 - `back`: `FACING.getOpposite()`
 
-The GUI has one direction toggle:
+The flow direction is toggled by right-clicking the bridge with a Create wrench:
 
-- `Back -> Front`
-- `Front -> Back`
+- default: `Back -> Front`
+- reversed: `Front -> Back`
 
 There is no separate `Push`, `Pull`, `Auto`, or `Disabled` mode. Direction is the single source of truth.
 
@@ -135,32 +132,24 @@ Current rule:
 - the other four sides can accept GTCEu energy
 - the machine does not output EU
 
-The energy capability is registered in [GreatechCapabilities.java](../src/main/java/com/greatech/registry/GreatechCapabilities.java).
+The energy capability is registered in [GreatechCapabilities.java](../../src/main/java/com/greatech/registry/GreatechCapabilities.java).
 
-## Passive Transfer
+## Fixed Pump Mode
 
-When target pressure is `0`, the bridge performs passive capability transfer:
-
-1. push any internal tank contents to the configured output port
-2. transfer directly from the configured input-side neighbor to the configured output-side neighbor
-3. store any unaccepted remainder in the internal tank
-
-Passive transfer does not consume `EU`.
-
-This mode is useful for GTCEu pipe to GTCEu pipe tests, simple tank bridging, and fallback behavior when Create pressure is not needed.
-
-## Create Pressure Transfer
-
-When target pressure is greater than `0`, the bridge behaves as an electric Create pump.
+The bridge now always behaves as an electric Create pump while it has enough stored EU for the tier's fixed tick cost.
 
 Each server tick:
 
-1. compute actual pressure from target pressure, available stored EU, and config limits
-2. spend EU for the actual pressure
-3. apply Create-style pressure to nearby Create pipe networks
-4. push any fluid stored in the internal tank to the output port
+1. read the tier's fixed pressure and fixed EU/t cost from config
+2. stop and clear old Create pipe pressure if pressure, cost, or stored EU is `0`
+3. spend the fixed EU/t cost
+4. pull fluid from the configured input port into the internal tank
+5. push stored fluid from the internal tank to the configured output port
+6. apply Create-style pull pressure on the input side and push pressure on the output side
 
 The internal tank push is still needed because Create can pull fluid into the bridge from one side while GTCEu expects a normal output handler on the other side.
+
+There is no GUI target-pressure slider anymore. Pressure and EU/t are fixed per tier and adjusted through config.
 
 ## Pressure Refresh
 
@@ -177,7 +166,7 @@ The bridge refreshes pressure when:
 - actual pressure changes
 - direction changes
 - the refresh interval expires
-- pressure drops to `0`, in which case old pressure is cleared
+- fixed pump mode stops, in which case old pressure is cleared
 
 Clearing pressure is done by propagating a changed pipe update on both fluid sides.
 
@@ -199,24 +188,21 @@ The recorded hazard stores:
 
 Old hazard state is cleared when the bridge has no matching fluid left in its internal tank and no new fluid was routed into a Create pipe during the current tick. This prevents an empty bridge from continuing to damage Create pipes based on an old transfer.
 
-See [greatech-fluid-hazard.md](./greatech-fluid-hazard.md) for the shared hazard system design.
+See [greatech-fluid-hazard.md](../systems/greatech-fluid-hazard.md) for the shared hazard system design.
 
 ## Config
 
-Fluid bridge config lives in [Config.java](../src/main/java/com/greatech/Config.java).
+Fluid bridge config lives in [Config.java](../../src/main/java/com/greatech/Config.java).
 
 Current defaults are ordered as `[LV, MV, HV]`, even though only the LV block is registered right now:
 
 - `fluidBridgeTankCapacity = [8000, 32000, 128000]`
 - `fluidBridgeEnergyCapacity = [2048, 8192, 32768]`
 - `fluidBridgeTransferRate = [100, 400, 1600]`
-- `fluidBridgeEnergyPerBucket = [32, 24, 16]`
-- `fluidBridgeMaxEuPerTick = [32, 128, 512]`
 - `fluidBridgeInputVoltage = [32, 128, 512]`
 - `fluidBridgeInputAmperage = [1, 1, 1]`
-- `fluidBridgeMaxPressure = [64, 256, 1024]`
-- `fluidBridgeEuPerPressure = [1, 1, 1]`
-- `fluidBridgeMaxPressureEuPerTick = [32, 128, 512]`
+- `fluidBridgePressure = [64, 256, 1024]`
+- `fluidBridgeEuPerTick = [32, 128, 512]`
 - `enableFluidHazards = true`
 - `keepFluidHazardDrops = false`
 - `fluidHazardCheckInterval = 20`
@@ -224,25 +210,22 @@ Current defaults are ordered as `[LV, MV, HV]`, even though only the LV block is
 - `fluidHazardMaxCreatePipeScanNodes = 128`
 - `createFluidPipeMaxTemperature = 500`
 
-The current passive transfer path no longer consumes EU. The older `fluidBridgeEnergyPerBucket` and `fluidBridgeMaxEuPerTick` values remain available for future balancing if passive transfer cost is reintroduced.
-
 Fluid hazard config is shared by future Greatech fluid machines. In the first version, all Create fluid pipe variants use the same safety profile: `maxTemperature = 500K`, `gasProof = false`, `acidProof = false`, `cryoProof = false`, and `plasmaProof = false`.
 
-## GUI
+## Interaction
 
-Right-click opens the vanilla menu screen.
+Right-click with an empty hand prints a quick status line.
 
-The GUI shows:
+The status line includes:
 
 - stored EU
 - internal fluid amount
-- actual pressure and target pressure
 - moved mB/t
 - used EU/t
-- direction button
-- pressure slider
+- flow direction
+- actual/fixed pressure
 
-Shift-right-click keeps a plain debug chat output for quick testing without opening the GUI.
+Right-click with a Create wrench toggles the flow direction and prints the new direction. There is no fluid bridge menu registration or screen class in the current implementation.
 
 ## Known Boundaries
 
@@ -253,7 +236,7 @@ Important boundaries:
 - the bridge is not a Create kinetic block
 - pressure is driven by EU, not rotational speed
 - only `lv_fluid_bridge` is registered
-- the visual system currently handles the main body and GTCEu drain connector; future Create-side connector variants can be added as more partials
+- the visual system currently handles the main body and GTCEu drain connectors; future Create-side connector variants can be added as more partials
 - fluid hazards are Greatech-owned monitoring logic; they do not mix into Create's fluid pipe internals
 - fluid hazard accidents currently destroy a selected Create pipe block; richer leak, particle, entity damage, or fire behavior can be layered onto the same action system later
 - MV/HV visual wrappers are not registered yet

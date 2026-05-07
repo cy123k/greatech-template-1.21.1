@@ -25,10 +25,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -37,7 +33,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
-public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEnergyContainer, MenuProvider, FluidHazardSource {
+public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEnergyContainer, FluidHazardSource {
     private static final int PRESSURE_REFRESH_INTERVAL = 20;
 
     private final FluidTank tank = new FluidTank(1) {
@@ -53,7 +49,6 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
     private int lastTransferredMb;
     private int lastConsumedEu;
     private boolean flowReversed;
-    private int targetPressure;
     private int actualPressure;
     private int lastAppliedPressure;
     private boolean lastAppliedFlowReversed;
@@ -79,32 +74,27 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
         actualPressure = 0;
         createHazardRecordedThisTick = false;
 
-        if (shouldApplyCreatePressure()) {
-            applyCreatePressure(level, state);
-            pushStoredFluid(level, state);
-        } else {
-            clearAppliedPressure(level, state);
-            pushStoredFluid(level, state);
-            transferBetween(level, getInputPort(state), getOutputPort(state));
-        }
+        runFixedPumpMode(level, state);
         updateActiveState(state, lastTransferredMb > 0 || actualPressure > 0);
         clearStaleCreateHazard();
         GreatechFluidHazardFailure.tick(this);
     }
 
-    private boolean shouldApplyCreatePressure() {
-        return targetPressure > 0;
-    }
-
-    private void applyCreatePressure(Level level, BlockState state) {
-        int pressure = calculateActualPressure();
-        if (pressure <= 0) {
+    private void runFixedPumpMode(Level level, BlockState state) {
+        int pressure = Config.fluidBridgePressure(getTier());
+        int cost = Config.fluidBridgeEuPerTick(getTier());
+        if (pressure <= 0 || cost <= 0 || energyStored < cost) {
             clearAppliedPressure(level, state);
             return;
         }
 
         actualPressure = pressure;
-        consumePressureEnergy(pressure);
+        energyStored -= cost;
+        lastConsumedEu = cost;
+        setChanged();
+
+        pullIntoTank(level, getInputPort(state));
+        pushStoredFluid(level, state);
 
         if (shouldRefreshPressure(pressure)) {
             clearAppliedPressure(level, state);
@@ -120,6 +110,12 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
 
     private boolean shouldRefreshPressure(int pressure) {
         return pressureRefreshCooldown <= 0 || lastAppliedPressure != pressure || lastAppliedFlowReversed != flowReversed;
+    }
+
+    public void clearAppliedPressure() {
+        if (level != null) {
+            clearAppliedPressure(level, getBlockState());
+        }
     }
 
     private void clearAppliedPressure(Level level, BlockState state) {
@@ -140,36 +136,6 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
         }
     }
 
-    private int calculateActualPressure() {
-        int requestedPressure = Math.min(targetPressure, Config.fluidBridgeMaxPressure(getTier()));
-        int euPerPressure = Config.fluidBridgeEuPerPressure(getTier());
-        if (requestedPressure <= 0) {
-            return 0;
-        }
-        if (euPerPressure <= 0) {
-            return requestedPressure;
-        }
-
-        int euBudget = Math.min(Config.fluidBridgeMaxPressureEuPerTick(getTier()), (int) Math.min(Integer.MAX_VALUE, energyStored));
-        if (euBudget <= 0) {
-            return 0;
-        }
-
-        return Math.min(requestedPressure, euBudget / euPerPressure);
-    }
-
-    private void consumePressureEnergy(int pressure) {
-        int euPerPressure = Config.fluidBridgeEuPerPressure(getTier());
-        if (pressure <= 0 || euPerPressure <= 0) {
-            return;
-        }
-
-        int cost = Math.min(Config.fluidBridgeMaxPressureEuPerTick(getTier()), pressure * euPerPressure);
-        energyStored = Math.max(0L, energyStored - cost);
-        lastConsumedEu += cost;
-        setChanged();
-    }
-
     private void pushStoredFluid(Level level, BlockState state) {
         if (tank.isEmpty()) {
             return;
@@ -178,18 +144,17 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
         pushTankToSide(level, getOutputPort(state));
     }
 
-    private boolean transferBetween(Level level, Direction sourceSide, Direction targetSide) {
-        if (sourceSide == null || targetSide == null || sourceSide == targetSide) {
+    private boolean pullIntoTank(Level level, Direction sourceSide) {
+        if (sourceSide == null || tank.getFluidAmount() >= tank.getCapacity()) {
             return false;
         }
 
         IFluidHandler source = level.getCapability(Capabilities.FluidHandler.BLOCK, worldPosition.relative(sourceSide), sourceSide.getOpposite());
-        IFluidHandler target = level.getCapability(Capabilities.FluidHandler.BLOCK, worldPosition.relative(targetSide), targetSide.getOpposite());
-        if (source == null || target == null) {
+        if (source == null) {
             return false;
         }
 
-        int maxTransfer = Math.min(Config.fluidBridgeTransferRate(getTier()), tank.getCapacity());
+        int maxTransfer = Math.min(Config.fluidBridgeTransferRate(getTier()), tank.getCapacity() - tank.getFluidAmount());
         if (maxTransfer <= 0) {
             return false;
         }
@@ -199,7 +164,7 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
             return false;
         }
 
-        int accepted = target.fill(drainable, IFluidHandler.FluidAction.SIMULATE);
+        int accepted = tank.fill(drainable, IFluidHandler.FluidAction.SIMULATE);
         int transferable = Math.min(accepted, drainable.getAmount());
         if (transferable <= 0) {
             return false;
@@ -210,14 +175,11 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
             return false;
         }
 
-        int filled = target.fill(drained, IFluidHandler.FluidAction.EXECUTE);
-        if (filled > 0 && GreatechFluidPipeConnections.isCreateFluidPipeConnected(level, worldPosition, targetSide)) {
-            recordCreateHazard(drained, filled, targetSide);
-        }
+        int filled = tank.fill(drained, IFluidHandler.FluidAction.EXECUTE);
         if (filled < drained.getAmount()) {
             FluidStack remainder = drained.copy();
             remainder.setAmount(drained.getAmount() - filled);
-            tank.fill(remainder, IFluidHandler.FluidAction.EXECUTE);
+            source.fill(remainder, IFluidHandler.FluidAction.EXECUTE);
         }
 
         recordTransfer(filled);
@@ -367,7 +329,6 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
         tag.putInt("LastTransferredMb", lastTransferredMb);
         tag.putInt("LastConsumedEu", lastConsumedEu);
         tag.putBoolean("FlowReversed", flowReversed);
-        tag.putInt("TargetPressure", targetPressure);
         tag.putInt("FluidHazardCooldown", fluidHazardCooldown);
         tag.put("Tank", tank.writeToNBT(registries, new CompoundTag()));
     }
@@ -379,7 +340,6 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
         lastTransferredMb = tag.getInt("LastTransferredMb");
         lastConsumedEu = tag.getInt("LastConsumedEu");
         flowReversed = tag.getBoolean("FlowReversed");
-        targetPressure = tag.getInt("TargetPressure");
         fluidHazardCooldown = tag.getInt("FluidHazardCooldown");
         tank.setCapacity(Config.fluidBridgeCapacity(getTier()));
         tank.readFromNBT(registries, tag.getCompound("Tank"));
@@ -422,21 +382,16 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
         return Config.fluidBridgeTransferRate(getTier());
     }
 
-    public int getTargetPressure() {
-        return targetPressure;
-    }
-
-    public void setTargetPressure(int targetPressure) {
-        this.targetPressure = Math.max(0, Math.min(targetPressure, Config.fluidBridgeMaxPressure(getTier())));
-        setChanged();
-    }
-
     public int getActualPressure() {
         return actualPressure;
     }
 
-    public int getMaxPressure() {
-        return Config.fluidBridgeMaxPressure(getTier());
+    public int getFixedPressure() {
+        return Config.fluidBridgePressure(getTier());
+    }
+
+    public int getFixedEuPerTick() {
+        return Config.fluidBridgeEuPerTick(getTier());
     }
 
     public boolean isFlowReversed() {
@@ -444,8 +399,16 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
     }
 
     public void setFlowReversed(boolean flowReversed) {
+        if (this.flowReversed == flowReversed) {
+            return;
+        }
         this.flowReversed = flowReversed;
+        clearAppliedPressure();
         setChanged();
+    }
+
+    public void toggleFlowDirection() {
+        setFlowReversed(!flowReversed);
     }
 
     public String getFlowDirectionName() {
@@ -460,14 +423,8 @@ public class ElectricFluidBridgeBlockEntity extends BlockEntity implements IEner
         return Math.min(15, Math.round(15.0F * tank.getFluidAmount() / capacity));
     }
 
-    @Override
     public Component getDisplayName() {
         return Component.translatable("block.greatech.lv_fluid_bridge");
-    }
-
-    @Override
-    public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player) {
-        return new ElectricFluidBridgeMenu(containerId, inventory, this);
     }
 
     @Override

@@ -1,0 +1,17 @@
+{
+    "variants": {
+        "axis=x": {
+            "model": "greatech:block/shaft/stainless_shaft_block",
+            "x": 90,
+            "y": 90
+        },
+        "axis=y": {
+            "model": "greatech:block/shaft/stainless_shaft_block"
+        },
+        "axis=z": {
+            "model": "greatech:block/shaft/stainless_shaft_block",
+            "x": 90,
+            "y": 180
+        }
+    }
+}

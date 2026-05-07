@@ -1,0 +1,7 @@
+{
+  "parent": "greatech:block/cogwheel/greatech_cogwheel_shaftless",
+  "textures": {
+    "2": "greatech:block/greatech_cogwheel/stainless_cogwheel",
+    "particle": "greatech:block/greatech_cogwheel/stainless_cogwheel"
+  }
+}

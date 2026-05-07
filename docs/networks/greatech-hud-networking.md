@@ -97,7 +97,8 @@ The split exists because the bridge needs extra machine-local values such as:
 
 - flow direction
 - actual pressure
-- target pressure
+- fixed configured pressure
+- fixed configured EU/t
 - transferred `mB/t`
 - consumed `EU/t`
 

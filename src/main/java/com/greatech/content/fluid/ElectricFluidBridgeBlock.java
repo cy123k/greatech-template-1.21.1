@@ -2,13 +2,15 @@ package com.greatech.content.fluid;
 
 import com.greatech.content.fluid.pipe.GreatechFluidPipeConnections;
 import com.greatech.registry.GreatechBlockEntityTypes;
+import com.simibubi.create.AllItems;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -50,8 +52,9 @@ public class ElectricFluidBridgeBlock extends Block implements EntityBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
+        Direction playerSide = context.getHorizontalDirection().getOpposite();
         return defaultBlockState()
-                .setValue(FACING, context.getNearestLookingDirection().getOpposite())
+                .setValue(FACING, playerSide.getCounterClockWise())
                 .setValue(ACTIVE, false)
                 .setValue(GTCEU_CONNECTED, false);
     }
@@ -96,21 +99,36 @@ public class ElectricFluidBridgeBlock extends Block implements EntityBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (!level.isClientSide && level.getBlockEntity(pos) instanceof ElectricFluidBridgeBlockEntity bridge) {
-            if (player.isShiftKeyDown()) {
-                player.sendSystemMessage(Component.literal(
-                        "Electric Fluid Bridge | Stored: " + bridge.getEnergyStored()
-                                + " EU | Fluid: " + bridge.getFluidAmount()
-                                + " mB " + bridge.getFluidName()
-                                + " | Moved: " + bridge.getLastTransferredMb()
-                                + " mB/t | Used: " + bridge.getLastConsumedEu()
-                                + " EU/t | Flow: " + bridge.getFlowDirectionName()
-                                + " | Pressure: " + bridge.getActualPressure() + "/" + bridge.getTargetPressure()));
-            } else if (player instanceof ServerPlayer serverPlayer) {
-                serverPlayer.openMenu(bridge, pos);
-            }
+            sendStatus(player, bridge);
         }
 
         return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
+            net.minecraft.world.InteractionHand hand, BlockHitResult hitResult) {
+        if (!AllItems.WRENCH.isIn(stack)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        if (!level.isClientSide && level.getBlockEntity(pos) instanceof ElectricFluidBridgeBlockEntity bridge) {
+            bridge.toggleFlowDirection();
+            player.sendSystemMessage(Component.literal("Electric Fluid Bridge | Flow: " + bridge.getFlowDirectionName()));
+        }
+
+        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    private void sendStatus(Player player, ElectricFluidBridgeBlockEntity bridge) {
+        player.sendSystemMessage(Component.literal(
+                "Electric Fluid Bridge | Stored: " + bridge.getEnergyStored()
+                        + " EU | Fluid: " + bridge.getFluidAmount()
+                        + " mB " + bridge.getFluidName()
+                        + " | Moved: " + bridge.getLastTransferredMb()
+                        + " mB/t | Used: " + bridge.getLastConsumedEu()
+                        + " EU/t | Flow: " + bridge.getFlowDirectionName()
+                        + " | Pressure: " + bridge.getActualPressure() + "/" + bridge.getFixedPressure()));
     }
 
     @Override
@@ -175,6 +193,20 @@ public class ElectricFluidBridgeBlock extends Block implements EntityBlock {
     }
 
     public static boolean isGtceuFluidPipeConnected(BlockState state, BlockGetter level, BlockPos pos) {
-        return GreatechFluidPipeConnections.isGtceuFluidPipeConnected(level, pos, state.getValue(FACING).getOpposite());
+        for (Direction side : getFluidPorts(state)) {
+            if (isGtceuFluidPipeConnectedOnSide(level, pos, side)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isGtceuFluidPipeConnectedOnSide(BlockGetter level, BlockPos pos, Direction side) {
+        return GreatechFluidPipeConnections.isGtceuFluidPipeConnected(level, pos, side);
+    }
+
+    public static Iterable<Direction> getFluidPorts(BlockState state) {
+        Direction front = state.getValue(FACING);
+        return java.util.List.of(front, front.getOpposite());
     }
 }

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Greatech currently has two Create-style cogwheel transmission parts:
+Greatech currently has Create-style cogwheel transmission parts across three material families:
 
 - `greatech:steel_cogwheel`
 - `greatech:steel_large_cogwheel`
@@ -10,36 +10,36 @@ Greatech currently has two Create-style cogwheel transmission parts:
 - `greatech:aluminium_cogwheel`
 - `greatech:aluminium_large_cogwheel`
 - `greatech:powered_aluminium_cogwheel`
+- `greatech:stainless_cogwheel`
+- `greatech:stainless_large_cogwheel`
+- `greatech:powered_stainless_cogwheel`
 
 They behave like Create small and large cogwheels, but they belong to Greatech and participate in Greatech's kinetic failure system with higher break limits than vanilla Create transmission parts.
-
-Current prototype break limits:
-
-- `steel_cogwheel`: `2048 SU`
-- `steel_large_cogwheel`: `4096 SU`
 
 Current material progression:
 
 - `steel_cogwheel`: `2048 SU`
 - `aluminium_cogwheel`: `4096 SU`
+- `stainless_cogwheel`: `8192 SU`
 - `steel_large_cogwheel`: `4096 SU`
 - `aluminium_large_cogwheel`: `8192 SU`
+- `stainless_large_cogwheel`: `16384 SU`
 
 ## Main Code
 
 Core classes:
 
-- [GreatechCogwheelBlock.java](../src/main/java/com/greatech/content/cogwheel/GreatechCogwheelBlock.java)
-- [GreatechCogwheelBlockEntity.java](../src/main/java/com/greatech/content/cogwheel/GreatechCogwheelBlockEntity.java)
-- [GreatechLargeCogwheelBlockEntity.java](../src/main/java/com/greatech/content/cogwheel/GreatechLargeCogwheelBlockEntity.java)
-- [GreatechCogwheelRenderer.java](../src/main/java/com/greatech/content/cogwheel/GreatechCogwheelRenderer.java)
+- [GreatechCogwheelBlock.java](../../src/main/java/com/greatech/content/cogwheel/GreatechCogwheelBlock.java)
+- [GreatechCogwheelBlockEntity.java](../../src/main/java/com/greatech/content/cogwheel/GreatechCogwheelBlockEntity.java)
+- [GreatechLargeCogwheelBlockEntity.java](../../src/main/java/com/greatech/content/cogwheel/GreatechLargeCogwheelBlockEntity.java)
+- [GreatechCogwheelRenderer.java](../../src/main/java/com/greatech/content/cogwheel/GreatechCogwheelRenderer.java)
 
 Registration:
 
-- [GreatechBlocks.java](../src/main/java/com/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechPartialModels.java](../src/main/java/com/greatech/registry/GreatechPartialModels.java)
-- [Greatech placement helpers](../src/main/java/com/greatech/content/placement)
+- [GreatechBlocks.java](../../src/main/java/com/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](../../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechPartialModels.java](../../src/main/java/com/greatech/registry/GreatechPartialModels.java)
+- [Greatech placement helpers](../../src/main/java/com/greatech/content/placement)
 
 ## Block and BlockEntity Pattern
 
@@ -76,7 +76,8 @@ The family-based path keeps the same rule but routes the final block entity type
 Current code direction:
 
 - `steel` is the baseline transmission family
-- `aluminium` is the current higher-tier transmission family
+- `aluminium` is the next transmission family
+- `stainless` is the current tier above aluminium
 - transmission-family `blockstates`, item models, and loot tables are now generated from NeoForge datagen providers
 - future materials should extend the same family and datagen path instead of duplicating per-block resource roots
 
@@ -93,14 +94,14 @@ Current resource naming rule:
 - large wrapper models: `models/block/cogwheel/large_cogwheel/<material>_large_cogwheel*.json`
 - textures: `textures/block/greatech_cogwheel/<material>_*.png`
 
-Example future aluminum naming:
+Example material naming:
 
-- `aluminum_cogwheel`
-- `powered_aluminum_cogwheel`
-- `aluminum_large_cogwheel`
-- `assets/greatech/blockstates/aluminum_cogwheel.json`
-- `assets/greatech/models/item/aluminum_cogwheel.json`
-- `data/greatech/loot_table/blocks/aluminum_cogwheel.json`
+- `stainless_cogwheel`
+- `powered_stainless_cogwheel`
+- `stainless_large_cogwheel`
+- `assets/greatech/blockstates/stainless_cogwheel.json`
+- `assets/greatech/models/item/stainless_cogwheel.json`
+- `data/greatech/loot_table/blocks/stainless_cogwheel.json`
 
 Current small cogwheel resources:
 
@@ -109,12 +110,16 @@ Current small cogwheel resources:
 - `assets/greatech/models/block/cogwheel/greatech_cogwheel_shaft.json`
 - `assets/greatech/models/block/cogwheel/small_cogwheel/steel_cogwheel.json`
 - `assets/greatech/models/block/cogwheel/small_cogwheel/aluminium_cogwheel.json`
+- `assets/greatech/models/block/cogwheel/small_cogwheel/stainless_cogwheel.json`
 - `assets/greatech/models/block/cogwheel/small_cogwheel/steel_cogwheel_shaftless.json`
 - `assets/greatech/models/block/cogwheel/small_cogwheel/aluminium_cogwheel_shaftless.json`
+- `assets/greatech/models/block/cogwheel/small_cogwheel/stainless_cogwheel_shaftless.json`
 - `assets/greatech/models/block/cogwheel/small_cogwheel/steel_cogwheel_shaft.json`
 - `assets/greatech/models/block/cogwheel/small_cogwheel/aluminium_cogwheel_shaft.json`
+- `assets/greatech/models/block/cogwheel/small_cogwheel/stainless_cogwheel_shaft.json`
 - `assets/greatech/models/block/cogwheel/small_cogwheel/steel_cogwheel_block.json`
 - `assets/greatech/models/block/cogwheel/small_cogwheel/aluminium_cogwheel_block.json`
+- `assets/greatech/models/block/cogwheel/small_cogwheel/stainless_cogwheel_block.json`
 - `generated/assets/greatech/blockstates/<material>_cogwheel.json`
 - `generated/assets/greatech/blockstates/powered_<material>_cogwheel.json`
 - `generated/assets/greatech/models/item/<material>_cogwheel.json`
@@ -128,12 +133,16 @@ Current large cogwheel resources:
 - `assets/greatech/models/block/cogwheel/greatech_large_cogwheel_shaftless.json`
 - `assets/greatech/models/block/cogwheel/large_cogwheel/steel_large_cogwheel.json`
 - `assets/greatech/models/block/cogwheel/large_cogwheel/aluminium_large_cogwheel.json`
+- `assets/greatech/models/block/cogwheel/large_cogwheel/stainless_large_cogwheel.json`
 - `assets/greatech/models/block/cogwheel/large_cogwheel/steel_large_cogwheel_shaftless.json`
 - `assets/greatech/models/block/cogwheel/large_cogwheel/aluminium_large_cogwheel_shaftless.json`
+- `assets/greatech/models/block/cogwheel/large_cogwheel/stainless_large_cogwheel_shaftless.json`
 - `assets/greatech/models/block/cogwheel/large_cogwheel/steel_large_cogwheel_block.json`
 - `assets/greatech/models/block/cogwheel/large_cogwheel/aluminium_large_cogwheel_block.json`
+- `assets/greatech/models/block/cogwheel/large_cogwheel/stainless_large_cogwheel_block.json`
 - `assets/greatech/textures/block/greatech_cogwheel/steel_large_cogwheel.png`
 - `assets/greatech/textures/block/greatech_cogwheel/aluminium_large_cogwheel.png`
+- `assets/greatech/textures/block/greatech_cogwheel/stainless_large_cogwheel.png`
 - `generated/assets/greatech/blockstates/<material>_large_cogwheel.json`
 - `generated/assets/greatech/models/item/<material>_large_cogwheel.json`
 - `generated/data/greatech/loot_table/blocks/<material>_large_cogwheel.json`
@@ -144,6 +153,7 @@ Shared textures:
 - `assets/greatech/textures/block/greatech_cogwheel/steel_cogwheel_axis.png`
 - `assets/greatech/textures/block/greatech_cogwheel/steel_cogwheel.png`
 - `assets/greatech/textures/block/greatech_cogwheel/steel_cogwheel_2.png`
+- matching `aluminium_*` and `stainless_*` shaft/cogwheel texture sets
 
 The split is intentional:
 
@@ -192,9 +202,9 @@ Current helper split:
 
 Current behavior:
 
-- `greatech:steel_cogwheel` can place against Greatech and Create small cogwheel targets
+- Greatech small cogwheel items can place against Greatech and Create small cogwheel targets
 - `create:cogwheel` can place against Greatech small cogwheel targets
-- `greatech:steel_large_cogwheel` can place against Greatech and Create large cogwheel targets
+- Greatech large cogwheel items can place against Greatech and Create large cogwheel targets
 - `create:large_cogwheel` can place against Greatech large cogwheel targets
 - small and large cogwheels can use mixed-size diagonal placement when at least one side is Greatech-owned
 - Create item on Create target remains handled by Create's original helper
@@ -206,7 +216,7 @@ The mixed helper is registered as two precise Catnip helper instances:
 
 This keeps Catnip preview filtering accurate and avoids a broad cogwheel helper stealing same-size previews.
 
-See [greatech-placement-helper.md](./greatech-placement-helper.md) for the reusable placement design.
+See [greatech-placement-helper.md](../systems/greatech-placement-helper.md) for the reusable placement design.
 
 ## Adding More Cogwheel Materials
 
