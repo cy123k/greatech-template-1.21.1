@@ -1,34 +1,34 @@
 {
   "variants": {
     "facing=north,formed=false": {
-      "model": "minecraft:block/furnace",
-      "y": 180
+      "model": "greatech:block/heat_chamber/heat_chamber_controller"
     },
     "facing=north,formed=true": {
-      "model": "minecraft:block/furnace",
-      "y": 180
+      "model": "greatech:block/heat_chamber/heat_chamber_controller"
     },
     "facing=east,formed=false": {
-      "model": "minecraft:block/furnace",
-      "y": 270
+      "model": "greatech:block/heat_chamber/heat_chamber_controller",
+      "y": 90
     },
     "facing=east,formed=true": {
-      "model": "minecraft:block/furnace",
-      "y": 270
+      "model": "greatech:block/heat_chamber/heat_chamber_controller",
+      "y": 90
     },
     "facing=south,formed=false": {
-      "model": "minecraft:block/furnace"
+      "model": "greatech:block/heat_chamber/heat_chamber_controller",
+      "y": 180
     },
     "facing=south,formed=true": {
-      "model": "minecraft:block/furnace"
+      "model": "greatech:block/heat_chamber/heat_chamber_controller",
+      "y": 180
     },
     "facing=west,formed=false": {
-      "model": "minecraft:block/furnace",
-      "y": 90
+      "model": "greatech:block/heat_chamber/heat_chamber_controller",
+      "y": 270
     },
     "facing=west,formed=true": {
-      "model": "minecraft:block/furnace",
-      "y": 90
+      "model": "greatech:block/heat_chamber/heat_chamber_controller",
+      "y": 270
     }
   }
 }

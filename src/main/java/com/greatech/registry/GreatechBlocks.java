@@ -7,6 +7,7 @@ import com.greatech.content.converter.SUEnergyConverterBlock;
 import com.greatech.content.converter.SUEnergyConverterTier;
 import com.greatech.content.fluid.ElectricFluidBridgeBlock;
 import com.greatech.content.fluid.ElectricFluidBridgeTier;
+import com.greatech.content.heat.HeatChamberCasingBlock;
 import com.greatech.content.heat.HeatChamberControllerBlock;
 import com.greatech.content.kinetics.GreatechKineticFamily;
 import com.greatech.content.kinetics.GreatechKineticMaterial;
@@ -136,7 +137,7 @@ public final class GreatechBlocks {
     private static DeferredBlock<Block> registerHeatChamberCasing(String name) {
         return BLOCKS.register(
                 name,
-                () -> new Block(BlockBehaviour.Properties.of()
+                () -> new HeatChamberCasingBlock(BlockBehaviour.Properties.of()
                         .mapColor(MapColor.METAL)
                         .strength(3.5F)
                         .sound(SoundType.METAL)

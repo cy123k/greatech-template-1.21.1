@@ -1,0 +1,19 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "active": "greatech:block/greatech_overlay/panel/greatech_heatchamber/heat_chamber_controller_active",
+    "particle": "greatech:block/greatech_connected/heat_chamber_casing"
+  },
+  "elements": [
+    {
+      "from": [-0.02, -0.02, -0.02],
+      "to": [16.02, 16.02, 16.02],
+      "neoforge_data": { "block_light": 15, "sky_light": 15 },
+      "shade": false,
+      "faces": {
+        "north": { "uv": [0, 0, 16, 16], "texture": "#active", "cullface": "north" }
+      }
+    }
+  ]
+}

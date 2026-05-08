@@ -73,6 +73,8 @@ Implemented so far:
 - Create-style heat source recognition for heat chamber temperature updates
 - configurable heat chamber casing, glass, port, and interior compatibility patterns
 - GTCEu/LDLib-style connected textures for `heat_chamber_casing` and `heat_chamber_glass`
+- `heat_chamber_controller` casing-body connected texture integration through `getAppearance(...)`
+- BER-rendered full-bright active overlay for formed `heat_chamber_controller`
 - `heat_chamber_glass` registered as a transparent block so adjacent glass panes hide internal faces
 
 Still in progress:
@@ -186,8 +188,11 @@ Current structure behavior:
 Current visual behavior:
 
 - `heat_chamber_casing` and `heat_chamber_glass` use LDLib-style connected texture metadata
+- `heat_chamber_controller` reuses the casing connected texture for its body while keeping front panel overlays separate
 - base textures live under `textures/block/greatech_connected`
+- controller panel overlays live under `textures/block/greatech_overlay`
 - `_ctm` textures are referenced from adjacent `.png.mcmeta` files
+- formed controller active glow is rendered as a full-bright BER partial instead of a blockstate-selected body model
 - `heat_chamber_glass` uses vanilla `TransparentBlock` behavior so adjacent glass blocks skip internal face rendering
 
 The first heat model accepts recognized heat sources such as Create blaze burners and selected vanilla heat blocks. See [docs/systems/greatech-heat-chamber.md](docs/systems/greatech-heat-chamber.md) for the full design notes.

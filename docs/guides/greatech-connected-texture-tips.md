@@ -57,14 +57,49 @@ Current heat chamber resources:
 
 - `models/block/heat_chamber/heat_chamber_casing.json`
 - `models/block/heat_chamber/heat_chamber_glass.json`
+- `models/block/heat_chamber/heat_chamber_controller.json`
 - `textures/block/greatech_connected/heat_chamber_casing.png`
 - `textures/block/greatech_connected/heat_chamber_casing_ctm.png`
 - `textures/block/greatech_connected/heat_chamber_glass.png`
 - `textures/block/greatech_connected/heat_chamber_glass_ctm.png`
 
-The casing uses a normal solid `Block`.
+The casing uses `HeatChamberCasingBlock`, a normal solid block that returns its default state from `getAppearance(...)` so LDLib CTM sees a stable casing identity.
+
+The controller uses the same casing base texture for its body and a separate front overlay texture for the mechanical panel. It returns `heat_chamber_casing.defaultBlockState()` from `getAppearance(...)`, so LDLib CTM can connect it to neighboring casing faces instead of treating it as a separate block identity.
 
 The glass uses vanilla `TransparentBlock`, because `TransparentBlock` inherits the behavior that skips rendering internal faces between adjacent blocks of the same type. This matters for connected glass: without it, two adjacent glass blocks can still show the shared middle face, making the connection look wrong even when the outer faces use the CTM texture.
+
+## Connecting Different Block IDs
+
+LDLib's default CTM predicate compares the `getAppearance(...)` result of the source block and nearby candidate blocks. Two different block IDs can share one connected texture group when they report the same appearance state for CTM checks.
+
+Use this when:
+
+- two blocks should visually join as the same casing family
+- one block has extra state or behavior but still uses the same casing body texture
+- the extra visuals are independent overlays, BER partials, or non-CTM faces
+
+Current heat chamber example:
+
+- `heat_chamber_casing` uses `HeatChamberCasingBlock`
+- `heat_chamber_controller` uses `HeatChamberControllerBlock`
+- both bodies reference `greatech:block/greatech_connected/heat_chamber_casing`
+- `HeatChamberCasingBlock#getAppearance(...)` returns its own default state
+- `HeatChamberControllerBlock#getAppearance(...)` returns `GreatechBlocks.HEAT_CHAMBER_CASING.get().defaultBlockState()`
+
+Minimal pattern:
+
+```java
+@Override
+public BlockState getAppearance(BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side,
+        @Nullable BlockState sourceState, @Nullable BlockPos sourcePos) {
+    return GreatechBlocks.EXAMPLE_CASING.get().defaultBlockState();
+}
+```
+
+Do not use `skipRendering(...)` for solid casing blocks just to make CTM connect. `skipRendering(...)` is for hiding faces, which is useful for transparent blocks like glass, but it does not make LDLib choose connected subtextures. For solid casing families, normalize `getAppearance(...)` and keep all CTM-capable body faces on the same base texture.
+
+If a block has active lights, indicators, moving parts, or other conditional visuals, keep those outside the CTM body. The current controller uses a baked body for the casing and a small BER partial for the `FORMED=true` full-bright active overlay.
 
 ## Render Layer
 
@@ -96,6 +131,8 @@ For simple Greatech casing or glass blocks, the LDLib metadata path is lower mai
 3. Point the block model at the base texture.
 4. Point the blockstate at the block model.
 5. Point the item model at the block model.
-6. For glass, use a transparent block class that skips internal faces.
-7. Run `./gradlew compileJava --no-daemon` if Java registration changed.
-8. Check in game, because CTM resource behavior is only visible in the client renderer.
+6. For cross-ID casing connections, normalize `getAppearance(...)` to the shared casing default state.
+7. For glass, use a transparent block class that skips internal faces.
+8. Keep emissive or stateful overlays separate from the CTM body.
+9. Run `./gradlew compileJava --no-daemon` if Java registration changed.
+10. Check in game, because CTM resource behavior is only visible in the client renderer.

@@ -1,6 +1,7 @@
 package com.greatech.content.heat;
 
 import com.greatech.registry.GreatechBlockEntityTypes;
+import com.greatech.registry.GreatechBlocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -8,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -21,6 +23,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
+import org.jetbrains.annotations.Nullable;
+
 public class HeatChamberControllerBlock extends Block implements EntityBlock {
     public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
     public static final BooleanProperty FORMED = BooleanProperty.create("formed");
@@ -30,6 +34,18 @@ public class HeatChamberControllerBlock extends Block implements EntityBlock {
         registerDefaultState(defaultBlockState()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(FORMED, false));
+    }
+
+    public static Direction getFront(BlockState state) {
+        return state.getValue(FACING);
+    }
+
+    public static Direction getBack(BlockState state) {
+        return getFront(state).getOpposite();
+    }
+
+    public static BlockPos getInteriorStart(BlockState state, BlockPos controllerPos) {
+        return controllerPos.relative(getBack(state));
     }
 
     @Override
@@ -42,6 +58,12 @@ public class HeatChamberControllerBlock extends Block implements EntityBlock {
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
+    }
+
+    @Override
+    public BlockState getAppearance(BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side,
+            @Nullable BlockState sourceState, @Nullable BlockPos sourcePos) {
+        return GreatechBlocks.HEAT_CHAMBER_CASING.get().defaultBlockState();
     }
 
     @Override

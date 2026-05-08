@@ -6,6 +6,7 @@ import com.greatech.content.cogwheel.GreatechCogwheelRenderer;
 import com.greatech.content.converter.SUEnergyConverterRenderer;
 import com.greatech.content.equipment.hud.GreatechGoggleOverlayRenderer;
 import com.greatech.content.fluid.ElectricFluidBridgeRenderer;
+import com.greatech.content.heat.HeatChamberControllerRenderer;
 import com.greatech.content.shaft.GreatechShaftRenderer;
 import com.greatech.content.steam.GreatechPoweredCogwheelRenderer;
 import com.greatech.content.steam.GreatechPoweredShaftRenderer;
@@ -60,6 +61,7 @@ public class GreatechClient {
             event.registerBlockEntityRenderer(family.largeCogwheel().get(), GreatechCogwheelRenderer::new);
         }
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.ELECTRIC_FLUID_BRIDGE.get(), ElectricFluidBridgeRenderer::new);
+        event.registerBlockEntityRenderer(GreatechBlockEntityTypes.HEAT_CHAMBER_CONTROLLER.get(), HeatChamberControllerRenderer::new);
         event.registerBlockEntityRenderer(GreatechMachines.LV_STEAM_ENGINE_HATCH.getBlockEntityType(), GreatechSteamEngineHatchRenderer::new);
         event.registerBlockEntityRenderer(GreatechMachines.MV_STEAM_ENGINE_HATCH.getBlockEntityType(), GreatechSteamEngineHatchRenderer::new);
         event.registerBlockEntityRenderer(GreatechMachines.HV_STEAM_ENGINE_HATCH.getBlockEntityType(), GreatechSteamEngineHatchRenderer::new);

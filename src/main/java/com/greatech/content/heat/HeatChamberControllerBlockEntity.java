@@ -6,7 +6,6 @@ import java.util.List;
 import com.greatech.registry.GreatechBlockEntityTypes;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
@@ -60,8 +59,8 @@ public class HeatChamberControllerBlockEntity extends BlockEntity implements Hea
     }
 
     private void rescanStructure(Level level, BlockState state) {
-        Direction facing = state.getValue(HeatChamberControllerBlock.FACING);
-        HeatChamberScanResult scan = chamberScanner.scan(level, worldPosition, worldPosition.relative(facing));
+        HeatChamberScanResult scan =
+                chamberScanner.scan(level, worldPosition, HeatChamberControllerBlock.getInteriorStart(state, worldPosition));
         if (!scan.formed()) {
             cachedStructure = null;
             HeatChamberRegistry.unregister(level, worldPosition);

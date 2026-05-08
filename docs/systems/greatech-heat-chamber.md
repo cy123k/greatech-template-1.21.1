@@ -38,18 +38,46 @@ Current visual resources:
 
 - casing model: [heat_chamber_casing.json](../../src/main/resources/assets/greatech/models/block/heat_chamber/heat_chamber_casing.json)
 - glass model: [heat_chamber_glass.json](../../src/main/resources/assets/greatech/models/block/heat_chamber/heat_chamber_glass.json)
+- controller model: [heat_chamber_controller.json](../../src/main/resources/assets/greatech/models/block/heat_chamber/heat_chamber_controller.json)
+- controller active overlay partial: [heat_chamber_controller_active_overlay.json](../../src/main/resources/assets/greatech/models/block/heat_chamber/heat_chamber_controller_active_overlay.json)
 - connected textures: [greatech_connected](../../src/main/resources/assets/greatech/textures/block/greatech_connected)
+- controller overlay textures: [greatech_overlay](../../src/main/resources/assets/greatech/textures/block/greatech_overlay)
 - casing CT metadata: [heat_chamber_casing.png.mcmeta](../../src/main/resources/assets/greatech/textures/block/greatech_connected/heat_chamber_casing.png.mcmeta)
 - glass CT metadata: [heat_chamber_glass.png.mcmeta](../../src/main/resources/assets/greatech/textures/block/greatech_connected/heat_chamber_glass.png.mcmeta)
 
 Current first-pass controller code:
 
+- [HeatChamberCasingBlock.java](../../src/main/java/com/greatech/content/heat/HeatChamberCasingBlock.java)
 - [HeatChamberControllerBlock.java](../../src/main/java/com/greatech/content/heat/HeatChamberControllerBlock.java)
 - [HeatChamberControllerBlockEntity.java](../../src/main/java/com/greatech/content/heat/HeatChamberControllerBlockEntity.java)
+- [HeatChamberControllerRenderer.java](../../src/main/java/com/greatech/content/heat/HeatChamberControllerRenderer.java)
 - [DefaultHeatChamberStructureRules.java](../../src/main/java/com/greatech/content/heat/DefaultHeatChamberStructureRules.java)
 - [HeatChamberBlockWhitelist.java](../../src/main/java/com/greatech/content/heat/HeatChamberBlockWhitelist.java)
 - [CreateHeatSourceScanner.java](../../src/main/java/com/greatech/content/heat/CreateHeatSourceScanner.java)
 - [VanillaHeatSourceScanner.java](../../src/main/java/com/greatech/content/heat/VanillaHeatSourceScanner.java)
+
+## Controller Contract
+
+`heat_chamber_controller` is a Create-style Greatech block with ordinary baked model rendering.
+
+Its `FACING` property means the visible front panel direction. The chamber interior starts behind the controller, so structure scanning uses:
+
+```java
+HeatChamberControllerBlock.getInteriorStart(state, controllerPos)
+```
+
+Current side roles:
+
+- `front`: visible mechanical panel, faces the player/outside of the chamber
+- `back`: chamber interior entry point
+- world rendering: owned by the blockstate/model JSON
+- capability and heat state: owned by `HeatChamberControllerBlockEntity`
+
+The source model is authored with its front on `north`. The blockstate rotates that model by horizontal `facing` and does not use `formed` to choose a different model yet.
+
+`HeatChamberCasingBlock` and `HeatChamberControllerBlock` normalize `getAppearance(...)` to the casing default state for LDLib CTM checks, matching the GTCEu pattern used by casing-like blocks with stateful variants. The controller body still references the same `heat_chamber_casing` connected texture, while its front panel remains an independent overlay layer.
+
+The controller's active glow is not selected through blockstate model variants. The blockstate keeps the same baked body model for both `formed=false` and `formed=true`; `HeatChamberControllerRenderer` renders the active full-bright overlay partial when `FORMED=true`. This keeps the LDLib casing CTM path on the baked body separate from the emissive status layer.
 
 ## Ownership Model
 
@@ -172,6 +200,10 @@ Current base/CTM pairs:
 
 - `heat_chamber_casing.png` -> `heat_chamber_casing_ctm.png`
 - `heat_chamber_glass.png` -> `heat_chamber_glass_ctm.png`
+
+The controller body reuses `heat_chamber_casing.png`. Its block class reports the casing default state from `getAppearance(...)`, so LDLib CTM can connect controller body faces to neighboring casing faces even though the blocks have different IDs.
+
+The controller front panel and active glow are separate overlay textures under `textures/block/greatech_overlay`. The active glow is rendered by `HeatChamberControllerRenderer` only when `FORMED=true`.
 
 `heat_chamber_glass` is registered as vanilla `TransparentBlock`, matching the important part of GTCEu `cleanroom_glass` behavior. Adjacent glass blocks skip their shared internal face, so internal faces do not fight the connected glass texture. The glass model uses `minecraft:cutout_mipped`, again following the cleanroom-glass style more closely than a fully translucent model.
 
