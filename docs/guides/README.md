@@ -10,5 +10,6 @@ Current guide docs:
 - [Create Machine Tips](./create-machine-tips.md)
 - [Create Fluid Tips](./create-fluid-tips.md)
 - [Greatech Renderer Registration](./greatech-renderer-register.md)
+- [Greatech Connected Texture Tips](./greatech-connected-texture-tips.md)
 
-Use these when adding a new machine, deciding between Create-style and GTCEu-style registration, or wiring BER and model resources.
+Use these when adding a new machine, deciding between Create-style and GTCEu-style registration, wiring BER and model resources, or adding connected block textures.

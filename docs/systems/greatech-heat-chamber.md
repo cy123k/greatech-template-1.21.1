@@ -34,6 +34,14 @@ Current first-pass blocks:
 - `greatech:heat_chamber_glass`
 - `greatech:heat_chamber_controller`
 
+Current visual resources:
+
+- casing model: [heat_chamber_casing.json](../../src/main/resources/assets/greatech/models/block/heat_chamber/heat_chamber_casing.json)
+- glass model: [heat_chamber_glass.json](../../src/main/resources/assets/greatech/models/block/heat_chamber/heat_chamber_glass.json)
+- connected textures: [greatech_connected](../../src/main/resources/assets/greatech/textures/block/greatech_connected)
+- casing CT metadata: [heat_chamber_casing.png.mcmeta](../../src/main/resources/assets/greatech/textures/block/greatech_connected/heat_chamber_casing.png.mcmeta)
+- glass CT metadata: [heat_chamber_glass.png.mcmeta](../../src/main/resources/assets/greatech/textures/block/greatech_connected/heat_chamber_glass.png.mcmeta)
+
 Current first-pass controller code:
 
 - [HeatChamberControllerBlock.java](../../src/main/java/com/greatech/content/heat/HeatChamberControllerBlock.java)
@@ -148,6 +156,26 @@ Players can add compatible blocks in the generated common config:
 - `heatChamberInteriorAllowedBlocks`
 
 Add special Java behavior only when a block needs special temperature, heat-loss, or machine-binding values.
+
+## Visual Model
+
+The first heat chamber shell art uses GTCEu/LDLib-style connected textures rather than Create's larger `8x8` connected texture atlas.
+
+The current pattern is:
+
+- keep the block model as a normal `cube_all`
+- point the model at the base texture
+- add a sibling `.png.mcmeta` file with an `ldlib.connection` texture path
+- keep the `_ctm` texture out of the model JSON
+
+Current base/CTM pairs:
+
+- `heat_chamber_casing.png` -> `heat_chamber_casing_ctm.png`
+- `heat_chamber_glass.png` -> `heat_chamber_glass_ctm.png`
+
+`heat_chamber_glass` is registered as vanilla `TransparentBlock`, matching the important part of GTCEu `cleanroom_glass` behavior. Adjacent glass blocks skip their shared internal face, so internal faces do not fight the connected glass texture. The glass model uses `minecraft:cutout_mipped`, again following the cleanroom-glass style more closely than a fully translucent model.
+
+For the reusable implementation notes, see [greatech-connected-texture-tips.md](../guides/greatech-connected-texture-tips.md).
 
 ## Placement Warning
 

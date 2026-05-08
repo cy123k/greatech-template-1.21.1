@@ -72,13 +72,15 @@ Implemented so far:
 - first-pass Greatech-owned heat chamber blocks, controller block entity, sealed-space scanner, and runtime heat environment
 - Create-style heat source recognition for heat chamber temperature updates
 - configurable heat chamber casing, glass, port, and interior compatibility patterns
+- GTCEu/LDLib-style connected textures for `heat_chamber_casing` and `heat_chamber_glass`
+- `heat_chamber_glass` registered as a transparent block so adjacent glass panes hide internal faces
 
 Still in progress:
 
 - recipes
 - balance
 - higher-fidelity MV/HV machine art
-- production heat chamber art and machine integration
+- production heat chamber controller art and machine integration
 - broader machine roster
 
 ## Gameplay Direction
@@ -154,10 +156,12 @@ Important resource locations:
 - [fluid bridge block models](src/main/resources/assets/greatech/models/block/fluid/fluid_bridge)
 - [steam hatch machine models](src/main/resources/assets/greatech/models/block/machine)
 - [steam hatch shared hatch models](src/main/resources/assets/greatech/models/block/machine/hatch)
+- [heat chamber block models](src/main/resources/assets/greatech/models/block/heat_chamber)
 - [machine textures](src/main/resources/assets/greatech/textures/block/greatech_machine)
 - [shaft textures](src/main/resources/assets/greatech/textures/block/greatech_shaft)
 - [cogwheel textures](src/main/resources/assets/greatech/textures/block/greatech_cogwheel)
 - [fluid bridge textures](src/main/resources/assets/greatech/textures/block/greatech_fluid_bridge)
+- [connected heat chamber textures](src/main/resources/assets/greatech/textures/block/greatech_connected)
 
 ## Heat Chamber Prototype
 
@@ -178,6 +182,13 @@ Current structure behavior:
 - ordinary internal blocks do not count as shell and do not invalidate placement by themselves
 - the controller caches successful structure scans and rescans when marked dirty
 - runtime heat scanning runs against the cached interior
+
+Current visual behavior:
+
+- `heat_chamber_casing` and `heat_chamber_glass` use LDLib-style connected texture metadata
+- base textures live under `textures/block/greatech_connected`
+- `_ctm` textures are referenced from adjacent `.png.mcmeta` files
+- `heat_chamber_glass` uses vanilla `TransparentBlock` behavior so adjacent glass blocks skip internal face rendering
 
 The first heat model accepts recognized heat sources such as Create blaze burners and selected vanilla heat blocks. See [docs/systems/greatech-heat-chamber.md](docs/systems/greatech-heat-chamber.md) for the full design notes.
 
@@ -339,5 +350,6 @@ Direct doc links:
 - [docs/guides/create-fluid-tips.md](docs/guides/create-fluid-tips.md)
 - [docs/guides/greatech-renderer-register.md](docs/guides/greatech-renderer-register.md)
 - [docs/guides/greatech-datagen-tips.md](docs/guides/greatech-datagen-tips.md)
+- [docs/guides/greatech-connected-texture-tips.md](docs/guides/greatech-connected-texture-tips.md)
 - [docs/reference/art-direction.md](docs/reference/art-direction.md)
 - [docs/reference/dependencies.md](docs/reference/dependencies.md)

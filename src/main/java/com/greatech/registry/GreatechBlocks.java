@@ -18,6 +18,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.TransparentBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
@@ -145,7 +146,7 @@ public final class GreatechBlocks {
     private static DeferredBlock<Block> registerHeatChamberGlass(String name) {
         return BLOCKS.register(
                 name,
-                () -> new Block(BlockBehaviour.Properties.of()
+                () -> new TransparentBlock(BlockBehaviour.Properties.of()
                         .mapColor(MapColor.COLOR_GRAY)
                         .strength(3.0F)
                         .sound(SoundType.GLASS)

@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/tinted_glass"
+      "model": "greatech:block/heat_chamber/heat_chamber_glass"
     }
   }
 }
