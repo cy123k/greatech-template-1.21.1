@@ -31,5 +31,9 @@ public final class GreatechCapabilities {
                 Capabilities.FluidHandler.BLOCK,
                 GreatechBlockEntityTypes.ELECTRIC_FLUID_BRIDGE.get(),
                 (blockEntity, side) -> blockEntity.getFluidHandler(side));
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                GreatechBlockEntityTypes.HYDRAULIC_PRESS.get(),
+                (blockEntity, side) -> blockEntity.getFluidHandler(side));
     }
 }

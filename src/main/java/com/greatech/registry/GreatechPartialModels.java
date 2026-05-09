@@ -40,6 +40,8 @@ public final class GreatechPartialModels {
             block("fluid/fluid_bridge/lv_fluid_bridge/lv_drain_north");
     public static final PartialModel HEAT_CHAMBER_CONTROLLER_ACTIVE_OVERLAY =
             block("heat_chamber/heat_chamber_controller_active_overlay");
+    public static final PartialModel LV_HYDRAULIC_PRESS_HEAD =
+            block("hydraulic_press/lv_hydraulic_press_head");
 
     private GreatechPartialModels() {
     }

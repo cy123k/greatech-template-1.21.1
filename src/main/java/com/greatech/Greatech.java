@@ -9,6 +9,7 @@ import com.greatech.registry.GreatechBlocks;
 import com.greatech.registry.GreatechCapabilities;
 import com.greatech.registry.GreatechItems;
 import com.greatech.registry.GreatechMachines;
+import com.greatech.registry.GreatechRecipeTypes;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.greatech.content.placement.GreatechPlacementEvents;
@@ -51,6 +52,7 @@ public class Greatech {
                 output.accept(GreatechBlocks.MV_SUCON_ITEM.get());
                 output.accept(GreatechBlocks.HV_SUCON_ITEM.get());
                 output.accept(GreatechBlocks.LV_FLUID_BRIDGE_ITEM.get());
+                output.accept(GreatechBlocks.LV_HYDRAULIC_PRESS_ITEM.get());
                 output.accept(GreatechBlocks.HEAT_CHAMBER_CASING_ITEM.get());
                 output.accept(GreatechBlocks.HEAT_CHAMBER_GLASS_ITEM.get());
                 output.accept(GreatechBlocks.HEAT_CHAMBER_CONTROLLER_ITEM.get());
@@ -73,6 +75,7 @@ public class Greatech {
         GreatechItems.register(modEventBus);
         ConfigHolder.init();
         GreatechMachines.init(modEventBus);
+        GreatechRecipeTypes.register(modEventBus);
         GreatechBlockEntityTypes.register(modEventBus);
         GreatechPlacementHelpers.init();
         CREATIVE_MODE_TABS.register(modEventBus);
@@ -105,6 +108,7 @@ public class Greatech {
             event.accept(GreatechBlocks.MV_SUCON_ITEM);
             event.accept(GreatechBlocks.HV_SUCON_ITEM);
             event.accept(GreatechBlocks.LV_FLUID_BRIDGE_ITEM);
+            event.accept(GreatechBlocks.LV_HYDRAULIC_PRESS_ITEM);
             event.accept(GreatechBlocks.HEAT_CHAMBER_CASING_ITEM);
             event.accept(GreatechBlocks.HEAT_CHAMBER_GLASS_ITEM);
             event.accept(GreatechBlocks.HEAT_CHAMBER_CONTROLLER_ITEM);

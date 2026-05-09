@@ -1,15 +1,20 @@
 package com.greatech;
 
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import com.greatech.content.converter.SUEnergyConverterTier;
 import com.greatech.content.fluid.ElectricFluidBridgeTier;
+import com.greatech.content.hydraulic.HydraulicPressTier;
 import com.greatech.content.steam.SteamEngineHatchTier;
 
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import net.minecraft.resources.ResourceLocation;
 
 @EventBusSubscriber(modid = "greatech", bus = EventBusSubscriber.Bus.MOD)
 public final class Config {
@@ -17,6 +22,7 @@ public final class Config {
 
     private static final String RPM_TO_EU_FORMULA = "EU/t = min(converterMaxOutput, abs(rpm) * converterEfficiency)";
     private static final String TIER_ORDER = "Values are ordered as [LV, MV, HV].";
+    private static final String FIVE_TIER_ORDER = "Values are ordered as [LV, MV, HV, EV, IV].";
 
     private static final int[] DEFAULT_CONVERTER_CAPACITY = {2_048, 8_192, 32_768};
     private static final int[] DEFAULT_CONVERTER_MAX_OUTPUT = {32, 128, 512};
@@ -34,6 +40,11 @@ public final class Config {
     private static final int[] DEFAULT_STEAM_ENGINE_HATCH_RPM = {32, 32, 32};
     private static final double[] DEFAULT_STEAM_ENGINE_HATCH_STRESS_CAPACITY = {16.0D, 64.0D, 256.0D};
     private static final int[] DEFAULT_STEAM_ENGINE_HATCH_STEAM_PER_TICK = {40, 60, 80};
+    private static final int[] DEFAULT_HYDRAULIC_PRESS_TANK_CAPACITY = {4_000, 8_000, 16_000, 32_000, 64_000};
+    private static final int[] DEFAULT_HYDRAULIC_PRESS_MAX_ITEMS_PER_CYCLE = {2, 4, 8, 16, 32};
+    private static final int[] DEFAULT_HYDRAULIC_PRESS_FLUID_CONSUMPTION = {100, 75, 50, 25, 10};
+    private static final double[] DEFAULT_HYDRAULIC_PRESS_STRESS_IMPACT = {16.0D, 32.0D, 64.0D, 128.0D, 256.0D};
+    private static final List<String> DEFAULT_HYDRAULIC_PRESS_MATERIAL_TIER_OVERRIDES = List.of();
     private static final int DEFAULT_CREATE_FLUID_PIPE_MAX_TEMPERATURE = 500;
     private static final List<String> DEFAULT_HEAT_CHAMBER_CASING_BLOCKS = List.of(
             "greatech:heat_chamber_casing",
@@ -49,6 +60,7 @@ public final class Config {
             "greatech:steel_*",
             "greatech:aluminium_*",
             "greatech:stainless_*",
+            "greatech:*_hydraulic_press",
             "gtceu:*_wire",
             "gtceu:*_cable",
             "gtceu:*_pipe");
@@ -210,6 +222,35 @@ public final class Config {
                     "Defaults are tuned so higher tiers gain steam efficiency instead of only higher steam throughput.")
             .defineList("steamEngineHatchSteamPerTick", List.of(40, 60, 80), Config::isNonNegativeInteger);
 
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> HYDRAULIC_PRESS_TANK_CAPACITY = BUILDER
+            .comment("Internal fluid tank capacities in mB for hydraulic presses.", FIVE_TIER_ORDER)
+            .defineList("hydraulicPressTankCapacity", List.of(4_000, 8_000, 16_000, 32_000, 64_000),
+                    Config::isPositiveInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> HYDRAULIC_PRESS_MAX_ITEMS_PER_CYCLE = BUILDER
+            .comment("Maximum items processed from one target stack by each hydraulic press cycle.", FIVE_TIER_ORDER)
+            .defineList("hydraulicPressMaxItemsPerCycle", List.of(2, 4, 8, 16, 32),
+                    Config::isPositiveInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> HYDRAULIC_PRESS_FLUID_CONSUMPTION = BUILDER
+            .comment("Hydraulic fluid consumed per processed item, in mB.",
+                    "Values are ordered by hydraulic fluid grade [LV, MV, HV, EV, IV], not by machine tier.")
+            .defineList("hydraulicPressFluidConsumption", List.of(100, 75, 50, 25, 10),
+                    Config::isPositiveInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Double>> HYDRAULIC_PRESS_STRESS_IMPACT = BUILDER
+            .comment("Stress impact contributed by each hydraulic press tier to Create's kinetic network.",
+                    FIVE_TIER_ORDER)
+            .defineList("hydraulicPressStressImpact", List.of(16.0D, 32.0D, 64.0D, 128.0D, 256.0D),
+                    Config::isNonNegativeDouble);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> HYDRAULIC_PRESS_MATERIAL_TIER_OVERRIDES = BUILDER
+            .comment("Manual hydraulic pressing material tier overrides for generated recipes.",
+                    "Format: '<material_id>=<tier>', for example 'gtceu:steel=mv'.",
+                    "Valid tiers are lv, mv, hv, ev, and iv.")
+            .defineList("hydraulicPressMaterialTierOverrides", DEFAULT_HYDRAULIC_PRESS_MATERIAL_TIER_OVERRIDES,
+                    Config::isStringValue);
+
     static final ModConfigSpec SPEC = BUILDER.build();
 
     private static int[] converterCapacity = DEFAULT_CONVERTER_CAPACITY.clone();
@@ -228,6 +269,11 @@ public final class Config {
     private static int[] steamEngineHatchRpm = DEFAULT_STEAM_ENGINE_HATCH_RPM.clone();
     private static double[] steamEngineHatchStressCapacity = DEFAULT_STEAM_ENGINE_HATCH_STRESS_CAPACITY.clone();
     private static int[] steamEngineHatchSteamPerTick = DEFAULT_STEAM_ENGINE_HATCH_STEAM_PER_TICK.clone();
+    private static int[] hydraulicPressTankCapacity = DEFAULT_HYDRAULIC_PRESS_TANK_CAPACITY.clone();
+    private static int[] hydraulicPressMaxItemsPerCycle = DEFAULT_HYDRAULIC_PRESS_MAX_ITEMS_PER_CYCLE.clone();
+    private static int[] hydraulicPressFluidConsumption = DEFAULT_HYDRAULIC_PRESS_FLUID_CONSUMPTION.clone();
+    private static double[] hydraulicPressStressImpact = DEFAULT_HYDRAULIC_PRESS_STRESS_IMPACT.clone();
+    private static Map<ResourceLocation, HydraulicPressTier> hydraulicPressMaterialTierOverrides = Map.of();
     public static double converterMinimumSpeed;
     private static float createShaftBreakStressLimit;
     private static float createCogwheelBreakStressLimit;
@@ -271,6 +317,16 @@ public final class Config {
                 DEFAULT_STEAM_ENGINE_HATCH_STRESS_CAPACITY);
         steamEngineHatchSteamPerTick = readIntTierValues(STEAM_ENGINE_HATCH_STEAM_PER_TICK.get(),
                 DEFAULT_STEAM_ENGINE_HATCH_STEAM_PER_TICK);
+        hydraulicPressTankCapacity = readIntTierValues(HYDRAULIC_PRESS_TANK_CAPACITY.get(),
+                DEFAULT_HYDRAULIC_PRESS_TANK_CAPACITY);
+        hydraulicPressMaxItemsPerCycle = readIntTierValues(HYDRAULIC_PRESS_MAX_ITEMS_PER_CYCLE.get(),
+                DEFAULT_HYDRAULIC_PRESS_MAX_ITEMS_PER_CYCLE);
+        hydraulicPressFluidConsumption = readIntTierValues(HYDRAULIC_PRESS_FLUID_CONSUMPTION.get(),
+                DEFAULT_HYDRAULIC_PRESS_FLUID_CONSUMPTION);
+        hydraulicPressStressImpact = readDoubleTierValues(HYDRAULIC_PRESS_STRESS_IMPACT.get(),
+                DEFAULT_HYDRAULIC_PRESS_STRESS_IMPACT);
+        hydraulicPressMaterialTierOverrides = readHydraulicPressMaterialTierOverrides(
+                HYDRAULIC_PRESS_MATERIAL_TIER_OVERRIDES.get());
         converterMinimumSpeed = CONVERTER_MINIMUM_SPEED.get();
         createShaftBreakStressLimit = CREATE_SHAFT_BREAK_STRESS_LIMIT.get().floatValue();
         createCogwheelBreakStressLimit = CREATE_COGWHEEL_BREAK_STRESS_LIMIT.get().floatValue();
@@ -358,6 +414,26 @@ public final class Config {
 
     public static int steamEngineHatchSteamPerTick(SteamEngineHatchTier tier) {
         return steamEngineHatchSteamPerTick[tier.configIndex()];
+    }
+
+    public static int hydraulicPressTankCapacity(HydraulicPressTier tier) {
+        return hydraulicPressTankCapacity[tier.configIndex()];
+    }
+
+    public static int hydraulicPressMaxItemsPerCycle(HydraulicPressTier tier) {
+        return hydraulicPressMaxItemsPerCycle[tier.configIndex()];
+    }
+
+    public static int hydraulicPressFluidConsumption(HydraulicPressTier hydraulicFluidTier) {
+        return hydraulicPressFluidConsumption[hydraulicFluidTier.configIndex()];
+    }
+
+    public static double hydraulicPressStressImpact(HydraulicPressTier tier) {
+        return hydraulicPressStressImpact[tier.configIndex()];
+    }
+
+    public static Optional<HydraulicPressTier> hydraulicPressMaterialTierOverride(ResourceLocation materialId) {
+        return Optional.ofNullable(hydraulicPressMaterialTierOverrides.get(materialId));
     }
 
     public static float createShaftBreakStressLimit() {
@@ -457,6 +533,29 @@ public final class Config {
                 .filter(value -> value != null && !value.isBlank())
                 .map(String::trim)
                 .toList();
+    }
+
+    private static Map<ResourceLocation, HydraulicPressTier> readHydraulicPressMaterialTierOverrides(
+            List<? extends String> configured) {
+        Map<ResourceLocation, HydraulicPressTier> overrides = new HashMap<>();
+        if (configured == null) {
+            return overrides;
+        }
+        for (String entry : configured) {
+            if (entry == null || entry.isBlank()) {
+                continue;
+            }
+            String[] parts = entry.split("=", 2);
+            if (parts.length != 2) {
+                continue;
+            }
+            ResourceLocation materialId = ResourceLocation.tryParse(parts[0].trim());
+            Optional<HydraulicPressTier> tier = HydraulicPressTier.byId(parts[1].trim().toLowerCase());
+            if (materialId != null && tier.isPresent()) {
+                overrides.put(materialId, tier.get());
+            }
+        }
+        return Map.copyOf(overrides);
     }
 
     private static boolean isNonNegativeInteger(Object value) {

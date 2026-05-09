@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "greatech:block/greatech_machine/lv_machine/lv_casing",
+    "down": "greatech:block/greatech_machine/lv_machine/lv_kioutput",
+    "up": "greatech:block/greatech_machine/lv_machine/lv_casing",
+    "north": "greatech:block/greatech_machine/lv_machine/lv_casing",
+    "south": "greatech:block/greatech_machine/lv_machine/lv_casing",
+    "east": "greatech:block/greatech_machine/lv_machine/lv_casing",
+    "west": "greatech:block/greatech_machine/lv_machine/lv_casing"
+  }
+}

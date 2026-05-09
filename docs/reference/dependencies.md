@@ -10,6 +10,8 @@ Current project dependencies include:
 - Flywheel `1.0.6`
 - Registrate `MC1.21-1.3.0+67`
 - GTCEu `8.0.0-SNAPSHOT`
+- JEI `1.21.1-neoforge-19.27.0.340`
+- EMI `1.1.22+1.21.1+neoforge`
 
 ## Current GTCEu Workaround
 
@@ -24,6 +26,10 @@ Current local jars detected in development:
 
 - `libs/ldlib2-neoforge-1.21.1-2.2.6-all.jar`
 - `libs/configuration-neoforge-1.21.1-3.1.1.jar`
+- `libs/jei-1.21.1-neoforge-19.27.0.340.jar`
+- `libs/emi-1.1.22+1.21.1+neoforge.jar`
+
+JEI and EMI are optional client integrations. They are declared as `compileOnly` for compilation and `localRuntime` for development runs, and are marked optional in `neoforge.mods.toml`.
 
 ## Important Warning
 

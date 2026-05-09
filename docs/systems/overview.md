@@ -42,6 +42,7 @@ The currently registered blocks are:
 - `stainless_large_cogwheel`
 - `powered_stainless_cogwheel`
 - `lv_fluid_bridge`
+- `lv_hydraulic_press`
 - `lv_steam_engine_hatch`
 - `mv_steam_engine_hatch`
 - `hv_steam_engine_hatch`
@@ -59,6 +60,10 @@ The current fluid bridge prototype links GTCEu-style fluid handlers and Create-s
 
 Dangerous GTCEu fluid traits can also follow fluids into monitored Create pipe networks. The first fluid hazard prototype lets Greatech machines treat Create fluid pipes as accident candidates when hot, gaseous, acidic, cryogenic, or plasma fluids are routed through them.
 
+The current hydraulic press prototype adds `lv_hydraulic_press`, a Create-style kinetic processor that must work inside a usable Greatech heat chamber. It has an internal mold slot, an input-only tank for tagged hydraulic fluids, and a Greatech-owned `greatech:hydraulic_pressing` recipe type. GTCEu material recipes are generated through a Greatech GTCEu addon hook for common extruder-mold forming operations. Its first implementation processes only belt items and dropped world item entities below the press head; Basin inventories and fluids are deliberately outside the contract.
+
+Hydraulic pressing recipes are now exposed through Greatech-owned JEI and EMI categories. The display path reads the same `greatech:hydraulic_pressing` recipe type from Minecraft's recipe manager, so static JSON recipes and GTCEu-material-generated recipes appear in the same category. Hydraulic fluid remains a machine operating cost and is not shown as a recipe input.
+
 The current steam prototype adds three `GTCEu` machine parts, `lv_steam_engine_hatch`, `mv_steam_engine_hatch`, and `hv_steam_engine_hatch`, plus a matching `Create` generator relay, `powered_steel_shaft`. Each hatch behaves like a fluid export hatch for GTCEu multiblock recognition, stores only steam, and converts a valid neighboring `steel_shaft` into `powered_steel_shaft`. The powered shaft then acts as the actual `Create` kinetic source: it validates the adjacent hatch, requests steam power each tick, outputs a fixed `32 RPM` and `512 SU` prototype value, and automatically reverts back to `steel_shaft` when it no longer has a valid hatch source.
 
 Because Greatech mixes Create-style blocks and GTCEu machine definitions, new machine work should follow a documented ownership split for registration, facing, rendering, and capability exposure. See [greatech-machine-registration-tips.md](../guides/greatech-machine-registration-tips.md).
@@ -70,6 +75,8 @@ Because Greatech mixes Create-style blocks and GTCEu machine definitions, new ma
 - validate `lv_fluid_bridge` fixed pump behavior for GTCEu-to-Create and Create-to-GTCEu fluid direction
 - validate Create pressure refresh behavior so pressure does not stack every tick
 - validate fluid hazard behavior for dangerous GTCEu fluids routed into Create pipes
+- validate `lv_hydraulic_press` mold interaction, fluid consumption, heat chamber gating, and belt/world-item processing
+- validate hydraulic pressing JEI/EMI displays with both static and generated recipes
 - validate `lv_steam_engine_hatch` / `mv_steam_engine_hatch` / `hv_steam_engine_hatch` recognition in GTCEu large boiler structures
 - replace the temporary diamond-block hatch model with final art
 - replace fixed steam engine RPM and stress values with configurable or recipe/multiblock-derived values
@@ -82,5 +89,6 @@ Because Greatech mixes Create-style blocks and GTCEu machine definitions, new ma
 - higher tier converters
 - multi-block generators
 - SU driven GT utility machines
+- higher-tier hydraulic presses with stronger multi-item throughput
 - GT materials and casings integrated into Create-style machines
 - more advanced power conversion chains

@@ -30,6 +30,7 @@ Currently registered machines and transmission parts:
 - `stainless_large_cogwheel`
 - `powered_stainless_cogwheel`
 - `lv_fluid_bridge`
+- `lv_hydraulic_press`
 - `lv_steam_engine_hatch`
 - `mv_steam_engine_hatch`
 - `hv_steam_engine_hatch`
@@ -76,6 +77,10 @@ Implemented so far:
 - `heat_chamber_controller` casing-body connected texture integration through `getAppearance(...)`
 - BER-rendered full-bright active overlay for formed `heat_chamber_controller`
 - `heat_chamber_glass` registered as a transparent block so adjacent glass panes hide internal faces
+- `lv_hydraulic_press` Create-style kinetic processing prototype with internal mold slot, input-only fluid tank, heat chamber gating, and belt/world-item processing
+- `greatech:hydraulic_pressing` recipe type with item input, mold ingredient, item outputs, and optional processing time
+- GTCEu-material-driven hydraulic pressing recipe generation for ingot-to-plate/rod/ring/wire/gear/small-gear/bolt/rotor forming
+- JEI and EMI category registration for `greatech:hydraulic_pressing`, covering both static JSON recipes and GTCEu-material-generated recipes
 
 Still in progress:
 
@@ -137,6 +142,7 @@ Important code locations:
 - [cogwheel code](src/main/java/com/greatech/content/cogwheel)
 - [steam prototype code](src/main/java/com/greatech/content/steam)
 - [heat chamber code](src/main/java/com/greatech/content/heat)
+- [hydraulic press code](src/main/java/com/greatech/content/hydraulic)
 - [fluid bridge code](src/main/java/com/greatech/content/fluid)
 - [fluid hazard code](src/main/java/com/greatech/content/fluid/hazard)
 - [placement helper code](src/main/java/com/greatech/content/placement)
@@ -144,6 +150,11 @@ Important code locations:
 - [block registrations](src/main/java/com/greatech/registry/GreatechBlocks.java)
 - [block entity registrations](src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
 - [GTCEu machine registrations](src/main/java/com/greatech/registry/GreatechMachines.java)
+- [recipe type registrations](src/main/java/com/greatech/registry/GreatechRecipeTypes.java)
+- [GTCEu addon integration](src/main/java/com/greatech/integration/gtceu)
+- [JEI integration](src/main/java/com/greatech/integration/jei)
+- [EMI integration](src/main/java/com/greatech/integration/emi)
+- [shared XEI display helpers](src/main/java/com/greatech/integration/xei)
 - [partial model registrations](src/main/java/com/greatech/registry/GreatechPartialModels.java)
 
 Important resource locations:
@@ -159,6 +170,8 @@ Important resource locations:
 - [steam hatch machine models](src/main/resources/assets/greatech/models/block/machine)
 - [steam hatch shared hatch models](src/main/resources/assets/greatech/models/block/machine/hatch)
 - [heat chamber block models](src/main/resources/assets/greatech/models/block/heat_chamber)
+- [hydraulic press block models](src/main/resources/assets/greatech/models/block/hydraulic_press)
+- [hydraulic pressing recipes](src/main/resources/data/greatech/recipe/hydraulic_pressing)
 - [machine textures](src/main/resources/assets/greatech/textures/block/greatech_machine)
 - [shaft textures](src/main/resources/assets/greatech/textures/block/greatech_shaft)
 - [cogwheel textures](src/main/resources/assets/greatech/textures/block/greatech_cogwheel)
@@ -196,6 +209,51 @@ Current visual behavior:
 - `heat_chamber_glass` uses vanilla `TransparentBlock` behavior so adjacent glass blocks skip internal face rendering
 
 The first heat model accepts recognized heat sources such as Create blaze burners and selected vanilla heat blocks. See [docs/systems/greatech-heat-chamber.md](docs/systems/greatech-heat-chamber.md) for the full design notes.
+
+## Hydraulic Press Prototype
+
+The current hydraulic press is a Greatech-owned Create-style kinetic processing machine. It is not a GTCEu `MachineDefinition`; GTCEu tier names are used for progression and balancing.
+
+Current registered block:
+
+- `greatech:lv_hydraulic_press`
+
+The code already has a five-tier enum, ordered as `[LV, MV, HV, EV, IV]`, but only the LV block is registered in the current prototype.
+
+Current behavior:
+
+- requires a usable Greatech heat chamber environment at the press position
+- processes Create belt items and dropped world item entities under the press head
+- does not process Basin inventories, Basin fluids, adjacent inventories, or arbitrary item handlers
+- stores one internal mold item, installed by right-clicking a valid mold and removed with shift + empty hand
+- stores fluid in an internal input-only tank
+- accepts hydraulic fluids through `greatech:hydraulic_fluids/<tier>` fluid tags
+- consumes hydraulic fluid once per processed item, with consumption based on stored fluid grade
+- processes one target stack per press cycle, capped by tier max items, input stack size, and available fluid
+- renders a moving press-head partial while the body currently uses placeholder block models
+
+Current recipe type:
+
+- `greatech:hydraulic_pressing`
+
+Current recipe ingredient order:
+
+1. item input
+2. mold item ingredient
+
+Current generated recipe extras:
+
+- `required_tier`: minimum hydraulic press tier required to run the recipe
+- `input_count`: number of input items consumed per recipe operation
+
+Current recipe visibility:
+
+- JEI and EMI use a Greatech-owned `greatech:hydraulic_pressing` category
+- the consumed input count is shown on the item input
+- the mold is shown as a catalyst and is not consumed
+- hydraulic fluid is documented as a machine cost, not as a recipe input
+
+See [docs/machines/greatech-hydraulic-press.md](docs/machines/greatech-hydraulic-press.md) for the machine contract and current limitations.
 
 ## Converter Visual Notes
 
@@ -254,11 +312,14 @@ This project currently depends on:
 - `Flywheel`
 - `Registrate`
 - `GTCEu`
+- optional `JEI` and `EMI` integrations for recipe display
 
-Two `GTCEu` transitive dependencies are currently resolved from local jars in `libs/`:
+Several development dependencies are currently resolved from local jars in `libs/`:
 
 - `ldlib`
 - `configuration`
+- `jei`
+- `emi`
 
 See [docs/reference/dependencies.md](docs/reference/dependencies.md) for the current dependency setup.
 
@@ -313,6 +374,7 @@ Current high-level config areas:
 - fluid hazard timing and Create pipe safety profile
 - steam hatch RPM, stress capacity, and steam consumption
 - heat chamber casing, glass, port, and interior compatibility id patterns
+- hydraulic press tank capacity, max processed items per cycle, hydraulic fluid consumption, stress impact, and generated material tier overrides
 
 ## Naming
 
@@ -342,6 +404,7 @@ Direct doc links:
 - [docs/systems/overview.md](docs/systems/overview.md)
 - [docs/machines/greatech-converter.md](docs/machines/greatech-converter.md)
 - [docs/machines/greatech-fluidbridge.md](docs/machines/greatech-fluidbridge.md)
+- [docs/machines/greatech-hydraulic-press.md](docs/machines/greatech-hydraulic-press.md)
 - [docs/machines/greatech-steam-engine-hatch.md](docs/machines/greatech-steam-engine-hatch.md)
 - [docs/machines/greatech-shaft.md](docs/machines/greatech-shaft.md)
 - [docs/machines/greatech-cogwheel.md](docs/machines/greatech-cogwheel.md)
@@ -356,5 +419,7 @@ Direct doc links:
 - [docs/guides/greatech-renderer-register.md](docs/guides/greatech-renderer-register.md)
 - [docs/guides/greatech-datagen-tips.md](docs/guides/greatech-datagen-tips.md)
 - [docs/guides/greatech-connected-texture-tips.md](docs/guides/greatech-connected-texture-tips.md)
+- [docs/guides/hydraulic-pressing-recipe-generation.md](docs/guides/hydraulic-pressing-recipe-generation.md)
+- [docs/guides/hydraulic-pressing-xei-integration.md](docs/guides/hydraulic-pressing-xei-integration.md)
 - [docs/reference/art-direction.md](docs/reference/art-direction.md)
 - [docs/reference/dependencies.md](docs/reference/dependencies.md)

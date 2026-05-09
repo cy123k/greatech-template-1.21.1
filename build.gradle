@@ -167,6 +167,10 @@ dependencies {
             "libs/${ldlib_jar_name}",
             "libs/${configuration_jar_name}"
     ))
+    compileOnly(files("libs/jei-1.21.1-neoforge-19.27.0.340.jar"))
+    compileOnly(files("libs/emi-1.1.22+1.21.1+neoforge.jar"))
+    localRuntime(files("libs/jei-1.21.1-neoforge-19.27.0.340.jar"))
+    localRuntime(files("libs/emi-1.1.22+1.21.1+neoforge.jar"))
 
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime

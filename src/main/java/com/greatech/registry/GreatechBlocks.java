@@ -9,6 +9,8 @@ import com.greatech.content.fluid.ElectricFluidBridgeBlock;
 import com.greatech.content.fluid.ElectricFluidBridgeTier;
 import com.greatech.content.heat.HeatChamberCasingBlock;
 import com.greatech.content.heat.HeatChamberControllerBlock;
+import com.greatech.content.hydraulic.HydraulicPressBlock;
+import com.greatech.content.hydraulic.HydraulicPressTier;
 import com.greatech.content.kinetics.GreatechKineticFamily;
 import com.greatech.content.kinetics.GreatechKineticMaterial;
 import com.greatech.content.shaft.GreatechShaftBlock;
@@ -35,6 +37,8 @@ public final class GreatechBlocks {
     public static final DeferredBlock<Block> MV_SUCON = registerSUEnergyConverter("mv_sucon", SUEnergyConverterTier.MV);
     public static final DeferredBlock<Block> HV_SUCON = registerSUEnergyConverter("hv_sucon", SUEnergyConverterTier.HV);
     public static final DeferredBlock<Block> LV_FLUID_BRIDGE = registerElectricFluidBridge("lv_fluid_bridge", ElectricFluidBridgeTier.LV);
+    public static final DeferredBlock<Block> LV_HYDRAULIC_PRESS =
+            registerHydraulicPress("lv_hydraulic_press", HydraulicPressTier.LV);
     public static final DeferredBlock<Block> HEAT_CHAMBER_CASING = registerHeatChamberCasing("heat_chamber_casing");
     public static final DeferredBlock<Block> HEAT_CHAMBER_GLASS = registerHeatChamberGlass("heat_chamber_glass");
     public static final DeferredBlock<Block> HEAT_CHAMBER_CONTROLLER = registerHeatChamberController("heat_chamber_controller");
@@ -74,6 +78,8 @@ public final class GreatechBlocks {
     public static final DeferredItem<BlockItem> MV_SUCON_ITEM = registerBlockItem("mv_sucon", MV_SUCON);
     public static final DeferredItem<BlockItem> HV_SUCON_ITEM = registerBlockItem("hv_sucon", HV_SUCON);
     public static final DeferredItem<BlockItem> LV_FLUID_BRIDGE_ITEM = registerBlockItem("lv_fluid_bridge", LV_FLUID_BRIDGE);
+    public static final DeferredItem<BlockItem> LV_HYDRAULIC_PRESS_ITEM =
+            registerBlockItem("lv_hydraulic_press", LV_HYDRAULIC_PRESS);
     public static final DeferredItem<BlockItem> HEAT_CHAMBER_CASING_ITEM =
             registerBlockItem("heat_chamber_casing", HEAT_CHAMBER_CASING);
     public static final DeferredItem<BlockItem> HEAT_CHAMBER_GLASS_ITEM =
@@ -131,6 +137,19 @@ public final class GreatechBlocks {
                         .isViewBlocking((state, level, pos) -> false)
                         .forceSolidOn()
                         .lightLevel(state -> state.getValue(ElectricFluidBridgeBlock.ACTIVE) ? 1 : 0)
+                        .requiresCorrectToolForDrops(), tier));
+    }
+
+    private static DeferredBlock<Block> registerHydraulicPress(String name, HydraulicPressTier tier) {
+        return BLOCKS.register(
+                name,
+                () -> new HydraulicPressBlock(BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.METAL)
+                        .strength(3.5F)
+                        .sound(SoundType.METAL)
+                        .noOcclusion()
+                        .isSuffocating((state, level, pos) -> false)
+                        .isViewBlocking((state, level, pos) -> false)
                         .requiresCorrectToolForDrops(), tier));
     }
 

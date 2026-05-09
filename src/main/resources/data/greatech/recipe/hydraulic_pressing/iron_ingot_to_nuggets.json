@@ -1,0 +1,20 @@
+{
+  "type": "greatech:hydraulic_pressing",
+  "required_tier": "lv",
+  "input_count": 1,
+  "ingredients": [
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "gtceu:plate_extruder_mold"
+    }
+  ],
+  "results": [
+    {
+      "id": "minecraft:iron_nugget",
+      "count": 9
+    }
+  ],
+  "processing_time": 120
+}
