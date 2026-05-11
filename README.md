@@ -67,6 +67,7 @@ Implemented so far:
 - `powered_steel_shaft` generated-rotation relay behavior for the steam prototype
 - `powered_aluminium_shaft` and `powered_stainless_shaft` compatibility registration through the shared kinetic family path
 - `lv_steam_engine_hatch`, `mv_steam_engine_hatch`, and `hv_steam_engine_hatch` GTCEu machine-part registrations
+- GTCEu-style tier-array registration for steam hatches through `GreatechMachines.STEAM_ENGINE_HATCHES`
 - custom unformed `steam engine hatch` tier textures and item display models
 - BER-rendered unformed `steam engine hatch` body with front-facing alignment
 - formed `steam engine hatch` casing/overlay runtime models with non-emissive `steamout` front overlay
@@ -78,6 +79,8 @@ Implemented so far:
 - BER-rendered full-bright active overlay for formed `heat_chamber_controller`
 - `heat_chamber_glass` registered as a transparent block so adjacent glass panes hide internal faces
 - `lv_hydraulic_press` Create-style kinetic processing prototype with internal mold slot, input-only fluid tank, heat chamber gating, and belt/world-item processing
+- tier-array registration for Create-style `SUCON`, `FluidBridge`, and `HydraulicPress` blocks while preserving the old LV/MV/HV aliases
+- `lv_hydraulic_press` world visuals split between a blockstate body model and BER-rendered steel shaft, moving head, and installed mold item
 - `greatech:hydraulic_pressing` recipe type with item input, mold ingredient, item outputs, and optional processing time
 - GTCEu-material-driven hydraulic pressing recipe generation for ingot-to-plate/rod/ring/wire/gear/small-gear/bolt/rotor forming
 - JEI and EMI category registration for `greatech:hydraulic_pressing`, covering both static JSON recipes and GTCEu-material-generated recipes
@@ -220,6 +223,12 @@ Current registered block:
 
 The code already has a five-tier enum, ordered as `[LV, MV, HV, EV, IV]`, but only the LV block is registered in the current prototype.
 
+Registration currently follows the tier-array pattern in `GreatechBlocks`:
+
+- `REGISTERED_HYDRAULIC_PRESS_TIERS` contains only `LV`
+- `HYDRAULIC_PRESSES` and `HYDRAULIC_PRESS_ITEMS` are indexed by `HydraulicPressTier.configIndex()`
+- `LV_HYDRAULIC_PRESS` and `LV_HYDRAULIC_PRESS_ITEM` remain as compatibility aliases
+
 Current behavior:
 
 - requires a usable Greatech heat chamber environment at the press position
@@ -230,7 +239,19 @@ Current behavior:
 - accepts hydraulic fluids through `greatech:hydraulic_fluids/<tier>` fluid tags
 - consumes hydraulic fluid once per processed item, with consumption based on stored fluid grade
 - processes one target stack per press cycle, capped by tier max items, input stack size, and available fluid
-- renders a moving press-head partial while the body currently uses placeholder block models
+- renders the placed body through the blockstate model
+- renders the LV steel shaft, moving press head, and installed mold item through `HydraulicPressRenderer`
+- uses a full item/display model with static body and steel shaft geometry
+
+Current key hydraulic press model files are:
+
+- `models/block/hydraulic_press/greatech_hydraulic_press.json`
+- `models/block/hydraulic_press/greatech_hydraulic_press_block.json`
+- `models/block/hydraulic_press/greatech_hydraulic_press_head.json`
+- `models/block/hydraulic_press/lv_hydraulic_press.json`
+- `models/block/hydraulic_press/lv_hydraulic_press_block.json`
+- `models/block/hydraulic_press/lv_hydraulic_press_head.json`
+- `models/item/lv_hydraulic_press.json`
 
 Current recipe type:
 

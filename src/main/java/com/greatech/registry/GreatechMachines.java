@@ -25,40 +25,51 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 public final class GreatechMachines {
     public static final GTRegistrate REGISTRATE = GTRegistrate.create(Greatech.MODID, false);
 
-    public static final MachineDefinition LV_STEAM_ENGINE_HATCH = registerSteamEngineHatch("lv_steam_engine_hatch",
-            "LV Steam Engine Hatch", SteamEngineHatchTier.LV, 0);
-    public static final MachineDefinition MV_STEAM_ENGINE_HATCH = registerSteamEngineHatch("mv_steam_engine_hatch",
-            "MV Steam Engine Hatch", SteamEngineHatchTier.MV, 1);
-    public static final MachineDefinition HV_STEAM_ENGINE_HATCH = registerSteamEngineHatch("hv_steam_engine_hatch",
-            "HV Steam Engine Hatch", SteamEngineHatchTier.HV, 2);
+    public static final MachineDefinition[] STEAM_ENGINE_HATCHES = registerSteamEngineHatches();
+    public static final MachineDefinition LV_STEAM_ENGINE_HATCH = steamEngineHatch(SteamEngineHatchTier.LV);
+    public static final MachineDefinition MV_STEAM_ENGINE_HATCH = steamEngineHatch(SteamEngineHatchTier.MV);
+    public static final MachineDefinition HV_STEAM_ENGINE_HATCH = steamEngineHatch(SteamEngineHatchTier.HV);
 
     private GreatechMachines() {
     }
 
     public static void init(IEventBus modEventBus) {
         REGISTRATE.registerEventListeners(modEventBus);
-        removeQueuedMachineDefinition(LV_STEAM_ENGINE_HATCH.getId());
-        removeQueuedMachineDefinition(MV_STEAM_ENGINE_HATCH.getId());
-        removeQueuedMachineDefinition(HV_STEAM_ENGINE_HATCH.getId());
+        for (MachineDefinition definition : STEAM_ENGINE_HATCHES) {
+            removeQueuedMachineDefinition(definition.getId());
+        }
         modEventBus.addListener(GreatechMachines::registerMachineDefinitions);
     }
 
     private static void registerMachineDefinitions(RegisterEvent event) {
         event.register(GTRegistries.MACHINE_REGISTRY, helper -> {
-            registerMachineDefinition(helper, LV_STEAM_ENGINE_HATCH);
-            registerMachineDefinition(helper, MV_STEAM_ENGINE_HATCH);
-            registerMachineDefinition(helper, HV_STEAM_ENGINE_HATCH);
+            for (MachineDefinition definition : STEAM_ENGINE_HATCHES) {
+                registerMachineDefinition(helper, definition);
+            }
         });
     }
 
-    private static MachineDefinition registerSteamEngineHatch(String name, String langValue, SteamEngineHatchTier tier,
-            int machineTier) {
+    public static MachineDefinition steamEngineHatch(SteamEngineHatchTier tier) {
+        return STEAM_ENGINE_HATCHES[tier.configIndex()];
+    }
+
+    private static MachineDefinition[] registerSteamEngineHatches() {
+        SteamEngineHatchTier[] tiers = SteamEngineHatchTier.values();
+        MachineDefinition[] definitions = new MachineDefinition[tiers.length];
+        for (SteamEngineHatchTier tier : tiers) {
+            definitions[tier.configIndex()] = registerSteamEngineHatch(tier);
+        }
+        return definitions;
+    }
+
+    private static MachineDefinition registerSteamEngineHatch(SteamEngineHatchTier tier) {
+        String name = tier.name().toLowerCase(java.util.Locale.ROOT) + "_steam_engine_hatch";
         return REGISTRATE
                 .machine(name, MachineDefinition::new, GreatechSteamEngineHatchBlock::new, MetaMachineItem::new,
                         holder -> new GreatechSteamEngineHatchMachine(holder, tier))
-                .langValue(langValue)
+                .langValue(tier.name() + " Steam Engine Hatch")
                 .rotationState(RotationState.ALL)
-                .tier(machineTier)
+                .tier(tier.configIndex())
                 .abilities(PartAbility.EXPORT_FLUIDS, PartAbility.EXPORT_FLUIDS_1X)
                 // We provide the actual gtceu:machine json manually in assets, so only the
                 // render-state properties need to exist here. Calling GTCEu's steam model

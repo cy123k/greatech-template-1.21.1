@@ -33,12 +33,22 @@ public final class GreatechBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Greatech.MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Greatech.MODID);
 
-    public static final DeferredBlock<Block> LV_SUCON = registerSUEnergyConverter("lv_sucon", SUEnergyConverterTier.LV);
-    public static final DeferredBlock<Block> MV_SUCON = registerSUEnergyConverter("mv_sucon", SUEnergyConverterTier.MV);
-    public static final DeferredBlock<Block> HV_SUCON = registerSUEnergyConverter("hv_sucon", SUEnergyConverterTier.HV);
-    public static final DeferredBlock<Block> LV_FLUID_BRIDGE = registerElectricFluidBridge("lv_fluid_bridge", ElectricFluidBridgeTier.LV);
-    public static final DeferredBlock<Block> LV_HYDRAULIC_PRESS =
-            registerHydraulicPress("lv_hydraulic_press", HydraulicPressTier.LV);
+    private static final SUEnergyConverterTier[] REGISTERED_SUCON_TIERS = SUEnergyConverterTier.values();
+    private static final ElectricFluidBridgeTier[] REGISTERED_FLUID_BRIDGE_TIERS = {
+            ElectricFluidBridgeTier.LV
+    };
+    private static final HydraulicPressTier[] REGISTERED_HYDRAULIC_PRESS_TIERS = {
+            HydraulicPressTier.LV
+    };
+
+    public static final DeferredBlock<Block>[] SU_ENERGY_CONVERTERS = registerSUEnergyConverters();
+    public static final DeferredBlock<Block>[] ELECTRIC_FLUID_BRIDGES = registerElectricFluidBridges();
+    public static final DeferredBlock<Block>[] HYDRAULIC_PRESSES = registerHydraulicPresses();
+    public static final DeferredBlock<Block> LV_SUCON = suEnergyConverter(SUEnergyConverterTier.LV);
+    public static final DeferredBlock<Block> MV_SUCON = suEnergyConverter(SUEnergyConverterTier.MV);
+    public static final DeferredBlock<Block> HV_SUCON = suEnergyConverter(SUEnergyConverterTier.HV);
+    public static final DeferredBlock<Block> LV_FLUID_BRIDGE = electricFluidBridge(ElectricFluidBridgeTier.LV);
+    public static final DeferredBlock<Block> LV_HYDRAULIC_PRESS = hydraulicPress(HydraulicPressTier.LV);
     public static final DeferredBlock<Block> HEAT_CHAMBER_CASING = registerHeatChamberCasing("heat_chamber_casing");
     public static final DeferredBlock<Block> HEAT_CHAMBER_GLASS = registerHeatChamberGlass("heat_chamber_glass");
     public static final DeferredBlock<Block> HEAT_CHAMBER_CONTROLLER = registerHeatChamberController("heat_chamber_controller");
@@ -74,12 +84,17 @@ public final class GreatechBlocks {
     public static final DeferredBlock<Block> POWERED_STAINLESS_COGWHEEL = STAINLESS_FAMILY.poweredCogwheel();
     public static final DeferredBlock<Block> STAINLESS_LARGE_COGWHEEL = STAINLESS_FAMILY.largeCogwheel();
 
-    public static final DeferredItem<BlockItem> LV_SUCON_ITEM = registerBlockItem("lv_sucon", LV_SUCON);
-    public static final DeferredItem<BlockItem> MV_SUCON_ITEM = registerBlockItem("mv_sucon", MV_SUCON);
-    public static final DeferredItem<BlockItem> HV_SUCON_ITEM = registerBlockItem("hv_sucon", HV_SUCON);
-    public static final DeferredItem<BlockItem> LV_FLUID_BRIDGE_ITEM = registerBlockItem("lv_fluid_bridge", LV_FLUID_BRIDGE);
-    public static final DeferredItem<BlockItem> LV_HYDRAULIC_PRESS_ITEM =
-            registerBlockItem("lv_hydraulic_press", LV_HYDRAULIC_PRESS);
+    public static final DeferredItem<BlockItem>[] SU_ENERGY_CONVERTER_ITEMS =
+            registerBlockItems(REGISTERED_SUCON_TIERS, SU_ENERGY_CONVERTERS, GreatechBlocks::suconName);
+    public static final DeferredItem<BlockItem>[] ELECTRIC_FLUID_BRIDGE_ITEMS =
+            registerBlockItems(REGISTERED_FLUID_BRIDGE_TIERS, ELECTRIC_FLUID_BRIDGES, GreatechBlocks::fluidBridgeName);
+    public static final DeferredItem<BlockItem>[] HYDRAULIC_PRESS_ITEMS =
+            registerBlockItems(REGISTERED_HYDRAULIC_PRESS_TIERS, HYDRAULIC_PRESSES, GreatechBlocks::hydraulicPressName);
+    public static final DeferredItem<BlockItem> LV_SUCON_ITEM = suEnergyConverterItem(SUEnergyConverterTier.LV);
+    public static final DeferredItem<BlockItem> MV_SUCON_ITEM = suEnergyConverterItem(SUEnergyConverterTier.MV);
+    public static final DeferredItem<BlockItem> HV_SUCON_ITEM = suEnergyConverterItem(SUEnergyConverterTier.HV);
+    public static final DeferredItem<BlockItem> LV_FLUID_BRIDGE_ITEM = electricFluidBridgeItem(ElectricFluidBridgeTier.LV);
+    public static final DeferredItem<BlockItem> LV_HYDRAULIC_PRESS_ITEM = hydraulicPressItem(HydraulicPressTier.LV);
     public static final DeferredItem<BlockItem> HEAT_CHAMBER_CASING_ITEM =
             registerBlockItem("heat_chamber_casing", HEAT_CHAMBER_CASING);
     public static final DeferredItem<BlockItem> HEAT_CHAMBER_GLASS_ITEM =
@@ -108,6 +123,93 @@ public final class GreatechBlocks {
     public static void register(IEventBus modEventBus) {
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
+    }
+
+    public static DeferredBlock<Block> suEnergyConverter(SUEnergyConverterTier tier) {
+        return SU_ENERGY_CONVERTERS[tier.configIndex()];
+    }
+
+    public static DeferredBlock<Block> electricFluidBridge(ElectricFluidBridgeTier tier) {
+        return ELECTRIC_FLUID_BRIDGES[tier.configIndex()];
+    }
+
+    public static DeferredBlock<Block> hydraulicPress(HydraulicPressTier tier) {
+        return HYDRAULIC_PRESSES[tier.configIndex()];
+    }
+
+    public static DeferredItem<BlockItem> suEnergyConverterItem(SUEnergyConverterTier tier) {
+        return SU_ENERGY_CONVERTER_ITEMS[tier.configIndex()];
+    }
+
+    public static DeferredItem<BlockItem> electricFluidBridgeItem(ElectricFluidBridgeTier tier) {
+        return ELECTRIC_FLUID_BRIDGE_ITEMS[tier.configIndex()];
+    }
+
+    public static DeferredItem<BlockItem> hydraulicPressItem(HydraulicPressTier tier) {
+        return HYDRAULIC_PRESS_ITEMS[tier.configIndex()];
+    }
+
+    @SuppressWarnings("unchecked")
+    private static DeferredBlock<Block>[] registerSUEnergyConverters() {
+        DeferredBlock<Block>[] blocks = new DeferredBlock[SUEnergyConverterTier.values().length];
+        for (SUEnergyConverterTier tier : REGISTERED_SUCON_TIERS) {
+            blocks[tier.configIndex()] = registerSUEnergyConverter(suconName(tier), tier);
+        }
+        return blocks;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static DeferredBlock<Block>[] registerElectricFluidBridges() {
+        DeferredBlock<Block>[] blocks = new DeferredBlock[ElectricFluidBridgeTier.values().length];
+        for (ElectricFluidBridgeTier tier : REGISTERED_FLUID_BRIDGE_TIERS) {
+            blocks[tier.configIndex()] = registerElectricFluidBridge(fluidBridgeName(tier), tier);
+        }
+        return blocks;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static DeferredBlock<Block>[] registerHydraulicPresses() {
+        DeferredBlock<Block>[] blocks = new DeferredBlock[HydraulicPressTier.values().length];
+        for (HydraulicPressTier tier : REGISTERED_HYDRAULIC_PRESS_TIERS) {
+            blocks[tier.configIndex()] = registerHydraulicPress(hydraulicPressName(tier), tier);
+        }
+        return blocks;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> DeferredItem<BlockItem>[] registerBlockItems(T[] tiers, DeferredBlock<Block>[] blocks,
+            java.util.function.Function<T, String> nameFactory) {
+        DeferredItem<BlockItem>[] items = new DeferredItem[blocks.length];
+        for (T tier : tiers) {
+            int index = tierIndex(tier);
+            items[index] = registerBlockItem(nameFactory.apply(tier), blocks[index]);
+        }
+        return items;
+    }
+
+    private static int tierIndex(Object tier) {
+        if (tier instanceof SUEnergyConverterTier suconTier) {
+            return suconTier.configIndex();
+        }
+        if (tier instanceof ElectricFluidBridgeTier fluidTier) {
+            return fluidTier.configIndex();
+        }
+        if (tier instanceof HydraulicPressTier pressTier) {
+            return pressTier.configIndex();
+        }
+        throw new IllegalArgumentException("Unsupported Greatech tier: " + tier);
+    }
+
+    private static String suconName(SUEnergyConverterTier tier) {
+        return tier.name().toLowerCase(java.util.Locale.ROOT) + "_sucon";
+    }
+
+    private static String fluidBridgeName(ElectricFluidBridgeTier tier) {
+        return tier.name().toLowerCase(java.util.Locale.ROOT) + "_fluid_bridge";
+    }
+
+    private static String hydraulicPressName(HydraulicPressTier tier) {
+        return tier.id() + "_hydraulic_press";
     }
 
     private static DeferredBlock<Block> registerSUEnergyConverter(String name, SUEnergyConverterTier tier) {

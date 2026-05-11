@@ -40,6 +40,15 @@ Registration path:
 
 The hydraulic press is not a GTCEu `MachineDefinition`. GTCEu tier naming is used for progression, tank capacity, throughput, stress impact, and future recipe gating.
 
+In [GreatechBlocks.java](../../src/main/java/com/greatech/registry/GreatechBlocks.java), hydraulic presses follow the same tier-array registration shape now used by other Create-style Greatech machines:
+
+- `REGISTERED_HYDRAULIC_PRESS_TIERS` decides which tiers are actually registered
+- `HYDRAULIC_PRESSES` stores block registry entries by `HydraulicPressTier.configIndex()`
+- `HYDRAULIC_PRESS_ITEMS` stores matching block items by the same tier index
+- `LV_HYDRAULIC_PRESS` and `LV_HYDRAULIC_PRESS_ITEM` remain as compatibility aliases
+
+Only add a tier to `REGISTERED_HYDRAULIC_PRESS_TIERS` after its blockstate, item model, partials, textures, language entry, and balancing values are all ready.
+
 ## Main Code
 
 Core classes:
@@ -109,6 +118,7 @@ Current interaction rules:
 - shift + empty hand removes the installed mold
 - empty-hand interaction reports basic mold/fluid status
 - the mold is not consumed by recipes
+- the installed mold is synced to the client and rendered against the underside of the press head
 
 A mold is considered valid if at least one loaded `greatech:hydraulic_pressing` recipe uses it as the second item ingredient.
 
@@ -340,25 +350,32 @@ The current renderer is Greatech-owned.
 
 Current visual structure:
 
-- placed blockstate uses a placeholder body model
-- moving press head is rendered as a BER partial
-- item model uses the LV hydraulic press block model
+- placed blockstate renders the static press body
+- BER renders the Greatech shaft visual, selected from the press tier
+- BER renders the moving press head partial
+- BER renders the installed mold item horizontally on the underside of the head
+- item/display rendering uses the full hydraulic press model with static shaft geometry
 - press-head motion follows the press cycle timing
 
 Current model files:
 
+- `models/block/hydraulic_press/greatech_hydraulic_press.json`
+- `models/block/hydraulic_press/greatech_hydraulic_press_block.json`
+- `models/block/hydraulic_press/greatech_hydraulic_press_head.json`
+- `models/block/hydraulic_press/lv_hydraulic_press.json`
 - `models/block/hydraulic_press/lv_hydraulic_press_block.json`
-- `models/block/hydraulic_press/lv_hydraulic_press_body.json`
 - `models/block/hydraulic_press/lv_hydraulic_press_head.json`
 - `models/item/lv_hydraulic_press.json`
 
-The art is still placeholder-level and should be replaced with a proper authored body/head set later.
+The shared `greatech_hydraulic_press*` models own the common authored geometry. The `lv_hydraulic_press*` models are tier wrappers that bind LV machine and hydraulic-press textures, matching the `su_energy_converter` parent/wrapper style.
+
+The LV renderer currently uses `GreatechPartialModels.STEEL_SHAFT` for the shaft. Higher tiers should choose their shaft partial explicitly instead of relying on Create's default shaft renderer.
 
 ## Current Limitations
 
 - only `lv_hydraulic_press` is registered
 - MV/HV/EV/IV block ids and resources are not registered yet
-- body and head models are placeholders
+- LV art is first-pass and still needs final production polish
 - no GUI
 - no mold automation item handler
 - no redstone controls

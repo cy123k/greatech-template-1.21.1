@@ -109,6 +109,18 @@ Important note:
 
 Greatech does not use GTCEu's generic BER helper for this hatch. Instead, it registers the block entity renderer directly against the machine block entity type in `GreatechClient`. This avoids the renderer path conflict we hit earlier while still letting GTCEu own the machine block, item, and render-state sync.
 
+For `lv_hydraulic_press`, the world visual is split between baked body and BER runtime pieces:
+
+- static world model: `lv_hydraulic_press_block.json`, rendered by the blockstate
+- dynamic shaft partial: currently `GreatechPartialModels.STEEL_SHAFT`, rendered by `HydraulicPressRenderer`
+- dynamic head partial: `GreatechPartialModels.LV_HYDRAULIC_PRESS_HEAD`, animated with the press cycle
+- dynamic mold item: rendered horizontally on the head underside from the block entity's installed mold stack
+- item/display model: `models/item/lv_hydraulic_press.json`, pointing at the full wrapper with static shaft geometry
+
+This is intentionally different from the converter/fluid-bridge empty-world-model pattern. The press body is stable and works well as a baked model, while the shaft, head, and mold are runtime state.
+
+Until Greatech adds a Flywheel visual for the hydraulic press, the BER should not skip rendering just because `VisualizationManager.supportsVisualization(level)` is true. Otherwise the head, shaft, or mold can vanish when Flywheel is active without a matching visual implementation.
+
 For a machine with static casing and one moving rotor:
 
 - keep casing in the blockstate model

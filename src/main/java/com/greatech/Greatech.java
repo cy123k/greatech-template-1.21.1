@@ -48,11 +48,9 @@ public class Greatech {
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .icon(() -> GreatechBlocks.LV_SUCON_ITEM.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                output.accept(GreatechBlocks.LV_SUCON_ITEM.get());
-                output.accept(GreatechBlocks.MV_SUCON_ITEM.get());
-                output.accept(GreatechBlocks.HV_SUCON_ITEM.get());
-                output.accept(GreatechBlocks.LV_FLUID_BRIDGE_ITEM.get());
-                output.accept(GreatechBlocks.LV_HYDRAULIC_PRESS_ITEM.get());
+                acceptRegistered(output, GreatechBlocks.SU_ENERGY_CONVERTER_ITEMS);
+                acceptRegistered(output, GreatechBlocks.ELECTRIC_FLUID_BRIDGE_ITEMS);
+                acceptRegistered(output, GreatechBlocks.HYDRAULIC_PRESS_ITEMS);
                 output.accept(GreatechBlocks.HEAT_CHAMBER_CASING_ITEM.get());
                 output.accept(GreatechBlocks.HEAT_CHAMBER_GLASS_ITEM.get());
                 output.accept(GreatechBlocks.HEAT_CHAMBER_CONTROLLER_ITEM.get());
@@ -91,9 +89,9 @@ public class Greatech {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         LOGGER.info("Initializing Greatech common setup");
-        logMissingSteamEngineHatch(GreatechMachines.LV_STEAM_ENGINE_HATCH);
-        logMissingSteamEngineHatch(GreatechMachines.MV_STEAM_ENGINE_HATCH);
-        logMissingSteamEngineHatch(GreatechMachines.HV_STEAM_ENGINE_HATCH);
+        for (var hatch : GreatechMachines.STEAM_ENGINE_HATCHES) {
+            logMissingSteamEngineHatch(hatch);
+        }
     }
 
     private void logMissingSteamEngineHatch(com.gregtechceu.gtceu.api.machine.MachineDefinition definition) {
@@ -104,11 +102,9 @@ public class Greatech {
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
-            event.accept(GreatechBlocks.LV_SUCON_ITEM);
-            event.accept(GreatechBlocks.MV_SUCON_ITEM);
-            event.accept(GreatechBlocks.HV_SUCON_ITEM);
-            event.accept(GreatechBlocks.LV_FLUID_BRIDGE_ITEM);
-            event.accept(GreatechBlocks.LV_HYDRAULIC_PRESS_ITEM);
+            acceptRegistered(event, GreatechBlocks.SU_ENERGY_CONVERTER_ITEMS);
+            acceptRegistered(event, GreatechBlocks.ELECTRIC_FLUID_BRIDGE_ITEMS);
+            acceptRegistered(event, GreatechBlocks.HYDRAULIC_PRESS_ITEMS);
             event.accept(GreatechBlocks.HEAT_CHAMBER_CASING_ITEM);
             event.accept(GreatechBlocks.HEAT_CHAMBER_GLASS_ITEM);
             event.accept(GreatechBlocks.HEAT_CHAMBER_CONTROLLER_ITEM);
@@ -122,6 +118,24 @@ public class Greatech {
             event.accept(GreatechBlocks.STAINLESS_COGWHEEL_ITEM);
             event.accept(GreatechBlocks.STAINLESS_LARGE_COGWHEEL_ITEM);
             event.accept(GreatechItems.GOGGLES);
+        }
+    }
+
+    private static void acceptRegistered(CreativeModeTab.Output output,
+            net.neoforged.neoforge.registries.DeferredItem<? extends net.minecraft.world.item.Item>[] items) {
+        for (var item : items) {
+            if (item != null) {
+                output.accept(item.get());
+            }
+        }
+    }
+
+    private static void acceptRegistered(BuildCreativeModeTabContentsEvent event,
+            net.neoforged.neoforge.registries.DeferredItem<? extends net.minecraft.world.item.Item>[] items) {
+        for (var item : items) {
+            if (item != null) {
+                event.accept(item);
+            }
         }
     }
 

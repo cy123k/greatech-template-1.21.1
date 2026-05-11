@@ -30,6 +30,7 @@ Current examples:
 
 - `SU Energy Converter`: Create-style Greatech block
 - `Electric Fluid Bridge`: Create-style Greatech block
+- `Hydraulic Press`: Create-style Greatech block with kinetic processing and a Greatech recipe type
 - `Steam Engine Hatch`: GTCEu machine definition with Greatech custom rendering
 
 ## Two Supported Registration Paths
@@ -49,6 +50,7 @@ Current examples:
 
 - [SUEnergyConverterBlock.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterBlock.java)
 - [ElectricFluidBridgeBlock.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeBlock.java)
+- [HydraulicPressBlock.java](../src/main/java/com/greatech/content/hydraulic/HydraulicPressBlock.java)
 
 Recommended bundle:
 
@@ -57,6 +59,16 @@ Recommended bundle:
 3. capabilities in `GreatechCapabilities`
 4. BER or kinetic renderer in `GreatechClient`
 5. partial models in `GreatechPartialModels` if needed
+
+For tiered Create-style Greatech machines, prefer the current array pattern in `GreatechBlocks`:
+
+- keep a small `REGISTERED_*_TIERS` list for the tiers that actually have complete resources
+- store registered blocks in a tier-indexed array such as `SU_ENERGY_CONVERTERS`, `ELECTRIC_FLUID_BRIDGES`, or `HYDRAULIC_PRESSES`
+- store matching block items in a matching tier-indexed item array
+- keep old single-tier aliases such as `LV_HYDRAULIC_PRESS` while downstream code migrates to getters
+- expose a getter such as `hydraulicPress(tier)` so future code does not hardcode array indexes
+
+This mirrors the GTCEu habit of keeping tiered machines in arrays while staying on the normal NeoForge `DeferredRegister` block path.
 
 ### Path B: GTCEu machine definition
 
@@ -226,6 +238,20 @@ The main rule:
 - do not let both the baked world model and the BER draw the same visible body
 
 If the world appearance is BER-owned, the placed blockstate should usually point to an empty world model with a valid particle texture.
+
+### Pattern 4: blockstate owns the static body, BER owns attached moving or runtime pieces
+
+Use when:
+
+- the main body is a normal baked block model
+- a shaft, head, mold, indicator, or tool attachment must move or change at runtime
+- the item/display model needs a fuller static composition than the placed blockstate
+
+Current example:
+
+- `Hydraulic Press`
+
+For `lv_hydraulic_press`, the blockstate renders `lv_hydraulic_press_block`, while `HydraulicPressRenderer` renders the steel shaft, moving head, and installed mold item. The item model points at the full `lv_hydraulic_press` wrapper so inventory and display entities include the static shaft as well as the body.
 
 ## Keep Capability Ownership Obvious
 

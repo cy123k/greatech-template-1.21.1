@@ -1,0 +1,13 @@
+{
+  "parent": "greatech:block/hydraulic_press/greatech_hydraulic_press",
+  "textures": {
+    "0": "greatech:block/greatech_machine/lv_machine/lv_casing",
+    "1": "greatech:block/greatech_machine/lv_machine/lv_kioutput",
+    "2": "greatech:block/greatech_hydraulicpress/lv/lv_press_access",
+    "3": "greatech:block/greatech_hydraulicpress/lv/lv_press_head",
+    "4": "greatech:block/greatech_hydraulicpress/lv/lv_press_pole",
+    "5": "greatech:block/greatech_shaft/steel_axis",
+    "6": "greatech:block/greatech_shaft/steel_axis_top",
+    "particle": "greatech:block/greatech_machine/lv_machine/lv_casing"
+  }
+}

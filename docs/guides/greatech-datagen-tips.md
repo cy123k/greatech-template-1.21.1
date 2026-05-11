@@ -14,6 +14,7 @@ Current generated families:
 
 - `steel`
 - `aluminium`
+- `stainless`
 
 Current generated transmission kinds:
 
@@ -70,6 +71,15 @@ Do not move shared wrapper geometry such as:
 
 into datagen unless the generator is actually responsible for authoring geometry.
 
+Machine resources are still hand-authored unless a provider explicitly owns them. For example, the hydraulic press uses:
+
+- shared geometry parents under `models/block/hydraulic_press/greatech_hydraulic_press*`
+- tier wrappers such as `models/block/hydraulic_press/lv_hydraulic_press*`
+- a hand-authored item wrapper at `models/item/lv_hydraulic_press.json`
+- BER partial registrations for runtime shaft, head, and mold rendering
+
+Do not migrate those machine JSON files into the transmission datagen path just because they are tiered. They need a separate provider if we later decide to generate machine wrappers.
+
 ## Current Generation Rules
 
 ### Shafts
@@ -119,7 +129,7 @@ Current blockstate rules:
 
 ## Adding Another Transmission Material
 
-For another material such as `stainless`:
+For another material such as `titanium`:
 
 1. Add the material entry in `GreatechKineticMaterial`.
 2. Register the family in `GreatechBlocks` and `GreatechBlockEntityTypes`.

@@ -1,3 +1,9 @@
 {
-  "parent": "greatech:block/hydraulic_press/lv_hydraulic_press_body"
+  "parent": "greatech:block/hydraulic_press/greatech_hydraulic_press_block",
+  "textures": {
+    "0": "greatech:block/greatech_machine/lv_machine/lv_casing",
+    "1": "greatech:block/greatech_machine/lv_machine/lv_kioutput",
+    "2": "greatech:block/greatech_hydraulicpress/lv/lv_press_access",
+    "particle": "greatech:block/greatech_machine/lv_machine/lv_casing"
+  }
 }

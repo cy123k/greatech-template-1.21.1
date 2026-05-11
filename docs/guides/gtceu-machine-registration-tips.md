@@ -68,6 +68,20 @@ Symptoms can include:
 - machine item crashes when opened in creative inventory
 - registry sync issues
 
+## Tiered Machine Definition Arrays
+
+GTCEu itself commonly registers tiered machines as arrays, for example an `EXTRUDER[]`-style family indexed by voltage tier. Greatech's current steam hatch registration follows the same shape:
+
+- `STEAM_ENGINE_HATCHES` stores every registered hatch `MachineDefinition`
+- `steamEngineHatch(tier)` returns the definition for a `SteamEngineHatchTier`
+- `LV_STEAM_ENGINE_HATCH`, `MV_STEAM_ENGINE_HATCH`, and `HV_STEAM_ENGINE_HATCH` remain compatibility aliases
+- event registration iterates the array instead of repeating one register call per tier
+- renderer setup and startup validation can also iterate the same array
+
+Use this for future GTCEu machine families when all registered tiers share one machine class and mostly differ by tier data, language name, model resources, and balancing.
+
+Keep the array order tied to the tier enum's `configIndex()` or another explicit tier index. Do not rely on incidental declaration order if config arrays, renderer selection, or item ids need to stay stable.
+
 ## Avoid Early GTCEu Model Initializers
 
 During the prototype, calling GTCEu's higher-level `simpleModel(...)` path triggered early initialization of `GTMachineModels`.
@@ -143,7 +157,7 @@ Itemstack 1 greatech:steam_engine_hatch already exists in the tab's list
 
 For the current steam hatch, manual insertion was removed. The item is expected to appear through the GTRegistrate listener.
 
-That includes Greatech's own custom creative tab. If the machine item is already bound to that tab through GTRegistrate/Registrate, adding `GreatechMachines.STEAM_ENGINE_HATCH.asStack()` manually will duplicate the same entry and crash when the creative inventory rebuilds.
+That includes Greatech's own custom creative tab. If the machine item is already bound to that tab through GTRegistrate/Registrate, adding a hatch stack such as `GreatechMachines.LV_STEAM_ENGINE_HATCH.asStack()` manually will duplicate the same entry and crash when the creative inventory rebuilds.
 
 For GTCEu machine items, Registrate can also leave the item on its default tab path while you add it to a custom tab path. In practice that can still produce a duplicate creative entry even when you are not manually calling `output.accept(...)`.
 

@@ -64,9 +64,9 @@ public class GreatechClient {
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.ELECTRIC_FLUID_BRIDGE.get(), ElectricFluidBridgeRenderer::new);
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.HYDRAULIC_PRESS.get(), HydraulicPressRenderer::new);
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.HEAT_CHAMBER_CONTROLLER.get(), HeatChamberControllerRenderer::new);
-        event.registerBlockEntityRenderer(GreatechMachines.LV_STEAM_ENGINE_HATCH.getBlockEntityType(), GreatechSteamEngineHatchRenderer::new);
-        event.registerBlockEntityRenderer(GreatechMachines.MV_STEAM_ENGINE_HATCH.getBlockEntityType(), GreatechSteamEngineHatchRenderer::new);
-        event.registerBlockEntityRenderer(GreatechMachines.HV_STEAM_ENGINE_HATCH.getBlockEntityType(), GreatechSteamEngineHatchRenderer::new);
+        for (var hatch : GreatechMachines.STEAM_ENGINE_HATCHES) {
+            event.registerBlockEntityRenderer(hatch.getBlockEntityType(), GreatechSteamEngineHatchRenderer::new);
+        }
     }
 
     @SubscribeEvent

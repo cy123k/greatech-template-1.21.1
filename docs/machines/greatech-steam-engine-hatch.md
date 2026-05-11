@@ -63,13 +63,17 @@ It no longer extends `FluidHatchPartMachine`. The machine part identity, steam s
 Current machine registration:
 
 ```java
-registerSteamEngineHatch("lv_steam_engine_hatch", "LV Steam Engine Hatch", SteamEngineHatchTier.LV, 0);
-registerSteamEngineHatch("mv_steam_engine_hatch", "MV Steam Engine Hatch", SteamEngineHatchTier.MV, 1);
-registerSteamEngineHatch("hv_steam_engine_hatch", "HV Steam Engine Hatch", SteamEngineHatchTier.HV, 2);
+public static final MachineDefinition[] STEAM_ENGINE_HATCHES = registerSteamEngineHatches();
+public static final MachineDefinition LV_STEAM_ENGINE_HATCH = steamEngineHatch(SteamEngineHatchTier.LV);
+public static final MachineDefinition MV_STEAM_ENGINE_HATCH = steamEngineHatch(SteamEngineHatchTier.MV);
+public static final MachineDefinition HV_STEAM_ENGINE_HATCH = steamEngineHatch(SteamEngineHatchTier.HV);
 ```
 
 Current registration notes:
 
+- `STEAM_ENGINE_HATCHES` stores the hatch definitions by `SteamEngineHatchTier.configIndex()`
+- event registration, renderer setup, and startup validation iterate the definition array
+- the LV/MV/HV fields are compatibility aliases for callers that still expect named definitions
 - `rotationState(RotationState.ALL)` keeps the hatch compatible with all six GTCEu-facing directions
 - a custom [GreatechSteamEngineHatchBlock.java](../src/main/java/com/greatech/content/steam/GreatechSteamEngineHatchBlock.java) now makes hatch placement follow the same explicit `context.getNearestLookingDirection().getOpposite()` rule used by Greatech's other directional machines
 - `.hasBER(false)` stays set, because we register our own block-entity renderer instead of using GTCEu's generic BER path
