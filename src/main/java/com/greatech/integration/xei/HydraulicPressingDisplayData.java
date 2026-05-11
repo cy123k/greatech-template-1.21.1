@@ -9,9 +9,11 @@ import com.greatech.content.hydraulic.HydraulicPressingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 public final class HydraulicPressingDisplayData {
     private HydraulicPressingDisplayData() {
@@ -44,8 +46,7 @@ public final class HydraulicPressingDisplayData {
                         .withStyle(ChatFormatting.GRAY),
                 Component.translatable("greatech.recipe.hydraulic_pressing.input_count", recipe.getInputCount())
                         .withStyle(ChatFormatting.GRAY),
-                Component.translatable("greatech.recipe.hydraulic_pressing.fluid_note")
-                        .withStyle(ChatFormatting.DARK_GRAY));
+                hydraulicFluidNote());
     }
 
     public static List<Component> moldTooltip() {
@@ -64,12 +65,48 @@ public final class HydraulicPressingDisplayData {
     }
 
     public static List<Component> hydraulicFluidTooltip() {
-        return Arrays.stream(HydraulicPressTier.values())
+        List<Component> costs = hydraulicFluidCosts().stream()
                 .<Component>map(tier -> Component.translatable(
                         "greatech.recipe.hydraulic_pressing.fluid_tier",
-                        tier.id().toUpperCase(),
-                        Config.hydraulicPressFluidConsumption(tier))
+                        tier.tier().id().toUpperCase(),
+                        tier.amountPerItem())
                         .withStyle(ChatFormatting.GRAY))
                 .toList();
+        return java.util.stream.Stream.concat(
+                java.util.stream.Stream.of(
+                        Component.translatable("greatech.recipe.hydraulic_pressing.fluid_cost")
+                                .withStyle(ChatFormatting.GOLD),
+                        hydraulicFluidNote()),
+                costs.stream())
+                .toList();
+    }
+
+    public static List<HydraulicFluidCost> hydraulicFluidCosts() {
+        return Arrays.stream(HydraulicPressTier.values())
+                .map(tier -> new HydraulicFluidCost(tier, Config.hydraulicPressFluidConsumption(tier)))
+                .toList();
+    }
+
+    public static List<FluidStack> hydraulicFluidStacks() {
+        return hydraulicFluidCosts().stream()
+                .flatMap(cost -> fluidStacks(cost).stream())
+                .toList();
+    }
+
+    private static List<FluidStack> fluidStacks(HydraulicFluidCost cost) {
+        return BuiltInRegistries.FLUID.getTag(cost.tier().hydraulicFluidTag())
+                .stream()
+                .flatMap(named -> named.stream())
+                .map(holder -> new FluidStack(holder.value(), cost.amountPerItem()))
+                .filter(stack -> !stack.isEmpty())
+                .toList();
+    }
+
+    private static Component hydraulicFluidNote() {
+        return Component.translatable("greatech.recipe.hydraulic_pressing.fluid_note")
+                .withStyle(ChatFormatting.DARK_GRAY);
+    }
+
+    public record HydraulicFluidCost(HydraulicPressTier tier, int amountPerItem) {
     }
 }

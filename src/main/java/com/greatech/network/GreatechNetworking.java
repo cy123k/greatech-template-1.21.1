@@ -6,6 +6,8 @@ import com.greatech.network.fluid.FluidBridgeHudDataPayload;
 import com.greatech.network.fluid.FluidHudDataPayload;
 import com.greatech.network.fluid.RequestFluidBridgeHudDataPayload;
 import com.greatech.network.fluid.RequestFluidHudDataPayload;
+import com.greatech.network.hydraulic.HydraulicPressHudDataPayload;
+import com.greatech.network.hydraulic.RequestHydraulicPressHudDataPayload;
 
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
@@ -29,5 +31,9 @@ public final class GreatechNetworking {
                 RequestFluidBridgeHudDataPayload::handleServer);
         registrar.playToClient(FluidBridgeHudDataPayload.TYPE, FluidBridgeHudDataPayload.STREAM_CODEC,
                 FluidBridgeHudDataPayload::handleClient);
+        registrar.playToServer(RequestHydraulicPressHudDataPayload.TYPE, RequestHydraulicPressHudDataPayload.STREAM_CODEC,
+                RequestHydraulicPressHudDataPayload::handleServer);
+        registrar.playToClient(HydraulicPressHudDataPayload.TYPE, HydraulicPressHudDataPayload.STREAM_CODEC,
+                HydraulicPressHudDataPayload::handleClient);
     }
 }

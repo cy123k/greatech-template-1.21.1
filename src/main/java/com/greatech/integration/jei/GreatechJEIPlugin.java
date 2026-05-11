@@ -37,7 +37,7 @@ public class GreatechJEIPlugin implements IModPlugin {
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
-        IDrawable background = guiHelper.createBlankDrawable(150, 68);
+        IDrawable background = guiHelper.createBlankDrawable(150, 76);
         IDrawable icon = guiHelper.createDrawableItemStack(new ItemStack(GreatechBlocks.LV_HYDRAULIC_PRESS_ITEM.get()));
         IDrawable arrow = guiHelper.getRecipeArrow();
         registration.addRecipeCategories(new HydraulicPressingJEICategory(background, icon, arrow));

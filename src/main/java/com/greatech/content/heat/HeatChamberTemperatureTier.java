@@ -27,6 +27,10 @@ public enum HeatChamberTemperatureTier {
         return temperature >= minimumTemperature;
     }
 
+    public boolean isAtLeast(HeatChamberTemperatureTier other) {
+        return other != null && minimumTemperature >= other.minimumTemperature;
+    }
+
     public static HeatChamberTemperatureTier fromTemperature(int temperature) {
         HeatChamberTemperatureTier result = AMBIENT;
         for (HeatChamberTemperatureTier tier : values()) {

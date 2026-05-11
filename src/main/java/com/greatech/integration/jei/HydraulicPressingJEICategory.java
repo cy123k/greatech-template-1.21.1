@@ -17,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 @SuppressWarnings("removal")
 public class HydraulicPressingJEICategory implements IRecipeCategory<RecipeHolder<HydraulicPressingRecipe>> {
@@ -64,6 +65,14 @@ public class HydraulicPressingJEICategory implements IRecipeCategory<RecipeHolde
                 .addItemStacks(HydraulicPressingDisplayData.moldStacks(recipe))
                 .addTooltipCallback((view, tooltip) -> tooltip.addAll(HydraulicPressingDisplayData.moldTooltip()));
 
+        var fluidSlot = builder.addSlot(RecipeIngredientRole.INPUT, 18, 52)
+                .setStandardSlotBackground()
+                .setFluidRenderer(1000, false, 16, 16)
+                .addTooltipCallback((view, tooltip) -> tooltip.addAll(HydraulicPressingDisplayData.hydraulicFluidTooltip()));
+        for (FluidStack stack : HydraulicPressingDisplayData.hydraulicFluidStacks()) {
+            fluidSlot.addFluidStack(stack.getFluid(), stack.getAmount(), stack.getComponentsPatch());
+        }
+
         List<ProcessingOutput> results = recipe.getRollableResults();
         for (int i = 0; i < results.size(); i++) {
             ProcessingOutput output = results.get(i);
@@ -86,7 +95,7 @@ public class HydraulicPressingJEICategory implements IRecipeCategory<RecipeHolde
         graphics.drawString(
                 Minecraft.getInstance().font,
                 holder.value().getRequiredTier().id().toUpperCase(),
-                18,
+                45,
                 54,
                 0x555555,
                 false);
@@ -95,7 +104,7 @@ public class HydraulicPressingJEICategory implements IRecipeCategory<RecipeHolde
     @Override
     public List<Component> getTooltipStrings(RecipeHolder<HydraulicPressingRecipe> holder,
             IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
-        if (mouseX >= 14 && mouseX <= 142 && mouseY >= 50 && mouseY <= 66) {
+        if (mouseX >= 42 && mouseX <= 142 && mouseY >= 50 && mouseY <= 66) {
             return HydraulicPressingDisplayData.recipeNotes(holder.value());
         }
         return List.of();

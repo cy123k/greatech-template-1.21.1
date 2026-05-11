@@ -9,6 +9,7 @@ import com.greatech.content.equipment.hud.content.ObservedFluidInfo;
 import com.greatech.content.fluid.ElectricFluidBridgeBlockEntity;
 import com.greatech.network.fluid.FluidBridgeHudDataPayload;
 import com.greatech.network.fluid.GreatechFluidBridgeHudCache;
+import com.greatech.network.fluid.RequestFluidBridgeHudDataPayload;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,8 +17,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class GreatechFluidBridgeGoggleInfoProvider implements GreatechGoggleInfoProvider {
+    private static final long REQUEST_INTERVAL = 5L;
+
     @Override
     public ProviderMode mode() {
         return ProviderMode.EXCLUSIVE;
@@ -30,18 +34,26 @@ public class GreatechFluidBridgeGoggleInfoProvider implements GreatechGoggleInfo
     }
 
     @Override
+    public void requestDataIfNeeded(GoggleHudContext context) {
+        if (GreatechHudRequestTracker.shouldRequest("greatech_fluid_bridge", context.pos(), context.gameTime(),
+                REQUEST_INTERVAL)) {
+            PacketDistributor.sendToServer(new RequestFluidBridgeHudDataPayload(context.pos()));
+        }
+    }
+
+    @Override
     public boolean addTooltip(Level level, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity,
             @Nullable Direction hitFace, boolean detailed, List<Component> tooltip) {
         FluidBridgeHudDataPayload payload = GreatechFluidBridgeHudCache.get(pos, level.getGameTime());
 
         GreatechGoggleTooltipHelper.addTitle(tooltip, "greatech.goggles.greatech_fluid_bridge");
         if (payload == null) {
-            tooltip.add(Component.translatable("greatech.goggles.scanning"));
+            tooltip.add(GreatechGoggleTooltipHelper.goggleText("greatech.goggles.scanning"));
             return true;
         }
 
         if (payload.fluids().isEmpty()) {
-            tooltip.add(Component.translatable("greatech.goggles.empty"));
+            tooltip.add(GreatechGoggleTooltipHelper.goggleText("greatech.goggles.empty"));
         } else {
             for (ObservedFluidInfo fluid : payload.fluids()) {
                 GreatechGoggleTooltipHelper.addObservedFluidInfo(tooltip, fluid);

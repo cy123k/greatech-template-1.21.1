@@ -3,6 +3,8 @@ package com.greatech.content.hydraulic;
 import java.util.Optional;
 
 import com.greatech.Greatech;
+import com.greatech.content.heat.HeatChamberEnvironment;
+import com.greatech.content.heat.HeatChamberTemperatureTier;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.core.registries.Registries;
@@ -47,6 +49,39 @@ public enum HydraulicPressTier implements StringRepresentable {
 
     public boolean canProcess(HydraulicPressTier requiredTier) {
         return configIndex >= requiredTier.configIndex;
+    }
+
+    public Optional<HydraulicPressTier> nextTier() {
+        return switch (this) {
+            case LV -> Optional.of(MV);
+            case MV -> Optional.of(HV);
+            case HV -> Optional.of(EV);
+            case EV -> Optional.of(IV);
+            case IV -> Optional.empty();
+        };
+    }
+
+    public Optional<HeatChamberTemperatureTier> overclockHeatTier() {
+        return switch (this) {
+            case LV -> Optional.of(HeatChamberTemperatureTier.WARM);
+            case MV -> Optional.of(HeatChamberTemperatureTier.HOT);
+            case HV -> Optional.of(HeatChamberTemperatureTier.INCANDESCENT);
+            case EV -> Optional.of(HeatChamberTemperatureTier.EXTREME);
+            case IV -> Optional.empty();
+        };
+    }
+
+    public HydraulicPressTier effectiveTier(HeatChamberEnvironment environment) {
+        if (environment == null || !environment.isUsable()) {
+            return this;
+        }
+        Optional<HydraulicPressTier> nextTier = nextTier();
+        Optional<HeatChamberTemperatureTier> requiredHeatTier = overclockHeatTier();
+        if (nextTier.isPresent() && requiredHeatTier.isPresent()
+                && environment.currentTier().isAtLeast(requiredHeatTier.get())) {
+            return nextTier.get();
+        }
+        return this;
     }
 
     public TagKey<Fluid> hydraulicFluidTag() {

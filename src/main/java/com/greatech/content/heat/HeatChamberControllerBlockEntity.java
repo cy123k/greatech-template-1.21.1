@@ -17,6 +17,10 @@ public class HeatChamberControllerBlockEntity extends BlockEntity implements Hea
     private static final int STRUCTURE_RESCAN_INTERVAL = 100;
     private static final int AMBIENT_TEMPERATURE = 300;
     private static final int TEMPERATURE_STEP = 10;
+    private static final int WARM_VOLUME_PER_HEAT_POWER = 8;
+    private static final int HOT_VOLUME_PER_HEAT_POWER = 4;
+    private static final int INCANDESCENT_VOLUME_PER_HEAT_POWER = 2;
+    private static final int EXTREME_VOLUME_PER_HEAT_POWER = 1;
 
     private final HeatSourceScanner heatSourceScanner = new CompositeHeatSourceScanner(
             List.of(new CreateHeatSourceScanner(), new VanillaHeatSourceScanner()));
@@ -86,8 +90,11 @@ public class HeatChamberControllerBlockEntity extends BlockEntity implements Hea
         }
 
         HeatTotals heatTotals = scanHeatSources(level, cachedStructure);
-        int targetTemperature = Math.min(cachedStructure.maxTemperature(),
-                AMBIENT_TEMPERATURE + heatTotals.heatPower() * 20 - cachedStructure.heatLoss());
+        int sourceTemperatureLimit = heatTotals.supportedTier().minimumTemperature();
+        int shellTemperatureLimit = cachedStructure.maxTemperature() > 0
+                ? cachedStructure.maxTemperature()
+                : sourceTemperatureLimit;
+        int targetTemperature = Math.min(sourceTemperatureLimit, shellTemperatureLimit);
         targetTemperature = Math.max(AMBIENT_TEMPERATURE, targetTemperature);
         int nextTemperature = approach(environment.currentTemperature(), targetTemperature);
         boolean stable = Math.abs(nextTemperature - targetTemperature) <= TEMPERATURE_STEP;
@@ -99,17 +106,55 @@ public class HeatChamberControllerBlockEntity extends BlockEntity implements Hea
     }
 
     private HeatTotals scanHeatSources(Level level, HeatChamberScanResult scan) {
-        int power = 0;
+        int totalPower = 0;
         int count = 0;
+        int[] powerByReachableTier = new int[HeatChamberTemperatureTier.values().length];
         for (BlockPos pos : scan.interior()) {
             var profile = heatSourceScanner.scan(level, pos);
             if (profile.isEmpty()) {
                 continue;
             }
-            power += profile.get().heatPower();
+            totalPower += profile.get().heatPower();
+            powerByReachableTier[profile.get().reachableTier().ordinal()] += profile.get().heatPower();
             count++;
         }
-        return new HeatTotals(power, count);
+        HeatChamberTemperatureTier supportedTier = supportedTierFor(scan.interior().size(), powerByReachableTier);
+        return new HeatTotals(totalPower, count, supportedTier);
+    }
+
+    private HeatChamberTemperatureTier supportedTierFor(int interiorVolume, int[] powerByReachableTier) {
+        for (int i = HeatChamberTemperatureTier.values().length - 1; i >= 0; i--) {
+            HeatChamberTemperatureTier tier = HeatChamberTemperatureTier.values()[i];
+            if (tier == HeatChamberTemperatureTier.AMBIENT) {
+                return tier;
+            }
+
+            int supportingPower = supportingPowerFor(tier, powerByReachableTier);
+            if (supportingPower >= requiredPowerFor(tier, interiorVolume)) {
+                return tier;
+            }
+        }
+        return HeatChamberTemperatureTier.AMBIENT;
+    }
+
+    private int supportingPowerFor(HeatChamberTemperatureTier tier, int[] powerByReachableTier) {
+        int power = 0;
+        HeatChamberTemperatureTier[] tiers = HeatChamberTemperatureTier.values();
+        for (int i = tier.ordinal(); i < tiers.length; i++) {
+            power += powerByReachableTier[i];
+        }
+        return power;
+    }
+
+    private int requiredPowerFor(HeatChamberTemperatureTier tier, int interiorVolume) {
+        int divisor = switch (tier) {
+            case WARM -> WARM_VOLUME_PER_HEAT_POWER;
+            case HOT -> HOT_VOLUME_PER_HEAT_POWER;
+            case INCANDESCENT -> INCANDESCENT_VOLUME_PER_HEAT_POWER;
+            case EXTREME -> EXTREME_VOLUME_PER_HEAT_POWER;
+            case AMBIENT -> Integer.MAX_VALUE;
+        };
+        return Math.max(1, (interiorVolume + divisor - 1) / divisor);
     }
 
     private void bindReceivers(Level level, HeatChamberScanResult scan) {
@@ -214,6 +259,6 @@ public class HeatChamberControllerBlockEntity extends BlockEntity implements Hea
         structureDirty = true;
     }
 
-    private record HeatTotals(int heatPower, int heatSourceCount) {
+    private record HeatTotals(int heatPower, int heatSourceCount, HeatChamberTemperatureTier supportedTier) {
     }
 }

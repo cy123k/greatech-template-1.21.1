@@ -8,6 +8,7 @@ import com.greatech.content.equipment.hud.GreatechGoggleInfoProvider.ProviderMod
 import com.greatech.content.equipment.hud.content.ObservedFluidInfo;
 import com.greatech.network.fluid.FluidHudDataPayload;
 import com.greatech.network.fluid.GreatechFluidHudCache;
+import com.greatech.network.fluid.RequestFluidHudDataPayload;
 import com.simibubi.create.content.fluids.FluidTransportBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
@@ -17,8 +18,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class CreateFluidPipeGoggleInfoProvider implements GreatechGoggleInfoProvider {
+    private static final long REQUEST_INTERVAL = 5L;
+
     @Override
     public ProviderMode mode() {
         return ProviderMode.EXCLUSIVE;
@@ -31,20 +35,28 @@ public class CreateFluidPipeGoggleInfoProvider implements GreatechGoggleInfoProv
     }
 
     @Override
+    public void requestDataIfNeeded(GoggleHudContext context) {
+        if (GreatechHudRequestTracker.shouldRequest("create_fluid_pipe", context.pos(), context.gameTime(),
+                REQUEST_INTERVAL)) {
+            PacketDistributor.sendToServer(new RequestFluidHudDataPayload(context.pos()));
+        }
+    }
+
+    @Override
     public boolean addTooltip(Level level, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity,
             @Nullable Direction hitFace, boolean detailed, List<Component> tooltip) {
         FluidHudDataPayload payload = GreatechFluidHudCache.get(pos, level.getGameTime());
 
         GreatechGoggleTooltipHelper.addTitle(tooltip, "greatech.goggles.create_fluid_pipe");
         if (payload == null) {
-            tooltip.add(Component.translatable("greatech.goggles.scanning"));
+            tooltip.add(GreatechGoggleTooltipHelper.goggleText("greatech.goggles.scanning"));
             return true;
         }
         if (!"create_fluid_pipe".equals(payload.pipeKind())) {
             return false;
         }
         if (payload.fluids().isEmpty()) {
-            tooltip.add(Component.translatable("greatech.goggles.empty"));
+            tooltip.add(GreatechGoggleTooltipHelper.goggleText("greatech.goggles.empty"));
             return true;
         }
 

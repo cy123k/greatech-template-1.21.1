@@ -7,7 +7,6 @@ import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
@@ -17,6 +16,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.Containers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -75,26 +75,26 @@ public class HydraulicPressBlock extends HorizontalKineticBlock implements IBE<H
     }
 
     @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        if (!state.is(newState.getBlock()) && !level.isClientSide
+                && level.getBlockEntity(pos) instanceof HydraulicPressBlockEntity press && press.hasMold()) {
+            ItemStack mold = press.removeMold();
+            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), mold);
+        }
+        super.onRemove(state, level, pos, newState, movedByPiston);
+    }
+
+    @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hitResult) {
+        if (!(level.getBlockEntity(pos) instanceof HydraulicPressBlockEntity press) || !press.hasMold()) {
+            return InteractionResult.PASS;
+        }
         if (!level.isClientSide) {
-            withBlockEntityDo(level, pos, press -> {
-                if (player.isShiftKeyDown() && press.hasMold()) {
-                    ItemStack removed = press.removeMold();
-                    if (!player.getInventory().add(removed)) {
-                        player.drop(removed, false);
-                    }
-                    player.sendSystemMessage(Component.literal("Hydraulic Press | Removed mold"));
-                    return;
-                }
-                String moldName = press.hasMold() ? press.getMold().getHoverName().getString() : "Empty";
-                String fluidName = press.getFluidStack().isEmpty()
-                        ? "Empty"
-                        : press.getFluidStack().getHoverName().getString();
-                player.sendSystemMessage(Component.literal("Hydraulic Press | Mold: " + moldName
-                        + " | Fluid: " + press.getFluidAmount() + "/" + press.getFluidCapacity()
-                        + " mB " + fluidName));
-            });
+            ItemStack removed = press.removeMold();
+            if (!player.getInventory().add(removed)) {
+                player.drop(removed, false);
+            }
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
@@ -115,8 +115,6 @@ public class HydraulicPressBlock extends HorizontalKineticBlock implements IBE<H
                 if (!player.getAbilities().instabuild) {
                     stack.shrink(1);
                 }
-                player.sendSystemMessage(Component.literal("Hydraulic Press | Installed mold: "
-                        + press.getMold().getHoverName().getString()));
             });
         }
         return ItemInteractionResult.sidedSuccess(level.isClientSide);

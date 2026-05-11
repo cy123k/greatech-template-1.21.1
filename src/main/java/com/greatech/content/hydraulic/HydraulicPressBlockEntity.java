@@ -1,10 +1,12 @@
 package com.greatech.content.hydraulic;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 import com.greatech.Config;
+import com.greatech.content.heat.HeatChamberEnvironment;
 import com.greatech.content.heat.HeatChamberRegistry;
 import com.greatech.registry.GreatechBlockEntityTypes;
 import com.greatech.registry.GreatechRecipeTypes;
@@ -20,7 +22,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
@@ -122,23 +123,22 @@ public class HydraulicPressBlockEntity extends KineticBlockEntity {
     }
 
     private ProcessPlan createProcessPlan(ItemStack input) {
-        if (level == null || level.isClientSide || input.isEmpty() || getKineticSpeed() == 0 || !hasUsableHeatChamber()) {
+        if (level == null || level.isClientSide || input.isEmpty() || getKineticSpeed() == 0) {
             return ProcessPlan.NONE;
         }
 
-        Optional<RecipeHolder<HydraulicPressingRecipe>> recipeHolder =
-                GreatechRecipeTypes.HYDRAULIC_PRESSING.find(new SingleRecipeInput(input), level);
-        if (recipeHolder.isEmpty()) {
+        Optional<HeatChamberEnvironment> heatChamber = getHeatChamberEnvironment();
+        if (heatChamber.isEmpty() || !heatChamber.get().isUsable()) {
             return ProcessPlan.NONE;
         }
 
-        HydraulicPressingRecipe recipe = recipeHolder.get().value();
-        if (!getTier().canProcess(recipe.getRequiredTier())) {
+        HydraulicPressTier effectiveTier = getEffectiveTier(heatChamber.get());
+        Optional<HydraulicPressingRecipe> matchingRecipe = findProcessableRecipe(input, effectiveTier);
+        if (matchingRecipe.isEmpty()) {
             return ProcessPlan.NONE;
         }
-        if (mold.isEmpty() || !recipe.getMoldIngredient().test(mold)) {
-            return ProcessPlan.NONE;
-        }
+
+        HydraulicPressingRecipe recipe = matchingRecipe.get();
 
         Optional<HydraulicPressTier> fluidTier = HydraulicPressTier.hydraulicFluidTierOf(tank.getFluid());
         if (fluidTier.isEmpty()) {
@@ -157,10 +157,39 @@ public class HydraulicPressBlockEntity extends KineticBlockEntity {
         return new ProcessPlan(recipe, operations, recipe.getInputCount(), fluidPerItem);
     }
 
-    private boolean hasUsableHeatChamber() {
-        return level != null && HeatChamberRegistry.getControllerAt(level, worldPosition)
-                .map(controller -> controller.getHeatChamberEnvironment().isUsable())
-                .orElse(false);
+    private Optional<HydraulicPressingRecipe> findProcessableRecipe(ItemStack input, HydraulicPressTier effectiveTier) {
+        if (level == null || input.isEmpty() || mold.isEmpty()) {
+            return Optional.empty();
+        }
+        RecipeType<HydraulicPressingRecipe> recipeType = GreatechRecipeTypes.HYDRAULIC_PRESSING.getType();
+        SingleRecipeInput recipeInput = new SingleRecipeInput(input);
+        return level.getRecipeManager()
+                .getAllRecipesFor(recipeType)
+                .stream()
+                .map(holder -> holder.value())
+                .filter(recipe -> recipe.matches(recipeInput, level))
+                .filter(recipe -> input.getCount() >= recipe.getInputCount())
+                .filter(recipe -> recipe.getMoldIngredient().test(mold))
+                .filter(recipe -> effectiveTier.canProcess(recipe.getRequiredTier()))
+                .max(Comparator.comparingInt(recipe -> recipe.getRequiredTier().configIndex()));
+    }
+
+    public Optional<HeatChamberEnvironment> getHeatChamberEnvironment() {
+        if (level == null) {
+            return Optional.empty();
+        }
+        return HeatChamberRegistry.getControllerAt(level, worldPosition)
+                .map(controller -> controller.getHeatChamberEnvironment());
+    }
+
+    public HydraulicPressTier getEffectiveTier(HeatChamberEnvironment environment) {
+        return getTier().effectiveTier(environment);
+    }
+
+    public HydraulicPressTier getEffectiveTier() {
+        return getHeatChamberEnvironment()
+                .map(this::getEffectiveTier)
+                .orElse(getTier());
     }
 
     private void drainHydraulicFluid(int fluidPerItem, int count) {
@@ -282,7 +311,7 @@ public class HydraulicPressBlockEntity extends KineticBlockEntity {
         return side.getAxis() == getBlockState().getValue(HydraulicPressBlock.HORIZONTAL_FACING).getAxis();
     }
 
-    private HydraulicPressTier getTier() {
+    public HydraulicPressTier getTier() {
         if (getBlockState().getBlock() instanceof HydraulicPressBlock pressBlock) {
             return pressBlock.getTier();
         }

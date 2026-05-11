@@ -122,7 +122,7 @@ Outputs are read from Create's `ProcessingOutput`. Probability is carried into E
 
 ## Hydraulic Fluid Display
 
-Hydraulic fluid is intentionally not shown as a recipe input.
+Hydraulic fluid is shown as a machine operating cost, not as a serialized recipe fluid ingredient.
 
 Reason:
 
@@ -130,7 +130,9 @@ Reason:
 - fluid grade changes operating cost
 - recipe matching does not depend on a specific fluid
 
-The category currently shows a note that hydraulic fluid is consumed by the machine, not the recipe. `HydraulicPressingDisplayData` also has `hydraulicFluidTooltip()` prepared for a future info icon or fluid-cost panel.
+The category displays one cycling fluid-cost slot backed by the `greatech:hydraulic_fluids/<tier>` tags. The amount shown for each fluid tier comes from `Config.hydraulicPressFluidConsumption(...)`, so JEI and EMI reflect balance config while keeping the datapack recipe contract item-only.
+
+`HydraulicPressingDisplayData` owns the shared fluid-cost data and tooltip text so JEI and EMI stay visually consistent.
 
 ## Workstations And Catalysts
 

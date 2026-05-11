@@ -25,7 +25,11 @@ public class HydraulicPressingEmiRecipe implements EmiRecipe {
     public HydraulicPressingEmiRecipe(RecipeHolder<HydraulicPressingRecipe> holder) {
         this.holder = holder;
         HydraulicPressingRecipe recipe = holder.value();
-        this.inputs = List.of(EmiIngredient.of(recipe.getItemIngredient(), recipe.getInputCount()));
+        this.inputs = List.of(
+                EmiIngredient.of(recipe.getItemIngredient(), recipe.getInputCount()),
+                EmiIngredient.of(HydraulicPressingDisplayData.hydraulicFluidCosts().stream()
+                        .map(cost -> EmiIngredient.of(cost.tier().hydraulicFluidTag(), cost.amountPerItem()))
+                        .toList()));
         this.catalysts = List.of(EmiIngredient.of(recipe.getMoldIngredient()));
         this.outputs = recipe.getRollableResults().stream()
                 .map(this::toEmiOutput)
@@ -64,7 +68,7 @@ public class HydraulicPressingEmiRecipe implements EmiRecipe {
 
     @Override
     public int getDisplayHeight() {
-        return 68;
+        return 76;
     }
 
     @Override
@@ -74,6 +78,10 @@ public class HydraulicPressingEmiRecipe implements EmiRecipe {
         widgets.addSlot(catalysts.get(0), 45, 28)
                 .catalyst(true)
                 .appendTooltip(Component.translatable("greatech.recipe.hydraulic_pressing.mold_not_consumed"));
+        var fluidSlot = widgets.addSlot(inputs.get(1), 18, 52);
+        for (Component tooltip : HydraulicPressingDisplayData.hydraulicFluidTooltip()) {
+            fluidSlot.appendTooltip(tooltip);
+        }
         widgets.addTexture(EmiTexture.EMPTY_ARROW, 77, 29);
 
         for (int i = 0; i < outputs.size(); i++) {
@@ -83,11 +91,11 @@ public class HydraulicPressingEmiRecipe implements EmiRecipe {
 
         widgets.addText(
                 Component.literal(recipe.getRequiredTier().id().toUpperCase()),
-                18,
+                45,
                 54,
                 0x555555,
                 false);
-        widgets.addTooltipText(HydraulicPressingDisplayData.recipeNotes(recipe), 14, 50, 128, 16);
+        widgets.addTooltipText(HydraulicPressingDisplayData.recipeNotes(recipe), 42, 50, 100, 16);
     }
 
     @Override

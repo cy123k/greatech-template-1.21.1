@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import com.greatech.network.cable.CableHudDataPayload;
 import com.greatech.network.cable.GreatechCableHudCache;
 import com.greatech.network.cable.GreatechCableHudCache.DisplayData;
+import com.greatech.network.cable.RequestCableHudDataPayload;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,8 +15,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class GtceuCableGoggleInfoProvider implements GreatechGoggleInfoProvider {
+    private static final long REQUEST_INTERVAL = 5L;
+
     @Override
     public ProviderMode mode() {
         return ProviderMode.EXCLUSIVE;
@@ -29,13 +33,21 @@ public class GtceuCableGoggleInfoProvider implements GreatechGoggleInfoProvider 
     }
 
     @Override
+    public void requestDataIfNeeded(GoggleHudContext context) {
+        if (GreatechHudRequestTracker.shouldRequest("gtceu_cable", context.pos(), context.gameTime(),
+                REQUEST_INTERVAL)) {
+            PacketDistributor.sendToServer(new RequestCableHudDataPayload(context.pos()));
+        }
+    }
+
+    @Override
     public boolean addTooltip(Level level, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity,
             @Nullable Direction hitFace, boolean detailed, List<Component> tooltip) {
         DisplayData displayData = GreatechCableHudCache.get(pos, level.getGameTime());
 
         GreatechGoggleTooltipHelper.addTitle(tooltip, "greatech.goggles.cable");
         if (displayData == null) {
-            tooltip.add(Component.translatable("greatech.goggles.scanning"));
+            tooltip.add(GreatechGoggleTooltipHelper.goggleText("greatech.goggles.scanning"));
             return true;
         }
         CableHudDataPayload cable = displayData.payload();
@@ -52,7 +64,7 @@ public class GtceuCableGoggleInfoProvider implements GreatechGoggleInfoProvider 
         if (detailed) {
             GreatechGoggleTooltipHelper.addLabelValue(tooltip, "greatech.goggles.average_voltage",
                     GreatechGoggleTooltipHelper.formatEuPerTick(Math.round(cable.averageVoltage())));
-            GreatechGoggleTooltipHelper.addLabelValue(tooltip, "greatech.goggles.temperature",
+            GreatechGoggleTooltipHelper.addLabelValue(tooltip, "greatech.goggles.cable_temperature",
                     Component.literal(cable.temperature() + " K"));
         }
         return true;

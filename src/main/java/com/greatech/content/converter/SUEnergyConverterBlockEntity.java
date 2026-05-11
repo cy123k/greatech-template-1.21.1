@@ -238,7 +238,7 @@ public class SUEnergyConverterBlockEntity extends KineticBlockEntity implements 
         return SUEnergyConverterBlock.getEnergyOutputSide(getBlockState());
     }
 
-    private SUEnergyConverterTier getTier() {
+    public SUEnergyConverterTier getTier() {
         if (getBlockState().getBlock() instanceof SUEnergyConverterBlock converterBlock) {
             return converterBlock.getTier();
         }

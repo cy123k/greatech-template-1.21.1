@@ -217,10 +217,10 @@ If the position is inside a chamber, the chamber is marked dirty so it can natur
 
 ## Heat Model
 
-The first runtime model should stay simple:
+The first runtime model should stay tier-first and simple:
 
 ```text
-targetTemperature = ambientTemperature + heatPower - heatLoss
+targetTemperature = highestReachableHeatTier.minimumTemperature()
 currentTemperature moves toward targetTemperature over time
 ```
 
@@ -245,7 +245,38 @@ Planned scanners:
 - Create superheated blaze burner scanner
 - future Greatech electric heater scanner
 
-The controller can combine all returned `HeatSourceProfile` values into total heat power and maximum reachable temperature.
+The controller combines returned `HeatSourceProfile` values by checking how much heat power can support each reachable tier for the chamber's interior volume. Multiple low-tier heat sources do not stack into a higher tier, but multiple sources of the same tier can support a larger chamber at that tier.
+
+The current support check runs from high tier to low tier. For a candidate tier, only heat sources whose `reachableTier` is that tier or higher contribute supporting power. The tier is accepted when:
+
+```text
+supportingHeatPower >= ceil(interiorVolume / volumePerHeatPower)
+```
+
+Current volume support constants:
+
+| Chamber tier | Volume per heatPower |
+| --- | ---: |
+| `WARM` | 8 |
+| `HOT` | 4 |
+| `INCANDESCENT` | 2 |
+| `EXTREME` | 1 |
+
+This keeps the final temperature tier based on heat-source quality while making larger chambers require more heat sources.
+
+Current heat source behavior:
+
+| Heat source | Highest reachable chamber tier |
+| --- | --- |
+| lava / flowing lava | `WARM` |
+| lit campfire / soul campfire | `WARM` |
+| magma block | `WARM` |
+| fire / soul fire | `WARM` |
+| Create blaze burner `smouldering` | `WARM` |
+| Create blaze burner `fading` / `kindled` | `HOT` |
+| Create blaze burner `seething` | `INCANDESCENT` |
+
+This means piling up lava, campfires, magma blocks, or vanilla fire can support larger warm chambers but cannot reach hot or incandescent tiers. Higher chamber tiers require a higher-grade heat source such as a hotter Create blaze burner or a future Greatech heater.
 
 ## Receiver Binding
 
@@ -274,6 +305,29 @@ or:
 ```java
 receiver.hasHeatChamber(HeatChamberRequirement.temperature(1200));
 ```
+
+## Hydraulic Press Overclocking
+
+Hydraulic presses can use a usable heat chamber to process recipes one tier above the machine's base tier. The bonus is capped at one tier no matter how hot the chamber is.
+
+Current overclock requirements:
+
+| Base press tier | Required chamber tier | Effective press tier |
+| --- | --- | --- |
+| `LV` | `WARM` | `MV` |
+| `MV` | `HOT` | `HV` |
+| `HV` | `INCANDESCENT` | `EV` |
+| `EV` | `EXTREME` | `IV` |
+| `IV` | none | `IV` |
+
+The recipe still owns its normal `required_tier`. Runtime processing compares that recipe tier against the press's effective tier:
+
+```text
+effectiveTier = baseTier + at most one heat-chamber bonus tier
+canProcess = effectiveTier >= recipe.required_tier
+```
+
+This keeps JEI/EMI recipe data stable while letting chamber heat provide a controlled one-tier overclock path.
 
 ## Near-Term Implementation Plan
 

@@ -12,20 +12,32 @@ import net.minecraft.world.level.block.state.properties.Property;
 public class CreateHeatSourceScanner implements HeatSourceScanner {
     private static final ResourceLocation BLAZE_BURNER =
             ResourceLocation.fromNamespaceAndPath("create", "blaze_burner");
+    private static final ResourceLocation LIT_BLAZE_BURNER =
+            ResourceLocation.fromNamespaceAndPath("create", "lit_blaze_burner");
 
     @Override
     public Optional<HeatSourceProfile> scan(Level level, BlockPos pos) {
         var state = level.getBlockState(pos);
         ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(state.getBlock());
+        if (LIT_BLAZE_BURNER.equals(blockId)) {
+            return Optional.of(new HeatSourceProfile(pos.immutable(),
+                    HeatChamberTemperatureTier.WARM, 8, "create:lit_blaze_burner"));
+        }
         if (!BLAZE_BURNER.equals(blockId)) {
             return Optional.empty();
         }
 
-        String heatLevel = getPropertyValue(state, "heat_level");
+        String heatLevel = getPropertyValue(state, "blaze");
+        if (heatLevel.isEmpty()) {
+            heatLevel = getPropertyValue(state, "heat_level");
+        }
         return switch (heatLevel) {
-            case "smouldering" -> Optional.of(new HeatSourceProfile(pos.immutable(), 500, 8, "create:blaze_burner"));
-            case "fading", "kindled" -> Optional.of(new HeatSourceProfile(pos.immutable(), 900, 32, "create:blaze_burner"));
-            case "seething" -> Optional.of(new HeatSourceProfile(pos.immutable(), 1_800, 64, "create:blaze_burner"));
+            case "smouldering" -> Optional.of(new HeatSourceProfile(pos.immutable(),
+                    HeatChamberTemperatureTier.WARM, 8, "create:blaze_burner"));
+            case "fading", "kindled" -> Optional.of(new HeatSourceProfile(pos.immutable(),
+                    HeatChamberTemperatureTier.HOT, 32, "create:blaze_burner"));
+            case "seething" -> Optional.of(new HeatSourceProfile(pos.immutable(),
+                    HeatChamberTemperatureTier.INCANDESCENT, 64, "create:blaze_burner"));
             default -> Optional.empty();
         };
     }

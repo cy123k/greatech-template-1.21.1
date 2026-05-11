@@ -115,8 +115,8 @@ The press has one internal mold slot.
 Current interaction rules:
 
 - right-click with a valid mold installs it if the mold slot is empty
-- shift + empty hand removes the installed mold
-- empty-hand interaction reports basic mold/fluid status
+- empty-hand right-click removes the installed mold
+- runtime status is shown through the Greatech goggles HUD
 - the mold is not consumed by recipes
 - the installed mold is synced to the client and rendered against the underside of the press head
 
@@ -314,7 +314,8 @@ The press does not scan heat chamber structures itself. Structure ownership stay
 
 Current limitation:
 
-- recipe-specific temperature, pressure, or tier requirements are not implemented yet
+- pressure requirements are not implemented yet
+- heat currently changes the press's effective tier rather than being stored on individual recipes
 
 ## Tier Semantics
 
@@ -330,6 +331,8 @@ Current tier-controlled values:
 - maximum items processed per cycle
 - hydraulic fluid consumption, by stored fluid grade
 - stress impact
+- recipe eligibility through `required_tier`
+- one-step heat chamber overclocking
 
 Current defaults in [Config.java](../../src/main/java/com/greatech/Config.java):
 
@@ -338,11 +341,19 @@ Current defaults in [Config.java](../../src/main/java/com/greatech/Config.java):
 - `hydraulicPressFluidConsumption = [100, 75, 50, 25, 10]`
 - `hydraulicPressStressImpact = [16.0, 32.0, 64.0, 128.0, 256.0]`
 
-Future tier hooks may include:
+Effective tier can increase by one step when the surrounding heat chamber reaches the required heat tier:
 
-- minimum heat chamber requirement
-- recipe eligibility
-- model and texture variant
+| Base press tier | Required heat tier | Effective tier |
+| --- | --- | --- |
+| LV | WARM | MV |
+| MV | HOT | HV |
+| HV | INCANDESCENT | EV |
+| EV | EXTREME | IV |
+| IV | none | IV |
+
+The press uses the effective tier when choosing a processable recipe. It scans all loaded hydraulic pressing recipes matching the input stack and installed mold, filters by effective tier, and prefers the highest valid recipe tier.
+
+The goggles HUD shows this effective recipe tier as `Tier`.
 
 ## Rendering
 
@@ -379,9 +390,9 @@ The LV renderer currently uses `GreatechPartialModels.STEEL_SHAFT` for the shaft
 - no GUI
 - no mold automation item handler
 - no redstone controls
-- JEI/EMI category exists, but visual polish and hydraulic-fluid info icon are still future work
+- JEI/EMI category exists, but visual polish is still future work
 - no Ponder scene
 - no fluid output recipes
-- no recipe-specific heat or tier params
+- no recipe-specific pressure params
 - no Basin processing by design
 - no processing of multiple separate item entities in one cycle yet

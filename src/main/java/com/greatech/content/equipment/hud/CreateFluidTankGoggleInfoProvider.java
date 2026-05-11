@@ -43,7 +43,7 @@ public class CreateFluidTankGoggleInfoProvider implements GreatechGoggleInfoProv
         GreatechGoggleTooltipHelper.addTitle(tooltip, "greatech.goggles.create_fluid_tank");
         FluidStack stack = controller.getTankInventory().getFluid().copy();
         if (stack.isEmpty()) {
-            tooltip.add(Component.translatable("greatech.goggles.empty"));
+            tooltip.add(GreatechGoggleTooltipHelper.goggleText("greatech.goggles.empty"));
             return true;
         }
 

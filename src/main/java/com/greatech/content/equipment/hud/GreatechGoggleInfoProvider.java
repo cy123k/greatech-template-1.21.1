@@ -19,6 +19,9 @@ public interface GreatechGoggleInfoProvider {
     boolean supports(Level level, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity,
             @Nullable Direction hitFace);
 
+    default void requestDataIfNeeded(GoggleHudContext context) {
+    }
+
     boolean addTooltip(Level level, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity,
             @Nullable Direction hitFace, boolean detailed, List<Component> tooltip);
 

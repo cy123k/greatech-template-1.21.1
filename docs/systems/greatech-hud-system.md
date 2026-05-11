@@ -102,7 +102,9 @@ The HUD currently supports:
 - `Create` kinetic block entities
 - `Create` fluid pipes
 - `Create` fluid tanks
+- `Greatech` SU energy converters
 - `Greatech` electric fluid bridge
+- `Greatech` hydraulic press
 
 ## Shared Fluid Presentation
 
@@ -120,6 +122,8 @@ This keeps:
 - plasma flag
 
 in one neutral structure so `GTCEu` pipes, `Create` pipes, `Create` tanks, and Greatech bridge HUDs can render with the same visual language.
+
+Providers can hide individual shared fields when the machine context would be noisy. For example, the hydraulic press uses the shared fluid model for its internal hydraulic fluid tank but suppresses fluid temperature in its HUD.
 
 ## Direct Read vs Networked Read
 
@@ -144,7 +148,7 @@ Current formatting conventions include:
 - gold titles for sections
 - label/value rows for machine data
 - tier-aware voltage formatting for `GTCEu`
-- consistent fluid amount and temperature formatting
+- consistent fluid amount and optional temperature formatting
 
 The helper intentionally keeps formatting centralized so provider classes focus on data selection rather than line styling.
 
