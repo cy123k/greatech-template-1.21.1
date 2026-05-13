@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
+import com.greatech.content.kinetics.GreatechEncasingType;
 import com.greatech.content.kinetics.GreatechKineticMaterial;
 import com.greatech.registry.GreatechBlocks;
 
@@ -39,7 +40,13 @@ public final class GreatechBlockLootProvider {
                 var family = GreatechBlocks.getFamily(material);
                 dropSelf(family.shaft().get());
                 dropSelf(family.poweredShaft().get());
+                for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
+                    dropSelf(family.encasedShaft(encasingType).get());
+                }
                 dropSelf(family.cogwheel().get());
+                for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
+                    dropSelf(family.encasedCogwheel(encasingType).get());
+                }
                 dropSelf(family.poweredCogwheel().get());
                 dropSelf(family.largeCogwheel().get());
             }
@@ -52,7 +59,13 @@ public final class GreatechBlockLootProvider {
                 var family = GreatechBlocks.getFamily(material);
                 blocks.add(family.shaft().get());
                 blocks.add(family.poweredShaft().get());
+                for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
+                    blocks.add(family.encasedShaft(encasingType).get());
+                }
                 blocks.add(family.cogwheel().get());
+                for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
+                    blocks.add(family.encasedCogwheel(encasingType).get());
+                }
                 blocks.add(family.poweredCogwheel().get());
                 blocks.add(family.largeCogwheel().get());
             }

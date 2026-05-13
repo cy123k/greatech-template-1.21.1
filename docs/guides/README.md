@@ -14,4 +14,4 @@ Current guide docs:
 - [Hydraulic Pressing Recipe Generation](./hydraulic-pressing-recipe-generation.md)
 - [Hydraulic Pressing JEI/EMI Integration](./hydraulic-pressing-xei-integration.md)
 
-Use these when adding a new machine, deciding between Create-style and GTCEu-style registration, wiring BER and model resources, adding generated recipes, integrating JEI/EMI displays, or adding connected block textures.
+Use these when adding a new machine, deciding between Create-style and GTCEu-style registration, wiring BER and model resources, adding generated recipes, integrating JEI/EMI displays, adding connected block textures, or extending datagen-backed transmission resources.

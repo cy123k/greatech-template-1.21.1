@@ -11,9 +11,7 @@ import com.greatech.content.hydraulic.HydraulicPressRenderer;
 import com.greatech.content.shaft.GreatechShaftRenderer;
 import com.greatech.content.steam.GreatechPoweredCogwheelRenderer;
 import com.greatech.content.steam.GreatechPoweredShaftRenderer;
-import com.greatech.content.steam.GreatechSteamEngineHatchRenderer;
 import com.greatech.registry.GreatechBlockEntityTypes;
-import com.greatech.registry.GreatechMachines;
 import com.greatech.registry.GreatechPartialModels;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -64,9 +62,6 @@ public class GreatechClient {
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.ELECTRIC_FLUID_BRIDGE.get(), ElectricFluidBridgeRenderer::new);
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.HYDRAULIC_PRESS.get(), HydraulicPressRenderer::new);
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.HEAT_CHAMBER_CONTROLLER.get(), HeatChamberControllerRenderer::new);
-        for (var hatch : GreatechMachines.STEAM_ENGINE_HATCHES) {
-            event.registerBlockEntityRenderer(hatch.getBlockEntityType(), GreatechSteamEngineHatchRenderer::new);
-        }
     }
 
     @SubscribeEvent

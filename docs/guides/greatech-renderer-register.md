@@ -82,32 +82,29 @@ For `lv_fluid_bridge`, the whole world visual is BER-rendered:
 
 This prevents the normal blockstate model from being face-culled or darkened by adjacent full blocks.
 
-For the current `steam_engine_hatch`, Greatech uses a mixed `GTCEu machine + custom BER` pattern:
+For the current `steam_engine_hatch`, Greatech keeps both unformed and formed visuals in the baked `gtceu:machine` model path:
 
-- unformed world model: empty `*_steam_engine_hatch_block.json`, particle texture only
-- unformed visible body: `GreatechSteamEngineHatchRenderer`
+- unformed world model: `models/block/machine/hatch/<tier>_steam_engine_hatch.json`
 - formed world model: `gtceu:machine` runtime JSON in `models/block/machine/<tier>_steam_engine_hatch.json`
-- formed front overlay: still handled by the formed machine model, not by BER
+- front overlays: handled by the model parent, not by BER
 - item model: `models/item/<tier>_steam_engine_hatch.json`, inheriting the full shared hatch geometry
 
 This split is useful when:
 
 - the machine must still exist as a real GTCEu `MachineDefinition`
 - `is_formed` and `is_painted` need to stay in GTCEu's model-state system
-- the unformed custom geometry does not rotate or light correctly through `gtceu:machine` alone
+- the unformed and formed appearances should differ without registering a block entity renderer
 
 The current code path is:
 
 - machine registration: [GreatechMachines.java](../src/main/java/com/greatech/registry/GreatechMachines.java)
-- custom BER: [GreatechSteamEngineHatchRenderer.java](../src/main/java/com/greatech/content/steam/GreatechSteamEngineHatchRenderer.java)
-- partials: [GreatechPartialModels.java](../src/main/java/com/greatech/registry/GreatechPartialModels.java)
 - client registration: [GreatechClient.java](../src/main/java/com/greatech/GreatechClient.java)
 
 Important note:
 
 - `.hasBER(false)` is intentional here
 
-Greatech does not use GTCEu's generic BER helper for this hatch. Instead, it registers the block entity renderer directly against the machine block entity type in `GreatechClient`. This avoids the renderer path conflict we hit earlier while still letting GTCEu own the machine block, item, and render-state sync.
+Greatech does not register a hatch-specific `BlockEntityRenderer`. The hatch remains a GTCEu machine block entity for state and behavior, but its unformed and formed bodies are ordinary model variants.
 
 For `lv_hydraulic_press`, the world visual is split between baked body and BER runtime pieces:
 
@@ -168,7 +165,7 @@ For Greatech's current directional BER machines, the runtime transform usually u
 Direction modelFacing = logicalFront.getOpposite();
 ```
 
-This matches the current converter, fluid bridge, and unformed steam hatch renderers.
+This matches the current converter and fluid bridge renderers.
 
 The bridge block also uses non-occluding block properties and light overrides so the invisible world model does not behave like a full opaque cube.
 
@@ -182,11 +179,6 @@ Relevant block-side settings:
 - `propagatesSkylightDown(...) == true`
 
 These settings help the block stop shading its neighbors, while the BER handles the bridge's own visible lighting.
-
-The same empty-world-model idea is reused for the unformed `steam_engine_hatch`, but with one difference:
-
-- `fluid_bridge`: BER owns the full world appearance
-- `steam_engine_hatch`: BER owns only the unformed world body, while formed appearance returns to `gtceu:machine`
 
 ## Neighbor Light Sampling
 
@@ -202,8 +194,6 @@ The sampler:
 Use this only for BER partials that are visually pipe-like or inset. For normal solid machines, vanilla packed light is usually more correct.
 
 The current converter now also uses this sampler because both its casing and rotor are BER-rendered and the rotor sits recessed behind the input opening.
-
-The unformed `steam_engine_hatch` renderer also uses this sampler for the front-facing body partial, so the custom hatch face does not look overly dark when recessed against adjacent blocks.
 
 ## Renderer Pattern
 

@@ -2,6 +2,8 @@ package com.greatech.datagen;
 
 import com.greatech.Greatech;
 import com.greatech.content.cogwheel.GreatechCogwheelBlock;
+import com.greatech.content.cogwheel.GreatechEncasedCogwheelBlock;
+import com.greatech.content.kinetics.GreatechEncasingType;
 import com.greatech.content.kinetics.GreatechKineticMaterial;
 import com.greatech.content.shaft.GreatechShaftBlock;
 import com.greatech.registry.GreatechBlocks;
@@ -41,6 +43,13 @@ public class GreatechBlockStateProvider extends BlockStateProvider {
         registerAxisOnlyBlock(
                 family.poweredShaft().get(),
                 modelFile("block/shaft/" + material.id() + "_shaft_block"));
+
+        for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
+            String blockName = GreatechBlocks.encasedShaftName(material, encasingType);
+            registerAxisOnlyBlock(
+                    family.encasedShaft(encasingType).get(),
+                    uncheckedModelFile("block/shaft/encased/" + blockName));
+        }
     }
 
     private void registerSmallCogwheelFamily(GreatechKineticMaterial material) {
@@ -56,6 +65,10 @@ public class GreatechBlockStateProvider extends BlockStateProvider {
                 modelFile("block/cogwheel/small_cogwheel/" + material.id() + "_cogwheel_block"),
                 modelFile("block/cogwheel/small_cogwheel/" + material.id() + "_cogwheel"),
                 GreatechCogwheelBlock.PLACEMENT_GHOST);
+
+        for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
+            registerEncasedSmallCogwheelBlock(material, encasingType);
+        }
     }
 
     private void registerLargeCogwheelFamily(GreatechKineticMaterial material) {
@@ -97,6 +110,34 @@ public class GreatechBlockStateProvider extends BlockStateProvider {
         }
     }
 
+    private void registerEncasedSmallCogwheelBlock(GreatechKineticMaterial material, GreatechEncasingType encasingType) {
+        VariantBlockStateBuilder builder = getVariantBuilder(
+                GreatechBlocks.getFamily(material).encasedCogwheel(encasingType).get());
+        for (Axis axis : Axis.values()) {
+            addEncasedCogwheelVariant(builder, axis, false, false, encasedCogwheelModel(material, encasingType, ""));
+            addEncasedCogwheelVariant(builder, axis, false, true, encasedCogwheelModel(material, encasingType, "_top"));
+            addEncasedCogwheelVariant(builder, axis, true, false, encasedCogwheelModel(material, encasingType, "_bottom"));
+            addEncasedCogwheelVariant(builder, axis, true, true, encasedCogwheelModel(material, encasingType, "_top_bottom"));
+        }
+    }
+
+    private void addEncasedCogwheelVariant(VariantBlockStateBuilder builder, Axis axis, boolean bottomShaft,
+            boolean topShaft, ModelFile model) {
+        ConfiguredModel.Builder<?> configured = builder.partialState()
+                .with(BlockStateProperties.AXIS, axis)
+                .with(GreatechEncasedCogwheelBlock.BOTTOM_SHAFT, bottomShaft)
+                .with(GreatechEncasedCogwheelBlock.TOP_SHAFT, topShaft)
+                .modelForState()
+                .modelFile(model);
+        applyAxisRotation(configured, axis).addModel();
+    }
+
+    private ModelFile encasedCogwheelModel(GreatechKineticMaterial material, GreatechEncasingType encasingType,
+            String suffix) {
+        return uncheckedModelFile("block/cogwheel/small_cogwheel/encased/"
+                + GreatechBlocks.encasedCogwheelName(material, encasingType) + suffix);
+    }
+
     private ConfiguredModel.Builder<?> applyAxisRotation(ConfiguredModel.Builder<?> builder, Axis axis) {
         return switch (axis) {
             case X -> builder.rotationX(90).rotationY(90);
@@ -107,5 +148,9 @@ public class GreatechBlockStateProvider extends BlockStateProvider {
 
     private ModelFile modelFile(String path) {
         return models().getExistingFile(modLoc(path));
+    }
+
+    private ModelFile uncheckedModelFile(String path) {
+        return new ModelFile.UncheckedModelFile(modLoc(path));
     }
 }

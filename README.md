@@ -5,9 +5,11 @@ Greatech is a NeoForge `1.21.1` mod prototype that explores a bridge between Cre
 The current build focuses on:
 
 - Create kinetic parts and machine interaction
+- Greatech-owned steel, aluminium, and stainless transmission families with Create-style encasing support
 - GTCEu-flavored tiers, energy output, and industrial recipes
 - Greatech-owned machines such as the SU Energy Converter, Fluid Bridge, Heat Chamber, and Hydraulic Press
 - shared HUD/goggles display helpers for Create and GTCEu-adjacent blocks
+- datagen-backed transmission resources, including generated Create-casing wrapper models
 
 ## Documentation
 

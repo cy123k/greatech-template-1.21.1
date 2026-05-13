@@ -20,6 +20,7 @@ public final class GreatechDataGen {
 
         generator.addProvider(event.includeClient(), new GreatechBlockStateProvider(output, existingFileHelper));
         generator.addProvider(event.includeClient(), new GreatechItemModelProvider(output, existingFileHelper));
+        generator.addProvider(event.includeClient(), new GreatechEncasedModelProvider(output));
         generator.addProvider(event.includeServer(), GreatechBlockLootProvider.create(output, event.getLookupProvider()));
     }
 }

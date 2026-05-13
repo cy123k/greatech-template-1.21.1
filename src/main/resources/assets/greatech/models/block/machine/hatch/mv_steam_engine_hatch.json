@@ -1,8 +1,9 @@
 {
-  "parent": "greatech:block/machine/hatch/greatech_hatch",
+  "parent": "greatech:block/machine/template/part/hatch_machine_no_glow",
   "textures": {
-    "0": "greatech:block/greatech_machine/mv_machine/mv_steamout",
-    "1": "greatech:block/greatech_machine/mv_machine/mv_casing",
-    "particle": "greatech:block/greatech_machine/mv_machine/mv_steamout"
+    "bottom": "greatech:block/greatech_machine/mv_machine/mv_casing",
+    "overlay": "greatech:block/greatech_machine/mv_machine/mv_steamout",
+    "side": "greatech:block/greatech_machine/mv_machine/mv_casing",
+    "top": "greatech:block/greatech_machine/mv_machine/mv_casing"
   }
 }

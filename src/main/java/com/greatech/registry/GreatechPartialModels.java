@@ -2,6 +2,7 @@ package com.greatech.registry;
 
 import com.greatech.content.kinetics.GreatechKineticMaterial;
 import com.greatech.content.kinetics.MaterialKineticBlock;
+import com.greatech.content.cogwheel.GreatechEncasedCogwheelBlock;
 
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import net.minecraft.resources.ResourceLocation;
@@ -24,12 +25,15 @@ public final class GreatechPartialModels {
     public static final PartialModel STAINLESS_SHAFT = block("shaft/stainless_shaft");
     public static final PartialModel STEAM_ENGINE_BRACKET =
             block("steam_engine_hatch/greatech_steamengine_bracket");
-    public static final PartialModel LV_STEAM_ENGINE_HATCH = block("machine/hatch/lv_steam_engine_hatch");
-    public static final PartialModel MV_STEAM_ENGINE_HATCH = block("machine/hatch/mv_steam_engine_hatch");
-    public static final PartialModel HV_STEAM_ENGINE_HATCH = block("machine/hatch/hv_steam_engine_hatch");
     public static final PartialModel STEEL_COGWHEEL = block("cogwheel/small_cogwheel/steel_cogwheel");
     public static final PartialModel ALUMINIUM_COGWHEEL = block("cogwheel/small_cogwheel/aluminium_cogwheel");
     public static final PartialModel STAINLESS_COGWHEEL = block("cogwheel/small_cogwheel/stainless_cogwheel");
+    public static final PartialModel STEEL_COGWHEEL_SHAFTLESS =
+            block("cogwheel/small_cogwheel/steel_cogwheel_shaftless");
+    public static final PartialModel ALUMINIUM_COGWHEEL_SHAFTLESS =
+            block("cogwheel/small_cogwheel/aluminium_cogwheel_shaftless");
+    public static final PartialModel STAINLESS_COGWHEEL_SHAFTLESS =
+            block("cogwheel/small_cogwheel/stainless_cogwheel_shaftless");
     public static final PartialModel STEEL_LARGE_COGWHEEL = block("cogwheel/large_cogwheel/steel_large_cogwheel");
     public static final PartialModel ALUMINIUM_LARGE_COGWHEEL = block("cogwheel/large_cogwheel/aluminium_large_cogwheel");
     public static final PartialModel STAINLESS_LARGE_COGWHEEL =
@@ -66,22 +70,20 @@ public final class GreatechPartialModels {
     }
 
     public static PartialModel cogwheel(BlockState state, boolean large) {
-        return cogwheel(materialOf(state), large);
+        return cogwheel(materialOf(state), large, state.getBlock() instanceof GreatechEncasedCogwheelBlock);
     }
 
     public static PartialModel cogwheel(GreatechKineticMaterial material, boolean large) {
-        return switch (material) {
-            case STEEL -> large ? STEEL_LARGE_COGWHEEL : STEEL_COGWHEEL;
-            case ALUMINIUM -> large ? ALUMINIUM_LARGE_COGWHEEL : ALUMINIUM_COGWHEEL;
-            case STAINLESS -> large ? STAINLESS_LARGE_COGWHEEL : STAINLESS_COGWHEEL;
-        };
+        return cogwheel(material, large, false);
     }
 
-    public static PartialModel steamEngineHatch(com.greatech.content.steam.GreatechSteamEngineHatchMachine hatch) {
-        return switch (hatch.getTier()) {
-            case LV -> LV_STEAM_ENGINE_HATCH;
-            case MV -> MV_STEAM_ENGINE_HATCH;
-            case HV -> HV_STEAM_ENGINE_HATCH;
+    public static PartialModel cogwheel(GreatechKineticMaterial material, boolean large, boolean shaftless) {
+        return switch (material) {
+            case STEEL -> large ? STEEL_LARGE_COGWHEEL : shaftless ? STEEL_COGWHEEL_SHAFTLESS : STEEL_COGWHEEL;
+            case ALUMINIUM -> large ? ALUMINIUM_LARGE_COGWHEEL
+                    : shaftless ? ALUMINIUM_COGWHEEL_SHAFTLESS : ALUMINIUM_COGWHEEL;
+            case STAINLESS -> large ? STAINLESS_LARGE_COGWHEEL
+                    : shaftless ? STAINLESS_COGWHEEL_SHAFTLESS : STAINLESS_COGWHEEL;
         };
     }
 

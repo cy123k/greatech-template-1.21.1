@@ -183,7 +183,6 @@ This is already used by:
 
 - [SUEnergyConverterRenderer.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterRenderer.java)
 - [ElectricFluidBridgeRenderer.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
-- [GreatechSteamEngineHatchRenderer.java](../src/main/java/com/greatech/content/steam/GreatechSteamEngineHatchRenderer.java)
 
 Important caution:
 

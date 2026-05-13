@@ -1,5 +1,6 @@
 package com.greatech.content.shaft;
 
+import com.greatech.client.render.GreatechLightSampler;
 import com.greatech.registry.GreatechPartialModels;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -12,6 +13,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.Direction.AxisDirection;
 
 public class GreatechShaftRenderer extends KineticBlockEntityRenderer<GreatechShaftBlockEntity> {
     private static final float HALF_PI = (float) Math.PI / 2.0F;
@@ -28,10 +30,23 @@ public class GreatechShaftRenderer extends KineticBlockEntityRenderer<GreatechSh
                 GreatechPartialModels.shaft(blockEntity.getBlockState()),
                 blockEntity.getBlockState());
         VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.solid());
+        int shaftLight = lightForShaft(blockEntity, axis, light);
 
-        kineticRotationTransform(shaft, blockEntity, axis, getAngleForBe(blockEntity, blockEntity.getBlockPos(), axis), light);
+        kineticRotationTransform(shaft, blockEntity, axis, getAngleForBe(blockEntity, blockEntity.getBlockPos(), axis), shaftLight);
         orientShaftToAxis(shaft, axis);
         shaft.renderInto(poseStack, vertexConsumer);
+    }
+
+    private static int lightForShaft(GreatechShaftBlockEntity blockEntity, Axis axis, int fallbackLight) {
+        if (!(blockEntity.getBlockState().getBlock() instanceof GreatechEncasedShaftBlock)
+                || blockEntity.getLevel() == null) {
+            return fallbackLight;
+        }
+
+        return GreatechLightSampler.sample(
+                blockEntity.getLevel(),
+                blockEntity.getBlockPos(),
+                Direction.fromAxisAndDirection(axis, AxisDirection.POSITIVE));
     }
 
     private static void orientShaftToAxis(SuperByteBuffer shaft, Axis axis) {

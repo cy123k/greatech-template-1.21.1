@@ -9,6 +9,7 @@ import com.greatech.content.heat.HeatChamberControllerBlockEntity;
 import com.greatech.content.hydraulic.HydraulicPressBlockEntity;
 import com.greatech.content.kinetics.MaterialKineticBlock;
 import com.greatech.content.kinetics.GreatechKineticBlockEntityFamily;
+import com.greatech.content.kinetics.GreatechEncasingType;
 import com.greatech.content.kinetics.GreatechKineticMaterial;
 import com.greatech.content.shaft.GreatechShaftBlockEntity;
 import com.greatech.content.steam.GreatechPoweredCogwheelBlockEntity;
@@ -145,7 +146,7 @@ public final class GreatechBlockEntityTypes {
                 material.id() + "_shaft",
                 () -> BlockEntityType.Builder.of(
                         GreatechShaftBlockEntity::new,
-                        GreatechBlocks.getFamily(material).shaft().get()).build(null));
+                        shaftBlocks(material)).build(null));
 
         DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechPoweredShaftBlockEntity>> poweredShaft = BLOCK_ENTITY_TYPES.register(
                 "powered_" + material.id() + "_shaft",
@@ -157,7 +158,7 @@ public final class GreatechBlockEntityTypes {
                 material.id() + "_cogwheel",
                 () -> BlockEntityType.Builder.of(
                         GreatechCogwheelBlockEntity::new,
-                        GreatechBlocks.getFamily(material).cogwheel().get()).build(null));
+                        cogwheelBlocks(material)).build(null));
 
         DeferredHolder<BlockEntityType<?>, BlockEntityType<GreatechPoweredCogwheelBlockEntity>> poweredCogwheel = BLOCK_ENTITY_TYPES.register(
                 "powered_" + material.id() + "_cogwheel",
@@ -185,5 +186,25 @@ public final class GreatechBlockEntityTypes {
             return materialBlock.getMaterial();
         }
         return GreatechKineticMaterial.STEEL;
+    }
+
+    private static net.minecraft.world.level.block.Block[] shaftBlocks(GreatechKineticMaterial material) {
+        java.util.List<net.minecraft.world.level.block.Block> blocks = new java.util.ArrayList<>();
+        var family = GreatechBlocks.getFamily(material);
+        blocks.add(family.shaft().get());
+        for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
+            blocks.add(family.encasedShaft(encasingType).get());
+        }
+        return blocks.toArray(net.minecraft.world.level.block.Block[]::new);
+    }
+
+    private static net.minecraft.world.level.block.Block[] cogwheelBlocks(GreatechKineticMaterial material) {
+        java.util.List<net.minecraft.world.level.block.Block> blocks = new java.util.ArrayList<>();
+        var family = GreatechBlocks.getFamily(material);
+        blocks.add(family.cogwheel().get());
+        for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
+            blocks.add(family.encasedCogwheel(encasingType).get());
+        }
+        return blocks.toArray(net.minecraft.world.level.block.Block[]::new);
     }
 }

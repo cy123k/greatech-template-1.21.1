@@ -76,7 +76,7 @@ Current registration notes:
 - the LV/MV/HV fields are compatibility aliases for callers that still expect named definitions
 - `rotationState(RotationState.ALL)` keeps the hatch compatible with all six GTCEu-facing directions
 - a custom [GreatechSteamEngineHatchBlock.java](../src/main/java/com/greatech/content/steam/GreatechSteamEngineHatchBlock.java) now makes hatch placement follow the same explicit `context.getNearestLookingDirection().getOpposite()` rule used by Greatech's other directional machines
-- `.hasBER(false)` stays set, because we register our own block-entity renderer instead of using GTCEu's generic BER path
+- `.hasBER(false)` stays set, because the hatch now uses ordinary baked machine models for both unformed and formed visual states
 - `.appearanceBlock(() -> Blocks.IRON_BLOCK)` plus a plain `.blockModel(...)` lambda are still intentional dev-environment workarounds to avoid GTCEu model static-init crashes
 
 Creative-tab note:
@@ -176,9 +176,9 @@ For rendering, `GreatechPoweredShaftRenderer` reuses `GreatechPartialModels.STEE
 
 ## Resource Notes
 
-The hatch now uses a split visual path:
+The hatch now uses a split baked-model visual path:
 
-- unformed world body: BER partial from `models/block/machine/hatch/<tier>_steam_engine_hatch.json`
+- unformed world body: ordinary `gtceu:machine` variant from `models/block/machine/hatch/<tier>_steam_engine_hatch.json`
 - formed world body: `gtceu:machine` model from `models/block/machine/<tier>_steam_engine_hatch.json`
 - item/display body: the same shared hatch geometry through the item model wrappers
 
@@ -186,29 +186,25 @@ The shared parent model is:
 
 - `models/block/machine/hatch/greatech_hatch.json`
 
-It defines a complete cube-style hatch body where:
+The unformed tier wrappers now use the same local non-emissive hatch parent style as the formed state:
 
-- `north` is the visible `steamout` face
-- the other five faces use the tier casing texture
+- the base cube uses the tier casing texture
+- the `north` face receives the visible `steamout` overlay
+- the overlay is not rendered through a block entity renderer
 
-Each tier wrapper only swaps textures:
+Each tier wrapper swaps textures:
 
 - `lv`: `lv_steamout` + `lv_casing`
 - `mv`: `mv_steamout` + `mv_casing`
 - `hv`: currently reuses `lv_steamout` + `lv_casing`
 
-The unformed world model does not rely on `gtceu:machine` to rotate the custom full-cube geometry. Instead:
+The unformed world model now stays in the normal baked model path:
 
-- `models/block/machine/<tier>_steam_engine_hatch.json` uses an empty shell model for `is_formed=false`
-- [GreatechSteamEngineHatchRenderer.java](../src/main/java/com/greatech/content/steam/GreatechSteamEngineHatchRenderer.java) renders the custom hatch body with BER
+- `models/block/machine/<tier>_steam_engine_hatch.json` points `is_formed=false` at the tier hatch wrapper
+- the blockstate rotates the `gtceu:machine` model by `facing`
+- there is no hatch-specific `BlockEntityRenderer` registered for the unformed body
 
-The current unformed BER path now follows the same facing helper pattern as Greatech's other BER-owned machines:
-
-- the source hatch model is authored with its visible `steamout` face on `north`
-- runtime orientation uses `CachedBuffers.partialFacing(...)`
-- the renderer passes `front.getOpposite()` as the model-facing transform input, matching the current converter and fluid bridge conventions
-
-The formed world model still uses `gtceu:machine`, but with a local non-emissive parent:
+The formed world model also uses `gtceu:machine`, but with a local non-emissive parent:
 
 - `models/block/machine/template/part/hatch_machine_no_glow.json`
 

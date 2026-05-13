@@ -1,5 +1,6 @@
 package com.greatech.content.cogwheel;
 
+import com.greatech.client.render.GreatechLightSampler;
 import com.greatech.registry.GreatechPartialModels;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -15,6 +16,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.Direction.AxisDirection;
 
 public class GreatechCogwheelRenderer extends KineticBlockEntityRenderer<BracketedKineticBlockEntity> {
     private static final float HALF_PI = (float) Math.PI / 2.0F;
@@ -36,10 +38,23 @@ public class GreatechCogwheelRenderer extends KineticBlockEntityRenderer<Bracket
                 GreatechPartialModels.cogwheel(blockEntity.getBlockState(), ICogWheel.isLargeCog(blockEntity.getBlockState())),
                 blockEntity.getBlockState());
         VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.solid());
+        int cogwheelLight = lightForCogwheel(blockEntity, axis, light);
 
-        kineticRotationTransform(cogwheel, blockEntity, axis, getAngleForBe(blockEntity, blockEntity.getBlockPos(), axis), light);
+        kineticRotationTransform(cogwheel, blockEntity, axis, getAngleForBe(blockEntity, blockEntity.getBlockPos(), axis), cogwheelLight);
         orientCogwheelToAxis(cogwheel, axis);
         cogwheel.renderInto(poseStack, vertexConsumer);
+    }
+
+    private static int lightForCogwheel(KineticBlockEntity blockEntity, Axis axis, int fallbackLight) {
+        if (!(blockEntity.getBlockState().getBlock() instanceof GreatechEncasedCogwheelBlock)
+                || blockEntity.getLevel() == null) {
+            return fallbackLight;
+        }
+
+        return GreatechLightSampler.sample(
+                blockEntity.getLevel(),
+                blockEntity.getBlockPos(),
+                Direction.fromAxisAndDirection(axis, AxisDirection.POSITIVE));
     }
 
     private static void orientCogwheelToAxis(SuperByteBuffer cogwheel, Axis axis) {

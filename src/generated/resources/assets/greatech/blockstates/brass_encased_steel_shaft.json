@@ -1,0 +1,17 @@
+{
+    "variants": {
+        "axis=x": {
+            "model": "greatech:block/shaft/encased/brass_encased_steel_shaft",
+            "x": 90,
+            "y": 90
+        },
+        "axis=y": {
+            "model": "greatech:block/shaft/encased/brass_encased_steel_shaft"
+        },
+        "axis=z": {
+            "model": "greatech:block/shaft/encased/brass_encased_steel_shaft",
+            "x": 90,
+            "y": 180
+        }
+    }
+}

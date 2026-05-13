@@ -2,6 +2,7 @@ package com.greatech;
 
 import org.slf4j.Logger;
 
+import com.greatech.compat.create.GreatechCreateEncasingCompat;
 import com.greatech.network.GreatechNetworking;
 import com.greatech.content.heat.HeatChamberPlacementEvents;
 import com.greatech.registry.GreatechBlockEntityTypes;
@@ -55,13 +56,19 @@ public class Greatech {
                 output.accept(GreatechBlocks.HEAT_CHAMBER_GLASS_ITEM.get());
                 output.accept(GreatechBlocks.HEAT_CHAMBER_CONTROLLER_ITEM.get());
                 output.accept(GreatechBlocks.STEEL_SHAFT_ITEM.get());
+                acceptRegistered(output, GreatechBlocks.STEEL_FAMILY.encasedShaftItems().values());
                 output.accept(GreatechBlocks.STEEL_COGWHEEL_ITEM.get());
+                acceptRegistered(output, GreatechBlocks.STEEL_FAMILY.encasedCogwheelItems().values());
                 output.accept(GreatechBlocks.STEEL_LARGE_COGWHEEL_ITEM.get());
                 output.accept(GreatechBlocks.ALUMINIUM_SHAFT_ITEM.get());
+                acceptRegistered(output, GreatechBlocks.ALUMINIUM_FAMILY.encasedShaftItems().values());
                 output.accept(GreatechBlocks.ALUMINIUM_COGWHEEL_ITEM.get());
+                acceptRegistered(output, GreatechBlocks.ALUMINIUM_FAMILY.encasedCogwheelItems().values());
                 output.accept(GreatechBlocks.ALUMINIUM_LARGE_COGWHEEL_ITEM.get());
                 output.accept(GreatechBlocks.STAINLESS_SHAFT_ITEM.get());
+                acceptRegistered(output, GreatechBlocks.STAINLESS_FAMILY.encasedShaftItems().values());
                 output.accept(GreatechBlocks.STAINLESS_COGWHEEL_ITEM.get());
+                acceptRegistered(output, GreatechBlocks.STAINLESS_FAMILY.encasedCogwheelItems().values());
                 output.accept(GreatechBlocks.STAINLESS_LARGE_COGWHEEL_ITEM.get());
                 output.accept(GreatechItems.GOGGLES.get());
             }).build());
@@ -89,6 +96,7 @@ public class Greatech {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         LOGGER.info("Initializing Greatech common setup");
+        event.enqueueWork(GreatechCreateEncasingCompat::register);
         for (var hatch : GreatechMachines.STEAM_ENGINE_HATCHES) {
             logMissingSteamEngineHatch(hatch);
         }
@@ -109,13 +117,19 @@ public class Greatech {
             event.accept(GreatechBlocks.HEAT_CHAMBER_GLASS_ITEM);
             event.accept(GreatechBlocks.HEAT_CHAMBER_CONTROLLER_ITEM);
             event.accept(GreatechBlocks.STEEL_SHAFT_ITEM);
+            acceptRegistered(event, GreatechBlocks.STEEL_FAMILY.encasedShaftItems().values());
             event.accept(GreatechBlocks.STEEL_COGWHEEL_ITEM);
+            acceptRegistered(event, GreatechBlocks.STEEL_FAMILY.encasedCogwheelItems().values());
             event.accept(GreatechBlocks.STEEL_LARGE_COGWHEEL_ITEM);
             event.accept(GreatechBlocks.ALUMINIUM_SHAFT_ITEM);
+            acceptRegistered(event, GreatechBlocks.ALUMINIUM_FAMILY.encasedShaftItems().values());
             event.accept(GreatechBlocks.ALUMINIUM_COGWHEEL_ITEM);
+            acceptRegistered(event, GreatechBlocks.ALUMINIUM_FAMILY.encasedCogwheelItems().values());
             event.accept(GreatechBlocks.ALUMINIUM_LARGE_COGWHEEL_ITEM);
             event.accept(GreatechBlocks.STAINLESS_SHAFT_ITEM);
+            acceptRegistered(event, GreatechBlocks.STAINLESS_FAMILY.encasedShaftItems().values());
             event.accept(GreatechBlocks.STAINLESS_COGWHEEL_ITEM);
+            acceptRegistered(event, GreatechBlocks.STAINLESS_FAMILY.encasedCogwheelItems().values());
             event.accept(GreatechBlocks.STAINLESS_LARGE_COGWHEEL_ITEM);
             event.accept(GreatechItems.GOGGLES);
         }
@@ -130,8 +144,26 @@ public class Greatech {
         }
     }
 
+    private static void acceptRegistered(CreativeModeTab.Output output,
+            java.lang.Iterable<? extends net.neoforged.neoforge.registries.DeferredItem<? extends net.minecraft.world.item.Item>> items) {
+        for (var item : items) {
+            if (item != null) {
+                output.accept(item.get());
+            }
+        }
+    }
+
     private static void acceptRegistered(BuildCreativeModeTabContentsEvent event,
             net.neoforged.neoforge.registries.DeferredItem<? extends net.minecraft.world.item.Item>[] items) {
+        for (var item : items) {
+            if (item != null) {
+                event.accept(item);
+            }
+        }
+    }
+
+    private static void acceptRegistered(BuildCreativeModeTabContentsEvent event,
+            java.lang.Iterable<? extends net.neoforged.neoforge.registries.DeferredItem<? extends net.minecraft.world.item.Item>> items) {
         for (var item : items) {
             if (item != null) {
                 event.accept(item);

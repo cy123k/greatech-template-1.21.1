@@ -35,6 +35,7 @@ Current material progression:
 Core classes:
 
 - [GreatechShaftBlock.java](../../src/main/java/com/greatech/content/shaft/GreatechShaftBlock.java)
+- [GreatechEncasedShaftBlock.java](../../src/main/java/com/greatech/content/shaft/GreatechEncasedShaftBlock.java)
 - [GreatechShaftBlockEntity.java](../../src/main/java/com/greatech/content/shaft/GreatechShaftBlockEntity.java)
 - [GreatechShaftRenderer.java](../../src/main/java/com/greatech/content/shaft/GreatechShaftRenderer.java)
 - [GreatechPoweredShaftBlock.java](../../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlock.java)
@@ -53,10 +54,15 @@ Registration:
 Current resource naming rule:
 
 - block ids: `<material>_shaft`, `powered_<material>_shaft`
+- encased block ids: `<encasing>_encased_<material>_shaft`
 - blockstates: `<material>_shaft.json`, `powered_<material>_shaft.json`
+- encased blockstates: `<encasing>_encased_<material>_shaft.json`
 - item models: `<material>_shaft.json`, `powered_<material>_shaft.json`
+- encased item models: `<encasing>_encased_<material>_shaft.json`
 - loot tables: `<material>_shaft.json`, `powered_<material>_shaft.json`
+- encased loot tables: `<encasing>_encased_<material>_shaft.json`
 - wrapper models: `models/block/shaft/<material>_shaft*.json`
+- generated encased wrapper models: `generated/assets/greatech/models/block/shaft/encased/<encasing>_encased_<material>_shaft.json`
 - textures: `textures/block/greatech_shaft/<material>_axis*.png`
 
 Example material naming:
@@ -88,6 +94,9 @@ Current resources:
 - `generated/assets/greatech/models/item/powered_<material>_shaft.json`
 - `generated/data/greatech/loot_table/blocks/<material>_shaft.json`
 - `generated/data/greatech/loot_table/blocks/powered_<material>_shaft.json`
+- `generated/assets/greatech/blockstates/<encasing>_encased_<material>_shaft.json`
+- `generated/assets/greatech/models/item/<encasing>_encased_<material>_shaft.json`
+- `generated/data/greatech/loot_table/blocks/<encasing>_encased_<material>_shaft.json`
 
 The split is intentional:
 
@@ -97,6 +106,13 @@ The split is intentional:
 - generated item roots under `src/generated/resources`: item model entry points using the full shaft geometry
 
 The generated shaft blockstates include `placement_ghost=true` variants. Normal placed blocks use `placement_ghost=false` and the empty `<material>_shaft_block.json` model. Placement preview ghost states use `placement_ghost=true` and point to the full `<material>_shaft.json` model so Catnip can render a visible translucent preview without reintroducing a static world model.
+
+Encased shaft wrapper models are generated under `src/generated/resources`.
+They use Create's casing-only `create:block/encased_shaft/block` parent, while the Greatech shaft itself is still rendered dynamically by `GreatechShaftRenderer`.
+The generator is [GreatechEncasedModelProvider.java](../../src/main/java/com/greatech/datagen/GreatechEncasedModelProvider.java), with texture metadata supplied by `GreatechEncasingType`.
+
+Encased shafts also use neighbor light sampling for the dynamic shaft partial.
+The baked casing shell can make the block entity's own packed light too dark, so `GreatechShaftRenderer` borrows light through `GreatechLightSampler` from the shaft axis for encased shaft blocks only.
 
 ## Block and BlockEntity Pattern
 
@@ -187,6 +203,28 @@ The helper lives under:
 
 See [greatech-placement-helper.md](../systems/greatech-placement-helper.md) for the reusable placement design.
 
+## Create Casing Compatibility
+
+Greatech shafts are registered with Create's `EncasingRegistry` during common setup.
+
+Current shaft behavior:
+
+- `create:andesite_casing` encases Greatech shafts as `greatech:andesite_encased_<material>_shaft`
+- `create:brass_casing` encases Greatech shafts as `greatech:brass_encased_<material>_shaft`
+- the casing item is not consumed, matching Create's current encasing behavior
+- the encased block keeps the original Greatech material, shaft block entity type, and kinetic break limit
+- the baked block model contributes only the Create casing shell
+- `GreatechShaftRenderer` still renders the rotating material shaft partial through the shared shaft block entity type
+- sneak-wrenching the encased shaft removes the casing and restores the matching Greatech shaft
+
+The casing type list is centralized in `GreatechEncasingType`.
+Adding another supported Create-style casing should start there, then rerun datagen to emit the matching wrapper models.
+
+The registration lives in:
+
+- [GreatechCreateEncasingCompat.java](../../src/main/java/com/greatech/compat/create/GreatechCreateEncasingCompat.java)
+- [GreatechEncasingType.java](../../src/main/java/com/greatech/content/kinetics/GreatechEncasingType.java)
+
 ## Adding More Shaft Materials
 
 For another shaft material such as aluminum:
@@ -196,11 +234,10 @@ For another shaft material such as aluminum:
 3. Register a matching block entity family in `GreatechBlockEntityTypes`.
 4. Add textures under `textures/block/greatech_shaft/`.
 5. Add a wrapper model under `models/block/shaft/`.
-6. Add a root item model under `models/item/`.
-7. Add a blockstate file named after the block id.
-8. Add `placement_ghost` blockstate variants if the world model is empty and the preview needs full geometry.
-9. Add a loot table and lang entries.
-10. Register placement-helper support if the new family should support assisted placement.
+6. Ensure `GreatechEncasingType` has the required encased-wrapper texture metadata.
+7. Add lang entries for the normal, powered, and encased shaft blocks/items.
+8. Run datagen so blockstates, item model roots, and loot tables are generated.
+9. Register placement-helper support if the new family should support assisted placement.
 
 The intended result is that `steel_shaft`, `aluminium_shaft`, `stainless_shaft`, and later materials all share the same runtime pattern and differ mainly by family registration, wrapper textures/models, and generated resources.
 

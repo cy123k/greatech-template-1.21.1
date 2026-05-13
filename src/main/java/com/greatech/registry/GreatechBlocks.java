@@ -2,6 +2,7 @@ package com.greatech.registry;
 
 import com.greatech.Greatech;
 import com.greatech.content.cogwheel.GreatechCogwheelBlock;
+import com.greatech.content.cogwheel.GreatechEncasedCogwheelBlock;
 import com.greatech.content.cogwheel.GreatechSteamConvertibleCogwheelBlock;
 import com.greatech.content.converter.SUEnergyConverterBlock;
 import com.greatech.content.converter.SUEnergyConverterTier;
@@ -11,8 +12,10 @@ import com.greatech.content.heat.HeatChamberCasingBlock;
 import com.greatech.content.heat.HeatChamberControllerBlock;
 import com.greatech.content.hydraulic.HydraulicPressBlock;
 import com.greatech.content.hydraulic.HydraulicPressTier;
+import com.greatech.content.kinetics.GreatechEncasingType;
 import com.greatech.content.kinetics.GreatechKineticFamily;
 import com.greatech.content.kinetics.GreatechKineticMaterial;
+import com.greatech.content.shaft.GreatechEncasedShaftBlock;
 import com.greatech.content.shaft.GreatechShaftBlock;
 import com.greatech.content.steam.GreatechPoweredCogwheelBlock;
 import com.greatech.content.steam.GreatechPoweredShaftBlock;
@@ -292,6 +295,10 @@ public final class GreatechBlocks {
         return getFamily(material).shaft().get();
     }
 
+    public static Block getEncasedShaft(GreatechKineticMaterial material, GreatechEncasingType encasingType) {
+        return getFamily(material).encasedShaft(encasingType).get();
+    }
+
     public static Block getPoweredShaft(GreatechKineticMaterial material) {
         return getFamily(material).poweredShaft().get();
     }
@@ -299,6 +306,10 @@ public final class GreatechBlocks {
     public static Block getCogwheel(GreatechKineticMaterial material, boolean large) {
         GreatechKineticFamily family = getFamily(material);
         return large ? family.largeCogwheel().get() : family.cogwheel().get();
+    }
+
+    public static Block getEncasedCogwheel(GreatechKineticMaterial material, GreatechEncasingType encasingType) {
+        return getFamily(material).encasedCogwheel(encasingType).get();
     }
 
     public static Block getPoweredCogwheel(GreatechKineticMaterial material, boolean large) {
@@ -337,6 +348,17 @@ public final class GreatechBlocks {
                         .requiresCorrectToolForDrops(), material.shaftBreakStressLimit()));
     }
 
+    private static DeferredBlock<Block> registerGreatechEncasedShaft(GreatechKineticMaterial material,
+            GreatechEncasingType encasingType) {
+        return BLOCKS.register(
+                encasedShaftName(material, encasingType),
+                () -> new GreatechEncasedShaftBlock(material, encasingType, BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.METAL)
+                        .strength(3.0F)
+                        .sound(SoundType.METAL)
+                        .requiresCorrectToolForDrops()));
+    }
+
     private static DeferredBlock<Block> registerGreatechCogwheel(GreatechKineticMaterial material, boolean large,
             java.util.function.Supplier<net.minecraft.world.level.block.entity.BlockEntityType<? extends com.simibubi.create.content.kinetics.base.KineticBlockEntity>> blockEntityType) {
         return BLOCKS.register(
@@ -348,6 +370,17 @@ public final class GreatechBlocks {
                         .requiresCorrectToolForDrops(),
                         large ? material.largeCogwheelBreakStressLimit() : material.smallCogwheelBreakStressLimit(),
                         blockEntityType));
+    }
+
+    private static DeferredBlock<Block> registerGreatechEncasedCogwheel(GreatechKineticMaterial material,
+            GreatechEncasingType encasingType) {
+        return BLOCKS.register(
+                encasedCogwheelName(material, encasingType),
+                () -> new GreatechEncasedCogwheelBlock(material, encasingType, BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.METAL)
+                        .strength(3.0F)
+                        .sound(SoundType.METAL)
+                        .requiresCorrectToolForDrops()));
     }
 
     private static DeferredBlock<Block> registerGreatechPoweredCogwheel(GreatechKineticMaterial material, boolean large,
@@ -373,7 +406,26 @@ public final class GreatechBlocks {
             java.util.function.Supplier<net.minecraft.world.level.block.entity.BlockEntityType<? extends com.simibubi.create.content.kinetics.base.KineticBlockEntity>> largeCogwheelBlockEntityType) {
         DeferredBlock<Block> shaft = registerGreatechShaft(material);
         DeferredBlock<Block> poweredShaft = registerGreatechPoweredShaft(material);
+        java.util.Map<GreatechEncasingType, DeferredBlock<Block>> encasedShafts = new java.util.EnumMap<>(
+                GreatechEncasingType.class);
+        java.util.Map<GreatechEncasingType, DeferredItem<BlockItem>> encasedShaftItems = new java.util.EnumMap<>(
+                GreatechEncasingType.class);
+        for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
+            DeferredBlock<Block> encasedShaft = registerGreatechEncasedShaft(material, encasingType);
+            encasedShafts.put(encasingType, encasedShaft);
+            encasedShaftItems.put(encasingType, registerBlockItem(encasedShaftName(material, encasingType), encasedShaft));
+        }
         DeferredBlock<Block> cogwheel = registerGreatechCogwheel(material, false, smallCogwheelBlockEntityType);
+        java.util.Map<GreatechEncasingType, DeferredBlock<Block>> encasedCogwheels = new java.util.EnumMap<>(
+                GreatechEncasingType.class);
+        java.util.Map<GreatechEncasingType, DeferredItem<BlockItem>> encasedCogwheelItems = new java.util.EnumMap<>(
+                GreatechEncasingType.class);
+        for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
+            DeferredBlock<Block> encasedCogwheel = registerGreatechEncasedCogwheel(material, encasingType);
+            encasedCogwheels.put(encasingType, encasedCogwheel);
+            encasedCogwheelItems.put(encasingType,
+                    registerBlockItem(encasedCogwheelName(material, encasingType), encasedCogwheel));
+        }
         DeferredBlock<Block> poweredCogwheel = registerGreatechPoweredCogwheel(material, false, poweredSmallCogwheelBlockEntityType);
         DeferredBlock<Block> largeCogwheel = registerGreatechCogwheel(material, true, largeCogwheelBlockEntityType);
 
@@ -381,17 +433,29 @@ public final class GreatechBlocks {
                 material,
                 shaft,
                 poweredShaft,
+                java.util.Collections.unmodifiableMap(encasedShafts),
                 cogwheel,
+                java.util.Collections.unmodifiableMap(encasedCogwheels),
                 poweredCogwheel,
                 largeCogwheel,
                 registerBlockItem(material.id() + "_shaft", shaft),
                 registerBlockItem("powered_" + material.id() + "_shaft", poweredShaft),
+                java.util.Collections.unmodifiableMap(encasedShaftItems),
                 registerBlockItem(material.id() + "_cogwheel", cogwheel),
+                java.util.Collections.unmodifiableMap(encasedCogwheelItems),
                 registerBlockItem("powered_" + material.id() + "_cogwheel", poweredCogwheel),
                 registerBlockItem(material.id() + "_large_cogwheel", largeCogwheel));
     }
 
     private static DeferredItem<BlockItem> registerBlockItem(String name, DeferredBlock<Block> block) {
         return ITEMS.registerSimpleBlockItem(name, block, new Item.Properties());
+    }
+
+    public static String encasedShaftName(GreatechKineticMaterial material, GreatechEncasingType encasingType) {
+        return encasingType.id() + "_encased_" + material.id() + "_shaft";
+    }
+
+    public static String encasedCogwheelName(GreatechKineticMaterial material, GreatechEncasingType encasingType) {
+        return encasingType.id() + "_encased_" + material.id() + "_cogwheel";
     }
 }

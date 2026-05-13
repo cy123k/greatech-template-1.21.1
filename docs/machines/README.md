@@ -12,3 +12,5 @@ Current machine and transmission docs:
 - [Greatech Cogwheel](./greatech-cogwheel.md)
 
 Use these when you want the behavior, rendering, resources, and limitations of one concrete machine or part.
+
+Current transmission notes include Greatech-owned Create-casing support for shafts and small cogwheels. Large cogwheel casing is still documented as a first-pass Create-owned bridge.

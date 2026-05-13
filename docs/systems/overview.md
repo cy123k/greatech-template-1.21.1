@@ -21,7 +21,7 @@ The design goal is not to make one mod imitate the other. The goal is to create 
 
 The first implemented machine family is the `SU Energy Converter`.
 
-The currently registered blocks are:
+The currently registered block families are:
 
 - `lv_sucon`
 - `mv_sucon`
@@ -41,6 +41,10 @@ The currently registered blocks are:
 - `stainless_cogwheel`
 - `stainless_large_cogwheel`
 - `powered_stainless_cogwheel`
+- `andesite_encased_<material>_shaft`
+- `brass_encased_<material>_shaft`
+- `andesite_encased_<material>_cogwheel`
+- `brass_encased_<material>_cogwheel`
 - `lv_fluid_bridge`
 - `lv_hydraulic_press`
 - `lv_steam_engine_hatch`
@@ -54,7 +58,9 @@ Their role is:
 - generate `GTCEu` `EU`
 - export energy through `GTCEu` capabilities
 
-The current transmission parts behave like Create shaft/cogwheel parts while using Greatech block entity types, renderers, kinetic failure limits, and placement helpers. Their code is now being reorganized around kinetic material families so future materials can reuse the same shaft/cogwheel/large-cogwheel pattern.
+The current transmission parts behave like Create shaft/cogwheel parts while using Greatech block entity types, renderers, kinetic failure limits, and placement helpers. Their code is organized around kinetic material families so future materials can reuse the same shaft/cogwheel/large-cogwheel pattern.
+
+Create casing compatibility is active for Greatech shafts and small cogwheels. Andesite and brass casing right-clicks create Greatech-owned encased variants, preserving material identity, Greatech block entity ownership, and kinetic break limits. Encased shaft and small cogwheel wrapper models are generated through datagen because they are regular cross-mod texture/parent combinations rather than hand-authored geometry. Large cogwheels still use the first-pass Create-owned encased large cogwheel bridge.
 
 The current fluid bridge prototype links GTCEu-style fluid handlers and Create-style fluid pressure. Its two fluid ports are direction-controlled with a Create wrench, while the other sides can accept GTCEu energy. It now behaves as a fixed electric pump: fixed pressure and fixed EU/t are configured per tier, with no GUI or target-pressure slider.
 
@@ -64,7 +70,7 @@ The current hydraulic press prototype adds `lv_hydraulic_press`, a Create-style 
 
 Hydraulic pressing recipes are now exposed through Greatech-owned JEI and EMI categories. The display path reads the same `greatech:hydraulic_pressing` recipe type from Minecraft's recipe manager, so static JSON recipes and GTCEu-material-generated recipes appear in the same category. Hydraulic fluid remains a machine operating cost and is not shown as a recipe input.
 
-The current steam prototype adds three `GTCEu` machine parts, `lv_steam_engine_hatch`, `mv_steam_engine_hatch`, and `hv_steam_engine_hatch`, plus a matching `Create` generator relay, `powered_steel_shaft`. Each hatch behaves like a fluid export hatch for GTCEu multiblock recognition, stores only steam, and converts a valid neighboring `steel_shaft` into `powered_steel_shaft`. The powered shaft then acts as the actual `Create` kinetic source: it validates the adjacent hatch, requests steam power each tick, outputs a fixed `32 RPM` and `512 SU` prototype value, and automatically reverts back to `steel_shaft` when it no longer has a valid hatch source.
+The current steam prototype adds three `GTCEu` machine parts, `lv_steam_engine_hatch`, `mv_steam_engine_hatch`, and `hv_steam_engine_hatch`, plus a matching `Create` generator relay, `powered_steel_shaft`. Each hatch behaves like a fluid export hatch for GTCEu multiblock recognition, stores only steam, and converts a valid neighboring `steel_shaft` into `powered_steel_shaft`. The powered shaft then acts as the actual `Create` kinetic source: it validates the adjacent hatch, requests steam power each tick, outputs configured tier RPM and stress capacity, and automatically reverts back to `steel_shaft` when it no longer has a valid hatch source.
 
 Because Greatech mixes Create-style blocks and GTCEu machine definitions, new machine work should follow a documented ownership split for registration, facing, rendering, and capability exposure. See [greatech-machine-registration-tips.md](../guides/greatech-machine-registration-tips.md).
 
@@ -72,14 +78,15 @@ Because Greatech mixes Create-style blocks and GTCEu machine definitions, new ma
 
 - validate the new custom art and active-state presentation in gameplay
 - validate Greatech placement helper previews against Create/Greatech transmission part combinations
+- validate Greatech-owned encased shaft and small cogwheel visuals in dense kinetic networks
 - validate `lv_fluid_bridge` fixed pump behavior for GTCEu-to-Create and Create-to-GTCEu fluid direction
 - validate Create pressure refresh behavior so pressure does not stack every tick
 - validate fluid hazard behavior for dangerous GTCEu fluids routed into Create pipes
 - validate `lv_hydraulic_press` mold interaction, fluid consumption, heat chamber gating, and belt/world-item processing
 - validate hydraulic pressing JEI/EMI displays with both static and generated recipes
 - validate `lv_steam_engine_hatch` / `mv_steam_engine_hatch` / `hv_steam_engine_hatch` recognition in GTCEu large boiler structures
-- replace the temporary diamond-block hatch model with final art
-- replace fixed steam engine RPM and stress values with configurable or recipe/multiblock-derived values
+- replace the current steam engine config defaults with recipe- or multiblock-derived values
+- add Greatech-owned encased large cogwheels
 - finish `neoforge.mods.toml` dependency declarations
 - add recipe and progression balancing
 - expand debugging and testing workflow
