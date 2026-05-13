@@ -312,6 +312,10 @@ public final class GreatechBlocks {
         return getFamily(material).encasedCogwheel(encasingType).get();
     }
 
+    public static Block getEncasedLargeCogwheel(GreatechKineticMaterial material, GreatechEncasingType encasingType) {
+        return getFamily(material).encasedLargeCogwheel(encasingType).get();
+    }
+
     public static Block getPoweredCogwheel(GreatechKineticMaterial material, boolean large) {
         GreatechKineticFamily family = getFamily(material);
         return large ? family.largeCogwheel().get() : family.poweredCogwheel().get();
@@ -376,10 +380,27 @@ public final class GreatechBlocks {
             GreatechEncasingType encasingType) {
         return BLOCKS.register(
                 encasedCogwheelName(material, encasingType),
-                () -> new GreatechEncasedCogwheelBlock(material, encasingType, BlockBehaviour.Properties.of()
+                () -> new GreatechEncasedCogwheelBlock(material, encasingType, false, BlockBehaviour.Properties.of()
                         .mapColor(MapColor.METAL)
                         .strength(3.0F)
                         .sound(SoundType.METAL)
+                        .noOcclusion()
+                        .isSuffocating((state, level, pos) -> false)
+                        .isViewBlocking((state, level, pos) -> false)
+                        .requiresCorrectToolForDrops()));
+    }
+
+    private static DeferredBlock<Block> registerGreatechEncasedLargeCogwheel(GreatechKineticMaterial material,
+            GreatechEncasingType encasingType) {
+        return BLOCKS.register(
+                encasedLargeCogwheelName(material, encasingType),
+                () -> new GreatechEncasedCogwheelBlock(material, encasingType, true, BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.METAL)
+                        .strength(3.0F)
+                        .sound(SoundType.METAL)
+                        .noOcclusion()
+                        .isSuffocating((state, level, pos) -> false)
+                        .isViewBlocking((state, level, pos) -> false)
                         .requiresCorrectToolForDrops()));
     }
 
@@ -428,6 +449,16 @@ public final class GreatechBlocks {
         }
         DeferredBlock<Block> poweredCogwheel = registerGreatechPoweredCogwheel(material, false, poweredSmallCogwheelBlockEntityType);
         DeferredBlock<Block> largeCogwheel = registerGreatechCogwheel(material, true, largeCogwheelBlockEntityType);
+        java.util.Map<GreatechEncasingType, DeferredBlock<Block>> encasedLargeCogwheels = new java.util.EnumMap<>(
+                GreatechEncasingType.class);
+        java.util.Map<GreatechEncasingType, DeferredItem<BlockItem>> encasedLargeCogwheelItems = new java.util.EnumMap<>(
+                GreatechEncasingType.class);
+        for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
+            DeferredBlock<Block> encasedLargeCogwheel = registerGreatechEncasedLargeCogwheel(material, encasingType);
+            encasedLargeCogwheels.put(encasingType, encasedLargeCogwheel);
+            encasedLargeCogwheelItems.put(encasingType,
+                    registerBlockItem(encasedLargeCogwheelName(material, encasingType), encasedLargeCogwheel));
+        }
 
         return new GreatechKineticFamily(
                 material,
@@ -438,13 +469,15 @@ public final class GreatechBlocks {
                 java.util.Collections.unmodifiableMap(encasedCogwheels),
                 poweredCogwheel,
                 largeCogwheel,
+                java.util.Collections.unmodifiableMap(encasedLargeCogwheels),
                 registerBlockItem(material.id() + "_shaft", shaft),
                 registerBlockItem("powered_" + material.id() + "_shaft", poweredShaft),
                 java.util.Collections.unmodifiableMap(encasedShaftItems),
                 registerBlockItem(material.id() + "_cogwheel", cogwheel),
                 java.util.Collections.unmodifiableMap(encasedCogwheelItems),
                 registerBlockItem("powered_" + material.id() + "_cogwheel", poweredCogwheel),
-                registerBlockItem(material.id() + "_large_cogwheel", largeCogwheel));
+                registerBlockItem(material.id() + "_large_cogwheel", largeCogwheel),
+                java.util.Collections.unmodifiableMap(encasedLargeCogwheelItems));
     }
 
     private static DeferredItem<BlockItem> registerBlockItem(String name, DeferredBlock<Block> block) {
@@ -457,5 +490,9 @@ public final class GreatechBlocks {
 
     public static String encasedCogwheelName(GreatechKineticMaterial material, GreatechEncasingType encasingType) {
         return encasingType.id() + "_encased_" + material.id() + "_cogwheel";
+    }
+
+    public static String encasedLargeCogwheelName(GreatechKineticMaterial material, GreatechEncasingType encasingType) {
+        return encasingType.id() + "_encased_" + material.id() + "_large_cogwheel";
     }
 }

@@ -3,7 +3,6 @@ package com.greatech.compat.create;
 import com.greatech.content.kinetics.GreatechKineticFamily;
 import com.greatech.content.kinetics.GreatechEncasingType;
 import com.greatech.registry.GreatechBlocks;
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.decoration.encasing.EncasableBlock;
 import com.simibubi.create.content.decoration.encasing.EncasedBlock;
 import com.simibubi.create.content.decoration.encasing.EncasingRegistry;
@@ -27,8 +26,8 @@ public final class GreatechCreateEncasingCompat {
         addVariant(family.cogwheel().get(), family.encasedCogwheel(GreatechEncasingType.ANDESITE).get());
         addVariant(family.cogwheel().get(), family.encasedCogwheel(GreatechEncasingType.BRASS).get());
 
-        addVariant(family.largeCogwheel().get(), AllBlocks.ANDESITE_ENCASED_LARGE_COGWHEEL.get());
-        addVariant(family.largeCogwheel().get(), AllBlocks.BRASS_ENCASED_LARGE_COGWHEEL.get());
+        addVariant(family.largeCogwheel().get(), family.encasedLargeCogwheel(GreatechEncasingType.ANDESITE).get());
+        addVariant(family.largeCogwheel().get(), family.encasedLargeCogwheel(GreatechEncasingType.BRASS).get());
     }
 
     @SuppressWarnings("unchecked")

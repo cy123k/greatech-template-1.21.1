@@ -87,8 +87,10 @@ The current stack is:
 3. `Create` fluid pipe
 4. `Create` fluid tank
 5. `Greatech` fluid bridge
-6. `GTCEu` machine energy
-7. `Create` kinetics
+6. `Greatech` hydraulic press
+7. `Greatech` SU energy converter
+8. `GTCEu` machine energy
+9. `Create` kinetics
 
 This makes pipe and tank observation independent from machine observation, while still allowing mixed machines such as converters to display multiple sections.
 
@@ -138,6 +140,8 @@ Examples:
 - `Create` fluid tanks are read directly from synced controller inventory state
 - `GTCEu` cables use request/response networking because peak runtime data is too transient
 - Greatech fluid bridge uses request/response because the HUD includes extra machine-local telemetry
+- Greatech hydraulic press uses request/response for mold, heat chamber, tank, and speed telemetry
+- Greatech SU energy converter uses request/response for server-authoritative generated and stored EU values
 
 The actual packet architecture is documented in [greatech-hud-networking.md](../networks/greatech-hud-networking.md).
 

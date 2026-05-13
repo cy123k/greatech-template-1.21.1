@@ -49,6 +49,9 @@ public final class GreatechBlockLootProvider {
                 }
                 dropSelf(family.poweredCogwheel().get());
                 dropSelf(family.largeCogwheel().get());
+                for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
+                    dropSelf(family.encasedLargeCogwheel(encasingType).get());
+                }
             }
         }
 
@@ -68,6 +71,9 @@ public final class GreatechBlockLootProvider {
                 }
                 blocks.add(family.poweredCogwheel().get());
                 blocks.add(family.largeCogwheel().get());
+                for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
+                    blocks.add(family.encasedLargeCogwheel(encasingType).get());
+                }
             }
             return blocks;
         }

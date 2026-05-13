@@ -2,6 +2,8 @@ package com.greatech.network;
 
 import com.greatech.network.cable.CableHudDataPayload;
 import com.greatech.network.cable.RequestCableHudDataPayload;
+import com.greatech.network.converter.RequestSUEnergyConverterHudDataPayload;
+import com.greatech.network.converter.SUEnergyConverterHudDataPayload;
 import com.greatech.network.fluid.FluidBridgeHudDataPayload;
 import com.greatech.network.fluid.FluidHudDataPayload;
 import com.greatech.network.fluid.RequestFluidBridgeHudDataPayload;
@@ -35,5 +37,10 @@ public final class GreatechNetworking {
                 RequestHydraulicPressHudDataPayload::handleServer);
         registrar.playToClient(HydraulicPressHudDataPayload.TYPE, HydraulicPressHudDataPayload.STREAM_CODEC,
                 HydraulicPressHudDataPayload::handleClient);
+        registrar.playToServer(RequestSUEnergyConverterHudDataPayload.TYPE,
+                RequestSUEnergyConverterHudDataPayload.STREAM_CODEC,
+                RequestSUEnergyConverterHudDataPayload::handleServer);
+        registrar.playToClient(SUEnergyConverterHudDataPayload.TYPE, SUEnergyConverterHudDataPayload.STREAM_CODEC,
+                SUEnergyConverterHudDataPayload::handleClient);
     }
 }

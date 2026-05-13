@@ -45,6 +45,8 @@ The currently registered block families are:
 - `brass_encased_<material>_shaft`
 - `andesite_encased_<material>_cogwheel`
 - `brass_encased_<material>_cogwheel`
+- `andesite_encased_<material>_large_cogwheel`
+- `brass_encased_<material>_large_cogwheel`
 - `lv_fluid_bridge`
 - `lv_hydraulic_press`
 - `lv_steam_engine_hatch`
@@ -60,7 +62,7 @@ Their role is:
 
 The current transmission parts behave like Create shaft/cogwheel parts while using Greatech block entity types, renderers, kinetic failure limits, and placement helpers. Their code is organized around kinetic material families so future materials can reuse the same shaft/cogwheel/large-cogwheel pattern.
 
-Create casing compatibility is active for Greatech shafts and small cogwheels. Andesite and brass casing right-clicks create Greatech-owned encased variants, preserving material identity, Greatech block entity ownership, and kinetic break limits. Encased shaft and small cogwheel wrapper models are generated through datagen because they are regular cross-mod texture/parent combinations rather than hand-authored geometry. Large cogwheels still use the first-pass Create-owned encased large cogwheel bridge.
+Create casing compatibility is active for Greatech shafts, small cogwheels, and large cogwheels. Andesite and brass casing right-clicks create Greatech-owned encased variants, preserving material identity, Greatech block entity ownership, and kinetic break limits. Encased shaft, small cogwheel, and large cogwheel wrapper models are generated through datagen because they are regular cross-mod texture/parent combinations rather than hand-authored geometry.
 
 The current fluid bridge prototype links GTCEu-style fluid handlers and Create-style fluid pressure. Its two fluid ports are direction-controlled with a Create wrench, while the other sides can accept GTCEu energy. It now behaves as a fixed electric pump: fixed pressure and fixed EU/t are configured per tier, with no GUI or target-pressure slider.
 
@@ -77,8 +79,8 @@ Because Greatech mixes Create-style blocks and GTCEu machine definitions, new ma
 ## Near-Term Development Goals
 
 - validate the new custom art and active-state presentation in gameplay
-- validate Greatech placement helper previews against Create/Greatech transmission part combinations
-- validate Greatech-owned encased shaft and small cogwheel visuals in dense kinetic networks
+- validate Greatech placement helper previews against Create/Greatech bare and encased transmission part combinations
+- validate Greatech-owned encased shaft, small cogwheel, and large cogwheel visuals in dense kinetic networks
 - validate `lv_fluid_bridge` fixed pump behavior for GTCEu-to-Create and Create-to-GTCEu fluid direction
 - validate Create pressure refresh behavior so pressure does not stack every tick
 - validate fluid hazard behavior for dangerous GTCEu fluids routed into Create pipes
@@ -86,7 +88,6 @@ Because Greatech mixes Create-style blocks and GTCEu machine definitions, new ma
 - validate hydraulic pressing JEI/EMI displays with both static and generated recipes
 - validate `lv_steam_engine_hatch` / `mv_steam_engine_hatch` / `hv_steam_engine_hatch` recognition in GTCEu large boiler structures
 - replace the current steam engine config defaults with recipe- or multiblock-derived values
-- add Greatech-owned encased large cogwheels
 - finish `neoforge.mods.toml` dependency declarations
 - add recipe and progression balancing
 - expand debugging and testing workflow

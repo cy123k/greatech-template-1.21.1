@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import com.greatech.content.cogwheel.GreatechCogwheelBlock;
+import com.greatech.content.cogwheel.GreatechEncasedCogwheelBlock;
+import com.greatech.content.shaft.GreatechEncasedShaftBlock;
 import com.greatech.content.shaft.GreatechShaftBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.AbstractSimpleShaftBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
@@ -29,10 +31,12 @@ public final class GreatechPlacementRegistry {
     private static final List<Predicate<ItemStack>> LARGE_COGWHEEL_ITEMS = new ArrayList<>();
 
     static {
-        registerGreatechShaftTarget(state -> state.getBlock() instanceof GreatechShaftBlock);
+        registerGreatechShaftTarget(state -> state.getBlock() instanceof GreatechShaftBlock
+                || state.getBlock() instanceof GreatechEncasedShaftBlock);
         registerShaftTarget(state -> state.getBlock() instanceof AbstractSimpleShaftBlock
                 && !(state.getBlock() instanceof ICogWheel)
-                || state.getBlock() instanceof PoweredShaftBlock);
+                || state.getBlock() instanceof PoweredShaftBlock
+                || state.getBlock() instanceof GreatechEncasedShaftBlock);
         registerGreatechShaftItem(stack -> stack.getItem() instanceof BlockItem blockItem
                 && blockItem.getBlock() instanceof GreatechShaftBlock);
         registerShaftItem(stack -> stack.getItem() instanceof BlockItem blockItem
@@ -40,15 +44,23 @@ public final class GreatechPlacementRegistry {
                         && !(blockItem.getBlock() instanceof ICogWheel))
                         || blockItem.getBlock() instanceof PoweredShaftBlock));
 
-        registerGreatechSmallCogwheelTarget(state -> state.getBlock() instanceof GreatechCogwheelBlock && ICogWheel.isSmallCog(state));
-        registerSmallCogwheelTarget(state -> ICogWheel.isSmallCog(state) && ICogWheel.isDedicatedCogWheel(state.getBlock()));
+        registerGreatechSmallCogwheelTarget(state -> (state.getBlock() instanceof GreatechCogwheelBlock
+                || state.getBlock() instanceof GreatechEncasedCogwheelBlock)
+                && ICogWheel.isSmallCog(state));
+        registerSmallCogwheelTarget(state -> ICogWheel.isSmallCog(state)
+                && (ICogWheel.isDedicatedCogWheel(state.getBlock())
+                        || state.getBlock() instanceof GreatechEncasedCogwheelBlock));
         registerGreatechSmallCogwheelItem(stack -> stack.getItem() instanceof BlockItem blockItem
                 && blockItem.getBlock() instanceof GreatechCogwheelBlock
                 && ICogWheel.isSmallCog(blockItem.getBlock()));
         registerSmallCogwheelItem(stack -> ICogWheel.isSmallCogItem(stack) && ICogWheel.isDedicatedCogItem(stack));
 
-        registerGreatechLargeCogwheelTarget(state -> state.getBlock() instanceof GreatechCogwheelBlock && ICogWheel.isLargeCog(state));
-        registerLargeCogwheelTarget(state -> ICogWheel.isLargeCog(state) && ICogWheel.isDedicatedCogWheel(state.getBlock()));
+        registerGreatechLargeCogwheelTarget(state -> (state.getBlock() instanceof GreatechCogwheelBlock
+                || state.getBlock() instanceof GreatechEncasedCogwheelBlock)
+                && ICogWheel.isLargeCog(state));
+        registerLargeCogwheelTarget(state -> ICogWheel.isLargeCog(state)
+                && (ICogWheel.isDedicatedCogWheel(state.getBlock())
+                        || state.getBlock() instanceof GreatechEncasedCogwheelBlock));
         registerGreatechLargeCogwheelItem(stack -> stack.getItem() instanceof BlockItem blockItem
                 && blockItem.getBlock() instanceof GreatechCogwheelBlock
                 && ICogWheel.isLargeCog(blockItem.getBlock()));

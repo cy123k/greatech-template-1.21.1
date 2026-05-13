@@ -20,7 +20,7 @@ Registered or partially implemented feature families:
 - Hydraulic Press: `lv_hydraulic_press`
 - Heat Chamber: casing, glass, and controller blocks
 - Steam Engine Hatch: `lv`, `mv`, and `hv` hatch machine parts
-- Transmission parts: steel, aluminium, and stainless shafts/cogwheels, including powered variants and Greatech-owned Create-casing variants for shafts and small cogwheels
+- Transmission parts: steel, aluminium, and stainless shafts/cogwheels, including powered variants and Greatech-owned Create-casing variants for shafts, small cogwheels, and large cogwheels
 - Greatech Goggles HUD providers for supported Greatech, Create, and GTCEu-adjacent blocks
 - Hydraulic pressing recipe generation and JEI/EMI display integration
 
@@ -111,7 +111,7 @@ Typical commands:
 
 Several development dependencies are resolved from local jars in `libs/`. See [Dependencies](reference/dependencies.md) for the current setup.
 
-`runData` generates transmission-family blockstates, item models, loot tables, and Create-casing wrapper models into `src/generated/resources`.
+`runData` generates transmission-family blockstates, item models, loot tables, lang files, and Create-casing wrapper models into `src/generated/resources`.
 
 For VS Code Java launch workflows, use:
 

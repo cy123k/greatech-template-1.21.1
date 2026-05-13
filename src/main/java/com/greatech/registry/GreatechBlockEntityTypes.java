@@ -170,7 +170,7 @@ public final class GreatechBlockEntityTypes {
                 material.id() + "_large_cogwheel",
                 () -> BlockEntityType.Builder.of(
                         GreatechLargeCogwheelBlockEntity::new,
-                        GreatechBlocks.getFamily(material).largeCogwheel().get()).build(null));
+                        largeCogwheelBlocks(material)).build(null));
 
         return new GreatechKineticBlockEntityFamily(
                 material,
@@ -204,6 +204,16 @@ public final class GreatechBlockEntityTypes {
         blocks.add(family.cogwheel().get());
         for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
             blocks.add(family.encasedCogwheel(encasingType).get());
+        }
+        return blocks.toArray(net.minecraft.world.level.block.Block[]::new);
+    }
+
+    private static net.minecraft.world.level.block.Block[] largeCogwheelBlocks(GreatechKineticMaterial material) {
+        java.util.List<net.minecraft.world.level.block.Block> blocks = new java.util.ArrayList<>();
+        var family = GreatechBlocks.getFamily(material);
+        blocks.add(family.largeCogwheel().get());
+        for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
+            blocks.add(family.encasedLargeCogwheel(encasingType).get());
         }
         return blocks.toArray(net.minecraft.world.level.block.Block[]::new);
     }

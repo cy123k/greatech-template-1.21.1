@@ -192,6 +192,7 @@ Current behavior:
 
 - hand items such as `greatech:steel_shaft`, `greatech:aluminium_shaft`, and `greatech:stainless_shaft` can extend Greatech and Create shaft targets
 - hand item `create:shaft` can extend Greatech shaft targets
+- bare shaft items can use Greatech encased shaft blocks as placement anchors
 - `create:shaft` on `create:shaft` remains handled by Create's original helper
 - the helper provides Catnip arrow indicators and a visible ghost preview
 

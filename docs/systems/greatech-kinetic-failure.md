@@ -21,19 +21,19 @@ Pure Create networks are not checked. A network must contain a Greatech block en
 
 Core implementation:
 
-- [GreatechKineticNetworkFailure.java](../src/main/java/com/greatech/content/kinetics/failure/GreatechKineticNetworkFailure.java)
-- [KineticFailureSource.java](../src/main/java/com/greatech/content/kinetics/failure/KineticFailureSource.java)
-- [KineticBreakable.java](../src/main/java/com/greatech/content/kinetics/failure/KineticBreakable.java)
-- [KineticFailureCandidate.java](../src/main/java/com/greatech/content/kinetics/failure/KineticFailureCandidate.java)
+- [GreatechKineticNetworkFailure.java](../../src/main/java/com/greatech/content/kinetics/failure/GreatechKineticNetworkFailure.java)
+- [KineticFailureSource.java](../../src/main/java/com/greatech/content/kinetics/failure/KineticFailureSource.java)
+- [KineticBreakable.java](../../src/main/java/com/greatech/content/kinetics/failure/KineticBreakable.java)
+- [KineticFailureCandidate.java](../../src/main/java/com/greatech/content/kinetics/failure/KineticFailureCandidate.java)
 
 Current failure source:
 
-- [SUEnergyConverterBlockEntity.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterBlockEntity.java)
+- [SUEnergyConverterBlockEntity.java](../../src/main/java/com/greatech/content/converter/SUEnergyConverterBlockEntity.java)
 
 Current generated-rotation Greatech part:
 
-- [GreatechPoweredShaftBlock.java](../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlock.java)
-- [GreatechPoweredShaftBlockEntity.java](../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlockEntity.java)
+- [GreatechPoweredShaftBlock.java](../../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlock.java)
+- [GreatechPoweredShaftBlockEntity.java](../../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlockEntity.java)
 
 ## Behavior
 

@@ -14,6 +14,7 @@ import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.RotatedPillarKineticBlock;
+import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockEntity;
 import com.simibubi.create.content.kinetics.simpleRelays.CogWheelBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
@@ -46,19 +47,21 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
 public class GreatechEncasedCogwheelBlock extends RotatedPillarKineticBlock
-        implements ICogWheel, IBE<GreatechCogwheelBlockEntity>, SpecialBlockItemRequirement, TransformableBlock,
+        implements ICogWheel, IBE<BracketedKineticBlockEntity>, SpecialBlockItemRequirement, TransformableBlock,
         EncasedBlock, KineticBreakable, MaterialKineticBlock {
     public static final BooleanProperty TOP_SHAFT = BooleanProperty.create("top_shaft");
     public static final BooleanProperty BOTTOM_SHAFT = BooleanProperty.create("bottom_shaft");
 
     private final GreatechKineticMaterial material;
     private final GreatechEncasingType encasingType;
+    private final boolean large;
 
     public GreatechEncasedCogwheelBlock(GreatechKineticMaterial material, GreatechEncasingType encasingType,
-            Properties properties) {
+            boolean large, Properties properties) {
         super(properties);
         this.material = material;
         this.encasingType = encasingType;
+        this.large = large;
         registerDefaultState(defaultBlockState()
                 .setValue(TOP_SHAFT, false)
                 .setValue(BOTTOM_SHAFT, false));
@@ -80,14 +83,14 @@ public class GreatechEncasedCogwheelBlock extends RotatedPillarKineticBlock
 
     @Override
     public float getKineticBreakStressLimit() {
-        return material.smallCogwheelBreakStressLimit();
+        return large ? material.largeCogwheelBreakStressLimit() : material.smallCogwheelBreakStressLimit();
     }
 
     @Override
     public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos,
             Player player) {
         if (target instanceof BlockHitResult blockHit && blockHit.getDirection().getAxis() != getRotationAxis(state)) {
-            return GreatechBlocks.getCogwheel(material, false).asItem().getDefaultInstance();
+            return GreatechBlocks.getCogwheel(material, large).asItem().getDefaultInstance();
         }
         return getCasing().asItem().getDefaultInstance();
     }
@@ -134,7 +137,7 @@ public class GreatechEncasedCogwheelBlock extends RotatedPillarKineticBlock
 
         context.getLevel().levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, context.getClickedPos(), Block.getId(state));
         KineticBlockEntity.switchToBlockState(context.getLevel(), context.getClickedPos(),
-                GreatechBlocks.getCogwheel(material, false).defaultBlockState().setValue(AXIS, state.getValue(AXIS)));
+                GreatechBlocks.getCogwheel(material, large).defaultBlockState().setValue(AXIS, state.getValue(AXIS)));
         return InteractionResult.SUCCESS;
     }
 
@@ -167,17 +170,17 @@ public class GreatechEncasedCogwheelBlock extends RotatedPillarKineticBlock
 
     @Override
     public boolean isSmallCog() {
-        return true;
+        return !large;
     }
 
     @Override
     public boolean isLargeCog() {
-        return false;
+        return large;
     }
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-        return CogWheelBlock.isValidCogwheelPosition(false, level, pos, state.getValue(AXIS));
+        return CogWheelBlock.isValidCogwheelPosition(large, level, pos, state.getValue(AXIS));
     }
 
     @Override
@@ -253,17 +256,18 @@ public class GreatechEncasedCogwheelBlock extends RotatedPillarKineticBlock
 
     @Override
     public ItemRequirement getRequiredItems(BlockState state, BlockEntity blockEntity) {
-        return ItemRequirement.of(GreatechBlocks.getCogwheel(material, false).defaultBlockState(), blockEntity);
+        return ItemRequirement.of(GreatechBlocks.getCogwheel(material, large).defaultBlockState(), blockEntity);
     }
 
     @Override
-    public Class<GreatechCogwheelBlockEntity> getBlockEntityClass() {
-        return GreatechCogwheelBlockEntity.class;
+    public Class<BracketedKineticBlockEntity> getBlockEntityClass() {
+        return BracketedKineticBlockEntity.class;
     }
 
     @Override
-    public BlockEntityType<? extends GreatechCogwheelBlockEntity> getBlockEntityType() {
-        return GreatechBlockEntityTypes.getFamily(material).cogwheel().get();
+    public BlockEntityType<? extends BracketedKineticBlockEntity> getBlockEntityType() {
+        return large ? GreatechBlockEntityTypes.getFamily(material).largeCogwheel().get()
+                : GreatechBlockEntityTypes.getFamily(material).cogwheel().get();
     }
 
     @Override

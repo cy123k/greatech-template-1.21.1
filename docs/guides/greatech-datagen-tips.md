@@ -27,6 +27,8 @@ Current generated transmission kinds:
 - `andesite_encased_small_cogwheel`
 - `brass_encased_small_cogwheel`
 - `large_cogwheel`
+- `andesite_encased_large_cogwheel`
+- `brass_encased_large_cogwheel`
 
 ## Main Code
 
@@ -65,6 +67,7 @@ For the transmission family path:
 - `src/generated/resources/assets/greatech/blockstates`: generated transmission blockstates
 - `src/generated/resources/assets/greatech/models/block/shaft/encased`: generated Create-casing shaft wrapper models
 - `src/generated/resources/assets/greatech/models/block/cogwheel/small_cogwheel/encased`: generated Create-casing small cogwheel wrapper models
+- `src/generated/resources/assets/greatech/models/block/cogwheel/large_cogwheel/encased`: generated Create-casing large cogwheel wrapper models
 - `src/generated/resources/assets/greatech/models/item`: generated transmission item roots
 - `src/generated/resources/data/greatech/loot_table/blocks`: generated transmission block loot tables
 
@@ -78,8 +81,8 @@ Do not move shared wrapper geometry such as:
 
 into datagen unless the generator is actually responsible for authoring geometry.
 
-The current encased shaft and encased small cogwheel wrapper models are generated on purpose.
-They reference Create model parents and textures such as `create:block/encased_shaft/block`, `create:block/encased_cogwheel/block`, `create:block/andesite_casing`, and `create:block/brass_gearbox`.
+The current encased shaft, encased small cogwheel, and encased large cogwheel wrapper models are generated on purpose.
+They reference Create model parents and textures such as `create:block/encased_shaft/block`, `create:block/encased_cogwheel/block`, `create:block/encased_large_cogwheel/block`, `create:block/andesite_casing`, and `create:block/brass_gearbox`.
 `GreatechEncasedModelProvider` writes these cross-mod wrapper JSONs directly instead of using `ExistingFileHelper`, because Create parents and textures are valid runtime dependencies but should not be required as local Greatech model files during generation.
 
 Machine resources are still hand-authored unless a provider explicitly owns them. For example, the hydraulic press uses:
@@ -142,14 +145,19 @@ Adding another casing type means adding the enum entry with wrapper texture meta
 Generated per material:
 
 - `<material>_large_cogwheel.json`
+- `<encasing>_encased_<material>_large_cogwheel.json`
 - item root
+- item roots for every encased large cogwheel id
 - loot table
+- loot tables for all encased large cogwheel ids
 
 Current blockstate rules:
 
 - large cogwheels include `placement_ghost=true/false`
 - `placement_ghost=false` points at `<material>_large_cogwheel_block`
 - `placement_ghost=true` points at `<material>_large_cogwheel`
+- encased large cogwheels include `axis`, `top_shaft`, and `bottom_shaft`
+- encased large cogwheels point at `block/cogwheel/large_cogwheel/encased/<encasing>_encased_<material>_large_cogwheel` plus the matching `_top`, `_bottom`, or `_top_bottom` suffix
 
 ## Adding Another Transmission Material
 

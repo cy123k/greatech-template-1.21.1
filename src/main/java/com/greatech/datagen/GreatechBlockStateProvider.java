@@ -78,6 +78,10 @@ public class GreatechBlockStateProvider extends BlockStateProvider {
                 modelFile("block/cogwheel/large_cogwheel/" + material.id() + "_large_cogwheel_block"),
                 modelFile("block/cogwheel/large_cogwheel/" + material.id() + "_large_cogwheel"),
                 GreatechCogwheelBlock.PLACEMENT_GHOST);
+
+        for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
+            registerEncasedLargeCogwheelBlock(material, encasingType);
+        }
     }
 
     private void registerGhostAxisBlock(Block block, ModelFile hiddenModel, ModelFile visibleModel,
@@ -121,6 +125,17 @@ public class GreatechBlockStateProvider extends BlockStateProvider {
         }
     }
 
+    private void registerEncasedLargeCogwheelBlock(GreatechKineticMaterial material, GreatechEncasingType encasingType) {
+        VariantBlockStateBuilder builder = getVariantBuilder(
+                GreatechBlocks.getFamily(material).encasedLargeCogwheel(encasingType).get());
+        for (Axis axis : Axis.values()) {
+            addEncasedCogwheelVariant(builder, axis, false, false, encasedLargeCogwheelModel(material, encasingType, ""));
+            addEncasedCogwheelVariant(builder, axis, false, true, encasedLargeCogwheelModel(material, encasingType, "_top"));
+            addEncasedCogwheelVariant(builder, axis, true, false, encasedLargeCogwheelModel(material, encasingType, "_bottom"));
+            addEncasedCogwheelVariant(builder, axis, true, true, encasedLargeCogwheelModel(material, encasingType, "_top_bottom"));
+        }
+    }
+
     private void addEncasedCogwheelVariant(VariantBlockStateBuilder builder, Axis axis, boolean bottomShaft,
             boolean topShaft, ModelFile model) {
         ConfiguredModel.Builder<?> configured = builder.partialState()
@@ -136,6 +151,12 @@ public class GreatechBlockStateProvider extends BlockStateProvider {
             String suffix) {
         return uncheckedModelFile("block/cogwheel/small_cogwheel/encased/"
                 + GreatechBlocks.encasedCogwheelName(material, encasingType) + suffix);
+    }
+
+    private ModelFile encasedLargeCogwheelModel(GreatechKineticMaterial material, GreatechEncasingType encasingType,
+            String suffix) {
+        return uncheckedModelFile("block/cogwheel/large_cogwheel/encased/"
+                + GreatechBlocks.encasedLargeCogwheelName(material, encasingType) + suffix);
     }
 
     private ConfiguredModel.Builder<?> applyAxisRotation(ConfiguredModel.Builder<?> builder, Axis axis) {

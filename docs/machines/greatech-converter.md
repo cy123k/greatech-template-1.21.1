@@ -34,6 +34,12 @@ Registry hooks:
 - [GreatechPartialModels.java](../../src/main/java/com/greatech/registry/GreatechPartialModels.java)
 - [GreatechClient.java](../../src/main/java/com/greatech/GreatechClient.java)
 
+HUD networking:
+
+- [RequestSUEnergyConverterHudDataPayload.java](../../src/main/java/com/greatech/network/converter/RequestSUEnergyConverterHudDataPayload.java)
+- [SUEnergyConverterHudDataPayload.java](../../src/main/java/com/greatech/network/converter/SUEnergyConverterHudDataPayload.java)
+- [GreatechSUEnergyConverterHudCache.java](../../src/main/java/com/greatech/network/converter/GreatechSUEnergyConverterHudCache.java)
+
 Main docs that explain surrounding patterns:
 
 - [create-machine-tips.md](../guides/create-machine-tips.md)
@@ -107,6 +113,21 @@ Each server tick the block entity currently:
 5. tries to push energy into the neighboring `GTCEu` `IEnergyContainer` on that side
 
 This is still a prototype machine flow, but the Create-side and GTCEu-side integration path is already live.
+
+## Goggles HUD
+
+The converter HUD uses on-demand server sampling instead of reading the client-side block entity directly.
+
+Displayed values include:
+
+- tier
+- current RPM
+- stress required for configured maximum output
+- generated `EU/t`
+- stored `EU` and capacity
+- output voltage and amperage
+
+The stored-energy line is server-authoritative. `SUEnergyConverterBlockEntity` mutates `energyStored` during server generation and export, so the HUD requests `SUEnergyConverterHudDataPayload` and renders from `GreatechSUEnergyConverterHudCache`.
 
 ## Kinetic Failure Integration
 

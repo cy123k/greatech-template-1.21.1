@@ -14,13 +14,15 @@ public record GreatechKineticFamily(
         java.util.Map<GreatechEncasingType, DeferredBlock<Block>> encasedCogwheels,
         DeferredBlock<Block> poweredCogwheel,
         DeferredBlock<Block> largeCogwheel,
+        java.util.Map<GreatechEncasingType, DeferredBlock<Block>> encasedLargeCogwheels,
         DeferredItem<BlockItem> shaftItem,
         DeferredItem<BlockItem> poweredShaftItem,
         java.util.Map<GreatechEncasingType, DeferredItem<BlockItem>> encasedShaftItems,
         DeferredItem<BlockItem> cogwheelItem,
         java.util.Map<GreatechEncasingType, DeferredItem<BlockItem>> encasedCogwheelItems,
         DeferredItem<BlockItem> poweredCogwheelItem,
-        DeferredItem<BlockItem> largeCogwheelItem) {
+        DeferredItem<BlockItem> largeCogwheelItem,
+        java.util.Map<GreatechEncasingType, DeferredItem<BlockItem>> encasedLargeCogwheelItems) {
     public DeferredBlock<Block> encasedShaft(GreatechEncasingType type) {
         return encasedShafts.get(type);
     }
@@ -35,5 +37,13 @@ public record GreatechKineticFamily(
 
     public DeferredItem<BlockItem> encasedCogwheelItem(GreatechEncasingType type) {
         return encasedCogwheelItems.get(type);
+    }
+
+    public DeferredBlock<Block> encasedLargeCogwheel(GreatechEncasingType type) {
+        return encasedLargeCogwheels.get(type);
+    }
+
+    public DeferredItem<BlockItem> encasedLargeCogwheelItem(GreatechEncasingType type) {
+        return encasedLargeCogwheelItems.get(type);
     }
 }

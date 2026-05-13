@@ -36,6 +36,18 @@ Fluid bridge HUD payloads:
 - [FluidBridgeHudDataPayload.java](../../src/main/java/com/greatech/network/fluid/FluidBridgeHudDataPayload.java)
 - [GreatechFluidBridgeHudCache.java](../../src/main/java/com/greatech/network/fluid/GreatechFluidBridgeHudCache.java)
 
+Hydraulic press HUD payloads:
+
+- [RequestHydraulicPressHudDataPayload.java](../../src/main/java/com/greatech/network/hydraulic/RequestHydraulicPressHudDataPayload.java)
+- [HydraulicPressHudDataPayload.java](../../src/main/java/com/greatech/network/hydraulic/HydraulicPressHudDataPayload.java)
+- [GreatechHydraulicPressHudCache.java](../../src/main/java/com/greatech/network/hydraulic/GreatechHydraulicPressHudCache.java)
+
+SU energy converter HUD payloads:
+
+- [RequestSUEnergyConverterHudDataPayload.java](../../src/main/java/com/greatech/network/converter/RequestSUEnergyConverterHudDataPayload.java)
+- [SUEnergyConverterHudDataPayload.java](../../src/main/java/com/greatech/network/converter/SUEnergyConverterHudDataPayload.java)
+- [GreatechSUEnergyConverterHudCache.java](../../src/main/java/com/greatech/network/converter/GreatechSUEnergyConverterHudCache.java)
+
 HUD trigger point:
 
 - [GreatechGoggleOverlayRenderer.java](../../src/main/java/com/greatech/content/equipment/hud/GreatechGoggleOverlayRenderer.java)
@@ -54,14 +66,14 @@ The client sends a request only while the player is actually looking at a suppor
 For on-demand targets, the flow is:
 
 1. HUD overlay detects the currently observed block
-2. overlay throttles repeat requests for the same position
+2. the matching provider throttles repeat requests for the same position
 3. client sends a `Request...Payload`
 4. server validates player, chunk, distance, and target block entity type
 5. server samples runtime data and builds a response payload
 6. client stores the response in a short-lived cache
 7. provider reads the cache and renders the HUD panel
 
-The overlay currently drives all request scheduling. Providers only render data and do not send packets by themselves.
+The overlay builds a `GoggleHudContext` every frame. Providers own their request throttling through `requestDataIfNeeded(...)`, then render from their short-lived client caches.
 
 ## Cable Sync
 
@@ -104,6 +116,28 @@ The split exists because the bridge needs extra machine-local values such as:
 
 Regular pipe observation only needs fluid contents and derived fluid traits.
 
+## Machine Telemetry Sync
+
+Some Greatech machines expose values that are server-authoritative and can change every tick.
+
+`RequestHydraulicPressHudDataPayload` covers:
+
+- `Greatech` hydraulic press mold state
+- effective heat chamber tier and temperature
+- hydraulic fluid contents
+- press RPM
+
+`RequestSUEnergyConverterHudDataPayload` covers:
+
+- converter tier
+- current RPM
+- stress required for configured maximum output
+- generated `EU/t`
+- stored `EU` and capacity
+- output voltage and amperage
+
+The SU energy converter intentionally uses this path for `stored EU`. The value is mutated on the server during generation and export, so reading the client-side block entity directly can show stale or misleading values.
+
 ## Why Some Targets Skip Networking
 
 Some targets are observed without extra packets:
@@ -127,9 +161,9 @@ This keeps the HUD request path narrow and avoids using it as a generic remote i
 
 ## Current Timing
 
-The overlay currently throttles repeated HUD requests to short fixed intervals.
+Providers currently throttle repeated HUD requests to short fixed intervals.
 
-The exact numbers live in [GreatechGoggleOverlayRenderer.java](../../src/main/java/com/greatech/content/equipment/hud/GreatechGoggleOverlayRenderer.java) and may change during playtesting, but the design intent is stable:
+The exact numbers live in each provider and may change during playtesting, but the design intent is stable:
 
 - frequent enough to feel live
 - slow enough to avoid packet spam
@@ -142,7 +176,7 @@ When adding a new HUD-inspected target:
 1. decide whether the needed data already exists on the client
 2. if yes, add only a provider
 3. if not, add request payload, response payload, and client cache
-4. keep request initiation in the overlay
+4. keep request initiation in the provider's `requestDataIfNeeded(...)`
 5. keep rendering logic inside providers
 
 This keeps transport, caching, and presentation separate.

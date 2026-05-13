@@ -13,26 +13,27 @@ The goals are:
 
 Current supported parts:
 
-- `greatech:steel_shaft`
-- `greatech:steel_cogwheel`
-- `greatech:steel_large_cogwheel`
+- Greatech steel, aluminium, and stainless shafts
+- Greatech steel, aluminium, and stainless small cogwheels
+- Greatech steel, aluminium, and stainless large cogwheels
+- matching Greatech-owned encased shaft, encased small cogwheel, and encased large cogwheel target blocks
 
 ## Main Code
 
 Core classes:
 
-- [GreatechPlacementRegistry.java](../src/main/java/com/greatech/content/placement/GreatechPlacementRegistry.java)
-- [GreatechPlacementHelpers.java](../src/main/java/com/greatech/content/placement/GreatechPlacementHelpers.java)
-- [GreatechPlacementEvents.java](../src/main/java/com/greatech/content/placement/GreatechPlacementEvents.java)
-- [GreatechPlacementGhosts.java](../src/main/java/com/greatech/content/placement/GreatechPlacementGhosts.java)
-- [GreatechShaftPlacementHelper.java](../src/main/java/com/greatech/content/placement/GreatechShaftPlacementHelper.java)
-- [GreatechSmallCogwheelPlacementHelper.java](../src/main/java/com/greatech/content/placement/GreatechSmallCogwheelPlacementHelper.java)
-- [GreatechLargeCogwheelPlacementHelper.java](../src/main/java/com/greatech/content/placement/GreatechLargeCogwheelPlacementHelper.java)
-- [GreatechMixedCogwheelPlacementHelper.java](../src/main/java/com/greatech/content/placement/GreatechMixedCogwheelPlacementHelper.java)
+- [GreatechPlacementRegistry.java](../../src/main/java/com/greatech/content/placement/GreatechPlacementRegistry.java)
+- [GreatechPlacementHelpers.java](../../src/main/java/com/greatech/content/placement/GreatechPlacementHelpers.java)
+- [GreatechPlacementEvents.java](../../src/main/java/com/greatech/content/placement/GreatechPlacementEvents.java)
+- [GreatechPlacementGhosts.java](../../src/main/java/com/greatech/content/placement/GreatechPlacementGhosts.java)
+- [GreatechShaftPlacementHelper.java](../../src/main/java/com/greatech/content/placement/GreatechShaftPlacementHelper.java)
+- [GreatechSmallCogwheelPlacementHelper.java](../../src/main/java/com/greatech/content/placement/GreatechSmallCogwheelPlacementHelper.java)
+- [GreatechLargeCogwheelPlacementHelper.java](../../src/main/java/com/greatech/content/placement/GreatechLargeCogwheelPlacementHelper.java)
+- [GreatechMixedCogwheelPlacementHelper.java](../../src/main/java/com/greatech/content/placement/GreatechMixedCogwheelPlacementHelper.java)
 
 Initialization happens in:
 
-- [Greatech.java](../src/main/java/com/greatech/Greatech.java)
+- [Greatech.java](../../src/main/java/com/greatech/Greatech.java)
 
 `GreatechPlacementHelpers.init()` forces helper registration, and `GreatechPlacementEvents::onRightClickBlock` is registered on the NeoForge event bus.
 
@@ -51,10 +52,13 @@ Current pairings:
 
 - `greatech:steel_shaft` can extend Greatech and Create shaft targets
 - `create:shaft` can extend Greatech shaft targets
+- bare shaft items can use Greatech encased shaft targets as shaft-helper anchors
 - `greatech:steel_cogwheel` can place against Greatech and Create small cogwheel targets
 - `create:cogwheel` can place against Greatech small cogwheel targets
+- bare small cogwheel items can use Greatech encased small cogwheel targets as cogwheel-helper anchors
 - `greatech:steel_large_cogwheel` can place against Greatech and Create large cogwheel targets
 - `create:large_cogwheel` can place against Greatech large cogwheel targets
+- bare large cogwheel items can use Greatech encased large cogwheel targets as cogwheel-helper anchors
 - `greatech:steel_cogwheel` can use mixed-size diagonal placement against large cogwheel targets
 - `greatech:steel_large_cogwheel` can use mixed-size diagonal placement against small cogwheel targets
 - Create small and large cogwheel items can use Greatech mixed placement when the target is Greatech-owned
@@ -150,7 +154,9 @@ Greatech solves this with a `placement_ghost` blockstate property:
 - `placement_ghost=false`: normal world state, empty static model
 - `placement_ghost=true`: preview-only state, full static model
 
-`GreatechPlacementGhosts.withGhostState(...)` sets this property on the ghost state before Catnip renders it. The placed block still uses the normal default state and remains BER-rendered in-world.
+`GreatechPlacementGhosts.withGhostState(...)` sets this property on the held bare block's ghost state before Catnip renders it. The placed block still uses the normal default state and remains BER-rendered in-world.
+
+Encased transmission blocks are targets, not ghost models. For example, looking at `greatech:brass_encased_steel_cogwheel` while holding `greatech:steel_cogwheel` should show the bare `steel_cogwheel` placement ghost. Encased shaft/cogwheel blocks therefore do not need their own `placement_ghost` variants.
 
 ## Current Boundaries
 

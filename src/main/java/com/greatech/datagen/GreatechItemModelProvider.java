@@ -34,6 +34,10 @@ public class GreatechItemModelProvider extends ItemModelProvider {
                     modLoc("block/cogwheel/small_cogwheel/" + material.id() + "_cogwheel"));
             withExistingParent(material.id() + "_large_cogwheel",
                     modLoc("block/cogwheel/large_cogwheel/" + material.id() + "_large_cogwheel"));
+            for (GreatechEncasingType encasingType : GreatechEncasingType.values()) {
+                String blockName = GreatechBlocks.encasedLargeCogwheelName(material, encasingType);
+                withUncheckedParent(blockName, "block/cogwheel/large_cogwheel/encased/" + blockName);
+            }
         }
     }
 
