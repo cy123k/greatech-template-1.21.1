@@ -146,7 +146,7 @@ When a machine uses custom full-cube geometry for only one state, keep the state
 
 GTRegistrate can add registered machine items to creative tab contents by itself.
 
-Do not manually add the same `MachineDefinition.asStack()` in Greatech's `BuildCreativeModeTabContentsEvent` unless you have confirmed GTRegistrate did not already add it.
+Do not manually add the same `MachineDefinition.asStack()` in a creative tab output unless you have confirmed GTRegistrate did not already add it.
 
 The duplicate insertion crash looks like:
 
@@ -155,21 +155,22 @@ java.lang.IllegalArgumentException:
 Itemstack 1 greatech:steam_engine_hatch already exists in the tab's list
 ```
 
-For the current steam hatch, manual insertion was removed. The item is expected to appear through the GTRegistrate listener.
+Greatech's main tab now uses a custom sectioned output path. For the current steam hatches, GTRegistrate's item builder does not add them to the Greatech tab directly. Instead, the sectioned Greatech tab emits `MachineDefinition.asStack()` inside the `GTCEu Hatches` section.
 
-That includes Greatech's own custom creative tab. If the machine item is already bound to that tab through GTRegistrate/Registrate, adding a hatch stack such as `GreatechMachines.LV_STEAM_ENGINE_HATCH.asStack()` manually will duplicate the same entry and crash when the creative inventory rebuilds.
-
-For GTCEu machine items, Registrate can also leave the item on its default tab path while you add it to a custom tab path. In practice that can still produce a duplicate creative entry even when you are not manually calling `output.accept(...)`.
-
-For `steam_engine_hatch`, the working pattern is:
+That means the hatch item builder uses:
 
 ```java
-.itemBuilder(item -> item
-        .removeTab(CreativeModeTabs.SEARCH)
-        .tab(Greatech.MAIN_TAB_KEY))
+.itemBuilder(item -> item.removeTab(CreativeModeTabs.SEARCH))
 ```
 
-Use this when a machine item should appear in a custom Greatech tab instead of the default Registrate tab path.
+and the Greatech tab builder owns placement through:
+
+```java
+tab.section(CreativeSection.GTCEU_HATCHES);
+tab.accept(GreatechMachines.STEAM_ENGINE_HATCHES);
+```
+
+If a future GTCEu machine item should appear in the sectioned Greatech tab, follow the same ownership split: prevent independent tab insertion in the item builder, then add the stack once from the sectioned tab output.
 
 ## Common Crash Patterns
 
@@ -186,7 +187,7 @@ Use this when a machine item should appear in a custom Greatech tab instead of t
 Machine item is already in creative tab:
 
 - cause: GTRegistrate and Greatech both inserted the same item
-- fix: let GTRegistrate own the machine item creative insertion
+- fix: choose one owner. For the sectioned Greatech tab, let the Greatech tab output own insertion and keep the GTRegistrate item builder from adding the item independently
 
 Placed block is a purple/black cube:
 

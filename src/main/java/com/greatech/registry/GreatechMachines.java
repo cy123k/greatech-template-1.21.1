@@ -80,7 +80,7 @@ public final class GreatechMachines {
                 .appearanceBlock(() -> Blocks.IRON_BLOCK)
                 .blockModel((ctx, provider) -> provider.simpleBlock(ctx.get(), provider.models()
                         .cubeAll(ctx.getName(), provider.mcLoc("block/iron_block"))))
-                .itemBuilder(item -> item.removeTab(CreativeModeTabs.SEARCH).tab(Greatech.MAIN_TAB_KEY))
+                .itemBuilder(item -> item.removeTab(CreativeModeTabs.SEARCH))
                 .tooltips(Component.translatable("block.greatech." + name + ".tooltip"))
                 .allowCoverOnFront(true)
                 .register();

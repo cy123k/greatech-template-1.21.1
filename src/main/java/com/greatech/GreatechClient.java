@@ -2,6 +2,7 @@ package com.greatech;
 
 import org.slf4j.Logger;
 
+import com.greatech.client.creative.GreatechCreativeTabSectionRenderer;
 import com.greatech.content.cogwheel.GreatechCogwheelRenderer;
 import com.greatech.content.converter.SUEnergyConverterRenderer;
 import com.greatech.content.equipment.hud.GreatechGoggleOverlayRenderer;
@@ -16,6 +17,7 @@ import com.greatech.registry.GreatechBlockEntityTypes;
 import com.greatech.registry.GreatechPartialModels;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -37,6 +39,7 @@ public class GreatechClient {
 
     public GreatechClient(ModContainer container) {
         GreatechPartialModels.init();
+        NeoForge.EVENT_BUS.register(GreatechCreativeTabSectionRenderer.class);
 
         // Allows NeoForge to create a config screen for this mod's configs.
         // The config screen is accessed by going to the Mods screen > clicking on your mod > clicking on config.

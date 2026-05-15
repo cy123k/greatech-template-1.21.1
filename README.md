@@ -8,6 +8,7 @@ The current build focuses on:
 - Greatech-owned steel, aluminium, and stainless transmission families with Create-style encased shafts, small cogwheels, and large cogwheels
 - a cover-driven Programmable Gearshift with redstone-controlled clutch, reverse, and overdrive behavior plus per-face cover overlays
 - a Greatech kinetic failure system that can break overloaded Create shafts, cogwheels, clutches, gearshifts, sequenced gearshifts, and belt connections in Greatech-monitored networks
+- a sectioned Greatech creative tab with full-row category headers for generators, transmission parts, multiblock structures, GTCEu hatches, machines, fluids, and items
 - GTCEu-flavored tiers, energy output, and industrial recipes
 - Greatech-owned machines such as the SU Energy Converter, Fluid Bridge, Heat Chamber, and Hydraulic Press
 - shared HUD/goggles display helpers with on-demand server sampling for transient machine and cable data

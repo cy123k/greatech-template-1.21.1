@@ -1,0 +1,11 @@
+{
+  "itemGroup.greatech": "Greatech",
+  "itemGroup.greatech.section.generators": "发电机",
+  "itemGroup.greatech.section.transmission": "传动件",
+  "itemGroup.greatech.section.multiblocks": "多方块结构",
+  "itemGroup.greatech.section.gtceu_hatches": "GTCEu 仓体",
+  "itemGroup.greatech.section.machines": "机器",
+  "itemGroup.greatech.section.fluids": "流体",
+  "itemGroup.greatech.section.items": "物品",
+  "item.greatech.creative_tab_marker": "Greatech 创造栏分区"
+}

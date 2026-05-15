@@ -2,6 +2,8 @@ package com.greatech;
 
 import org.slf4j.Logger;
 
+import com.greatech.content.creative.GreatechCreativeTabMarkerItem;
+import com.greatech.content.kinetics.GreatechKineticFamily;
 import com.greatech.compat.create.GreatechCreateEncasingCompat;
 import com.greatech.network.GreatechNetworking;
 import com.greatech.content.heat.HeatChamberPlacementEvents;
@@ -33,12 +35,14 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(Greatech.MODID)
 public class Greatech {
     public static final String MODID = "greatech";
+    private static final int CREATIVE_TAB_COLUMNS = 9;
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
     public static final ResourceKey<CreativeModeTab> MAIN_TAB_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB,
@@ -49,26 +53,35 @@ public class Greatech {
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .icon(() -> GreatechBlocks.LV_SUCON_ITEM.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
-                acceptRegistered(output, GreatechBlocks.SU_ENERGY_CONVERTER_ITEMS);
-                acceptRegistered(output, GreatechBlocks.ELECTRIC_FLUID_BRIDGE_ITEMS);
-                acceptRegistered(output, GreatechBlocks.HYDRAULIC_PRESS_ITEMS);
-                output.accept(GreatechBlocks.HEAT_CHAMBER_CASING_ITEM.get());
-                output.accept(GreatechBlocks.HEAT_CHAMBER_GLASS_ITEM.get());
-                output.accept(GreatechBlocks.HEAT_CHAMBER_CONTROLLER_ITEM.get());
-                output.accept(GreatechBlocks.PROGRAMMABLE_GEARSHIFT_ITEM.get());
-                output.accept(GreatechBlocks.STEEL_SHAFT_ITEM.get());
-                output.accept(GreatechBlocks.STEEL_COGWHEEL_ITEM.get());
-                output.accept(GreatechBlocks.STEEL_LARGE_COGWHEEL_ITEM.get());
-                output.accept(GreatechBlocks.ALUMINIUM_SHAFT_ITEM.get());
-                output.accept(GreatechBlocks.ALUMINIUM_COGWHEEL_ITEM.get());
-                output.accept(GreatechBlocks.ALUMINIUM_LARGE_COGWHEEL_ITEM.get());
-                output.accept(GreatechBlocks.STAINLESS_SHAFT_ITEM.get());
-                output.accept(GreatechBlocks.STAINLESS_COGWHEEL_ITEM.get());
-                output.accept(GreatechBlocks.STAINLESS_LARGE_COGWHEEL_ITEM.get());
-                output.accept(GreatechItems.GOGGLES.get());
-                output.accept(GreatechItems.REDSTONE_CLUTCH_COVER.get());
-                output.accept(GreatechItems.REDSTONE_REVERSE_COVER.get());
-                output.accept(GreatechItems.REDSTONE_OVERDRIVE_COVER.get());
+                SectionedCreativeOutput tab = new SectionedCreativeOutput(output);
+                tab.section(CreativeSection.GENERATORS);
+                tab.accept(GreatechBlocks.SU_ENERGY_CONVERTER_ITEMS);
+
+                tab.section(CreativeSection.TRANSMISSION);
+                tab.acceptFamily(GreatechBlocks.STEEL_FAMILY);
+                tab.acceptFamily(GreatechBlocks.ALUMINIUM_FAMILY);
+                tab.acceptFamily(GreatechBlocks.STAINLESS_FAMILY);
+                tab.accept(GreatechBlocks.PROGRAMMABLE_GEARSHIFT_ITEM);
+
+                tab.section(CreativeSection.MULTIBLOCKS);
+                tab.accept(GreatechBlocks.HEAT_CHAMBER_CASING_ITEM);
+                tab.accept(GreatechBlocks.HEAT_CHAMBER_GLASS_ITEM);
+                tab.accept(GreatechBlocks.HEAT_CHAMBER_CONTROLLER_ITEM);
+
+                tab.section(CreativeSection.GTCEU_HATCHES);
+                tab.accept(GreatechMachines.STEAM_ENGINE_HATCHES);
+
+                tab.section(CreativeSection.MACHINES);
+                tab.accept(GreatechBlocks.HYDRAULIC_PRESS_ITEMS);
+
+                tab.section(CreativeSection.FLUIDS);
+                tab.accept(GreatechBlocks.ELECTRIC_FLUID_BRIDGE_ITEMS);
+
+                tab.section(CreativeSection.ITEMS);
+                tab.accept(GreatechItems.GOGGLES);
+                tab.accept(GreatechItems.REDSTONE_CLUTCH_COVER);
+                tab.accept(GreatechItems.REDSTONE_REVERSE_COVER);
+                tab.accept(GreatechItems.REDSTONE_OVERDRIVE_COVER);
             }).build());
 
     public Greatech(IEventBus modEventBus, ModContainer modContainer) {
@@ -163,6 +176,96 @@ public class Greatech {
         for (var item : items) {
             if (item != null) {
                 event.accept(item);
+            }
+        }
+    }
+
+    public enum CreativeSection {
+        GENERATORS("itemGroup.greatech.section.generators"),
+        TRANSMISSION("itemGroup.greatech.section.transmission"),
+        MULTIBLOCKS("itemGroup.greatech.section.multiblocks"),
+        GTCEU_HATCHES("itemGroup.greatech.section.gtceu_hatches"),
+        MACHINES("itemGroup.greatech.section.machines"),
+        FLUIDS("itemGroup.greatech.section.fluids"),
+        ITEMS("itemGroup.greatech.section.items");
+
+        private final String titleKey;
+
+        CreativeSection(String titleKey) {
+            this.titleKey = titleKey;
+        }
+
+        public String titleKey() {
+            return titleKey;
+        }
+    }
+
+    private static final class SectionedCreativeOutput {
+        private final CreativeModeTab.Output output;
+        private int column;
+        private int markerId;
+
+        private SectionedCreativeOutput(CreativeModeTab.Output output) {
+            this.output = output;
+        }
+
+        private void section(CreativeSection section) {
+            padRow();
+            for (int i = 0; i < CREATIVE_TAB_COLUMNS; i++) {
+                output.accept(GreatechCreativeTabMarkerItem.section(
+                        GreatechItems.CREATIVE_TAB_MARKER.get(),
+                        section.titleKey(),
+                        markerId++));
+            }
+            column = 0;
+        }
+
+        private void padRow() {
+            while (column != 0) {
+                output.accept(GreatechCreativeTabMarkerItem.spacer(
+                        GreatechItems.CREATIVE_TAB_MARKER.get(),
+                        markerId++));
+                column = (column + 1) % CREATIVE_TAB_COLUMNS;
+            }
+        }
+
+        private void accept(DeferredItem<? extends net.minecraft.world.item.Item> item) {
+            if (item != null) {
+                output.accept(item.get());
+                column = (column + 1) % CREATIVE_TAB_COLUMNS;
+            }
+        }
+
+        private void accept(net.minecraft.world.item.ItemStack stack) {
+            if (!stack.isEmpty()) {
+                output.accept(stack);
+                column = (column + 1) % CREATIVE_TAB_COLUMNS;
+            }
+        }
+
+        private void accept(DeferredItem<? extends net.minecraft.world.item.Item>[] items) {
+            for (var item : items) {
+                accept(item);
+            }
+        }
+
+        private void accept(Iterable<? extends DeferredItem<? extends net.minecraft.world.item.Item>> items) {
+            for (var item : items) {
+                accept(item);
+            }
+        }
+
+        private void acceptFamily(GreatechKineticFamily family) {
+            accept(family.shaftItem());
+            accept(family.cogwheelItem());
+            accept(family.largeCogwheelItem());
+        }
+
+        private void accept(com.gregtechceu.gtceu.api.machine.MachineDefinition[] definitions) {
+            for (var definition : definitions) {
+                if (definition != null) {
+                    accept(definition.asStack());
+                }
             }
         }
     }

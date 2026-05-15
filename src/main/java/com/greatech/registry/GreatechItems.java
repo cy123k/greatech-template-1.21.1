@@ -1,6 +1,7 @@
 package com.greatech.registry;
 
 import com.greatech.Greatech;
+import com.greatech.content.creative.GreatechCreativeTabMarkerItem;
 import com.greatech.content.equipment.goggles.GreatechGogglesItem;
 import com.greatech.content.gearshift.GearshiftCoverItem;
 import com.greatech.content.gearshift.GearshiftCoverType;
@@ -15,6 +16,8 @@ public final class GreatechItems {
 
     public static final DeferredItem<Item> GOGGLES = ITEMS.register("goggles",
             () -> new GreatechGogglesItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> CREATIVE_TAB_MARKER = ITEMS.register("creative_tab_marker",
+            () -> new GreatechCreativeTabMarkerItem(new Item.Properties()));
     public static final DeferredItem<Item> REDSTONE_CLUTCH_COVER = registerCover(GearshiftCoverType.CLUTCH);
     public static final DeferredItem<Item> REDSTONE_REVERSE_COVER = registerCover(GearshiftCoverType.REVERSE);
     public static final DeferredItem<Item> REDSTONE_OVERDRIVE_COVER = registerCover(GearshiftCoverType.OVERDRIVE);

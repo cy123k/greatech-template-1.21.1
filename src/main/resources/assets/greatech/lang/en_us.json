@@ -1,5 +1,13 @@
 {
   "itemGroup.greatech": "Greatech",
+  "itemGroup.greatech.section.generators": "Generators",
+  "itemGroup.greatech.section.transmission": "Transmission",
+  "itemGroup.greatech.section.multiblocks": "Multiblock Structures",
+  "itemGroup.greatech.section.gtceu_hatches": "GTCEu Hatches",
+  "itemGroup.greatech.section.machines": "Machines",
+  "itemGroup.greatech.section.fluids": "Fluids",
+  "itemGroup.greatech.section.items": "Items",
+  "item.greatech.creative_tab_marker": "Greatech Creative Section",
   "item.greatech.goggles": "Greatech Goggles",
   "block.greatech.lv_sucon": "LV SU Energy Converter",
   "block.greatech.mv_sucon": "MV SU Energy Converter",

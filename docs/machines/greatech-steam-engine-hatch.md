@@ -81,15 +81,13 @@ Current registration notes:
 
 Creative-tab note:
 
-Each `*_steam_engine_hatch` is a GTRegistrate machine item, so custom creative-tab assignment should happen through the machine's `itemBuilder(...)` path rather than through manual `displayItems(...)` insertion in Greatech's tab builder. The current safe pattern is:
+Each `*_steam_engine_hatch` is a GTRegistrate machine item, but the current Greatech creative tab is sectioned through a custom marker-row renderer. To keep the hatch items inside the `GTCEu Hatches` / `GTCEu 仓体` section, the machine item builder removes the vanilla search tab but does not independently add the item to the Greatech tab:
 
 ```java
-.itemBuilder(item -> item
-        .removeTab(CreativeModeTabs.SEARCH)
-        .tab(Greatech.MAIN_TAB_KEY))
+.itemBuilder(item -> item.removeTab(CreativeModeTabs.SEARCH))
 ```
 
-This prevents duplicate creative-tab insertion crashes while still letting the hatch appear in Greatech's own tab and in creative search.
+The Greatech tab builder then emits the hatch items manually through `MachineDefinition.asStack()` inside the GTCEu hatch section. This prevents duplicate or unsectioned creative-tab entries while keeping the hatch items grouped with other GTCEu multiblock parts.
 
 The hatch is currently an output-fluid part from GTCEu's pattern perspective. This is the closest match to an output hatch style component, and it lets large boiler-like structures recognize it through the same ability family as normal fluid output hatches.
 
@@ -236,7 +234,7 @@ When GTCEu updates from the current snapshot to a stable API, revisit these area
 3. Replace the hatch's manual steam-availability subscription behavior if GTCEu exposes a cleaner machine-part ticking or tank-change API.
 4. Re-check whether output hatch tanks should be locked using the same `tank.setLocked` and `tank.setFilter` calls.
 5. Re-test multiblock recognition with a real large boiler pattern.
-6. Re-test creative tab insertion. GTRegistrate currently inserts machine items automatically, so Greatech should not manually add any `*_steam_engine_hatch` item to custom tab output unless the GT API changes.
+6. Re-test creative tab insertion. Greatech currently adds `*_steam_engine_hatch` stacks manually through the sectioned creative tab output and keeps GTRegistrate's item builder from adding them to the Greatech tab independently.
 7. Replace temporary runtime JSON resources with generated resources only after datagen output is confirmed to be present in the dev and packaged runtime.
 8. Move fixed values to config or derive them from multiblock state after the boiler API is stable.
 

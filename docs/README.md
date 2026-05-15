@@ -23,6 +23,7 @@ Registered or partially implemented feature families:
 - Transmission parts: steel, aluminium, and stainless shafts/cogwheels, including powered variants and Greatech-owned Create-casing variants for shafts, small cogwheels, and large cogwheels
 - Programmable Gearshift: `programmable_gearshift` plus redstone clutch, reverse, and overdrive covers with installed-face and active overlay rendering
 - Kinetic failure accidents for overloaded Greatech-monitored Create shafts, cogwheels, clutches, gearshifts, sequenced gearshifts, and belt connections
+- Sectioned Greatech creative tab UI with full-row category headers for generators, transmission parts, multiblock structures, GTCEu hatches, machines, fluids, and items
 - Greatech Goggles HUD providers for supported Greatech, Create, and GTCEu-adjacent blocks
 - Hydraulic pressing recipe generation and JEI/EMI display integration
 
@@ -44,6 +45,7 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 - [Kinetic Failure](systems/greatech-kinetic-failure.md)
 - [Fluid Hazard](systems/greatech-fluid-hazard.md)
 - [Placement Helper](systems/greatech-placement-helper.md)
+- [Creative Tab Sections](systems/greatech-creative-tab-sections.md)
 
 ## Machine Docs
 

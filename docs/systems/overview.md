@@ -79,6 +79,8 @@ Hydraulic pressing recipes are now exposed through Greatech-owned JEI and EMI ca
 
 The current steam prototype adds three `GTCEu` machine parts, `lv_steam_engine_hatch`, `mv_steam_engine_hatch`, and `hv_steam_engine_hatch`, plus a matching `Create` generator relay, `powered_steel_shaft`. Each hatch behaves like a fluid export hatch for GTCEu multiblock recognition, stores only steam, and converts a valid neighboring `steel_shaft` into `powered_steel_shaft`. The powered shaft then acts as the actual `Create` kinetic source: it validates the adjacent hatch, requests steam power each tick, outputs configured tier RPM and stress capacity, and automatically reverts back to `steel_shaft` when it no longer has a valid hatch source.
 
+The current creative tab prototype keeps one Greatech tab while adding client-rendered section headers for generators, transmission parts, multiblock structures, GTCEu hatches, machines, fluids, and items. It uses invisible marker item stacks for layout and a `ScreenEvent`/`ContainerScreenEvent` renderer for the visible header bars. Powered and encased transmission variants are intentionally omitted from the main Greatech creative tab.
+
 Because Greatech mixes Create-style blocks and GTCEu machine definitions, new machine work should follow a documented ownership split for registration, facing, rendering, and capability exposure. See [greatech-machine-registration-tips.md](../guides/greatech-machine-registration-tips.md).
 
 ## Near-Term Development Goals
@@ -94,6 +96,7 @@ Because Greatech mixes Create-style blocks and GTCEu machine definitions, new ma
 - validate `lv_hydraulic_press` mold interaction, fluid consumption, heat chamber gating, and belt/world-item processing
 - validate hydraulic pressing JEI/EMI displays with both static and generated recipes
 - validate `lv_steam_engine_hatch` / `mv_steam_engine_hatch` / `hv_steam_engine_hatch` recognition in GTCEu large boiler structures
+- validate Greatech creative tab section headers, marker interaction blocking, and search behavior
 - replace the current steam engine config defaults with recipe- or multiblock-derived values
 - finish `neoforge.mods.toml` dependency declarations
 - add recipe and progression balancing
