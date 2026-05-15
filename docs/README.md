@@ -21,7 +21,8 @@ Registered or partially implemented feature families:
 - Heat Chamber: casing, glass, and controller blocks
 - Steam Engine Hatch: `lv`, `mv`, and `hv` hatch machine parts
 - Transmission parts: steel, aluminium, and stainless shafts/cogwheels, including powered variants and Greatech-owned Create-casing variants for shafts, small cogwheels, and large cogwheels
-- Programmable Gearshift: `programmable_gearshift` plus redstone clutch, reverse, and overdrive covers
+- Programmable Gearshift: `programmable_gearshift` plus redstone clutch, reverse, and overdrive covers with installed-face and active overlay rendering
+- Kinetic failure accidents for overloaded Greatech-monitored Create shafts, cogwheels, clutches, gearshifts, sequenced gearshifts, and belt connections
 - Greatech Goggles HUD providers for supported Greatech, Create, and GTCEu-adjacent blocks
 - Hydraulic pressing recipe generation and JEI/EMI display integration
 

@@ -57,6 +57,18 @@ public final class GreatechPartialModels {
             block("hydraulic_press/lv_hydraulic_press_head");
     public static final PartialModel PROGRAMMABLE_GEARSHIFT_ACTIVE_OVERLAY =
             block("gearshift/programmable_gearshift_active_overlay");
+    public static final PartialModel CLUTCH_COVER_OVERLAY =
+            block("gearshift/clutch_cover_overlay");
+    public static final PartialModel CLUTCH_COVER_ACTIVE_OVERLAY =
+            block("gearshift/clutch_cover_active_overlay");
+    public static final PartialModel REVERSE_COVER_OVERLAY =
+            block("gearshift/reverse_cover_overlay");
+    public static final PartialModel REVERSE_COVER_ACTIVE_OVERLAY =
+            block("gearshift/reverse_cover_active_overlay");
+    public static final PartialModel OVERDRIVE_COVER_OVERLAY =
+            block("gearshift/overdrive_cover_overlay");
+    public static final PartialModel OVERDRIVE_COVER_ACTIVE_OVERLAY =
+            block("gearshift/overdrive_cover_active_overlay");
 
     private GreatechPartialModels() {
     }

@@ -120,6 +120,18 @@ public final class GreatechKineticNetworkFailure {
             return new FailureCandidateType(Optional.of(Config.createLargeCogwheelBreakStressLimit()), KineticFailureAction.DESTROY_BLOCK);
         }
 
+        if (AllBlocks.CLUTCH.has(state)) {
+            return new FailureCandidateType(Optional.of(Config.createClutchBreakStressLimit()), KineticFailureAction.DESTROY_BLOCK);
+        }
+
+        if (AllBlocks.GEARSHIFT.has(state)) {
+            return new FailureCandidateType(Optional.of(Config.createGearshiftBreakStressLimit()), KineticFailureAction.DESTROY_BLOCK);
+        }
+
+        if (AllBlocks.SEQUENCED_GEARSHIFT.has(state)) {
+            return new FailureCandidateType(Optional.of(Config.createSequencedGearshiftBreakStressLimit()), KineticFailureAction.DESTROY_BLOCK);
+        }
+
         return new FailureCandidateType(Optional.empty(), KineticFailureAction.DESTROY_BLOCK);
     }
 

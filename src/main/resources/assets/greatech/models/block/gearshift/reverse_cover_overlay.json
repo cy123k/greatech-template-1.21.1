@@ -1,0 +1,20 @@
+{
+  "parent": "block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "overlay": "greatech:block/greatech_overlay/panel/greatech_gearshift/reverse_cover_overlay",
+    "particle": "greatech:block/greatech_overlay/panel/greatech_gearshift/reverse_cover_overlay"
+  },
+  "elements": [
+    {
+      "from": [2, 2, -0.1],
+      "to": [16, 14, -0.1],
+      "faces": {
+        "north": {
+          "uv": [0, 2, 14, 14],
+          "texture": "#overlay"
+        }
+      }
+    }
+  ]
+}

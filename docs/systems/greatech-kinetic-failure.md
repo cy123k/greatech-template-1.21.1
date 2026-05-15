@@ -13,6 +13,9 @@ The system currently affects:
 - `greatech:powered_steel_shaft`
 - `create:cogwheel`
 - `create:large_cogwheel`
+- `create:clutch`
+- `create:gearshift`
+- `create:sequenced_gearshift`
 - `create:belt` connections
 
 Pure Create networks are not checked. A network must contain a Greatech block entity that implements `KineticFailureSource`.
@@ -58,6 +61,9 @@ Current defaults:
 - `greatech:powered_steel_shaft`: `2048 SU`
 - `create:cogwheel`: `512 SU`
 - `create:large_cogwheel`: `1024 SU`
+- `create:clutch`: `512 SU`
+- `create:gearshift`: `512 SU`
+- `create:sequenced_gearshift`: `1024 SU`
 - `create:belt` connection: `1024 SU`
 
 The selection rule favors the lowest overloaded limit first.
@@ -84,6 +90,9 @@ keepKineticFailureDrops = false
 createShaftBreakStressLimit = 512.0
 createCogwheelBreakStressLimit = 512.0
 createLargeCogwheelBreakStressLimit = 1024.0
+createClutchBreakStressLimit = 512.0
+createGearshiftBreakStressLimit = 512.0
+createSequencedGearshiftBreakStressLimit = 1024.0
 createBeltConnectorBreakStressLimit = 1024.0
 kineticFailureCheckInterval = 20
 kineticFailureCooldown = 100
@@ -96,6 +105,9 @@ Meaning:
 - `createShaftBreakStressLimit`: vanilla shaft and powered shaft break threshold
 - `createCogwheelBreakStressLimit`: vanilla small cogwheel break threshold
 - `createLargeCogwheelBreakStressLimit`: vanilla large cogwheel break threshold
+- `createClutchBreakStressLimit`: vanilla clutch break threshold
+- `createGearshiftBreakStressLimit`: vanilla gearshift break threshold
+- `createSequencedGearshiftBreakStressLimit`: vanilla sequenced gearshift break threshold
 - `createBeltConnectorBreakStressLimit`: vanilla belt connection break threshold
 - `kineticFailureCheckInterval`: tick interval between checks
 - `kineticFailureCooldown`: cooldown after one accident occurs

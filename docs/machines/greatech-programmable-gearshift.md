@@ -89,17 +89,28 @@ Each cover samples redstone from its own installed face.
 Only powered installed cover faces affect:
 
 - the active modifier
-- the visual active overlay
+- that cover face's active overlay
+- the machine-wide active overlay
 
 Nearby redstone that does not power an installed cover face should not light the block.
 
-The active overlay is rendered by the block entity renderer, not by blockstate variants. It uses:
+The machine-wide active overlay is rendered by the block entity renderer, not by blockstate variants. It uses:
 
 - [programmable_gearshift_active_overlay.json](../../src/main/resources/assets/greatech/models/block/gearshift/programmable_gearshift_active_overlay.json)
 - `textures/block/greatech_overlay/panel/greatech_gearshift/gearshift_active.png`
 - `LightTexture.FULL_BRIGHT`
 
 The source model is authored with its shaft axis on north/south (`Z`). The blockstate keeps `axis=z` unrotated, rotates `axis=x` around Y, and rotates `axis=y` around X. The active overlay renderer follows the same source-axis convention.
+
+Installed covers have their own per-face overlay partials. Each cover type has a normal overlay that renders whenever the cover is installed and a full-bright active overlay that renders only while that cover face is powered:
+
+| Cover | Installed overlay | Active overlay |
+| --- | --- | --- |
+| clutch | [clutch_cover_overlay.json](../../src/main/resources/assets/greatech/models/block/gearshift/clutch_cover_overlay.json) | [clutch_cover_active_overlay.json](../../src/main/resources/assets/greatech/models/block/gearshift/clutch_cover_active_overlay.json) |
+| reverse | [reverse_cover_overlay.json](../../src/main/resources/assets/greatech/models/block/gearshift/reverse_cover_overlay.json) | [reverse_cover_active_overlay.json](../../src/main/resources/assets/greatech/models/block/gearshift/reverse_cover_active_overlay.json) |
+| overdrive | [overdrive_cover_overlay.json](../../src/main/resources/assets/greatech/models/block/gearshift/overdrive_cover_overlay.json) | [overdrive_cover_active_overlay.json](../../src/main/resources/assets/greatech/models/block/gearshift/overdrive_cover_active_overlay.json) |
+
+The cover overlay source models are authored on the north face, slightly outside the block cube, and the renderer rotates them to the installed face.
 
 ## Rendering And Resources
 
@@ -114,7 +125,9 @@ The baked world model renders the casing and static panel geometry.
 The renderer contributes:
 
 - rotating steel shaft halves
-- the full-bright active overlay when an installed cover face is powered
+- per-face installed cover overlays for clutch, reverse, and overdrive covers
+- per-face full-bright active cover overlays when the matching installed cover face is powered
+- the full-bright machine active overlay when any installed cover face is powered
 
 The item model is hand-authored at:
 
@@ -122,7 +135,7 @@ The item model is hand-authored at:
 
 It includes static shaft geometry so inventory, hand, ground, and display rendering show a complete machine rather than only the casing.
 
-Current cover item models are placeholder generated-item models using the vanilla redstone texture:
+Current cover item models use dedicated Greatech item textures:
 
 - [redstone_clutch_cover.json](../../src/main/resources/assets/greatech/models/item/redstone_clutch_cover.json)
 - [redstone_reverse_cover.json](../../src/main/resources/assets/greatech/models/item/redstone_reverse_cover.json)
@@ -130,12 +143,10 @@ Current cover item models are placeholder generated-item models using the vanill
 
 ## Current Limits
 
-- cover faces do not yet render their own visible side-mounted modules
 - no GUI
 - no goggles HUD provider yet
 - no recipe or progression balancing
-- no dedicated cover textures yet
-- redstone behavior should still be validated in game across all axes and common redstone components
+- cover overlay orientation and redstone behavior should still be validated in game across all axes and common redstone components
 
 ## Development Notes
 

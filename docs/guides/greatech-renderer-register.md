@@ -29,6 +29,10 @@ for (var family : GreatechBlockEntityTypes.families()) {
     event.registerBlockEntityRenderer(family.largeCogwheel().get(), GreatechCogwheelRenderer::new);
 }
 event.registerBlockEntityRenderer(GreatechBlockEntityTypes.ELECTRIC_FLUID_BRIDGE.get(), ElectricFluidBridgeRenderer::new);
+event.registerBlockEntityRenderer(GreatechBlockEntityTypes.HYDRAULIC_PRESS.get(), HydraulicPressRenderer::new);
+event.registerBlockEntityRenderer(GreatechBlockEntityTypes.HEAT_CHAMBER_CONTROLLER.get(), HeatChamberControllerRenderer::new);
+event.registerBlockEntityRenderer(GreatechBlockEntityTypes.PROGRAMMABLE_GEARSHIFT.get(),
+        GreatechProgrammableGearshiftRenderer::new);
 ```
 
 Keep renderer classes client-safe. They can import Minecraft client rendering classes because `GreatechClient` is loaded only on the client distribution.
@@ -117,6 +121,16 @@ For `lv_hydraulic_press`, the world visual is split between baked body and BER r
 This is intentionally different from the converter/fluid-bridge empty-world-model pattern. The press body is stable and works well as a baked model, while the shaft, head, and mold are runtime state.
 
 Until Greatech adds a Flywheel visual for the hydraulic press, the BER should not skip rendering just because `VisualizationManager.supportsVisualization(level)` is true. Otherwise the head, shaft, or mold can vanish when Flywheel is active without a matching visual implementation.
+
+For `programmable_gearshift`, the world visual is split between baked casing/panel geometry and BER runtime pieces:
+
+- static world model: `programmable_gearshift_block.json`, rendered by the blockstate
+- dynamic shaft partial: `GreatechPartialModels.STEEL_SHAFT_HALF`, rendered once for each shaft-axis side
+- machine active overlay: `GreatechPartialModels.PROGRAMMABLE_GEARSHIFT_ACTIVE_OVERLAY`, rendered full-bright when any installed cover face is powered
+- cover overlays: one normal partial and one active partial per cover type, rendered on the installed non-axis face
+- item/display model: `models/item/programmable_gearshift.json`, pointing at a full wrapper with static shaft geometry
+
+Cover overlay source models are authored as north-facing sheets slightly outside the block cube. `GreatechProgrammableGearshiftRenderer` rotates those partials onto the installed face, so new cover visuals should follow the same north-source convention.
 
 For a machine with static casing and one moving rotor:
 

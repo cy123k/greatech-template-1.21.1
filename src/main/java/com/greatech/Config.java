@@ -77,6 +77,18 @@ public final class Config {
             .comment("When a Create kinetic network contains a Greatech failure source, vanilla create:large_cogwheel blocks can break above this network stress.")
             .defineInRange("createLargeCogwheelBreakStressLimit", 1024.0D, 0.0D, Double.MAX_VALUE);
 
+    private static final ModConfigSpec.DoubleValue CREATE_CLUTCH_BREAK_STRESS_LIMIT = BUILDER
+            .comment("When a Create kinetic network contains a Greatech failure source, vanilla create:clutch blocks can break above this network stress.")
+            .defineInRange("createClutchBreakStressLimit", 512.0D, 0.0D, Double.MAX_VALUE);
+
+    private static final ModConfigSpec.DoubleValue CREATE_GEARSHIFT_BREAK_STRESS_LIMIT = BUILDER
+            .comment("When a Create kinetic network contains a Greatech failure source, vanilla create:gearshift blocks can break above this network stress.")
+            .defineInRange("createGearshiftBreakStressLimit", 512.0D, 0.0D, Double.MAX_VALUE);
+
+    private static final ModConfigSpec.DoubleValue CREATE_SEQUENCED_GEARSHIFT_BREAK_STRESS_LIMIT = BUILDER
+            .comment("When a Create kinetic network contains a Greatech failure source, vanilla create:sequenced_gearshift blocks can break above this network stress.")
+            .defineInRange("createSequencedGearshiftBreakStressLimit", 1024.0D, 0.0D, Double.MAX_VALUE);
+
     private static final ModConfigSpec.DoubleValue CREATE_BELT_CONNECTOR_BREAK_STRESS_LIMIT = BUILDER
             .comment("When a Create kinetic network contains a Greatech failure source, vanilla create:belt connections can break above this network stress.",
                     "Belt failures are normalized to the belt controller so one belt chain counts as one failure candidate.")
@@ -278,6 +290,9 @@ public final class Config {
     private static float createShaftBreakStressLimit;
     private static float createCogwheelBreakStressLimit;
     private static float createLargeCogwheelBreakStressLimit;
+    private static float createClutchBreakStressLimit;
+    private static float createGearshiftBreakStressLimit;
+    private static float createSequencedGearshiftBreakStressLimit;
     private static float createBeltConnectorBreakStressLimit;
     private static boolean enableKineticFailures;
     private static boolean keepKineticFailureDrops;
@@ -331,6 +346,9 @@ public final class Config {
         createShaftBreakStressLimit = CREATE_SHAFT_BREAK_STRESS_LIMIT.get().floatValue();
         createCogwheelBreakStressLimit = CREATE_COGWHEEL_BREAK_STRESS_LIMIT.get().floatValue();
         createLargeCogwheelBreakStressLimit = CREATE_LARGE_COGWHEEL_BREAK_STRESS_LIMIT.get().floatValue();
+        createClutchBreakStressLimit = CREATE_CLUTCH_BREAK_STRESS_LIMIT.get().floatValue();
+        createGearshiftBreakStressLimit = CREATE_GEARSHIFT_BREAK_STRESS_LIMIT.get().floatValue();
+        createSequencedGearshiftBreakStressLimit = CREATE_SEQUENCED_GEARSHIFT_BREAK_STRESS_LIMIT.get().floatValue();
         createBeltConnectorBreakStressLimit = CREATE_BELT_CONNECTOR_BREAK_STRESS_LIMIT.get().floatValue();
         enableKineticFailures = ENABLE_KINETIC_FAILURES.get();
         keepKineticFailureDrops = KEEP_KINETIC_FAILURE_DROPS.get();
@@ -446,6 +464,18 @@ public final class Config {
 
     public static float createLargeCogwheelBreakStressLimit() {
         return createLargeCogwheelBreakStressLimit;
+    }
+
+    public static float createClutchBreakStressLimit() {
+        return createClutchBreakStressLimit;
+    }
+
+    public static float createGearshiftBreakStressLimit() {
+        return createGearshiftBreakStressLimit;
+    }
+
+    public static float createSequencedGearshiftBreakStressLimit() {
+        return createSequencedGearshiftBreakStressLimit;
     }
 
     public static float createBeltConnectorBreakStressLimit() {

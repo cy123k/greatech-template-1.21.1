@@ -89,16 +89,19 @@ public class GreatechProgrammableGearshiftBlockEntity extends SplitShaftBlockEnt
         }
 
         boolean anySignal = false;
+        boolean coverPoweredChanged = false;
         for (Direction face : Direction.values()) {
             GearshiftCoverState cover = covers.get(face);
             if (cover == null) {
                 continue;
             }
+            boolean wasPowered = cover.isPowered();
             cover.setRedstonePower(readPowerFromFace(face));
+            coverPoweredChanged |= wasPowered != cover.isPowered();
             anySignal |= cover.isPowered();
         }
 
-        if (redstoneActive != anySignal) {
+        if (redstoneActive != anySignal || coverPoweredChanged) {
             redstoneActive = anySignal;
             sendData();
         }
