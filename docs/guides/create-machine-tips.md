@@ -154,7 +154,34 @@ For Greatech kinetic failures, Create belts are normalized to their controller p
 
 If you add Greatech belt-like blocks later, consider implementing `KineticFailureTarget` on the block entity so the failure system can normalize all segments to one controller and choose the correct failure action.
 
-## 9. Register Partial Models Early
+## 9. Split-Shaft Control Blocks
+
+Create's clutch, gearshift, and sequenced gearshift behavior is built around `SplitShaftBlockEntity#getRotationSpeedModifier(Direction face)`.
+
+Useful runtime pattern:
+
+- the source side returns `1`
+- the opposite shaft side returns the current modifier
+- `0` disconnects like a clutch
+- `-1` reverses like a gearshift
+- `2` and `-2` can provide a simple overdrive path
+
+The current Greatech example is `programmable_gearshift`. It uses a Greatech-owned block entity with redstone covers installed on non-axis faces. The cover signals combine into one active modifier:
+
+- clutch cover: `0x`
+- reverse cover: `-1x`
+- overdrive cover: `2x`
+- reverse plus overdrive: `-2x`
+
+Important:
+
+- when the modifier changes, detach from the kinetic network, clear the source, store the new modifier, and attach again
+- sample redstone from installed cover faces rather than treating any neighbor signal as a functional input
+- document the source model axis before copying Create blockstate rotations
+
+The Greatech gearshift source model is authored with its shaft on north/south (`Z`), unlike Create's own gearshift assets which use a top/bottom source orientation. Its blockstate and active-overlay renderer therefore keep `axis=z` unrotated and rotate the model for `axis=x` and `axis=y`.
+
+## 10. Register Partial Models Early
 
 If you use a rotating partial model, register it before model bake timing becomes an issue.
 
@@ -167,7 +194,7 @@ This avoids "missing model" problems where the code compiles but the in-game dyn
 
 For tiered machines, register a partial per visual variant and choose the right one in the renderer.
 
-## 10. Be Careful With Light on Inset Moving Parts
+## 11. Be Careful With Light on Inset Moving Parts
 
 Moving parts that sit slightly inside a casing can render much darker than expected.
 
@@ -183,7 +210,7 @@ When a moving part looks black or muddy, check these before rewriting the render
 - overlapping geometry
 - transparent or padded texture edges
 
-## 11. Active State: Start Simple
+## 12. Active State: Start Simple
 
 There are two common ways to show "machine is running":
 
@@ -208,7 +235,9 @@ The current converter uses:
 - active wrappers such as [lv_sucon_active.json](../src/main/resources/assets/greatech/models/block/su_energy_converter/lv_sucon_active.json)
 - a low block light level while active
 
-## 12. Add Item Display Models Deliberately
+For face-specific or renderer-owned state, a full-bright overlay partial can be cleaner than blockstate variants. The programmable gearshift uses a BER-rendered overlay for its active panel so installed cover power can drive visual state without multiplying blockstate variants for each cover face.
+
+## 13. Add Item Display Models Deliberately
 
 Create-style machines often have block-world rendering and item rendering needs that are not identical.
 
@@ -248,7 +277,9 @@ The important implementation detail is that the shared custom element item model
 
 Without that parent, Minecraft will not inherit the ordinary block-style item transforms, and a full 3D machine model can look like a single face in GUI or display contexts.
 
-## 13. Reuse Placement Helpers Deliberately
+If the world block uses a BER for rotating shaft halves, remember to include static shaft geometry in the item model when the item should look complete in displays. `programmable_gearshift` does this because the dynamic shaft renderer only runs for placed block entities.
+
+## 14. Reuse Placement Helpers Deliberately
 
 Create and Catnip already provide a useful assisted placement system:
 
@@ -291,7 +322,7 @@ Then set that property on the ghost state before returning the placement offset.
 
 See [greatech-placement-helper.md](./greatech-placement-helper.md) for the current reusable implementation.
 
-## 14. Overlay Advice if You Revisit It Later
+## 15. Overlay Advice if You Revisit It Later
 
 If you later want GT-style overlays:
 
@@ -308,7 +339,7 @@ The model decides:
 
 If the lamp is painted onto a large face, the overlay usually has to reuse that same face geometry.
 
-## 15. Common Failure Modes
+## 16. Common Failure Modes
 
 The converter work hit several useful edge cases:
 
@@ -324,10 +355,12 @@ The converter work hit several useful edge cases:
 - assuming a Create placement helper will recognize Greatech subclasses can fail if the helper checks Create registries or Create item classes
 - adding unrelated target states to a helper predicate can make Catnip's preview classify blocks as the wrong helper type
 - empty BER world models also produce empty placement ghosts unless a preview-only ghost state points to a full model
+- changing a texture in `src/main/resources` may not affect a VS Code Java launch until `syncIdeBinMainModRoot` refreshes `bin/main`
+- copying Create model rotations without checking the source model axis can rotate custom gearshift or shaft details onto the wrong faces
 
 These are worth checking before assuming the texture is wrong.
 
-## 16. A Good Development Order
+## 17. A Good Development Order
 
 For new Create-style machines, this order has worked well:
 

@@ -8,6 +8,7 @@ Current machine and transmission docs:
 - [Greatech Fluid Bridge](./greatech-fluidbridge.md)
 - [Greatech Hydraulic Press](./greatech-hydraulic-press.md)
 - [Greatech Steam Engine Hatch](./greatech-steam-engine-hatch.md)
+- [Greatech Programmable Gearshift](./greatech-programmable-gearshift.md)
 - [Greatech Shaft](./greatech-shaft.md)
 - [Greatech Cogwheel](./greatech-cogwheel.md)
 

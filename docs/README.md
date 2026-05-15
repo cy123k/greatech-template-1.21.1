@@ -21,6 +21,7 @@ Registered or partially implemented feature families:
 - Heat Chamber: casing, glass, and controller blocks
 - Steam Engine Hatch: `lv`, `mv`, and `hv` hatch machine parts
 - Transmission parts: steel, aluminium, and stainless shafts/cogwheels, including powered variants and Greatech-owned Create-casing variants for shafts, small cogwheels, and large cogwheels
+- Programmable Gearshift: `programmable_gearshift` plus redstone clutch, reverse, and overdrive covers
 - Greatech Goggles HUD providers for supported Greatech, Create, and GTCEu-adjacent blocks
 - Hydraulic pressing recipe generation and JEI/EMI display integration
 
@@ -49,6 +50,7 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 - [Electric Fluid Bridge](machines/greatech-fluidbridge.md)
 - [Hydraulic Press](machines/greatech-hydraulic-press.md)
 - [Steam Engine Hatch](machines/greatech-steam-engine-hatch.md)
+- [Programmable Gearshift](machines/greatech-programmable-gearshift.md)
 - [Shafts](machines/greatech-shaft.md)
 - [Cogwheels](machines/greatech-cogwheel.md)
 
@@ -83,6 +85,7 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 - [Fluid bridge code](../src/main/java/com/greatech/content/fluid)
 - [Heat chamber code](../src/main/java/com/greatech/content/heat)
 - [Hydraulic press code](../src/main/java/com/greatech/content/hydraulic)
+- [Programmable gearshift code](../src/main/java/com/greatech/content/gearshift)
 - [HUD/goggles code](../src/main/java/com/greatech/content/equipment/hud)
 - [Network payloads](../src/main/java/com/greatech/network)
 - [JEI integration](../src/main/java/com/greatech/integration/jei)

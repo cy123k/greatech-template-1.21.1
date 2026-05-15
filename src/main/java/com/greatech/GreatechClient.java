@@ -6,6 +6,7 @@ import com.greatech.content.cogwheel.GreatechCogwheelRenderer;
 import com.greatech.content.converter.SUEnergyConverterRenderer;
 import com.greatech.content.equipment.hud.GreatechGoggleOverlayRenderer;
 import com.greatech.content.fluid.ElectricFluidBridgeRenderer;
+import com.greatech.content.gearshift.GreatechProgrammableGearshiftRenderer;
 import com.greatech.content.heat.HeatChamberControllerRenderer;
 import com.greatech.content.hydraulic.HydraulicPressRenderer;
 import com.greatech.content.shaft.GreatechShaftRenderer;
@@ -62,6 +63,8 @@ public class GreatechClient {
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.ELECTRIC_FLUID_BRIDGE.get(), ElectricFluidBridgeRenderer::new);
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.HYDRAULIC_PRESS.get(), HydraulicPressRenderer::new);
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.HEAT_CHAMBER_CONTROLLER.get(), HeatChamberControllerRenderer::new);
+        event.registerBlockEntityRenderer(GreatechBlockEntityTypes.PROGRAMMABLE_GEARSHIFT.get(),
+                GreatechProgrammableGearshiftRenderer::new);
     }
 
     @SubscribeEvent

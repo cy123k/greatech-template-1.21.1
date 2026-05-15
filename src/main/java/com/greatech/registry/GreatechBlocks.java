@@ -8,6 +8,7 @@ import com.greatech.content.converter.SUEnergyConverterBlock;
 import com.greatech.content.converter.SUEnergyConverterTier;
 import com.greatech.content.fluid.ElectricFluidBridgeBlock;
 import com.greatech.content.fluid.ElectricFluidBridgeTier;
+import com.greatech.content.gearshift.GreatechProgrammableGearshiftBlock;
 import com.greatech.content.heat.HeatChamberCasingBlock;
 import com.greatech.content.heat.HeatChamberControllerBlock;
 import com.greatech.content.hydraulic.HydraulicPressBlock;
@@ -55,6 +56,8 @@ public final class GreatechBlocks {
     public static final DeferredBlock<Block> HEAT_CHAMBER_CASING = registerHeatChamberCasing("heat_chamber_casing");
     public static final DeferredBlock<Block> HEAT_CHAMBER_GLASS = registerHeatChamberGlass("heat_chamber_glass");
     public static final DeferredBlock<Block> HEAT_CHAMBER_CONTROLLER = registerHeatChamberController("heat_chamber_controller");
+    public static final DeferredBlock<Block> PROGRAMMABLE_GEARSHIFT =
+            registerProgrammableGearshift("programmable_gearshift");
     public static final GreatechKineticFamily STEEL_FAMILY = registerKineticFamily(
             GreatechKineticMaterial.STEEL,
             () -> GreatechBlockEntityTypes.STEEL_COGWHEEL.get(),
@@ -104,6 +107,8 @@ public final class GreatechBlocks {
             registerBlockItem("heat_chamber_glass", HEAT_CHAMBER_GLASS);
     public static final DeferredItem<BlockItem> HEAT_CHAMBER_CONTROLLER_ITEM =
             registerBlockItem("heat_chamber_controller", HEAT_CHAMBER_CONTROLLER);
+    public static final DeferredItem<BlockItem> PROGRAMMABLE_GEARSHIFT_ITEM =
+            registerBlockItem("programmable_gearshift", PROGRAMMABLE_GEARSHIFT);
     public static final DeferredItem<BlockItem> STEEL_SHAFT_ITEM = STEEL_FAMILY.shaftItem();
     public static final DeferredItem<BlockItem> POWERED_STEEL_SHAFT_ITEM = STEEL_FAMILY.poweredShaftItem();
     public static final DeferredItem<BlockItem> STEEL_COGWHEEL_ITEM = STEEL_FAMILY.cogwheelItem();
@@ -256,6 +261,19 @@ public final class GreatechBlocks {
                         .isSuffocating((state, level, pos) -> false)
                         .isViewBlocking((state, level, pos) -> false)
                         .requiresCorrectToolForDrops(), tier));
+    }
+
+    private static DeferredBlock<Block> registerProgrammableGearshift(String name) {
+        return BLOCKS.register(
+                name,
+                () -> new GreatechProgrammableGearshiftBlock(BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.METAL)
+                        .strength(3.0F)
+                        .sound(SoundType.METAL)
+                        .noOcclusion()
+                        .isSuffocating((state, level, pos) -> false)
+                        .isViewBlocking((state, level, pos) -> false)
+                        .requiresCorrectToolForDrops()));
     }
 
     private static DeferredBlock<Block> registerHeatChamberCasing(String name) {

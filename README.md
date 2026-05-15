@@ -6,6 +6,7 @@ The current build focuses on:
 
 - Create kinetic parts and machine interaction
 - Greatech-owned steel, aluminium, and stainless transmission families with Create-style encased shafts, small cogwheels, and large cogwheels
+- a cover-driven Programmable Gearshift for redstone-controlled clutch, reverse, and overdrive behavior in Create kinetic networks
 - GTCEu-flavored tiers, energy output, and industrial recipes
 - Greatech-owned machines such as the SU Energy Converter, Fluid Bridge, Heat Chamber, and Hydraulic Press
 - shared HUD/goggles display helpers with on-demand server sampling for transient machine and cable data

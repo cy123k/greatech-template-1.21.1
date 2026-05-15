@@ -55,6 +55,7 @@ public class Greatech {
                 output.accept(GreatechBlocks.HEAT_CHAMBER_CASING_ITEM.get());
                 output.accept(GreatechBlocks.HEAT_CHAMBER_GLASS_ITEM.get());
                 output.accept(GreatechBlocks.HEAT_CHAMBER_CONTROLLER_ITEM.get());
+                output.accept(GreatechBlocks.PROGRAMMABLE_GEARSHIFT_ITEM.get());
                 output.accept(GreatechBlocks.STEEL_SHAFT_ITEM.get());
                 output.accept(GreatechBlocks.STEEL_COGWHEEL_ITEM.get());
                 output.accept(GreatechBlocks.STEEL_LARGE_COGWHEEL_ITEM.get());
@@ -65,6 +66,9 @@ public class Greatech {
                 output.accept(GreatechBlocks.STAINLESS_COGWHEEL_ITEM.get());
                 output.accept(GreatechBlocks.STAINLESS_LARGE_COGWHEEL_ITEM.get());
                 output.accept(GreatechItems.GOGGLES.get());
+                output.accept(GreatechItems.REDSTONE_CLUTCH_COVER.get());
+                output.accept(GreatechItems.REDSTONE_REVERSE_COVER.get());
+                output.accept(GreatechItems.REDSTONE_OVERDRIVE_COVER.get());
             }).build());
 
     public Greatech(IEventBus modEventBus, ModContainer modContainer) {
@@ -110,6 +114,7 @@ public class Greatech {
             event.accept(GreatechBlocks.HEAT_CHAMBER_CASING_ITEM);
             event.accept(GreatechBlocks.HEAT_CHAMBER_GLASS_ITEM);
             event.accept(GreatechBlocks.HEAT_CHAMBER_CONTROLLER_ITEM);
+            event.accept(GreatechBlocks.PROGRAMMABLE_GEARSHIFT_ITEM);
             event.accept(GreatechBlocks.STEEL_SHAFT_ITEM);
             event.accept(GreatechBlocks.STEEL_COGWHEEL_ITEM);
             event.accept(GreatechBlocks.STEEL_LARGE_COGWHEEL_ITEM);
@@ -120,6 +125,9 @@ public class Greatech {
             event.accept(GreatechBlocks.STAINLESS_COGWHEEL_ITEM);
             event.accept(GreatechBlocks.STAINLESS_LARGE_COGWHEEL_ITEM);
             event.accept(GreatechItems.GOGGLES);
+            event.accept(GreatechItems.REDSTONE_CLUTCH_COVER);
+            event.accept(GreatechItems.REDSTONE_REVERSE_COVER);
+            event.accept(GreatechItems.REDSTONE_OVERDRIVE_COVER);
         }
     }
 

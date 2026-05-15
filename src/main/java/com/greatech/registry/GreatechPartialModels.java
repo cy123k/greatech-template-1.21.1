@@ -55,6 +55,8 @@ public final class GreatechPartialModels {
             block("heat_chamber/heat_chamber_controller_active_overlay");
     public static final PartialModel LV_HYDRAULIC_PRESS_HEAD =
             block("hydraulic_press/lv_hydraulic_press_head");
+    public static final PartialModel PROGRAMMABLE_GEARSHIFT_ACTIVE_OVERLAY =
+            block("gearshift/programmable_gearshift_active_overlay");
 
     private GreatechPartialModels() {
     }

@@ -9,6 +9,7 @@
   "block.greatech.heat_chamber_casing": "Heat Chamber Casing",
   "block.greatech.heat_chamber_glass": "Heat Chamber Glass",
   "block.greatech.heat_chamber_controller": "Heat Chamber Controller",
+  "block.greatech.programmable_gearshift": "Programmable Gearshift",
   "block.greatech.steel_shaft": "Steel Shaft",
   "block.greatech.andesite_encased_steel_shaft": "Andesite Encased Steel Shaft",
   "block.greatech.brass_encased_steel_shaft": "Brass Encased Steel Shaft",
@@ -50,6 +51,10 @@
   "item.greatech.heat_chamber_casing": "Heat Chamber Casing",
   "item.greatech.heat_chamber_glass": "Heat Chamber Glass",
   "item.greatech.heat_chamber_controller": "Heat Chamber Controller",
+  "item.greatech.programmable_gearshift": "Programmable Gearshift",
+  "item.greatech.redstone_clutch_cover": "Redstone Clutch Cover",
+  "item.greatech.redstone_reverse_cover": "Redstone Reverse Cover",
+  "item.greatech.redstone_overdrive_cover": "Redstone Overdrive Cover",
   "item.greatech.steel_shaft": "Steel Shaft",
   "item.greatech.andesite_encased_steel_shaft": "Andesite Encased Steel Shaft",
   "item.greatech.brass_encased_steel_shaft": "Brass Encased Steel Shaft",
@@ -191,5 +196,6 @@
   "greatech.recipe.hydraulic_pressing.chance": "%s%% chance",
   "message.greatech.su_energy_converter.status": "Speed: %s rpm | Stored: %s EU | Generated: %s EU/t",
   "message.greatech.electric_fluid_bridge.status": "Stored: %s EU | Fluid: %s mB | Moved: %s mB/t | Used: %s EU/t",
+  "message.greatech.programmable_gearshift.status": "Modifier: %s | Covers: %s",
   "message.greatech.heat_chamber.invalidating_interior_block": "This placement may invalidate the formed Heat Chamber."
 }

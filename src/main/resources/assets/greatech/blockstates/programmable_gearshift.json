@@ -1,0 +1,15 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "greatech:block/gearshift/programmable_gearshift_block",
+      "y": 90
+    },
+    "axis=y": {
+      "model": "greatech:block/gearshift/programmable_gearshift_block",
+      "x": 90
+    },
+    "axis=z": {
+      "model": "greatech:block/gearshift/programmable_gearshift_block"
+    }
+  }
+}
