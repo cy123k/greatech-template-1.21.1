@@ -1,0 +1,10 @@
+{
+  "multipart": [
+    { "when": { "facing": "north" }, "apply": { "model": "greatech:block/wireless_coil/lv_wireless_coil" } },
+    { "when": { "facing": "south" }, "apply": { "model": "greatech:block/wireless_coil/lv_wireless_coil", "y": 180 } },
+    { "when": { "facing": "east" }, "apply": { "model": "greatech:block/wireless_coil/lv_wireless_coil", "y": 90 } },
+    { "when": { "facing": "west" }, "apply": { "model": "greatech:block/wireless_coil/lv_wireless_coil", "y": 270 } },
+    { "when": { "facing": "up" }, "apply": { "model": "greatech:block/wireless_coil/lv_wireless_coil", "x": 270 } },
+    { "when": { "facing": "down" }, "apply": { "model": "greatech:block/wireless_coil/lv_wireless_coil", "x": 90 } }
+  ]
+}

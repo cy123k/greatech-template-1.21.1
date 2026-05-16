@@ -15,6 +15,7 @@ import com.jjjcfy.greatech.content.kinetics.GreatechKineticMaterial;
 import com.jjjcfy.greatech.content.shaft.GreatechShaftBlockEntity;
 import com.jjjcfy.greatech.content.steam.GreatechPoweredCogwheelBlockEntity;
 import com.jjjcfy.greatech.content.steam.GreatechPoweredShaftBlockEntity;
+import com.jjjcfy.greatech.content.wireless.electrostatic.ElectrostaticGeneratorBlockEntity;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -45,6 +46,12 @@ public final class GreatechBlockEntityTypes {
             () -> BlockEntityType.Builder.of(
                     HydraulicPressBlockEntity::new,
                     GreatechBlocks.LV_HYDRAULIC_PRESS.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ElectrostaticGeneratorBlockEntity>> ELECTROSTATIC_GENERATOR = BLOCK_ENTITY_TYPES.register(
+            "electrostatic_generator",
+            () -> BlockEntityType.Builder.of(
+                    ElectrostaticGeneratorBlockEntity::new,
+                    GreatechBlocks.LV_ELECTROSTATIC_GENERATOR.get()).build(null));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HeatChamberControllerBlockEntity>> HEAT_CHAMBER_CONTROLLER = BLOCK_ENTITY_TYPES.register(
             "heat_chamber_controller",

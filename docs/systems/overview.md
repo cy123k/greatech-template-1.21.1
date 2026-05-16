@@ -50,6 +50,8 @@ The currently registered block families are:
 - `programmable_gearshift`
 - `lv_fluid_bridge`
 - `lv_hydraulic_press`
+- `lv_electrostatic_generator`
+- `lv_wireless_coil`
 - `lv_steam_engine_hatch`
 - `mv_steam_engine_hatch`
 - `hv_steam_engine_hatch`
@@ -77,6 +79,8 @@ The current hydraulic press prototype adds `lv_hydraulic_press`, a Create-style 
 
 Hydraulic pressing recipes are now exposed through Greatech-owned JEI and EMI categories. The display path reads the same `greatech:hydraulic_pressing` recipe type from Minecraft's recipe manager, so static JSON recipes and GTCEu-material-generated recipes appear in the same category. Hydraulic fluid remains a machine operating cost and is not shown as a recipe input.
 
+The wireless EU prototype adds `lv_electrostatic_generator` and `lv_wireless_coil`. The generator is a Create-style kinetic consumer with a fixed stress impact. Its front face is the only GTCEu energy port, its back face is the Create shaft input, and its remaining sides can accept adjacent wireless coils. Each valid LV coil contributes `32V * 1A`, and the LV generator can use up to four coils for `128 EU/t`. Positive RPM stores EU into a server-side EU pool for the current dimension; negative RPM extracts EU from that pool and outputs it through the front energy port. Positive RPM below the qualified charging speed still accepts EU, but only half of the consumed EU reaches the pool. The LV prototype intentionally uses one shared pool per dimension with no frequency, owner, team, or cross-dimension channel split.
+
 The current steam prototype adds three `GTCEu` machine parts, `lv_steam_engine_hatch`, `mv_steam_engine_hatch`, and `hv_steam_engine_hatch`, plus a matching `Create` generator relay, `powered_steel_shaft`. Each hatch behaves like a fluid export hatch for GTCEu multiblock recognition, stores only steam, and converts a valid neighboring `steel_shaft` into `powered_steel_shaft`. The powered shaft then acts as the actual `Create` kinetic source: it validates the adjacent hatch, requests steam power each tick, outputs configured tier RPM and stress capacity, and automatically reverts back to `steel_shaft` when it no longer has a valid hatch source.
 
 The current creative tab prototype keeps one Greatech tab while adding client-rendered section headers for generators, transmission parts, multiblock structures, GTCEu hatches, machines, fluids, and items. It uses invisible marker item stacks for layout and a `ScreenEvent`/`ContainerScreenEvent` renderer for the visible header bars. Powered and encased transmission variants are intentionally omitted from the main Greatech creative tab.
@@ -95,6 +99,7 @@ Because Greatech mixes Create-style blocks and GTCEu machine definitions, new ma
 - validate fluid hazard behavior for dangerous GTCEu fluids routed into Create pipes
 - validate `lv_hydraulic_press` mold interaction, fluid consumption, heat chamber gating, and belt/world-item processing
 - validate hydraulic pressing JEI/EMI displays with both static and generated recipes
+- validate the LV electrostatic generator, LV wireless coil, and per-dimension EU pool prototype in gameplay
 - validate `lv_steam_engine_hatch` / `mv_steam_engine_hatch` / `hv_steam_engine_hatch` recognition in GTCEu large boiler structures
 - validate Greatech creative tab section headers, marker interaction blocking, and search behavior
 - replace the current steam engine config defaults with recipe- or multiblock-derived values

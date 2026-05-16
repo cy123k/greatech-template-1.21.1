@@ -20,6 +20,10 @@ import com.jjjcfy.greatech.content.shaft.GreatechEncasedShaftBlock;
 import com.jjjcfy.greatech.content.shaft.GreatechShaftBlock;
 import com.jjjcfy.greatech.content.steam.GreatechPoweredCogwheelBlock;
 import com.jjjcfy.greatech.content.steam.GreatechPoweredShaftBlock;
+import com.jjjcfy.greatech.content.wireless.coil.WirelessCoilBlock;
+import com.jjjcfy.greatech.content.wireless.coil.WirelessCoilTier;
+import com.jjjcfy.greatech.content.wireless.electrostatic.ElectrostaticGeneratorBlock;
+import com.jjjcfy.greatech.content.wireless.electrostatic.ElectrostaticGeneratorTier;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -44,15 +48,26 @@ public final class GreatechBlocks {
     private static final HydraulicPressTier[] REGISTERED_HYDRAULIC_PRESS_TIERS = {
             HydraulicPressTier.LV
     };
+    private static final ElectrostaticGeneratorTier[] REGISTERED_ELECTROSTATIC_GENERATOR_TIERS = {
+            ElectrostaticGeneratorTier.LV
+    };
+    private static final WirelessCoilTier[] REGISTERED_WIRELESS_COIL_TIERS = {
+            WirelessCoilTier.LV
+    };
 
     public static final DeferredBlock<Block>[] SU_ENERGY_CONVERTERS = registerSUEnergyConverters();
     public static final DeferredBlock<Block>[] ELECTRIC_FLUID_BRIDGES = registerElectricFluidBridges();
     public static final DeferredBlock<Block>[] HYDRAULIC_PRESSES = registerHydraulicPresses();
+    public static final DeferredBlock<Block>[] ELECTROSTATIC_GENERATORS = registerElectrostaticGenerators();
+    public static final DeferredBlock<Block>[] WIRELESS_COILS = registerWirelessCoils();
     public static final DeferredBlock<Block> LV_SUCON = suEnergyConverter(SUEnergyConverterTier.LV);
     public static final DeferredBlock<Block> MV_SUCON = suEnergyConverter(SUEnergyConverterTier.MV);
     public static final DeferredBlock<Block> HV_SUCON = suEnergyConverter(SUEnergyConverterTier.HV);
     public static final DeferredBlock<Block> LV_FLUID_BRIDGE = electricFluidBridge(ElectricFluidBridgeTier.LV);
     public static final DeferredBlock<Block> LV_HYDRAULIC_PRESS = hydraulicPress(HydraulicPressTier.LV);
+    public static final DeferredBlock<Block> LV_ELECTROSTATIC_GENERATOR =
+            electrostaticGenerator(ElectrostaticGeneratorTier.LV);
+    public static final DeferredBlock<Block> LV_WIRELESS_COIL = wirelessCoil(WirelessCoilTier.LV);
     public static final DeferredBlock<Block> HEAT_CHAMBER_CASING = registerHeatChamberCasing("heat_chamber_casing");
     public static final DeferredBlock<Block> HEAT_CHAMBER_GLASS = registerHeatChamberGlass("heat_chamber_glass");
     public static final DeferredBlock<Block> HEAT_CHAMBER_CONTROLLER = registerHeatChamberController("heat_chamber_controller");
@@ -96,11 +111,19 @@ public final class GreatechBlocks {
             registerBlockItems(REGISTERED_FLUID_BRIDGE_TIERS, ELECTRIC_FLUID_BRIDGES, GreatechBlocks::fluidBridgeName);
     public static final DeferredItem<BlockItem>[] HYDRAULIC_PRESS_ITEMS =
             registerBlockItems(REGISTERED_HYDRAULIC_PRESS_TIERS, HYDRAULIC_PRESSES, GreatechBlocks::hydraulicPressName);
+    public static final DeferredItem<BlockItem>[] ELECTROSTATIC_GENERATOR_ITEMS = registerBlockItems(
+            REGISTERED_ELECTROSTATIC_GENERATOR_TIERS, ELECTROSTATIC_GENERATORS,
+            GreatechBlocks::electrostaticGeneratorName);
+    public static final DeferredItem<BlockItem>[] WIRELESS_COIL_ITEMS =
+            registerBlockItems(REGISTERED_WIRELESS_COIL_TIERS, WIRELESS_COILS, GreatechBlocks::wirelessCoilName);
     public static final DeferredItem<BlockItem> LV_SUCON_ITEM = suEnergyConverterItem(SUEnergyConverterTier.LV);
     public static final DeferredItem<BlockItem> MV_SUCON_ITEM = suEnergyConverterItem(SUEnergyConverterTier.MV);
     public static final DeferredItem<BlockItem> HV_SUCON_ITEM = suEnergyConverterItem(SUEnergyConverterTier.HV);
     public static final DeferredItem<BlockItem> LV_FLUID_BRIDGE_ITEM = electricFluidBridgeItem(ElectricFluidBridgeTier.LV);
     public static final DeferredItem<BlockItem> LV_HYDRAULIC_PRESS_ITEM = hydraulicPressItem(HydraulicPressTier.LV);
+    public static final DeferredItem<BlockItem> LV_ELECTROSTATIC_GENERATOR_ITEM =
+            electrostaticGeneratorItem(ElectrostaticGeneratorTier.LV);
+    public static final DeferredItem<BlockItem> LV_WIRELESS_COIL_ITEM = wirelessCoilItem(WirelessCoilTier.LV);
     public static final DeferredItem<BlockItem> HEAT_CHAMBER_CASING_ITEM =
             registerBlockItem("heat_chamber_casing", HEAT_CHAMBER_CASING);
     public static final DeferredItem<BlockItem> HEAT_CHAMBER_GLASS_ITEM =
@@ -145,6 +168,14 @@ public final class GreatechBlocks {
         return HYDRAULIC_PRESSES[tier.configIndex()];
     }
 
+    public static DeferredBlock<Block> electrostaticGenerator(ElectrostaticGeneratorTier tier) {
+        return ELECTROSTATIC_GENERATORS[tier.configIndex()];
+    }
+
+    public static DeferredBlock<Block> wirelessCoil(WirelessCoilTier tier) {
+        return WIRELESS_COILS[tier.configIndex()];
+    }
+
     public static DeferredItem<BlockItem> suEnergyConverterItem(SUEnergyConverterTier tier) {
         return SU_ENERGY_CONVERTER_ITEMS[tier.configIndex()];
     }
@@ -155,6 +186,14 @@ public final class GreatechBlocks {
 
     public static DeferredItem<BlockItem> hydraulicPressItem(HydraulicPressTier tier) {
         return HYDRAULIC_PRESS_ITEMS[tier.configIndex()];
+    }
+
+    public static DeferredItem<BlockItem> electrostaticGeneratorItem(ElectrostaticGeneratorTier tier) {
+        return ELECTROSTATIC_GENERATOR_ITEMS[tier.configIndex()];
+    }
+
+    public static DeferredItem<BlockItem> wirelessCoilItem(WirelessCoilTier tier) {
+        return WIRELESS_COIL_ITEMS[tier.configIndex()];
     }
 
     @SuppressWarnings("unchecked")
@@ -185,6 +224,24 @@ public final class GreatechBlocks {
     }
 
     @SuppressWarnings("unchecked")
+    private static DeferredBlock<Block>[] registerElectrostaticGenerators() {
+        DeferredBlock<Block>[] blocks = new DeferredBlock[ElectrostaticGeneratorTier.values().length];
+        for (ElectrostaticGeneratorTier tier : REGISTERED_ELECTROSTATIC_GENERATOR_TIERS) {
+            blocks[tier.configIndex()] = registerElectrostaticGenerator(electrostaticGeneratorName(tier), tier);
+        }
+        return blocks;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static DeferredBlock<Block>[] registerWirelessCoils() {
+        DeferredBlock<Block>[] blocks = new DeferredBlock[WirelessCoilTier.values().length];
+        for (WirelessCoilTier tier : REGISTERED_WIRELESS_COIL_TIERS) {
+            blocks[tier.configIndex()] = registerWirelessCoil(wirelessCoilName(tier), tier);
+        }
+        return blocks;
+    }
+
+    @SuppressWarnings("unchecked")
     private static <T> DeferredItem<BlockItem>[] registerBlockItems(T[] tiers, DeferredBlock<Block>[] blocks,
             java.util.function.Function<T, String> nameFactory) {
         DeferredItem<BlockItem>[] items = new DeferredItem[blocks.length];
@@ -205,6 +262,12 @@ public final class GreatechBlocks {
         if (tier instanceof HydraulicPressTier pressTier) {
             return pressTier.configIndex();
         }
+        if (tier instanceof ElectrostaticGeneratorTier generatorTier) {
+            return generatorTier.configIndex();
+        }
+        if (tier instanceof WirelessCoilTier coilTier) {
+            return coilTier.configIndex();
+        }
         throw new IllegalArgumentException("Unsupported Greatech tier: " + tier);
     }
 
@@ -218,6 +281,14 @@ public final class GreatechBlocks {
 
     private static String hydraulicPressName(HydraulicPressTier tier) {
         return tier.id() + "_hydraulic_press";
+    }
+
+    private static String electrostaticGeneratorName(ElectrostaticGeneratorTier tier) {
+        return tier.id() + "_electrostatic_generator";
+    }
+
+    private static String wirelessCoilName(WirelessCoilTier tier) {
+        return tier.id() + "_wireless_coil";
     }
 
     private static DeferredBlock<Block> registerSUEnergyConverter(String name, SUEnergyConverterTier tier) {
@@ -256,6 +327,33 @@ public final class GreatechBlocks {
                 () -> new HydraulicPressBlock(BlockBehaviour.Properties.of()
                         .mapColor(MapColor.METAL)
                         .strength(3.5F)
+                        .sound(SoundType.METAL)
+                        .noOcclusion()
+                        .isSuffocating((state, level, pos) -> false)
+                        .isViewBlocking((state, level, pos) -> false)
+                        .requiresCorrectToolForDrops(), tier));
+    }
+
+    private static DeferredBlock<Block> registerElectrostaticGenerator(String name, ElectrostaticGeneratorTier tier) {
+        return BLOCKS.register(
+                name,
+                () -> new ElectrostaticGeneratorBlock(BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.METAL)
+                        .strength(3.5F)
+                        .sound(SoundType.METAL)
+                        .noOcclusion()
+                        .isSuffocating((state, level, pos) -> false)
+                        .isViewBlocking((state, level, pos) -> false)
+                        .lightLevel(state -> state.getValue(ElectrostaticGeneratorBlock.ACTIVE) ? 1 : 0)
+                        .requiresCorrectToolForDrops(), tier));
+    }
+
+    private static DeferredBlock<Block> registerWirelessCoil(String name, WirelessCoilTier tier) {
+        return BLOCKS.register(
+                name,
+                () -> new WirelessCoilBlock(BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.METAL)
+                        .strength(2.5F)
                         .sound(SoundType.METAL)
                         .noOcclusion()
                         .isSuffocating((state, level, pos) -> false)

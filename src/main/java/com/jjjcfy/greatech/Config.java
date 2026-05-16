@@ -9,6 +9,8 @@ import com.jjjcfy.greatech.content.converter.SUEnergyConverterTier;
 import com.jjjcfy.greatech.content.fluid.ElectricFluidBridgeTier;
 import com.jjjcfy.greatech.content.hydraulic.HydraulicPressTier;
 import com.jjjcfy.greatech.content.steam.SteamEngineHatchTier;
+import com.jjjcfy.greatech.content.wireless.coil.WirelessCoilTier;
+import com.jjjcfy.greatech.content.wireless.electrostatic.ElectrostaticGeneratorTier;
 
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -37,6 +39,13 @@ public final class Config {
     private static final int[] DEFAULT_FLUID_BRIDGE_INPUT_AMPERAGE = {1, 1, 1};
     private static final int[] DEFAULT_FLUID_BRIDGE_PRESSURE = {64, 256, 1024};
     private static final int[] DEFAULT_FLUID_BRIDGE_EU_PER_TICK = {32, 128, 512};
+    private static final int[] DEFAULT_ELECTROSTATIC_GENERATOR_ENERGY_CAPACITY = {2_048, 8_192, 32_768};
+    private static final int[] DEFAULT_ELECTROSTATIC_GENERATOR_MAX_TRANSFER = {128, 512, 2048};
+    private static final int[] DEFAULT_ELECTROSTATIC_GENERATOR_VOLTAGE = {32, 128, 512};
+    private static final int[] DEFAULT_ELECTROSTATIC_GENERATOR_AMPERAGE = {4, 4, 4};
+    private static final double[] DEFAULT_ELECTROSTATIC_GENERATOR_STRESS_IMPACT = {64.0D, 256.0D, 1024.0D};
+    private static final int[] DEFAULT_WIRELESS_COIL_VOLTAGE = {32, 128, 512};
+    private static final int[] DEFAULT_WIRELESS_COIL_AMPERAGE = {1, 1, 1};
     private static final int[] DEFAULT_STEAM_ENGINE_HATCH_RPM = {32, 32, 32};
     private static final double[] DEFAULT_STEAM_ENGINE_HATCH_STRESS_CAPACITY = {16.0D, 64.0D, 256.0D};
     private static final int[] DEFAULT_STEAM_ENGINE_HATCH_STEAM_PER_TICK = {40, 60, 80};
@@ -219,6 +228,49 @@ public final class Config {
             .comment("Fixed EU/t consumed by electric fluid bridges while applying Create fluid pressure.", TIER_ORDER)
             .defineList("fluidBridgeEuPerTick", List.of(32, 128, 512), Config::isNonNegativeInteger);
 
+    private static final ModConfigSpec.LongValue DIMENSION_EU_POOL_CAPACITY = BUILDER
+            .comment("EU capacity of each server dimension's shared wireless EU pool.")
+            .defineInRange("dimensionEuPoolCapacity", 1_000_000L, 0L, Long.MAX_VALUE);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> ELECTROSTATIC_GENERATOR_ENERGY_CAPACITY = BUILDER
+            .comment("Internal EU buffers for electrostatic generators.", TIER_ORDER)
+            .defineList("electrostaticGeneratorEnergyCapacity", List.of(2_048, 8_192, 32_768),
+                    Config::isNonNegativeInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> ELECTROSTATIC_GENERATOR_MAX_TRANSFER = BUILDER
+            .comment("Maximum EU/t moved between an electrostatic generator and its dimension EU pool.", TIER_ORDER)
+            .defineList("electrostaticGeneratorMaxTransfer", List.of(128, 512, 2_048), Config::isNonNegativeInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> ELECTROSTATIC_GENERATOR_VOLTAGE = BUILDER
+            .comment("GTCEu packet voltage for electrostatic generator input/output.", TIER_ORDER)
+            .defineList("electrostaticGeneratorVoltage", List.of(32, 128, 512), Config::isPositiveInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> ELECTROSTATIC_GENERATOR_AMPERAGE = BUILDER
+            .comment("GTCEu amperage for electrostatic generator input/output.", TIER_ORDER)
+            .defineList("electrostaticGeneratorAmperage", List.of(4, 4, 4), Config::isPositiveInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Double>> ELECTROSTATIC_GENERATOR_STRESS_IMPACT = BUILDER
+            .comment("Stress impact contributed by electrostatic generators to Create's kinetic network.", TIER_ORDER)
+            .defineList("electrostaticGeneratorStressImpact", List.of(64.0D, 256.0D, 1024.0D),
+                    Config::isNonNegativeDouble);
+
+    private static final ModConfigSpec.DoubleValue ELECTROSTATIC_GENERATOR_MINIMUM_SPEED = BUILDER
+            .comment("Qualified absolute RPM for electrostatic generator charging.",
+                    "Positive RPM below this value still accepts EU, but only 50% of consumed EU reaches the dimension pool.")
+            .defineInRange("electrostaticGeneratorMinimumSpeed", 16.0D, 0.0D, Double.MAX_VALUE);
+
+    private static final ModConfigSpec.DoubleValue ELECTROSTATIC_GENERATOR_FULL_TRANSFER_SPEED = BUILDER
+            .comment("Reserved for future speed scaling. The current prototype uses the qualified RPM setting for charging efficiency.")
+            .defineInRange("electrostaticGeneratorFullTransferSpeed", 32.0D, 0.0D, Double.MAX_VALUE);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> WIRELESS_COIL_VOLTAGE = BUILDER
+            .comment("Voltage contribution of wireless coils.", TIER_ORDER)
+            .defineList("wirelessCoilVoltage", List.of(32, 128, 512), Config::isPositiveInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> WIRELESS_COIL_AMPERAGE = BUILDER
+            .comment("Amperage contribution of wireless coils.", TIER_ORDER)
+            .defineList("wirelessCoilAmperage", List.of(1, 1, 1), Config::isPositiveInteger);
+
     private static final ModConfigSpec.ConfigValue<List<? extends Integer>> STEAM_ENGINE_HATCH_RPM = BUILDER
             .comment("Generated shaft RPM for steam engine hatches.", TIER_ORDER,
                     "Current default keeps all tiers at 16 RPM so tier progression comes from efficiency and stress capacity.")
@@ -278,6 +330,13 @@ public final class Config {
     private static int[] fluidBridgeInputAmperage = DEFAULT_FLUID_BRIDGE_INPUT_AMPERAGE.clone();
     private static int[] fluidBridgePressure = DEFAULT_FLUID_BRIDGE_PRESSURE.clone();
     private static int[] fluidBridgeEuPerTick = DEFAULT_FLUID_BRIDGE_EU_PER_TICK.clone();
+    private static int[] electrostaticGeneratorEnergyCapacity = DEFAULT_ELECTROSTATIC_GENERATOR_ENERGY_CAPACITY.clone();
+    private static int[] electrostaticGeneratorMaxTransfer = DEFAULT_ELECTROSTATIC_GENERATOR_MAX_TRANSFER.clone();
+    private static int[] electrostaticGeneratorVoltage = DEFAULT_ELECTROSTATIC_GENERATOR_VOLTAGE.clone();
+    private static int[] electrostaticGeneratorAmperage = DEFAULT_ELECTROSTATIC_GENERATOR_AMPERAGE.clone();
+    private static double[] electrostaticGeneratorStressImpact = DEFAULT_ELECTROSTATIC_GENERATOR_STRESS_IMPACT.clone();
+    private static int[] wirelessCoilVoltage = DEFAULT_WIRELESS_COIL_VOLTAGE.clone();
+    private static int[] wirelessCoilAmperage = DEFAULT_WIRELESS_COIL_AMPERAGE.clone();
     private static int[] steamEngineHatchRpm = DEFAULT_STEAM_ENGINE_HATCH_RPM.clone();
     private static double[] steamEngineHatchStressCapacity = DEFAULT_STEAM_ENGINE_HATCH_STRESS_CAPACITY.clone();
     private static int[] steamEngineHatchSteamPerTick = DEFAULT_STEAM_ENGINE_HATCH_STEAM_PER_TICK.clone();
@@ -287,6 +346,9 @@ public final class Config {
     private static double[] hydraulicPressStressImpact = DEFAULT_HYDRAULIC_PRESS_STRESS_IMPACT.clone();
     private static Map<ResourceLocation, HydraulicPressTier> hydraulicPressMaterialTierOverrides = Map.of();
     public static double converterMinimumSpeed;
+    public static double electrostaticGeneratorMinimumSpeed;
+    public static double electrostaticGeneratorFullTransferSpeed;
+    private static long dimensionEuPoolCapacity = 1_000_000L;
     private static float createShaftBreakStressLimit;
     private static float createCogwheelBreakStressLimit;
     private static float createLargeCogwheelBreakStressLimit;
@@ -327,6 +389,18 @@ public final class Config {
         fluidBridgeInputAmperage = readIntTierValues(FLUID_BRIDGE_INPUT_AMPERAGE.get(), DEFAULT_FLUID_BRIDGE_INPUT_AMPERAGE);
         fluidBridgePressure = readIntTierValues(FLUID_BRIDGE_PRESSURE.get(), DEFAULT_FLUID_BRIDGE_PRESSURE);
         fluidBridgeEuPerTick = readIntTierValues(FLUID_BRIDGE_EU_PER_TICK.get(), DEFAULT_FLUID_BRIDGE_EU_PER_TICK);
+        electrostaticGeneratorEnergyCapacity = readIntTierValues(ELECTROSTATIC_GENERATOR_ENERGY_CAPACITY.get(),
+                DEFAULT_ELECTROSTATIC_GENERATOR_ENERGY_CAPACITY);
+        electrostaticGeneratorMaxTransfer = readIntTierValues(ELECTROSTATIC_GENERATOR_MAX_TRANSFER.get(),
+                DEFAULT_ELECTROSTATIC_GENERATOR_MAX_TRANSFER);
+        electrostaticGeneratorVoltage = readIntTierValues(ELECTROSTATIC_GENERATOR_VOLTAGE.get(),
+                DEFAULT_ELECTROSTATIC_GENERATOR_VOLTAGE);
+        electrostaticGeneratorAmperage = readIntTierValues(ELECTROSTATIC_GENERATOR_AMPERAGE.get(),
+                DEFAULT_ELECTROSTATIC_GENERATOR_AMPERAGE);
+        electrostaticGeneratorStressImpact = readDoubleTierValues(ELECTROSTATIC_GENERATOR_STRESS_IMPACT.get(),
+                DEFAULT_ELECTROSTATIC_GENERATOR_STRESS_IMPACT);
+        wirelessCoilVoltage = readIntTierValues(WIRELESS_COIL_VOLTAGE.get(), DEFAULT_WIRELESS_COIL_VOLTAGE);
+        wirelessCoilAmperage = readIntTierValues(WIRELESS_COIL_AMPERAGE.get(), DEFAULT_WIRELESS_COIL_AMPERAGE);
         steamEngineHatchRpm = readIntTierValues(STEAM_ENGINE_HATCH_RPM.get(), DEFAULT_STEAM_ENGINE_HATCH_RPM);
         steamEngineHatchStressCapacity = readDoubleTierValues(STEAM_ENGINE_HATCH_STRESS_CAPACITY.get(),
                 DEFAULT_STEAM_ENGINE_HATCH_STRESS_CAPACITY);
@@ -343,6 +417,9 @@ public final class Config {
         hydraulicPressMaterialTierOverrides = readHydraulicPressMaterialTierOverrides(
                 HYDRAULIC_PRESS_MATERIAL_TIER_OVERRIDES.get());
         converterMinimumSpeed = CONVERTER_MINIMUM_SPEED.get();
+        dimensionEuPoolCapacity = DIMENSION_EU_POOL_CAPACITY.get();
+        electrostaticGeneratorMinimumSpeed = ELECTROSTATIC_GENERATOR_MINIMUM_SPEED.get();
+        electrostaticGeneratorFullTransferSpeed = ELECTROSTATIC_GENERATOR_FULL_TRANSFER_SPEED.get();
         createShaftBreakStressLimit = CREATE_SHAFT_BREAK_STRESS_LIMIT.get().floatValue();
         createCogwheelBreakStressLimit = CREATE_COGWHEEL_BREAK_STRESS_LIMIT.get().floatValue();
         createLargeCogwheelBreakStressLimit = CREATE_LARGE_COGWHEEL_BREAK_STRESS_LIMIT.get().floatValue();
@@ -420,6 +497,38 @@ public final class Config {
 
     public static int fluidBridgeEuPerTick(ElectricFluidBridgeTier tier) {
         return fluidBridgeEuPerTick[tier.configIndex()];
+    }
+
+    public static long dimensionEuPoolCapacity() {
+        return dimensionEuPoolCapacity;
+    }
+
+    public static int electrostaticGeneratorEnergyCapacity(ElectrostaticGeneratorTier tier) {
+        return electrostaticGeneratorEnergyCapacity[tier.configIndex()];
+    }
+
+    public static int electrostaticGeneratorMaxTransfer(ElectrostaticGeneratorTier tier) {
+        return electrostaticGeneratorMaxTransfer[tier.configIndex()];
+    }
+
+    public static int electrostaticGeneratorVoltage(ElectrostaticGeneratorTier tier) {
+        return electrostaticGeneratorVoltage[tier.configIndex()];
+    }
+
+    public static int electrostaticGeneratorAmperage(ElectrostaticGeneratorTier tier) {
+        return electrostaticGeneratorAmperage[tier.configIndex()];
+    }
+
+    public static double electrostaticGeneratorStressImpact(ElectrostaticGeneratorTier tier) {
+        return electrostaticGeneratorStressImpact[tier.configIndex()];
+    }
+
+    public static int wirelessCoilVoltage(WirelessCoilTier tier) {
+        return wirelessCoilVoltage[tier.configIndex()];
+    }
+
+    public static int wirelessCoilAmperage(WirelessCoilTier tier) {
+        return wirelessCoilAmperage[tier.configIndex()];
     }
 
     public static int steamEngineHatchRpm(SteamEngineHatchTier tier) {

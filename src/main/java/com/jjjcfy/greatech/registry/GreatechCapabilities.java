@@ -28,6 +28,14 @@ public final class GreatechCapabilities {
                 GreatechBlockEntityTypes.ELECTRIC_FLUID_BRIDGE.get(),
                 (blockEntity, side) -> blockEntity.getEnergyContainer(side));
         event.registerBlockEntity(
+                GTCapability.CAPABILITY_ENERGY_CONTAINER,
+                GreatechBlockEntityTypes.ELECTROSTATIC_GENERATOR.get(),
+                (blockEntity, side) -> blockEntity.getEnergyContainer(side));
+        event.registerBlockEntity(
+                GTCapability.CAPABILITY_ENERGY_INFO_PROVIDER,
+                GreatechBlockEntityTypes.ELECTROSTATIC_GENERATOR.get(),
+                (blockEntity, side) -> blockEntity.getEnergyContainer(side));
+        event.registerBlockEntity(
                 Capabilities.FluidHandler.BLOCK,
                 GreatechBlockEntityTypes.ELECTRIC_FLUID_BRIDGE.get(),
                 (blockEntity, side) -> blockEntity.getFluidHandler(side));

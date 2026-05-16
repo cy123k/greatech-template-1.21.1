@@ -1,0 +1,10 @@
+{
+  "multipart": [
+    { "when": { "facing": "north" }, "apply": { "model": "greatech:block/electrostatic_generator/lv_electrostatic_generator" } },
+    { "when": { "facing": "south" }, "apply": { "model": "greatech:block/electrostatic_generator/lv_electrostatic_generator", "y": 180 } },
+    { "when": { "facing": "east" }, "apply": { "model": "greatech:block/electrostatic_generator/lv_electrostatic_generator", "y": 90 } },
+    { "when": { "facing": "west" }, "apply": { "model": "greatech:block/electrostatic_generator/lv_electrostatic_generator", "y": 270 } },
+    { "when": { "facing": "up" }, "apply": { "model": "greatech:block/electrostatic_generator/lv_electrostatic_generator", "x": 270 } },
+    { "when": { "facing": "down" }, "apply": { "model": "greatech:block/electrostatic_generator/lv_electrostatic_generator", "x": 90 } }
+  ]
+}

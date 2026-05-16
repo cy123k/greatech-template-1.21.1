@@ -11,6 +11,7 @@ public final class GreatechGoggleInfoProviders {
             new GreatechFluidBridgeGoggleInfoProvider(),
             new GreatechHydraulicPressGoggleInfoProvider(),
             new GreatechSUEnergyConverterGoggleInfoProvider(),
+            new GreatechElectrostaticGeneratorGoggleInfoProvider(),
             new GtceuMachineEnergyGoggleInfoProvider(),
             new CreateKineticGoggleInfoProvider());
 

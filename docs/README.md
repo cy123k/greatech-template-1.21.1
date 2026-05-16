@@ -18,6 +18,7 @@ Registered or partially implemented feature families:
 - SU Energy Converter: `lv_sucon`, `mv_sucon`, `hv_sucon`
 - Electric Fluid Bridge: `lv_fluid_bridge`
 - Hydraulic Press: `lv_hydraulic_press`
+- Wireless EU transfer prototype: `lv_electrostatic_generator` and `lv_wireless_coil`
 - Heat Chamber: casing, glass, and controller blocks
 - Steam Engine Hatch: `lv`, `mv`, and `hv` hatch machine parts
 - Transmission parts: steel, aluminium, and stainless shafts/cogwheels, including powered variants and Greatech-owned Create-casing variants for shafts, small cogwheels, and large cogwheels
@@ -42,6 +43,7 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 - [System Overview](systems/overview.md)
 - [Greatech HUD System](systems/greatech-hud-system.md)
 - [Greatech Heat Chamber](systems/greatech-heat-chamber.md)
+- [Greatech Dimension EU Pool](systems/greatech-dimension-eu-pool.md)
 - [Kinetic Failure](systems/greatech-kinetic-failure.md)
 - [Fluid Hazard](systems/greatech-fluid-hazard.md)
 - [Placement Helper](systems/greatech-placement-helper.md)
@@ -52,6 +54,7 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 - [SU Energy Converter](machines/greatech-converter.md)
 - [Electric Fluid Bridge](machines/greatech-fluidbridge.md)
 - [Hydraulic Press](machines/greatech-hydraulic-press.md)
+- [Electrostatic Generator](machines/greatech-electrostatic-generator.md)
 - [Steam Engine Hatch](machines/greatech-steam-engine-hatch.md)
 - [Programmable Gearshift](machines/greatech-programmable-gearshift.md)
 - [Shafts](machines/greatech-shaft.md)
@@ -86,6 +89,7 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 - [Create compatibility bridge](../src/main/java/com/jjjcfy/greatech/compat/create)
 - [Converter code](../src/main/java/com/jjjcfy/greatech/content/converter)
 - [Fluid bridge code](../src/main/java/com/jjjcfy/greatech/content/fluid)
+- [Wireless EU code](../src/main/java/com/jjjcfy/greatech/content/wireless)
 - [Heat chamber code](../src/main/java/com/jjjcfy/greatech/content/heat)
 - [Hydraulic press code](../src/main/java/com/jjjcfy/greatech/content/hydraulic)
 - [Programmable gearshift code](../src/main/java/com/jjjcfy/greatech/content/gearshift)

@@ -10,6 +10,8 @@ import com.jjjcfy.greatech.network.fluid.RequestFluidBridgeHudDataPayload;
 import com.jjjcfy.greatech.network.fluid.RequestFluidHudDataPayload;
 import com.jjjcfy.greatech.network.hydraulic.HydraulicPressHudDataPayload;
 import com.jjjcfy.greatech.network.hydraulic.RequestHydraulicPressHudDataPayload;
+import com.jjjcfy.greatech.network.wireless.ElectrostaticGeneratorHudDataPayload;
+import com.jjjcfy.greatech.network.wireless.RequestElectrostaticGeneratorHudDataPayload;
 
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
@@ -42,5 +44,11 @@ public final class GreatechNetworking {
                 RequestSUEnergyConverterHudDataPayload::handleServer);
         registrar.playToClient(SUEnergyConverterHudDataPayload.TYPE, SUEnergyConverterHudDataPayload.STREAM_CODEC,
                 SUEnergyConverterHudDataPayload::handleClient);
+        registrar.playToServer(RequestElectrostaticGeneratorHudDataPayload.TYPE,
+                RequestElectrostaticGeneratorHudDataPayload.STREAM_CODEC,
+                RequestElectrostaticGeneratorHudDataPayload::handleServer);
+        registrar.playToClient(ElectrostaticGeneratorHudDataPayload.TYPE,
+                ElectrostaticGeneratorHudDataPayload.STREAM_CODEC,
+                ElectrostaticGeneratorHudDataPayload::handleClient);
     }
 }
