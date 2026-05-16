@@ -22,17 +22,17 @@ Because of that, the current integration uses direct JEI/EMI plugins that read M
 
 Shared display helper:
 
-- [HydraulicPressingDisplayData.java](../../src/main/java/com/greatech/integration/xei/HydraulicPressingDisplayData.java)
+- [HydraulicPressingDisplayData.java](../../src/main/java/com/jjjcfy/greatech/integration/xei/HydraulicPressingDisplayData.java)
 
 JEI classes:
 
-- [GreatechJEIPlugin.java](../../src/main/java/com/greatech/integration/jei/GreatechJEIPlugin.java)
-- [HydraulicPressingJEICategory.java](../../src/main/java/com/greatech/integration/jei/HydraulicPressingJEICategory.java)
+- [GreatechJEIPlugin.java](../../src/main/java/com/jjjcfy/greatech/integration/jei/GreatechJEIPlugin.java)
+- [HydraulicPressingJEICategory.java](../../src/main/java/com/jjjcfy/greatech/integration/jei/HydraulicPressingJEICategory.java)
 
 EMI classes:
 
-- [GreatechEMIPlugin.java](../../src/main/java/com/greatech/integration/emi/GreatechEMIPlugin.java)
-- [HydraulicPressingEmiRecipe.java](../../src/main/java/com/greatech/integration/emi/HydraulicPressingEmiRecipe.java)
+- [GreatechEMIPlugin.java](../../src/main/java/com/jjjcfy/greatech/integration/emi/GreatechEMIPlugin.java)
+- [HydraulicPressingEmiRecipe.java](../../src/main/java/com/jjjcfy/greatech/integration/emi/HydraulicPressingEmiRecipe.java)
 
 Optional dependency metadata:
 

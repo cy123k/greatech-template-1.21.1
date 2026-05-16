@@ -25,20 +25,20 @@ Current cover items:
 
 Core classes:
 
-- [GreatechProgrammableGearshiftBlock.java](../../src/main/java/com/greatech/content/gearshift/GreatechProgrammableGearshiftBlock.java)
-- [GreatechProgrammableGearshiftBlockEntity.java](../../src/main/java/com/greatech/content/gearshift/GreatechProgrammableGearshiftBlockEntity.java)
-- [GreatechProgrammableGearshiftRenderer.java](../../src/main/java/com/greatech/content/gearshift/GreatechProgrammableGearshiftRenderer.java)
-- [GearshiftCoverType.java](../../src/main/java/com/greatech/content/gearshift/GearshiftCoverType.java)
-- [GearshiftCoverState.java](../../src/main/java/com/greatech/content/gearshift/GearshiftCoverState.java)
-- [GearshiftCoverItem.java](../../src/main/java/com/greatech/content/gearshift/GearshiftCoverItem.java)
+- [GreatechProgrammableGearshiftBlock.java](../../src/main/java/com/jjjcfy/greatech/content/gearshift/GreatechProgrammableGearshiftBlock.java)
+- [GreatechProgrammableGearshiftBlockEntity.java](../../src/main/java/com/jjjcfy/greatech/content/gearshift/GreatechProgrammableGearshiftBlockEntity.java)
+- [GreatechProgrammableGearshiftRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/gearshift/GreatechProgrammableGearshiftRenderer.java)
+- [GearshiftCoverType.java](../../src/main/java/com/jjjcfy/greatech/content/gearshift/GearshiftCoverType.java)
+- [GearshiftCoverState.java](../../src/main/java/com/jjjcfy/greatech/content/gearshift/GearshiftCoverState.java)
+- [GearshiftCoverItem.java](../../src/main/java/com/jjjcfy/greatech/content/gearshift/GearshiftCoverItem.java)
 
 Registry hooks:
 
-- [GreatechBlocks.java](../../src/main/java/com/greatech/registry/GreatechBlocks.java)
-- [GreatechItems.java](../../src/main/java/com/greatech/registry/GreatechItems.java)
-- [GreatechBlockEntityTypes.java](../../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechPartialModels.java](../../src/main/java/com/greatech/registry/GreatechPartialModels.java)
-- [GreatechClient.java](../../src/main/java/com/greatech/GreatechClient.java)
+- [GreatechBlocks.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechBlocks.java)
+- [GreatechItems.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechItems.java)
+- [GreatechBlockEntityTypes.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechPartialModels.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechPartialModels.java)
+- [GreatechClient.java](../../src/main/java/com/jjjcfy/greatech/GreatechClient.java)
 
 ## Kinetic Model
 

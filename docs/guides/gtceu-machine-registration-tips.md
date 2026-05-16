@@ -1,4 +1,4 @@
-﻿# GTCEu Machine Registration Tips
+# GTCEu Machine Registration Tips
 
 ## Purpose
 
@@ -16,7 +16,7 @@ public static final GTRegistrate REGISTRATE = GTRegistrate.create(Greatech.MODID
 
 Machine registration lives in:
 
-- [GreatechMachines.java](../src/main/java/com/greatech/registry/GreatechMachines.java)
+- [GreatechMachines.java](../src/main/java/com/jjjcfy/greatech/registry/GreatechMachines.java)
 
 Mod construction initializes GTCEu config before touching the machine builder:
 

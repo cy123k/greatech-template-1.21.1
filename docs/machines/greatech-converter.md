@@ -21,24 +21,24 @@ The currently registered tiers are:
 
 Core classes:
 
-- [SUEnergyConverterBlock.java](../../src/main/java/com/greatech/content/converter/SUEnergyConverterBlock.java)
-- [SUEnergyConverterBlockEntity.java](../../src/main/java/com/greatech/content/converter/SUEnergyConverterBlockEntity.java)
-- [SUEnergyConverterRenderer.java](../../src/main/java/com/greatech/content/converter/SUEnergyConverterRenderer.java)
-- [SUEnergyConverterTier.java](../../src/main/java/com/greatech/content/converter/SUEnergyConverterTier.java)
+- [SUEnergyConverterBlock.java](../../src/main/java/com/jjjcfy/greatech/content/converter/SUEnergyConverterBlock.java)
+- [SUEnergyConverterBlockEntity.java](../../src/main/java/com/jjjcfy/greatech/content/converter/SUEnergyConverterBlockEntity.java)
+- [SUEnergyConverterRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/converter/SUEnergyConverterRenderer.java)
+- [SUEnergyConverterTier.java](../../src/main/java/com/jjjcfy/greatech/content/converter/SUEnergyConverterTier.java)
 
 Registry hooks:
 
-- [GreatechBlocks.java](../../src/main/java/com/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](../../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechCapabilities.java](../../src/main/java/com/greatech/registry/GreatechCapabilities.java)
-- [GreatechPartialModels.java](../../src/main/java/com/greatech/registry/GreatechPartialModels.java)
-- [GreatechClient.java](../../src/main/java/com/greatech/GreatechClient.java)
+- [GreatechBlocks.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechCapabilities.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechCapabilities.java)
+- [GreatechPartialModels.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechPartialModels.java)
+- [GreatechClient.java](../../src/main/java/com/jjjcfy/greatech/GreatechClient.java)
 
 HUD networking:
 
-- [RequestSUEnergyConverterHudDataPayload.java](../../src/main/java/com/greatech/network/converter/RequestSUEnergyConverterHudDataPayload.java)
-- [SUEnergyConverterHudDataPayload.java](../../src/main/java/com/greatech/network/converter/SUEnergyConverterHudDataPayload.java)
-- [GreatechSUEnergyConverterHudCache.java](../../src/main/java/com/greatech/network/converter/GreatechSUEnergyConverterHudCache.java)
+- [RequestSUEnergyConverterHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/converter/RequestSUEnergyConverterHudDataPayload.java)
+- [SUEnergyConverterHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/converter/SUEnergyConverterHudDataPayload.java)
+- [GreatechSUEnergyConverterHudCache.java](../../src/main/java/com/jjjcfy/greatech/network/converter/GreatechSUEnergyConverterHudCache.java)
 
 Main docs that explain surrounding patterns:
 
@@ -84,7 +84,7 @@ The current output formula is:
 EU/t = min(converterMaxOutput, abs(rpm) * converterEfficiency)
 ```
 
-Current default tier lists in [Config.java](../../src/main/java/com/greatech/Config.java) are ordered as `[LV, MV, HV]`.
+Current default tier lists in [Config.java](../../src/main/java/com/jjjcfy/greatech/Config.java) are ordered as `[LV, MV, HV]`.
 
 Default values:
 
@@ -159,7 +159,7 @@ The converter uses a split visual model:
 
 Renderer class:
 
-- [SUEnergyConverterRenderer.java](../../src/main/java/com/greatech/content/converter/SUEnergyConverterRenderer.java)
+- [SUEnergyConverterRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/converter/SUEnergyConverterRenderer.java)
 
 Important current renderer details:
 

@@ -40,7 +40,7 @@ Registration path:
 
 The hydraulic press is not a GTCEu `MachineDefinition`. GTCEu tier naming is used for progression, tank capacity, throughput, stress impact, and future recipe gating.
 
-In [GreatechBlocks.java](../../src/main/java/com/greatech/registry/GreatechBlocks.java), hydraulic presses follow the same tier-array registration shape now used by other Create-style Greatech machines:
+In [GreatechBlocks.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechBlocks.java), hydraulic presses follow the same tier-array registration shape now used by other Create-style Greatech machines:
 
 - `REGISTERED_HYDRAULIC_PRESS_TIERS` decides which tiers are actually registered
 - `HYDRAULIC_PRESSES` stores block registry entries by `HydraulicPressTier.configIndex()`
@@ -53,26 +53,26 @@ Only add a tier to `REGISTERED_HYDRAULIC_PRESS_TIERS` after its blockstate, item
 
 Core classes:
 
-- [HydraulicPressBlock.java](../../src/main/java/com/greatech/content/hydraulic/HydraulicPressBlock.java)
-- [HydraulicPressBlockEntity.java](../../src/main/java/com/greatech/content/hydraulic/HydraulicPressBlockEntity.java)
-- [HydraulicPressRenderer.java](../../src/main/java/com/greatech/content/hydraulic/HydraulicPressRenderer.java)
-- [HydraulicPressingBehaviour.java](../../src/main/java/com/greatech/content/hydraulic/HydraulicPressingBehaviour.java)
-- [HydraulicPressingRecipe.java](../../src/main/java/com/greatech/content/hydraulic/HydraulicPressingRecipe.java)
-- [HydraulicPressingRecipeGenerator.java](../../src/main/java/com/greatech/content/hydraulic/HydraulicPressingRecipeGenerator.java)
-- [HydraulicPressTier.java](../../src/main/java/com/greatech/content/hydraulic/HydraulicPressTier.java)
-- [GreatechGTAddon.java](../../src/main/java/com/greatech/integration/gtceu/GreatechGTAddon.java)
-- [HydraulicPressingDisplayData.java](../../src/main/java/com/greatech/integration/xei/HydraulicPressingDisplayData.java)
-- [GreatechJEIPlugin.java](../../src/main/java/com/greatech/integration/jei/GreatechJEIPlugin.java)
-- [GreatechEMIPlugin.java](../../src/main/java/com/greatech/integration/emi/GreatechEMIPlugin.java)
+- [HydraulicPressBlock.java](../../src/main/java/com/jjjcfy/greatech/content/hydraulic/HydraulicPressBlock.java)
+- [HydraulicPressBlockEntity.java](../../src/main/java/com/jjjcfy/greatech/content/hydraulic/HydraulicPressBlockEntity.java)
+- [HydraulicPressRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/hydraulic/HydraulicPressRenderer.java)
+- [HydraulicPressingBehaviour.java](../../src/main/java/com/jjjcfy/greatech/content/hydraulic/HydraulicPressingBehaviour.java)
+- [HydraulicPressingRecipe.java](../../src/main/java/com/jjjcfy/greatech/content/hydraulic/HydraulicPressingRecipe.java)
+- [HydraulicPressingRecipeGenerator.java](../../src/main/java/com/jjjcfy/greatech/content/hydraulic/HydraulicPressingRecipeGenerator.java)
+- [HydraulicPressTier.java](../../src/main/java/com/jjjcfy/greatech/content/hydraulic/HydraulicPressTier.java)
+- [GreatechGTAddon.java](../../src/main/java/com/jjjcfy/greatech/integration/gtceu/GreatechGTAddon.java)
+- [HydraulicPressingDisplayData.java](../../src/main/java/com/jjjcfy/greatech/integration/xei/HydraulicPressingDisplayData.java)
+- [GreatechJEIPlugin.java](../../src/main/java/com/jjjcfy/greatech/integration/jei/GreatechJEIPlugin.java)
+- [GreatechEMIPlugin.java](../../src/main/java/com/jjjcfy/greatech/integration/emi/GreatechEMIPlugin.java)
 
 Registry hooks:
 
-- [GreatechBlocks.java](../../src/main/java/com/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](../../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechCapabilities.java](../../src/main/java/com/greatech/registry/GreatechCapabilities.java)
-- [GreatechRecipeTypes.java](../../src/main/java/com/greatech/registry/GreatechRecipeTypes.java)
-- [GreatechPartialModels.java](../../src/main/java/com/greatech/registry/GreatechPartialModels.java)
-- [GreatechClient.java](../../src/main/java/com/greatech/GreatechClient.java)
+- [GreatechBlocks.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechCapabilities.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechCapabilities.java)
+- [GreatechRecipeTypes.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechRecipeTypes.java)
+- [GreatechPartialModels.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechPartialModels.java)
+- [GreatechClient.java](../../src/main/java/com/jjjcfy/greatech/GreatechClient.java)
 
 Important resources:
 
@@ -334,7 +334,7 @@ Current tier-controlled values:
 - recipe eligibility through `required_tier`
 - one-step heat chamber overclocking
 
-Current defaults in [Config.java](../../src/main/java/com/greatech/Config.java):
+Current defaults in [Config.java](../../src/main/java/com/jjjcfy/greatech/Config.java):
 
 - `hydraulicPressTankCapacity = [4000, 8000, 16000, 32000, 64000]`
 - `hydraulicPressMaxItemsPerCycle = [2, 4, 8, 16, 32]`

@@ -42,3 +42,10 @@ VS Code users may also need:
 ```
 
 See [docs/reference/dependencies.md](docs/reference/dependencies.md) for dependency notes.
+
+## License
+
+Greatech is licensed under the GNU Lesser General Public License v3.0 or later. See [LICENSE](LICENSE).
+
+Third-party license and attribution notes for Create, GregTechCEu Modern, and the NeoForged MDK template
+are recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

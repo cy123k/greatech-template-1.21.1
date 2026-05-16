@@ -19,14 +19,14 @@ This system intentionally follows the useful provider/receiver idea from GTCEu c
 
 Initial environment API:
 
-- [HeatChamberEnvironment.java](../../src/main/java/com/greatech/content/heat/HeatChamberEnvironment.java)
-- [HeatChamberProvider.java](../../src/main/java/com/greatech/content/heat/HeatChamberProvider.java)
-- [HeatChamberReceiver.java](../../src/main/java/com/greatech/content/heat/HeatChamberReceiver.java)
-- [HeatChamberRequirement.java](../../src/main/java/com/greatech/content/heat/HeatChamberRequirement.java)
-- [HeatChamberTemperatureTier.java](../../src/main/java/com/greatech/content/heat/HeatChamberTemperatureTier.java)
-- [HeatChamberScanner.java](../../src/main/java/com/greatech/content/heat/HeatChamberScanner.java)
-- [HeatChamberStructureRules.java](../../src/main/java/com/greatech/content/heat/HeatChamberStructureRules.java)
-- [HeatSourceScanner.java](../../src/main/java/com/greatech/content/heat/HeatSourceScanner.java)
+- [HeatChamberEnvironment.java](../../src/main/java/com/jjjcfy/greatech/content/heat/HeatChamberEnvironment.java)
+- [HeatChamberProvider.java](../../src/main/java/com/jjjcfy/greatech/content/heat/HeatChamberProvider.java)
+- [HeatChamberReceiver.java](../../src/main/java/com/jjjcfy/greatech/content/heat/HeatChamberReceiver.java)
+- [HeatChamberRequirement.java](../../src/main/java/com/jjjcfy/greatech/content/heat/HeatChamberRequirement.java)
+- [HeatChamberTemperatureTier.java](../../src/main/java/com/jjjcfy/greatech/content/heat/HeatChamberTemperatureTier.java)
+- [HeatChamberScanner.java](../../src/main/java/com/jjjcfy/greatech/content/heat/HeatChamberScanner.java)
+- [HeatChamberStructureRules.java](../../src/main/java/com/jjjcfy/greatech/content/heat/HeatChamberStructureRules.java)
+- [HeatSourceScanner.java](../../src/main/java/com/jjjcfy/greatech/content/heat/HeatSourceScanner.java)
 
 Current first-pass blocks:
 
@@ -47,14 +47,14 @@ Current visual resources:
 
 Current first-pass controller code:
 
-- [HeatChamberCasingBlock.java](../../src/main/java/com/greatech/content/heat/HeatChamberCasingBlock.java)
-- [HeatChamberControllerBlock.java](../../src/main/java/com/greatech/content/heat/HeatChamberControllerBlock.java)
-- [HeatChamberControllerBlockEntity.java](../../src/main/java/com/greatech/content/heat/HeatChamberControllerBlockEntity.java)
-- [HeatChamberControllerRenderer.java](../../src/main/java/com/greatech/content/heat/HeatChamberControllerRenderer.java)
-- [DefaultHeatChamberStructureRules.java](../../src/main/java/com/greatech/content/heat/DefaultHeatChamberStructureRules.java)
-- [HeatChamberBlockWhitelist.java](../../src/main/java/com/greatech/content/heat/HeatChamberBlockWhitelist.java)
-- [CreateHeatSourceScanner.java](../../src/main/java/com/greatech/content/heat/CreateHeatSourceScanner.java)
-- [VanillaHeatSourceScanner.java](../../src/main/java/com/greatech/content/heat/VanillaHeatSourceScanner.java)
+- [HeatChamberCasingBlock.java](../../src/main/java/com/jjjcfy/greatech/content/heat/HeatChamberCasingBlock.java)
+- [HeatChamberControllerBlock.java](../../src/main/java/com/jjjcfy/greatech/content/heat/HeatChamberControllerBlock.java)
+- [HeatChamberControllerBlockEntity.java](../../src/main/java/com/jjjcfy/greatech/content/heat/HeatChamberControllerBlockEntity.java)
+- [HeatChamberControllerRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/heat/HeatChamberControllerRenderer.java)
+- [DefaultHeatChamberStructureRules.java](../../src/main/java/com/jjjcfy/greatech/content/heat/DefaultHeatChamberStructureRules.java)
+- [HeatChamberBlockWhitelist.java](../../src/main/java/com/jjjcfy/greatech/content/heat/HeatChamberBlockWhitelist.java)
+- [CreateHeatSourceScanner.java](../../src/main/java/com/jjjcfy/greatech/content/heat/CreateHeatSourceScanner.java)
+- [VanillaHeatSourceScanner.java](../../src/main/java/com/jjjcfy/greatech/content/heat/VanillaHeatSourceScanner.java)
 
 ## Controller Contract
 

@@ -1,4 +1,4 @@
-﻿# Steam Engine Hatch and Powered Steel Shaft
+# Steam Engine Hatch and Powered Steel Shaft
 
 ## Purpose
 
@@ -16,20 +16,20 @@ It is intentionally small and conservative:
 
 Steam hatch:
 
-- [GreatechSteamEngineHatchMachine.java](../src/main/java/com/greatech/content/steam/GreatechSteamEngineHatchMachine.java)
-- [GreatechMachines.java](../src/main/java/com/greatech/registry/GreatechMachines.java)
+- [GreatechSteamEngineHatchMachine.java](../src/main/java/com/jjjcfy/greatech/content/steam/GreatechSteamEngineHatchMachine.java)
+- [GreatechMachines.java](../src/main/java/com/jjjcfy/greatech/registry/GreatechMachines.java)
 
 Powered shaft:
 
-- [GreatechPoweredShaftBlock.java](../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlock.java)
-- [GreatechPoweredShaftBlockEntity.java](../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlockEntity.java)
-- [GreatechPoweredShaftRenderer.java](../src/main/java/com/greatech/content/steam/GreatechPoweredShaftRenderer.java)
+- [GreatechPoweredShaftBlock.java](../src/main/java/com/jjjcfy/greatech/content/steam/GreatechPoweredShaftBlock.java)
+- [GreatechPoweredShaftBlockEntity.java](../src/main/java/com/jjjcfy/greatech/content/steam/GreatechPoweredShaftBlockEntity.java)
+- [GreatechPoweredShaftRenderer.java](../src/main/java/com/jjjcfy/greatech/content/steam/GreatechPoweredShaftRenderer.java)
 
 Shared registration:
 
-- [GreatechBlocks.java](../src/main/java/com/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechClient.java](../src/main/java/com/greatech/GreatechClient.java)
+- [GreatechBlocks.java](../src/main/java/com/jjjcfy/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](../src/main/java/com/jjjcfy/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechClient.java](../src/main/java/com/jjjcfy/greatech/GreatechClient.java)
 
 Resources:
 
@@ -75,7 +75,7 @@ Current registration notes:
 - event registration, renderer setup, and startup validation iterate the definition array
 - the LV/MV/HV fields are compatibility aliases for callers that still expect named definitions
 - `rotationState(RotationState.ALL)` keeps the hatch compatible with all six GTCEu-facing directions
-- a custom [GreatechSteamEngineHatchBlock.java](../src/main/java/com/greatech/content/steam/GreatechSteamEngineHatchBlock.java) now makes hatch placement follow the same explicit `context.getNearestLookingDirection().getOpposite()` rule used by Greatech's other directional machines
+- a custom [GreatechSteamEngineHatchBlock.java](../src/main/java/com/jjjcfy/greatech/content/steam/GreatechSteamEngineHatchBlock.java) now makes hatch placement follow the same explicit `context.getNearestLookingDirection().getOpposite()` rule used by Greatech's other directional machines
 - `.hasBER(false)` stays set, because the hatch now uses ordinary baked machine models for both unformed and formed visual states
 - `.appearanceBlock(() -> Blocks.IRON_BLOCK)` plus a plain `.blockModel(...)` lambda are still intentional dev-environment workarounds to avoid GTCEu model static-init crashes
 
@@ -144,7 +144,7 @@ The axis rule is important:
 hatch front axis == shaft axis
 ```
 
-This matches the current implementation in [GreatechSteamEngineTrait.java](../src/main/java/com/greatech/content/steam/GreatechSteamEngineTrait.java) and [AbstractPoweredSteamKineticBlockEntity.java](../src/main/java/com/greatech/content/steam/AbstractPoweredSteamKineticBlockEntity.java): the hatch currently validates a powered shaft directly in front of its own front-facing side.
+This matches the current implementation in [GreatechSteamEngineTrait.java](../src/main/java/com/jjjcfy/greatech/content/steam/GreatechSteamEngineTrait.java) and [AbstractPoweredSteamKineticBlockEntity.java](../src/main/java/com/jjjcfy/greatech/content/steam/AbstractPoweredSteamKineticBlockEntity.java): the hatch currently validates a powered shaft directly in front of its own front-facing side.
 
 ## Powered Shaft Behavior
 

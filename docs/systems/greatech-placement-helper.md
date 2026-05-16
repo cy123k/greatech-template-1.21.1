@@ -1,4 +1,4 @@
-﻿# Greatech Placement Helper
+# Greatech Placement Helper
 
 ## Purpose
 
@@ -22,18 +22,18 @@ Current supported parts:
 
 Core classes:
 
-- [GreatechPlacementRegistry.java](../../src/main/java/com/greatech/content/placement/GreatechPlacementRegistry.java)
-- [GreatechPlacementHelpers.java](../../src/main/java/com/greatech/content/placement/GreatechPlacementHelpers.java)
-- [GreatechPlacementEvents.java](../../src/main/java/com/greatech/content/placement/GreatechPlacementEvents.java)
-- [GreatechPlacementGhosts.java](../../src/main/java/com/greatech/content/placement/GreatechPlacementGhosts.java)
-- [GreatechShaftPlacementHelper.java](../../src/main/java/com/greatech/content/placement/GreatechShaftPlacementHelper.java)
-- [GreatechSmallCogwheelPlacementHelper.java](../../src/main/java/com/greatech/content/placement/GreatechSmallCogwheelPlacementHelper.java)
-- [GreatechLargeCogwheelPlacementHelper.java](../../src/main/java/com/greatech/content/placement/GreatechLargeCogwheelPlacementHelper.java)
-- [GreatechMixedCogwheelPlacementHelper.java](../../src/main/java/com/greatech/content/placement/GreatechMixedCogwheelPlacementHelper.java)
+- [GreatechPlacementRegistry.java](../../src/main/java/com/jjjcfy/greatech/content/placement/GreatechPlacementRegistry.java)
+- [GreatechPlacementHelpers.java](../../src/main/java/com/jjjcfy/greatech/content/placement/GreatechPlacementHelpers.java)
+- [GreatechPlacementEvents.java](../../src/main/java/com/jjjcfy/greatech/content/placement/GreatechPlacementEvents.java)
+- [GreatechPlacementGhosts.java](../../src/main/java/com/jjjcfy/greatech/content/placement/GreatechPlacementGhosts.java)
+- [GreatechShaftPlacementHelper.java](../../src/main/java/com/jjjcfy/greatech/content/placement/GreatechShaftPlacementHelper.java)
+- [GreatechSmallCogwheelPlacementHelper.java](../../src/main/java/com/jjjcfy/greatech/content/placement/GreatechSmallCogwheelPlacementHelper.java)
+- [GreatechLargeCogwheelPlacementHelper.java](../../src/main/java/com/jjjcfy/greatech/content/placement/GreatechLargeCogwheelPlacementHelper.java)
+- [GreatechMixedCogwheelPlacementHelper.java](../../src/main/java/com/jjjcfy/greatech/content/placement/GreatechMixedCogwheelPlacementHelper.java)
 
 Initialization happens in:
 
-- [Greatech.java](../../src/main/java/com/greatech/Greatech.java)
+- [Greatech.java](../../src/main/java/com/jjjcfy/greatech/Greatech.java)
 
 `GreatechPlacementHelpers.init()` forces helper registration, and `GreatechPlacementEvents::onRightClickBlock` is registered on the NeoForge event bus.
 

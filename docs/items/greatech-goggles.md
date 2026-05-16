@@ -14,13 +14,13 @@ It is modeled after `Create` goggles in spirit, but the feature goal is broader:
 
 Item and registration:
 
-- [GreatechGogglesItem.java](../../src/main/java/com/greatech/content/equipment/goggles/GreatechGogglesItem.java)
-- [GreatechItems.java](../../src/main/java/com/greatech/registry/GreatechItems.java)
+- [GreatechGogglesItem.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/goggles/GreatechGogglesItem.java)
+- [GreatechItems.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechItems.java)
 
 HUD integration:
 
-- [GreatechHudWearables.java](../../src/main/java/com/greatech/content/equipment/hud/GreatechHudWearables.java)
-- [GreatechGoggleOverlayRenderer.java](../../src/main/java/com/greatech/content/equipment/hud/GreatechGoggleOverlayRenderer.java)
+- [GreatechHudWearables.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechHudWearables.java)
+- [GreatechGoggleOverlayRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechGoggleOverlayRenderer.java)
 
 Current item model:
 

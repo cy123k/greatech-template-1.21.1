@@ -28,10 +28,10 @@ In Chinese localization these are shown as:
 
 Core classes and resources:
 
-- [Greatech.java](../../src/main/java/com/greatech/Greatech.java)
-- [GreatechCreativeTabMarkerItem.java](../../src/main/java/com/greatech/content/creative/GreatechCreativeTabMarkerItem.java)
-- [GreatechCreativeTabSectionRenderer.java](../../src/main/java/com/greatech/client/creative/GreatechCreativeTabSectionRenderer.java)
-- [GreatechItems.java](../../src/main/java/com/greatech/registry/GreatechItems.java)
+- [Greatech.java](../../src/main/java/com/jjjcfy/greatech/Greatech.java)
+- [GreatechCreativeTabMarkerItem.java](../../src/main/java/com/jjjcfy/greatech/content/creative/GreatechCreativeTabMarkerItem.java)
+- [GreatechCreativeTabSectionRenderer.java](../../src/main/java/com/jjjcfy/greatech/client/creative/GreatechCreativeTabSectionRenderer.java)
+- [GreatechItems.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechItems.java)
 - [creative_tab_marker.json](../../src/main/resources/assets/greatech/models/item/creative_tab_marker.json)
 - `textures/item/transparent.png`
 - [en_us.json](../../src/main/resources/assets/greatech/lang/en_us.json)

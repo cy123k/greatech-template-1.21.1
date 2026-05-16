@@ -27,7 +27,7 @@ sourceSets.main.resources {
 }
 
 sourceSets.main.java {
-    include("com/greatech/**")
+    include("com/jjjcfy/greatech/**")
 }
 
 repositories {

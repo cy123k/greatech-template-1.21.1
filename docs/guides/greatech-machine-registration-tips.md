@@ -48,9 +48,9 @@ Good fit:
 
 Current examples:
 
-- [SUEnergyConverterBlock.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterBlock.java)
-- [ElectricFluidBridgeBlock.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeBlock.java)
-- [HydraulicPressBlock.java](../src/main/java/com/greatech/content/hydraulic/HydraulicPressBlock.java)
+- [SUEnergyConverterBlock.java](../src/main/java/com/jjjcfy/greatech/content/converter/SUEnergyConverterBlock.java)
+- [ElectricFluidBridgeBlock.java](../src/main/java/com/jjjcfy/greatech/content/fluid/ElectricFluidBridgeBlock.java)
+- [HydraulicPressBlock.java](../src/main/java/com/jjjcfy/greatech/content/hydraulic/HydraulicPressBlock.java)
 
 Recommended bundle:
 
@@ -82,8 +82,8 @@ Good fit:
 
 Current example:
 
-- [GreatechMachines.java](../src/main/java/com/greatech/registry/GreatechMachines.java)
-- [GreatechSteamEngineHatchMachine.java](../src/main/java/com/greatech/content/steam/GreatechSteamEngineHatchMachine.java)
+- [GreatechMachines.java](../src/main/java/com/jjjcfy/greatech/registry/GreatechMachines.java)
+- [GreatechSteamEngineHatchMachine.java](../src/main/java/com/jjjcfy/greatech/content/steam/GreatechSteamEngineHatchMachine.java)
 
 Recommended bundle:
 
@@ -132,9 +132,9 @@ context.getNearestLookingDirection().getOpposite()
 
 Current explicit examples:
 
-- [SUEnergyConverterBlock.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterBlock.java)
-- [ElectricFluidBridgeBlock.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeBlock.java)
-- [GreatechSteamEngineHatchBlock.java](../src/main/java/com/greatech/content/steam/GreatechSteamEngineHatchBlock.java)
+- [SUEnergyConverterBlock.java](../src/main/java/com/jjjcfy/greatech/content/converter/SUEnergyConverterBlock.java)
+- [ElectricFluidBridgeBlock.java](../src/main/java/com/jjjcfy/greatech/content/fluid/ElectricFluidBridgeBlock.java)
+- [GreatechSteamEngineHatchBlock.java](../src/main/java/com/jjjcfy/greatech/content/steam/GreatechSteamEngineHatchBlock.java)
 
 When documenting a machine, write the side roles in one small table or bullet list early:
 
@@ -181,8 +181,8 @@ CachedBuffers.partialFacing(partial, state, modelFacing)
 
 This is already used by:
 
-- [SUEnergyConverterRenderer.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterRenderer.java)
-- [ElectricFluidBridgeRenderer.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
+- [SUEnergyConverterRenderer.java](../src/main/java/com/jjjcfy/greatech/content/converter/SUEnergyConverterRenderer.java)
+- [ElectricFluidBridgeRenderer.java](../src/main/java/com/jjjcfy/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
 
 Important caution:
 
@@ -278,7 +278,7 @@ If a GTCEu machine has behavior that is bigger than one utility method but small
 
 Current example:
 
-- [GreatechSteamEngineTrait.java](../src/main/java/com/greatech/content/steam/GreatechSteamEngineTrait.java)
+- [GreatechSteamEngineTrait.java](../src/main/java/com/jjjcfy/greatech/content/steam/GreatechSteamEngineTrait.java)
 
 Good trait responsibilities:
 

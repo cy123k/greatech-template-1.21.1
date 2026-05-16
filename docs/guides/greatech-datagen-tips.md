@@ -34,16 +34,16 @@ Current generated transmission kinds:
 
 Current datagen entry points:
 
-- [GreatechDataGen.java](../src/main/java/com/greatech/datagen/GreatechDataGen.java)
-- [GreatechBlockStateProvider.java](../src/main/java/com/greatech/datagen/GreatechBlockStateProvider.java)
-- [GreatechItemModelProvider.java](../src/main/java/com/greatech/datagen/GreatechItemModelProvider.java)
-- [GreatechEncasedModelProvider.java](../src/main/java/com/greatech/datagen/GreatechEncasedModelProvider.java)
-- [GreatechBlockLootProvider.java](../src/main/java/com/greatech/datagen/GreatechBlockLootProvider.java)
+- [GreatechDataGen.java](../src/main/java/com/jjjcfy/greatech/datagen/GreatechDataGen.java)
+- [GreatechBlockStateProvider.java](../src/main/java/com/jjjcfy/greatech/datagen/GreatechBlockStateProvider.java)
+- [GreatechItemModelProvider.java](../src/main/java/com/jjjcfy/greatech/datagen/GreatechItemModelProvider.java)
+- [GreatechEncasedModelProvider.java](../src/main/java/com/jjjcfy/greatech/datagen/GreatechEncasedModelProvider.java)
+- [GreatechBlockLootProvider.java](../src/main/java/com/jjjcfy/greatech/datagen/GreatechBlockLootProvider.java)
 
 Current family data sources:
 
-- [GreatechKineticMaterial.java](../src/main/java/com/greatech/content/kinetics/GreatechKineticMaterial.java)
-- [GreatechBlocks.java](../src/main/java/com/greatech/registry/GreatechBlocks.java)
+- [GreatechKineticMaterial.java](../src/main/java/com/jjjcfy/greatech/content/kinetics/GreatechKineticMaterial.java)
+- [GreatechBlocks.java](../src/main/java/com/jjjcfy/greatech/registry/GreatechBlocks.java)
 
 ## Build Integration
 

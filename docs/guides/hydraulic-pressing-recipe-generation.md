@@ -6,8 +6,8 @@ This guide documents how Greatech currently generates `greatech:hydraulic_pressi
 
 Generated hydraulic pressing recipes are added through the GTCEu addon hook:
 
-- [GreatechGTAddon.java](../../src/main/java/com/greatech/integration/gtceu/GreatechGTAddon.java)
-- [HydraulicPressingRecipeGenerator.java](../../src/main/java/com/greatech/content/hydraulic/HydraulicPressingRecipeGenerator.java)
+- [GreatechGTAddon.java](../../src/main/java/com/jjjcfy/greatech/integration/gtceu/GreatechGTAddon.java)
+- [HydraulicPressingRecipeGenerator.java](../../src/main/java/com/jjjcfy/greatech/content/hydraulic/HydraulicPressingRecipeGenerator.java)
 
 `GreatechGTAddon#addRecipes(...)` calls:
 
@@ -93,7 +93,7 @@ Pack authors can override generated material tiers through config:
 hydraulicPressMaterialTierOverrides = ["gtceu:steel=mv", "gtceu:tungsten=iv"]
 ```
 
-The parser lives in [Config.java](../../src/main/java/com/greatech/Config.java). Invalid material ids or tier ids are ignored with a warning.
+The parser lives in [Config.java](../../src/main/java/com/jjjcfy/greatech/Config.java). Invalid material ids or tier ids are ignored with a warning.
 
 Use this hook when a material's blast temperature does not match desired progression.
 

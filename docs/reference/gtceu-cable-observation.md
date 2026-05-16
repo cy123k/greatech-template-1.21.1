@@ -10,13 +10,13 @@ They are not treated like ordinary energy machines because the most useful cable
 
 Provider:
 
-- [GtceuCableGoggleInfoProvider.java](../../src/main/java/com/greatech/content/equipment/hud/GtceuCableGoggleInfoProvider.java)
+- [GtceuCableGoggleInfoProvider.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GtceuCableGoggleInfoProvider.java)
 
 Network path:
 
-- [RequestCableHudDataPayload.java](../../src/main/java/com/greatech/network/cable/RequestCableHudDataPayload.java)
-- [CableHudDataPayload.java](../../src/main/java/com/greatech/network/cable/CableHudDataPayload.java)
-- [GreatechCableHudCache.java](../../src/main/java/com/greatech/network/cable/GreatechCableHudCache.java)
+- [RequestCableHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/cable/RequestCableHudDataPayload.java)
+- [CableHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/cable/CableHudDataPayload.java)
+- [GreatechCableHudCache.java](../../src/main/java/com/jjjcfy/greatech/network/cable/GreatechCableHudCache.java)
 
 ## Why Cable Is Special
 

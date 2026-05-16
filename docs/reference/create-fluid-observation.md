@@ -14,7 +14,7 @@ These targets all show fluid contents, but their data sources are intentionally 
 
 All fluid-facing HUD providers eventually render through:
 
-- [ObservedFluidInfo.java](../../src/main/java/com/greatech/content/equipment/hud/content/ObservedFluidInfo.java)
+- [ObservedFluidInfo.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/content/ObservedFluidInfo.java)
 
 This keeps fluid name, amount, temperature, and danger traits consistent across providers.
 
@@ -22,8 +22,8 @@ This keeps fluid name, amount, temperature, and danger traits consistent across 
 
 Main code:
 
-- [CreateFluidPipeGoggleInfoProvider.java](../../src/main/java/com/greatech/content/equipment/hud/CreateFluidPipeGoggleInfoProvider.java)
-- [RequestFluidHudDataPayload.java](../../src/main/java/com/greatech/network/fluid/RequestFluidHudDataPayload.java)
+- [CreateFluidPipeGoggleInfoProvider.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/CreateFluidPipeGoggleInfoProvider.java)
+- [RequestFluidHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/fluid/RequestFluidHudDataPayload.java)
 
 Current semantics:
 
@@ -38,7 +38,7 @@ The current request path collects client-visible or server-sampled flow packets,
 
 Main code:
 
-- [CreateFluidTankGoggleInfoProvider.java](../../src/main/java/com/greatech/content/equipment/hud/CreateFluidTankGoggleInfoProvider.java)
+- [CreateFluidTankGoggleInfoProvider.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/CreateFluidTankGoggleInfoProvider.java)
 
 Current semantics:
 
@@ -54,8 +54,8 @@ For normal tanks, this gives the actual stored amount and total multiblock capac
 
 Main code:
 
-- [GreatechFluidBridgeGoggleInfoProvider.java](../../src/main/java/com/greatech/content/equipment/hud/GreatechFluidBridgeGoggleInfoProvider.java)
-- [RequestFluidBridgeHudDataPayload.java](../../src/main/java/com/greatech/network/fluid/RequestFluidBridgeHudDataPayload.java)
+- [GreatechFluidBridgeGoggleInfoProvider.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechFluidBridgeGoggleInfoProvider.java)
+- [RequestFluidBridgeHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/fluid/RequestFluidBridgeHudDataPayload.java)
 
 The bridge is not a plain Create block, but it participates in Create fluid observation because it:
 

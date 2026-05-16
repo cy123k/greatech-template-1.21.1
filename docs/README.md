@@ -78,22 +78,22 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 
 ## Important Code Areas
 
-- [Mod entrypoint](../src/main/java/com/greatech/Greatech.java)
-- [Client entrypoint](../src/main/java/com/greatech/GreatechClient.java)
-- [Config](../src/main/java/com/greatech/Config.java)
-- [Registries](../src/main/java/com/greatech/registry)
-- [Datagen](../src/main/java/com/greatech/datagen)
-- [Create compatibility bridge](../src/main/java/com/greatech/compat/create)
-- [Converter code](../src/main/java/com/greatech/content/converter)
-- [Fluid bridge code](../src/main/java/com/greatech/content/fluid)
-- [Heat chamber code](../src/main/java/com/greatech/content/heat)
-- [Hydraulic press code](../src/main/java/com/greatech/content/hydraulic)
-- [Programmable gearshift code](../src/main/java/com/greatech/content/gearshift)
-- [HUD/goggles code](../src/main/java/com/greatech/content/equipment/hud)
-- [Network payloads](../src/main/java/com/greatech/network)
-- [JEI integration](../src/main/java/com/greatech/integration/jei)
-- [EMI integration](../src/main/java/com/greatech/integration/emi)
-- [Shared XEI helpers](../src/main/java/com/greatech/integration/xei)
+- [Mod entrypoint](../src/main/java/com/jjjcfy/greatech/Greatech.java)
+- [Client entrypoint](../src/main/java/com/jjjcfy/greatech/GreatechClient.java)
+- [Config](../src/main/java/com/jjjcfy/greatech/Config.java)
+- [Registries](../src/main/java/com/jjjcfy/greatech/registry)
+- [Datagen](../src/main/java/com/jjjcfy/greatech/datagen)
+- [Create compatibility bridge](../src/main/java/com/jjjcfy/greatech/compat/create)
+- [Converter code](../src/main/java/com/jjjcfy/greatech/content/converter)
+- [Fluid bridge code](../src/main/java/com/jjjcfy/greatech/content/fluid)
+- [Heat chamber code](../src/main/java/com/jjjcfy/greatech/content/heat)
+- [Hydraulic press code](../src/main/java/com/jjjcfy/greatech/content/hydraulic)
+- [Programmable gearshift code](../src/main/java/com/jjjcfy/greatech/content/gearshift)
+- [HUD/goggles code](../src/main/java/com/jjjcfy/greatech/content/equipment/hud)
+- [Network payloads](../src/main/java/com/jjjcfy/greatech/network)
+- [JEI integration](../src/main/java/com/jjjcfy/greatech/integration/jei)
+- [EMI integration](../src/main/java/com/jjjcfy/greatech/integration/emi)
+- [Shared XEI helpers](../src/main/java/com/jjjcfy/greatech/integration/xei)
 
 ## Important Resource Areas
 

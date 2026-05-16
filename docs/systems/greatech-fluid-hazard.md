@@ -1,4 +1,4 @@
-﻿# Greatech Fluid Hazard
+# Greatech Fluid Hazard
 
 ## Purpose
 
@@ -17,17 +17,17 @@ This mirrors the design style of the kinetic failure system: a Greatech source m
 
 Core classes:
 
-- [FluidHazardSource.java](../src/main/java/com/greatech/content/fluid/hazard/FluidHazardSource.java)
-- [FluidHazardProfile.java](../src/main/java/com/greatech/content/fluid/hazard/FluidHazardProfile.java)
-- [CreatePipeSafetyProfile.java](../src/main/java/com/greatech/content/fluid/hazard/CreatePipeSafetyProfile.java)
-- [FluidHazardCandidate.java](../src/main/java/com/greatech/content/fluid/hazard/FluidHazardCandidate.java)
-- [FluidHazardAction.java](../src/main/java/com/greatech/content/fluid/hazard/FluidHazardAction.java)
-- [GreatechFluidHazardFailure.java](../src/main/java/com/greatech/content/fluid/hazard/GreatechFluidHazardFailure.java)
-- [GreatechFluidPipeConnections.java](../src/main/java/com/greatech/content/fluid/pipe/GreatechFluidPipeConnections.java)
+- [FluidHazardSource.java](../src/main/java/com/jjjcfy/greatech/content/fluid/hazard/FluidHazardSource.java)
+- [FluidHazardProfile.java](../src/main/java/com/jjjcfy/greatech/content/fluid/hazard/FluidHazardProfile.java)
+- [CreatePipeSafetyProfile.java](../src/main/java/com/jjjcfy/greatech/content/fluid/hazard/CreatePipeSafetyProfile.java)
+- [FluidHazardCandidate.java](../src/main/java/com/jjjcfy/greatech/content/fluid/hazard/FluidHazardCandidate.java)
+- [FluidHazardAction.java](../src/main/java/com/jjjcfy/greatech/content/fluid/hazard/FluidHazardAction.java)
+- [GreatechFluidHazardFailure.java](../src/main/java/com/jjjcfy/greatech/content/fluid/hazard/GreatechFluidHazardFailure.java)
+- [GreatechFluidPipeConnections.java](../src/main/java/com/jjjcfy/greatech/content/fluid/pipe/GreatechFluidPipeConnections.java)
 
 Current source:
 
-- [ElectricFluidBridgeBlockEntity.java](../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeBlockEntity.java)
+- [ElectricFluidBridgeBlockEntity.java](../src/main/java/com/jjjcfy/greatech/content/fluid/ElectricFluidBridgeBlockEntity.java)
 
 ## Source Contract
 
@@ -112,7 +112,7 @@ Future versions can add particles, entity damage, fire placement, explosions, fl
 
 ## Config
 
-Fluid hazard config lives in [Config.java](../src/main/java/com/greatech/Config.java).
+Fluid hazard config lives in [Config.java](../src/main/java/com/jjjcfy/greatech/Config.java).
 
 Current defaults:
 

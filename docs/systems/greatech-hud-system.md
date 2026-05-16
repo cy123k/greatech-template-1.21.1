@@ -15,21 +15,21 @@ It is intentionally broader than one item. The goggles item is only one way to a
 
 Wearable gating:
 
-- [GreatechHudWearables.java](../../src/main/java/com/greatech/content/equipment/hud/GreatechHudWearables.java)
+- [GreatechHudWearables.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechHudWearables.java)
 
 Overlay:
 
-- [GreatechGoggleOverlayRenderer.java](../../src/main/java/com/greatech/content/equipment/hud/GreatechGoggleOverlayRenderer.java)
+- [GreatechGoggleOverlayRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechGoggleOverlayRenderer.java)
 
 Provider API and registry:
 
-- [GreatechGoggleInfoProvider.java](../../src/main/java/com/greatech/content/equipment/hud/GreatechGoggleInfoProvider.java)
-- [GreatechGoggleInfoProviders.java](../../src/main/java/com/greatech/content/equipment/hud/GreatechGoggleInfoProviders.java)
-- [GreatechGoggleTooltipHelper.java](../../src/main/java/com/greatech/content/equipment/hud/GreatechGoggleTooltipHelper.java)
+- [GreatechGoggleInfoProvider.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechGoggleInfoProvider.java)
+- [GreatechGoggleInfoProviders.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechGoggleInfoProviders.java)
+- [GreatechGoggleTooltipHelper.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechGoggleTooltipHelper.java)
 
 Shared fluid observation model:
 
-- [ObservedFluidInfo.java](../../src/main/java/com/greatech/content/equipment/hud/content/ObservedFluidInfo.java)
+- [ObservedFluidInfo.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/content/ObservedFluidInfo.java)
 
 ## Wearable Gate
 
@@ -76,7 +76,7 @@ This lets hybrid machines show both kinetic and electrical data while still allo
 
 ## Current Provider Order
 
-Current provider order lives in [GreatechGoggleInfoProviders.java](../../src/main/java/com/greatech/content/equipment/hud/GreatechGoggleInfoProviders.java).
+Current provider order lives in [GreatechGoggleInfoProviders.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechGoggleInfoProviders.java).
 
 The order matters because more specific providers should run before more general ones.
 

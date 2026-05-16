@@ -1,4 +1,4 @@
-﻿# Greatech Shaft
+# Greatech Shaft
 
 ## Purpose
 
@@ -34,20 +34,20 @@ Current material progression:
 
 Core classes:
 
-- [GreatechShaftBlock.java](../../src/main/java/com/greatech/content/shaft/GreatechShaftBlock.java)
-- [GreatechEncasedShaftBlock.java](../../src/main/java/com/greatech/content/shaft/GreatechEncasedShaftBlock.java)
-- [GreatechShaftBlockEntity.java](../../src/main/java/com/greatech/content/shaft/GreatechShaftBlockEntity.java)
-- [GreatechShaftRenderer.java](../../src/main/java/com/greatech/content/shaft/GreatechShaftRenderer.java)
-- [GreatechPoweredShaftBlock.java](../../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlock.java)
-- [GreatechPoweredShaftBlockEntity.java](../../src/main/java/com/greatech/content/steam/GreatechPoweredShaftBlockEntity.java)
-- [GreatechPoweredShaftRenderer.java](../../src/main/java/com/greatech/content/steam/GreatechPoweredShaftRenderer.java)
+- [GreatechShaftBlock.java](../../src/main/java/com/jjjcfy/greatech/content/shaft/GreatechShaftBlock.java)
+- [GreatechEncasedShaftBlock.java](../../src/main/java/com/jjjcfy/greatech/content/shaft/GreatechEncasedShaftBlock.java)
+- [GreatechShaftBlockEntity.java](../../src/main/java/com/jjjcfy/greatech/content/shaft/GreatechShaftBlockEntity.java)
+- [GreatechShaftRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/shaft/GreatechShaftRenderer.java)
+- [GreatechPoweredShaftBlock.java](../../src/main/java/com/jjjcfy/greatech/content/steam/GreatechPoweredShaftBlock.java)
+- [GreatechPoweredShaftBlockEntity.java](../../src/main/java/com/jjjcfy/greatech/content/steam/GreatechPoweredShaftBlockEntity.java)
+- [GreatechPoweredShaftRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/steam/GreatechPoweredShaftRenderer.java)
 
 Registration:
 
-- [GreatechBlocks.java](../../src/main/java/com/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](../../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechPartialModels.java](../../src/main/java/com/greatech/registry/GreatechPartialModels.java)
-- [Greatech placement helpers](../../src/main/java/com/greatech/content/placement)
+- [GreatechBlocks.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechPartialModels.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechPartialModels.java)
+- [Greatech placement helpers](../../src/main/java/com/jjjcfy/greatech/content/placement)
 
 ## Resource Layout
 
@@ -109,7 +109,7 @@ The generated shaft blockstates include `placement_ghost=true` variants. Normal 
 
 Encased shaft wrapper models are generated under `src/generated/resources`.
 They use Create's casing-only `create:block/encased_shaft/block` parent, while the Greatech shaft itself is still rendered dynamically by `GreatechShaftRenderer`.
-The generator is [GreatechEncasedModelProvider.java](../../src/main/java/com/greatech/datagen/GreatechEncasedModelProvider.java), with texture metadata supplied by `GreatechEncasingType`.
+The generator is [GreatechEncasedModelProvider.java](../../src/main/java/com/jjjcfy/greatech/datagen/GreatechEncasedModelProvider.java), with texture metadata supplied by `GreatechEncasingType`.
 
 Encased shafts also use neighbor light sampling for the dynamic shaft partial.
 The baked casing shell can make the block entity's own packed light too dark, so `GreatechShaftRenderer` borrows light through `GreatechLightSampler` from the shaft axis for encased shaft blocks only.
@@ -198,9 +198,9 @@ Current behavior:
 
 The helper lives under:
 
-- [GreatechPlacementRegistry.java](../../src/main/java/com/greatech/content/placement/GreatechPlacementRegistry.java)
-- [GreatechShaftPlacementHelper.java](../../src/main/java/com/greatech/content/placement/GreatechShaftPlacementHelper.java)
-- [GreatechPlacementGhosts.java](../../src/main/java/com/greatech/content/placement/GreatechPlacementGhosts.java)
+- [GreatechPlacementRegistry.java](../../src/main/java/com/jjjcfy/greatech/content/placement/GreatechPlacementRegistry.java)
+- [GreatechShaftPlacementHelper.java](../../src/main/java/com/jjjcfy/greatech/content/placement/GreatechShaftPlacementHelper.java)
+- [GreatechPlacementGhosts.java](../../src/main/java/com/jjjcfy/greatech/content/placement/GreatechPlacementGhosts.java)
 
 See [greatech-placement-helper.md](../systems/greatech-placement-helper.md) for the reusable placement design.
 
@@ -223,8 +223,8 @@ Adding another supported Create-style casing should start there, then rerun data
 
 The registration lives in:
 
-- [GreatechCreateEncasingCompat.java](../../src/main/java/com/greatech/compat/create/GreatechCreateEncasingCompat.java)
-- [GreatechEncasingType.java](../../src/main/java/com/greatech/content/kinetics/GreatechEncasingType.java)
+- [GreatechCreateEncasingCompat.java](../../src/main/java/com/jjjcfy/greatech/compat/create/GreatechCreateEncasingCompat.java)
+- [GreatechEncasingType.java](../../src/main/java/com/jjjcfy/greatech/content/kinetics/GreatechEncasingType.java)
 
 ## Adding More Shaft Materials
 

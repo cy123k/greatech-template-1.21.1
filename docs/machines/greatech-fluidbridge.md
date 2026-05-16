@@ -1,4 +1,4 @@
-﻿# Greatech Fluid Bridge
+# Greatech Fluid Bridge
 
 ## Purpose
 
@@ -17,19 +17,19 @@ The in-game feature should be referred to as the `Electric Fluid Bridge`.
 
 Core classes:
 
-- [ElectricFluidBridgeBlock.java](../../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeBlock.java)
-- [ElectricFluidBridgeBlockEntity.java](../../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeBlockEntity.java)
-- [ElectricFluidBridgeRenderer.java](../../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
-- [ElectricFluidBridgeTier.java](../../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeTier.java)
-- [Fluid hazard system](../../src/main/java/com/greatech/content/fluid/hazard)
-- [GreatechFluidPipeConnections.java](../../src/main/java/com/greatech/content/fluid/pipe/GreatechFluidPipeConnections.java)
-- [GreatechLightSampler.java](../../src/main/java/com/greatech/client/render/GreatechLightSampler.java)
+- [ElectricFluidBridgeBlock.java](../../src/main/java/com/jjjcfy/greatech/content/fluid/ElectricFluidBridgeBlock.java)
+- [ElectricFluidBridgeBlockEntity.java](../../src/main/java/com/jjjcfy/greatech/content/fluid/ElectricFluidBridgeBlockEntity.java)
+- [ElectricFluidBridgeRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
+- [ElectricFluidBridgeTier.java](../../src/main/java/com/jjjcfy/greatech/content/fluid/ElectricFluidBridgeTier.java)
+- [Fluid hazard system](../../src/main/java/com/jjjcfy/greatech/content/fluid/hazard)
+- [GreatechFluidPipeConnections.java](../../src/main/java/com/jjjcfy/greatech/content/fluid/pipe/GreatechFluidPipeConnections.java)
+- [GreatechLightSampler.java](../../src/main/java/com/jjjcfy/greatech/client/render/GreatechLightSampler.java)
 
 Registry hooks:
 
-- [GreatechBlocks.java](../../src/main/java/com/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](../../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechCapabilities.java](../../src/main/java/com/greatech/registry/GreatechCapabilities.java)
+- [GreatechBlocks.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechCapabilities.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechCapabilities.java)
 
 Resources:
 
@@ -46,10 +46,10 @@ Resources:
 Current rendering structure:
 
 - the blockstate points to `lv_fluid_bridge_block.json`, an empty model with only a particle texture
-- the full bridge body is rendered by [ElectricFluidBridgeRenderer.java](../../src/main/java/com/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
+- the full bridge body is rendered by [ElectricFluidBridgeRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/fluid/ElectricFluidBridgeRenderer.java)
 - the GTCEu drain connector is rendered as an extra partial on any fluid port connected to a GTCEu `FluidPipeBlockEntity`
-- partial models are declared in [GreatechPartialModels.java](../../src/main/java/com/greatech/registry/GreatechPartialModels.java)
-- light is sampled through [GreatechLightSampler.java](../../src/main/java/com/greatech/client/render/GreatechLightSampler.java)
+- partial models are declared in [GreatechPartialModels.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechPartialModels.java)
+- light is sampled through [GreatechLightSampler.java](../../src/main/java/com/jjjcfy/greatech/client/render/GreatechLightSampler.java)
 
 This avoids two problems seen with ordinary blockstate model composition:
 
@@ -132,7 +132,7 @@ Current rule:
 - the other four sides can accept GTCEu energy
 - the machine does not output EU
 
-The energy capability is registered in [GreatechCapabilities.java](../../src/main/java/com/greatech/registry/GreatechCapabilities.java).
+The energy capability is registered in [GreatechCapabilities.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechCapabilities.java).
 
 ## Fixed Pump Mode
 
@@ -192,7 +192,7 @@ See [greatech-fluid-hazard.md](../systems/greatech-fluid-hazard.md) for the shar
 
 ## Config
 
-Fluid bridge config lives in [Config.java](../../src/main/java/com/greatech/Config.java).
+Fluid bridge config lives in [Config.java](../../src/main/java/com/jjjcfy/greatech/Config.java).
 
 Current defaults are ordered as `[LV, MV, HV]`, even though only the LV block is registered right now:
 

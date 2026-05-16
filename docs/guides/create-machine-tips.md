@@ -1,4 +1,4 @@
-﻿# Tips for Registering Create Machines
+# Tips for Registering Create Machines
 
 This note collects practical patterns from the current `SU Energy Converter` implementation.
 
@@ -23,7 +23,7 @@ Tip:
 - do not add `FACING` again in `createBlockStateDefinition`
 - only append your own extra properties such as `ACTIVE`
 
-The current converter does this in [SUEnergyConverterBlock.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterBlock.java).
+The current converter does this in [SUEnergyConverterBlock.java](../src/main/java/com/jjjcfy/greatech/content/converter/SUEnergyConverterBlock.java).
 
 ## 2. Keep Orientation Rules Explicit
 
@@ -72,10 +72,10 @@ For a functional Create machine, treat these as one bundle:
 
 In this project the relevant locations are:
 
-- [GreatechBlocks.java](../src/main/java/com/greatech/registry/GreatechBlocks.java)
-- [GreatechBlockEntityTypes.java](../src/main/java/com/greatech/registry/GreatechBlockEntityTypes.java)
-- [GreatechCapabilities.java](../src/main/java/com/greatech/registry/GreatechCapabilities.java)
-- [GreatechClient.java](../src/main/java/com/greatech/GreatechClient.java)
+- [GreatechBlocks.java](../src/main/java/com/jjjcfy/greatech/registry/GreatechBlocks.java)
+- [GreatechBlockEntityTypes.java](../src/main/java/com/jjjcfy/greatech/registry/GreatechBlockEntityTypes.java)
+- [GreatechCapabilities.java](../src/main/java/com/jjjcfy/greatech/registry/GreatechCapabilities.java)
+- [GreatechClient.java](../src/main/java/com/jjjcfy/greatech/GreatechClient.java)
 
 If one of these is missing, the machine often appears to "half work".
 
@@ -91,7 +91,7 @@ Typical server tick flow:
 4. push to adjacent targets
 5. update presentation state such as `ACTIVE`
 
-The current example lives in [SUEnergyConverterBlockEntity.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterBlockEntity.java).
+The current example lives in [SUEnergyConverterBlockEntity.java](../src/main/java/com/jjjcfy/greatech/content/converter/SUEnergyConverterBlockEntity.java).
 
 ## 6. Use BER First for One Moving Part
 
@@ -103,7 +103,7 @@ Why this is a good starting point:
 - it is easier to debug than jumping straight into a more advanced visual pipeline
 - it lets you verify orientation and lighting before optimizing
 
-The current example is [SUEnergyConverterRenderer.java](../src/main/java/com/greatech/content/converter/SUEnergyConverterRenderer.java).
+The current example is [SUEnergyConverterRenderer.java](../src/main/java/com/jjjcfy/greatech/content/converter/SUEnergyConverterRenderer.java).
 
 ## 7. Understand Create's SU Network Model
 
@@ -187,7 +187,7 @@ If you use a rotating partial model, register it before model bake timing become
 
 In this project:
 
-- partials are declared in [GreatechPartialModels.java](../src/main/java/com/greatech/registry/GreatechPartialModels.java)
+- partials are declared in [GreatechPartialModels.java](../src/main/java/com/jjjcfy/greatech/registry/GreatechPartialModels.java)
 - `GreatechClient` calls `GreatechPartialModels.init()` during client construction
 
 This avoids "missing model" problems where the code compiles but the in-game dynamic part renders as missing.
@@ -318,7 +318,7 @@ If your placed block uses an empty world model because a BER renders the visible
 - `placement_ghost=false`: normal placed block, empty static model
 - `placement_ghost=true`: ghost preview, full static model
 
-Then set that property on the ghost state before returning the placement offset. Greatech does this in [GreatechPlacementGhosts.java](../src/main/java/com/greatech/content/placement/GreatechPlacementGhosts.java).
+Then set that property on the ghost state before returning the placement offset. Greatech does this in [GreatechPlacementGhosts.java](../src/main/java/com/jjjcfy/greatech/content/placement/GreatechPlacementGhosts.java).
 
 See [greatech-placement-helper.md](./greatech-placement-helper.md) for the current reusable implementation.
 

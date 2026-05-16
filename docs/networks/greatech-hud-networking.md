@@ -16,41 +16,41 @@ This keeps the HUD responsive while avoiding permanent sync load on all cables a
 
 Network registration:
 
-- [GreatechNetworking.java](../../src/main/java/com/greatech/network/GreatechNetworking.java)
+- [GreatechNetworking.java](../../src/main/java/com/jjjcfy/greatech/network/GreatechNetworking.java)
 
 Cable HUD payloads:
 
-- [RequestCableHudDataPayload.java](../../src/main/java/com/greatech/network/cable/RequestCableHudDataPayload.java)
-- [CableHudDataPayload.java](../../src/main/java/com/greatech/network/cable/CableHudDataPayload.java)
-- [GreatechCableHudCache.java](../../src/main/java/com/greatech/network/cable/GreatechCableHudCache.java)
+- [RequestCableHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/cable/RequestCableHudDataPayload.java)
+- [CableHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/cable/CableHudDataPayload.java)
+- [GreatechCableHudCache.java](../../src/main/java/com/jjjcfy/greatech/network/cable/GreatechCableHudCache.java)
 
 Fluid HUD payloads:
 
-- [RequestFluidHudDataPayload.java](../../src/main/java/com/greatech/network/fluid/RequestFluidHudDataPayload.java)
-- [FluidHudDataPayload.java](../../src/main/java/com/greatech/network/fluid/FluidHudDataPayload.java)
-- [GreatechFluidHudCache.java](../../src/main/java/com/greatech/network/fluid/GreatechFluidHudCache.java)
+- [RequestFluidHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/fluid/RequestFluidHudDataPayload.java)
+- [FluidHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/fluid/FluidHudDataPayload.java)
+- [GreatechFluidHudCache.java](../../src/main/java/com/jjjcfy/greatech/network/fluid/GreatechFluidHudCache.java)
 
 Fluid bridge HUD payloads:
 
-- [RequestFluidBridgeHudDataPayload.java](../../src/main/java/com/greatech/network/fluid/RequestFluidBridgeHudDataPayload.java)
-- [FluidBridgeHudDataPayload.java](../../src/main/java/com/greatech/network/fluid/FluidBridgeHudDataPayload.java)
-- [GreatechFluidBridgeHudCache.java](../../src/main/java/com/greatech/network/fluid/GreatechFluidBridgeHudCache.java)
+- [RequestFluidBridgeHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/fluid/RequestFluidBridgeHudDataPayload.java)
+- [FluidBridgeHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/fluid/FluidBridgeHudDataPayload.java)
+- [GreatechFluidBridgeHudCache.java](../../src/main/java/com/jjjcfy/greatech/network/fluid/GreatechFluidBridgeHudCache.java)
 
 Hydraulic press HUD payloads:
 
-- [RequestHydraulicPressHudDataPayload.java](../../src/main/java/com/greatech/network/hydraulic/RequestHydraulicPressHudDataPayload.java)
-- [HydraulicPressHudDataPayload.java](../../src/main/java/com/greatech/network/hydraulic/HydraulicPressHudDataPayload.java)
-- [GreatechHydraulicPressHudCache.java](../../src/main/java/com/greatech/network/hydraulic/GreatechHydraulicPressHudCache.java)
+- [RequestHydraulicPressHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/hydraulic/RequestHydraulicPressHudDataPayload.java)
+- [HydraulicPressHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/hydraulic/HydraulicPressHudDataPayload.java)
+- [GreatechHydraulicPressHudCache.java](../../src/main/java/com/jjjcfy/greatech/network/hydraulic/GreatechHydraulicPressHudCache.java)
 
 SU energy converter HUD payloads:
 
-- [RequestSUEnergyConverterHudDataPayload.java](../../src/main/java/com/greatech/network/converter/RequestSUEnergyConverterHudDataPayload.java)
-- [SUEnergyConverterHudDataPayload.java](../../src/main/java/com/greatech/network/converter/SUEnergyConverterHudDataPayload.java)
-- [GreatechSUEnergyConverterHudCache.java](../../src/main/java/com/greatech/network/converter/GreatechSUEnergyConverterHudCache.java)
+- [RequestSUEnergyConverterHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/converter/RequestSUEnergyConverterHudDataPayload.java)
+- [SUEnergyConverterHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/converter/SUEnergyConverterHudDataPayload.java)
+- [GreatechSUEnergyConverterHudCache.java](../../src/main/java/com/jjjcfy/greatech/network/converter/GreatechSUEnergyConverterHudCache.java)
 
 HUD trigger point:
 
-- [GreatechGoggleOverlayRenderer.java](../../src/main/java/com/greatech/content/equipment/hud/GreatechGoggleOverlayRenderer.java)
+- [GreatechGoggleOverlayRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechGoggleOverlayRenderer.java)
 
 ## Current Strategy
 
