@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/orientable",
-  "textures": {
-    "front": "greatech:block/greatech_machine/lv_machine/lv_kioutput",
-    "side": "greatech:block/greatech_machine/lv_machine/lv_casing",
-    "top": "greatech:block/greatech_machine/lv_machine/lv_rotor"
-  }
-}

@@ -65,6 +65,7 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 - [Greatech Machine Registration Tips](guides/greatech-machine-registration-tips.md)
 - [Greatech Datagen Tips](guides/greatech-datagen-tips.md)
 - [GTCEu Machine Registration Tips](guides/gtceu-machine-registration-tips.md)
+- [GTCEu Material Rendering Tips](guides/gtceu-material-rendering-tips.md)
 - [Create Machine Tips](guides/create-machine-tips.md)
 - [Create Fluid Tips](guides/create-fluid-tips.md)
 - [Renderer Registration](guides/greatech-renderer-register.md)
@@ -101,9 +102,9 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 
 ## Important Resource Areas
 
-- [Blockstates](../src/main/resources/assets/greatech/blockstates)
-- [Block models](../src/main/resources/assets/greatech/models/block)
-- [Item models](../src/main/resources/assets/greatech/models/item)
+- [Hand-authored blockstates](../src/main/resources/assets/greatech/blockstates)
+- [Hand-authored block models](../src/main/resources/assets/greatech/models/block)
+- [Hand-authored item models](../src/main/resources/assets/greatech/models/item)
 - [Textures](../src/main/resources/assets/greatech/textures/block)
 - [Hydraulic pressing recipes](../src/main/resources/data/greatech/recipe/hydraulic_pressing)
 - [Generated resources](../src/generated/resources)
@@ -121,7 +122,7 @@ Typical commands:
 
 Several development dependencies are resolved from local jars in `libs/`. See [Dependencies](reference/dependencies.md) for the current setup.
 
-`runData` generates transmission-family blockstates, item models, loot tables, lang files, and Create-casing wrapper models into `src/generated/resources`.
+`runData` generates transmission-family blockstates, item models, loot tables, lang files, Create-casing wrapper models, and the LV wireless coil blockstate/block model/item model into `src/generated/resources`.
 
 For VS Code Java launch workflows, use:
 

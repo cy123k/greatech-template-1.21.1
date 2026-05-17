@@ -10,9 +10,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class WirelessCoilBlock extends Block {
+    private static final VoxelShape X_AXIS_SHAPE = Block.box(0, 4, 4, 16, 12, 12);
+    private static final VoxelShape Y_AXIS_SHAPE = Block.box(4, 0, 4, 12, 16, 12);
+    private static final VoxelShape Z_AXIS_SHAPE = Block.box(4, 4, 0, 12, 12, 16);
     private static final VoxelShape OCCLUSION_BOX = Block.box(2, 2, 2, 14, 14, 14);
     public static final DirectionProperty FACING = DirectionProperty.create("facing");
 
@@ -36,6 +40,15 @@ public class WirelessCoilBlock extends Block {
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return switch (state.getValue(FACING).getAxis()) {
+            case X -> X_AXIS_SHAPE;
+            case Y -> Y_AXIS_SHAPE;
+            case Z -> Z_AXIS_SHAPE;
+        };
     }
 
     @Override

@@ -1,0 +1,518 @@
+{
+    "parent": "minecraft:block/block",
+    "children": {
+        "body": {
+            "elements": [
+                {
+                    "faces": {
+                        "east": {
+                            "texture": "#0",
+                            "uv": [
+                                4.0,
+                                0.0,
+                                12.0,
+                                2.0
+                            ]
+                        },
+                        "north": {
+                            "rotation": 180,
+                            "texture": "#0",
+                            "uv": [
+                                4.0,
+                                14.0,
+                                12.0,
+                                16.0
+                            ]
+                        },
+                        "south": {
+                            "rotation": 180,
+                            "texture": "#0",
+                            "uv": [
+                                4.0,
+                                14.0,
+                                12.0,
+                                16.0
+                            ]
+                        },
+                        "up": {
+                            "texture": "#0",
+                            "uv": [
+                                4.0,
+                                4.0,
+                                12.0,
+                                12.0
+                            ]
+                        },
+                        "west": {
+                            "texture": "#0",
+                            "uv": [
+                                4.0,
+                                0.0,
+                                12.0,
+                                2.0
+                            ]
+                        }
+                    },
+                    "from": [
+                        4.0,
+                        0.0,
+                        4.0
+                    ],
+                    "name": "bottm",
+                    "rotation": {
+                        "angle": 0.0,
+                        "axis": "y",
+                        "origin": [
+                            4.0,
+                            0.0,
+                            4.0
+                        ]
+                    },
+                    "to": [
+                        12.0,
+                        2.0,
+                        12.0
+                    ]
+                },
+                {
+                    "faces": {
+                        "east": {
+                            "texture": "#0",
+                            "uv": [
+                                5.0,
+                                0.0,
+                                11.0,
+                                2.0
+                            ]
+                        },
+                        "north": {
+                            "texture": "#0",
+                            "uv": [
+                                5.0,
+                                0.0,
+                                11.0,
+                                2.0
+                            ]
+                        },
+                        "south": {
+                            "texture": "#0",
+                            "uv": [
+                                5.0,
+                                0.0,
+                                11.0,
+                                2.0
+                            ]
+                        },
+                        "up": {
+                            "texture": "#0",
+                            "uv": [
+                                5.0,
+                                5.0,
+                                11.0,
+                                11.0
+                            ]
+                        },
+                        "west": {
+                            "texture": "#0",
+                            "uv": [
+                                5.0,
+                                0.0,
+                                11.0,
+                                2.0
+                            ]
+                        }
+                    },
+                    "from": [
+                        5.0,
+                        2.0,
+                        5.0
+                    ],
+                    "name": "bottom2",
+                    "rotation": {
+                        "angle": 0.0,
+                        "axis": "y",
+                        "origin": [
+                            1.0,
+                            8.0,
+                            1.0
+                        ]
+                    },
+                    "to": [
+                        11.0,
+                        4.0,
+                        11.0
+                    ]
+                },
+                {
+                    "faces": {
+                        "down": {
+                            "texture": "#1",
+                            "uv": [
+                                4.0,
+                                4.0,
+                                12.0,
+                                12.0
+                            ]
+                        },
+                        "east": {
+                            "texture": "#1",
+                            "uv": [
+                                4.0,
+                                13.0,
+                                12.0,
+                                14.0
+                            ]
+                        },
+                        "north": {
+                            "texture": "#1",
+                            "uv": [
+                                4.0,
+                                13.0,
+                                12.0,
+                                14.0
+                            ]
+                        },
+                        "south": {
+                            "texture": "#1",
+                            "uv": [
+                                4.0,
+                                2.0,
+                                12.0,
+                                3.0
+                            ]
+                        },
+                        "up": {
+                            "texture": "#1",
+                            "uv": [
+                                4.0,
+                                4.0,
+                                12.0,
+                                12.0
+                            ]
+                        },
+                        "west": {
+                            "texture": "#1",
+                            "uv": [
+                                4.0,
+                                2.0,
+                                12.0,
+                                3.0
+                            ]
+                        }
+                    },
+                    "from": [
+                        4.0,
+                        7.0,
+                        4.0
+                    ],
+                    "name": "coil2",
+                    "to": [
+                        12.0,
+                        8.0,
+                        12.0
+                    ]
+                },
+                {
+                    "faces": {
+                        "down": {
+                            "texture": "#1",
+                            "uv": [
+                                5.0,
+                                4.0,
+                                12.0,
+                                11.0
+                            ]
+                        },
+                        "east": {
+                            "texture": "#1",
+                            "uv": [
+                                8.0,
+                                13.0,
+                                14.0,
+                                14.0
+                            ]
+                        },
+                        "north": {
+                            "texture": "#1",
+                            "uv": [
+                                8.0,
+                                13.0,
+                                14.0,
+                                14.0
+                            ]
+                        },
+                        "south": {
+                            "texture": "#1",
+                            "uv": [
+                                8.0,
+                                2.0,
+                                14.0,
+                                3.0
+                            ]
+                        },
+                        "up": {
+                            "texture": "#1",
+                            "uv": [
+                                5.0,
+                                4.0,
+                                12.0,
+                                11.0
+                            ]
+                        },
+                        "west": {
+                            "texture": "#1",
+                            "uv": [
+                                8.0,
+                                2.0,
+                                14.0,
+                                3.0
+                            ]
+                        }
+                    },
+                    "from": [
+                        5.0,
+                        9.0,
+                        5.0
+                    ],
+                    "name": "coil3",
+                    "to": [
+                        11.0,
+                        10.0,
+                        11.0
+                    ]
+                },
+                {
+                    "faces": {
+                        "down": {
+                            "texture": "#1",
+                            "uv": [
+                                4.0,
+                                4.0,
+                                12.0,
+                                12.0
+                            ]
+                        },
+                        "east": {
+                            "texture": "#1",
+                            "uv": [
+                                4.0,
+                                13.0,
+                                12.0,
+                                14.0
+                            ]
+                        },
+                        "north": {
+                            "texture": "#1",
+                            "uv": [
+                                4.0,
+                                2.0,
+                                12.0,
+                                3.0
+                            ]
+                        },
+                        "south": {
+                            "texture": "#1",
+                            "uv": [
+                                4.0,
+                                13.0,
+                                12.0,
+                                14.0
+                            ]
+                        },
+                        "up": {
+                            "texture": "#1",
+                            "uv": [
+                                4.0,
+                                4.0,
+                                12.0,
+                                12.0
+                            ]
+                        },
+                        "west": {
+                            "texture": "#1",
+                            "uv": [
+                                4.0,
+                                13.0,
+                                12.0,
+                                14.0
+                            ]
+                        }
+                    },
+                    "from": [
+                        4.0,
+                        5.0,
+                        4.0
+                    ],
+                    "name": "coil1",
+                    "to": [
+                        12.0,
+                        6.0,
+                        12.0
+                    ]
+                },
+                {
+                    "faces": {
+                        "east": {
+                            "texture": "#0",
+                            "uv": [
+                                1.0,
+                                5.0,
+                                3.0,
+                                12.0
+                            ]
+                        },
+                        "north": {
+                            "texture": "#0",
+                            "uv": [
+                                10.0,
+                                5.0,
+                                12.0,
+                                12.0
+                            ]
+                        },
+                        "south": {
+                            "texture": "#0",
+                            "uv": [
+                                12.0,
+                                5.0,
+                                14.0,
+                                12.0
+                            ]
+                        },
+                        "west": {
+                            "texture": "#0",
+                            "uv": [
+                                3.0,
+                                5.0,
+                                5.0,
+                                12.0
+                            ]
+                        }
+                    },
+                    "from": [
+                        7.0,
+                        4.0,
+                        7.0
+                    ],
+                    "name": "pole",
+                    "rotation": {
+                        "angle": 0.0,
+                        "axis": "y",
+                        "origin": [
+                            7.0,
+                            4.0,
+                            7.0
+                        ]
+                    },
+                    "to": [
+                        9.0,
+                        11.0,
+                        9.0
+                    ]
+                }
+            ],
+            "render_type": "minecraft:solid",
+            "textures": {
+                "0": "greatech:block/greatech_machine/lv_machine/lv_casing",
+                "1": "greatech:block/greatech_wireless/lv_coil",
+                "particle": "greatech:block/greatech_machine/lv_machine/lv_casing"
+            }
+        },
+        "top": {
+            "elements": [
+                {
+                    "faces": {
+                        "down": {
+                            "texture": "#2",
+                            "uv": [
+                                6.0,
+                                6.0,
+                                10.0,
+                                10.0
+                            ]
+                        },
+                        "east": {
+                            "texture": "#2",
+                            "uv": [
+                                6.0,
+                                6.0,
+                                10.0,
+                                10.0
+                            ]
+                        },
+                        "north": {
+                            "texture": "#2",
+                            "uv": [
+                                6.0,
+                                6.0,
+                                10.0,
+                                10.0
+                            ]
+                        },
+                        "south": {
+                            "texture": "#2",
+                            "uv": [
+                                6.0,
+                                6.0,
+                                10.0,
+                                10.0
+                            ]
+                        },
+                        "up": {
+                            "texture": "#2",
+                            "uv": [
+                                6.0,
+                                6.0,
+                                10.0,
+                                10.0
+                            ]
+                        },
+                        "west": {
+                            "texture": "#2",
+                            "uv": [
+                                6.0,
+                                6.0,
+                                10.0,
+                                10.0
+                            ]
+                        }
+                    },
+                    "from": [
+                        6.0,
+                        10.9,
+                        6.0
+                    ],
+                    "name": "top",
+                    "rotation": {
+                        "angle": 0.0,
+                        "axis": "y",
+                        "origin": [
+                            0.0,
+                            -0.1,
+                            0.0
+                        ]
+                    },
+                    "to": [
+                        10.0,
+                        14.9,
+                        10.0
+                    ]
+                }
+            ],
+            "render_type": "minecraft:translucent",
+            "textures": {
+                "2": "greatech:block/greatech_wireless/lv_coiltop",
+                "particle": "greatech:block/greatech_machine/lv_machine/lv_casing"
+            }
+        }
+    },
+    "credit": "Made with Blockbench",
+    "format_version": "1.21.11",
+    "loader": "neoforge:composite",
+    "textures": {
+        "0": "greatech:block/greatech_machine/lv_machine/lv_casing",
+        "1": "greatech:block/greatech_wireless/lv_coil",
+        "2": "greatech:block/greatech_wireless/lv_coiltop",
+        "particle": "greatech:block/greatech_machine/lv_machine/lv_casing"
+    }
+}

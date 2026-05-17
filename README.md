@@ -13,7 +13,7 @@ The current build focuses on:
 - Greatech-owned machines such as the SU Energy Converter, Electrostatic Generator, Fluid Bridge, Heat Chamber, and Hydraulic Press
 - an LV wireless EU transfer prototype with adjacent LV Wireless Coils and one server-saved EU pool per dimension
 - shared HUD/goggles display helpers with on-demand server sampling for transient machine and cable data
-- datagen-backed transmission resources, including generated Create-casing wrapper models
+- datagen-backed transmission and wireless-coil resources, including generated Create-casing wrapper models and tiered coil block/item models
 
 ## Documentation
 
