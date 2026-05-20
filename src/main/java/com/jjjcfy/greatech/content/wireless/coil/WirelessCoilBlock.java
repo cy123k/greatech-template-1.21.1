@@ -1,9 +1,14 @@
 package com.jjjcfy.greatech.content.wireless.coil;
 
+import com.jjjcfy.greatech.content.wireless.electrostatic.ElectrostaticGeneratorBlock;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
@@ -74,6 +79,54 @@ public class WirelessCoilBlock extends Block {
     @Override
     protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        Direction facing = state.getValue(FACING);
+        BlockPos generatorPos = pos.relative(facing);
+        BlockState generatorState = level.getBlockState(generatorPos);
+        if (!(generatorState.getBlock() instanceof ElectrostaticGeneratorBlock generator)) {
+            return;
+        }
+
+        Direction coilSide = facing.getOpposite();
+        if (!ElectrostaticGeneratorBlock.isCoilSide(generatorState, coilSide)
+                || generator.getTier().configIndex() < tier.configIndex()) {
+            return;
+        }
+
+        boolean active = generatorState.getValue(ElectrostaticGeneratorBlock.ACTIVE);
+        if (random.nextFloat() > (active ? 0.55F : 0.08F)) {
+            return;
+        }
+
+        int sparks = active ? 2 + random.nextInt(3) : 1;
+        Direction outward = facing.getOpposite();
+        for (int i = 0; i < sparks; i++) {
+            spawnElectricSpark(level, pos, outward, random, active);
+        }
+    }
+
+    private static void spawnElectricSpark(Level level, BlockPos pos, Direction outward, RandomSource random,
+            boolean active) {
+        double baseX = pos.getX() + 0.5D + outward.getStepX() * 0.34D;
+        double baseY = pos.getY() + 0.5D + outward.getStepY() * 0.34D;
+        double baseZ = pos.getZ() + 0.5D + outward.getStepZ() * 0.34D;
+        double jitter = active ? 0.22D : 0.12D;
+        double x = baseX + perpendicularJitter(outward, Direction.Axis.X, random, jitter);
+        double y = baseY + perpendicularJitter(outward, Direction.Axis.Y, random, jitter);
+        double z = baseZ + perpendicularJitter(outward, Direction.Axis.Z, random, jitter);
+        double speed = active ? 0.035D : 0.015D;
+        double dx = outward.getStepX() * speed + random.triangle(0.0D, 0.01D);
+        double dy = outward.getStepY() * speed + random.triangle(0.0D, 0.01D);
+        double dz = outward.getStepZ() * speed + random.triangle(0.0D, 0.01D);
+        level.addParticle(ParticleTypes.ELECTRIC_SPARK, x, y, z, dx, dy, dz);
+    }
+
+    private static double perpendicularJitter(Direction outward, Direction.Axis axis, RandomSource random,
+            double scale) {
+        return outward.getAxis() == axis ? 0.0D : random.triangle(0.0D, scale);
     }
 
     @Override

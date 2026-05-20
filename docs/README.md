@@ -18,7 +18,7 @@ Registered or partially implemented feature families:
 - SU Energy Converter: `lv_sucon`, `mv_sucon`, `hv_sucon`
 - Electric Fluid Bridge: `lv_fluid_bridge`
 - Hydraulic Press: `lv_hydraulic_press`
-- Wireless EU transfer prototype: `lv_electrostatic_generator` and `lv_wireless_coil`
+- Wireless EU transfer prototype: `lv_electrostatic_generator` and `lv_wireless_coil`, including generator-side coil overlays, dynamic kinetic shaft rendering, coil display models, and electric spark particles
 - Heat Chamber: casing, glass, and controller blocks
 - Steam Engine Hatch: `lv`, `mv`, and `hv` hatch machine parts
 - Transmission parts: steel, aluminium, and stainless shafts/cogwheels, including powered variants and Greatech-owned Create-casing variants for shafts, small cogwheels, and large cogwheels

@@ -69,6 +69,8 @@ public final class GreatechPartialModels {
             block("gearshift/overdrive_cover_overlay");
     public static final PartialModel OVERDRIVE_COVER_ACTIVE_OVERLAY =
             block("gearshift/overdrive_cover_active_overlay");
+    public static final PartialModel ELECTROSTATIC_GENERATOR_COIL_CONTAINER_OVERLAY =
+            block("electrostatic_generator/coil_container_overlay");
 
     private GreatechPartialModels() {
     }

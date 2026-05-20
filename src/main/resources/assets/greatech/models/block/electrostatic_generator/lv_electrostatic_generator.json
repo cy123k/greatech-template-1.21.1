@@ -1,8 +1,8 @@
 {
-  "parent": "minecraft:block/orientable",
+  "parent": "greatech:block/electrostatic_generator/greatech_generator",
   "textures": {
-    "front": "greatech:block/greatech_machine/lv_machine/lv_powerout",
-    "side": "greatech:block/greatech_machine/lv_machine/lv_casing",
-    "top": "greatech:block/greatech_machine/lv_machine/lv_su_converter_panel_off"
+    "0": "greatech:block/greatech_machine/lv_machine/lv_casing",
+    "1": "greatech:block/greatech_machine/lv_machine/lv_gearshift_ki",
+    "particle": "greatech:block/greatech_machine/lv_machine/lv_casing"
   }
 }

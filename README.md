@@ -11,7 +11,7 @@ The current build focuses on:
 - a sectioned Greatech creative tab with full-row category headers for generators, transmission parts, multiblock structures, GTCEu hatches, machines, fluids, and items
 - GTCEu-flavored tiers, energy output, and industrial recipes
 - Greatech-owned machines such as the SU Energy Converter, Electrostatic Generator, Fluid Bridge, Heat Chamber, and Hydraulic Press
-- an LV wireless EU transfer prototype with adjacent LV Wireless Coils and one server-saved EU pool per dimension
+- an LV wireless EU transfer prototype with adjacent LV Wireless Coils, coil-side overlays, electric spark particles, and one server-saved EU pool per dimension
 - shared HUD/goggles display helpers with on-demand server sampling for transient machine and cable data
 - datagen-backed transmission and wireless-coil resources, including generated Create-casing wrapper models and tiered coil block/item models
 
