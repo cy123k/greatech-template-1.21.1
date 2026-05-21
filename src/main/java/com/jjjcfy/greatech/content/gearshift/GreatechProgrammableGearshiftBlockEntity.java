@@ -4,24 +4,25 @@
  */
 package com.jjjcfy.greatech.content.gearshift;
 
-import java.util.EnumMap;
 import java.util.Map;
 
+import com.jjjcfy.greatech.content.cover.GreatechCoverHandler;
+import com.jjjcfy.greatech.content.cover.GreatechCoverHost;
+import com.jjjcfy.greatech.content.cover.GreatechCoverState;
+import com.jjjcfy.greatech.content.cover.GreatechCoverType;
 import com.simibubi.create.content.kinetics.transmission.SplitShaftBlockEntity;
 import com.jjjcfy.greatech.registry.GreatechBlockEntityTypes;
 
-import net.createmod.catnip.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class GreatechProgrammableGearshiftBlockEntity extends SplitShaftBlockEntity {
-    private final EnumMap<Direction, GearshiftCoverState> covers = new EnumMap<>(Direction.class);
+public class GreatechProgrammableGearshiftBlockEntity extends SplitShaftBlockEntity implements GreatechCoverHost {
+    private final GreatechCoverHandler covers = new GreatechCoverHandler();
     private float activeModifier = 1.0F;
     private boolean redstoneActive;
 
@@ -41,29 +42,32 @@ public class GreatechProgrammableGearshiftBlockEntity extends SplitShaftBlockEnt
         return activeModifier;
     }
 
+    @Override
     public boolean canInstallCover(Direction face) {
         return getBlockState().getBlock() instanceof GreatechProgrammableGearshiftBlock block
                 && block.canInstallCover(getBlockState(), face)
-                && !covers.containsKey(face);
+                && !covers.hasCover(face);
     }
 
-    public boolean installCover(Direction face, GearshiftCoverType type) {
+    @Override
+    public boolean installCover(Direction face, GreatechCoverType type) {
         if (level == null || level.isClientSide || !canInstallCover(face)) {
             return false;
         }
 
-        covers.put(face, new GearshiftCoverState(type));
+        covers.installCover(face, type);
         refreshRedstoneInputs();
         notifyUpdate();
         return true;
     }
 
-    public GearshiftCoverState removeCover(Direction face) {
+    @Override
+    public GreatechCoverState removeCover(Direction face) {
         if (level == null || level.isClientSide) {
             return null;
         }
 
-        GearshiftCoverState removed = covers.remove(face);
+        GreatechCoverState removed = covers.removeCover(face);
         if (removed != null) {
             refreshRedstoneInputs();
             notifyUpdate();
@@ -71,12 +75,14 @@ public class GreatechProgrammableGearshiftBlockEntity extends SplitShaftBlockEnt
         return removed;
     }
 
-    public GearshiftCoverState getCover(Direction face) {
-        return covers.get(face);
+    @Override
+    public GreatechCoverState getCover(Direction face) {
+        return covers.getCover(face);
     }
 
-    public Map<Direction, GearshiftCoverState> covers() {
-        return java.util.Collections.unmodifiableMap(covers);
+    @Override
+    public Map<Direction, GreatechCoverState> covers() {
+        return covers.covers();
     }
 
     public float activeModifier() {
@@ -92,29 +98,13 @@ public class GreatechProgrammableGearshiftBlockEntity extends SplitShaftBlockEnt
             return;
         }
 
-        boolean anySignal = false;
-        boolean coverPoweredChanged = false;
-        for (Direction face : Direction.values()) {
-            GearshiftCoverState cover = covers.get(face);
-            if (cover == null) {
-                continue;
-            }
-            boolean wasPowered = cover.isPowered();
-            cover.setRedstonePower(readPowerFromFace(face));
-            coverPoweredChanged |= wasPowered != cover.isPowered();
-            anySignal |= cover.isPowered();
-        }
+        GreatechCoverHandler.RefreshResult result = covers.refreshRedstoneInputs(level, worldPosition);
 
-        if (redstoneActive != anySignal || coverPoweredChanged) {
-            redstoneActive = anySignal;
+        if (redstoneActive != result.anySignal() || result.coverPoweredChanged()) {
+            redstoneActive = result.anySignal();
             sendData();
         }
         updateModifier();
-    }
-
-    private int readPowerFromFace(Direction face) {
-        BlockPos neighborPos = worldPosition.relative(face);
-        return Math.max(level.getSignal(neighborPos, face), level.getDirectSignal(neighborPos, face));
     }
 
     private void updateModifier() {
@@ -137,7 +127,7 @@ public class GreatechProgrammableGearshiftBlockEntity extends SplitShaftBlockEnt
         boolean reverse = false;
         boolean overdrive = false;
 
-        for (GearshiftCoverState cover : covers.values()) {
+        for (GreatechCoverState cover : covers.covers().values()) {
             if (!cover.isPowered()) {
                 continue;
             }
@@ -161,13 +151,7 @@ public class GreatechProgrammableGearshiftBlockEntity extends SplitShaftBlockEnt
     protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
         compound.putFloat("ActiveModifier", activeModifier);
         compound.putBoolean("RedstoneActive", redstoneActive);
-        ListTag coverList = new ListTag();
-        for (Map.Entry<Direction, GearshiftCoverState> entry : covers.entrySet()) {
-            CompoundTag coverTag = entry.getValue().save(registries);
-            NBTHelper.writeEnum(coverTag, "Face", entry.getKey());
-            coverList.add(coverTag);
-        }
-        compound.put("Covers", coverList);
+        compound.put("Covers", covers.save(registries));
         super.write(compound, registries, clientPacket);
     }
 
@@ -175,13 +159,7 @@ public class GreatechProgrammableGearshiftBlockEntity extends SplitShaftBlockEnt
     protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
         activeModifier = compound.contains("ActiveModifier") ? compound.getFloat("ActiveModifier") : 1.0F;
         redstoneActive = compound.getBoolean("RedstoneActive");
-        covers.clear();
-        ListTag coverList = compound.getList("Covers", Tag.TAG_COMPOUND);
-        for (Tag tag : coverList) {
-            CompoundTag coverTag = (CompoundTag) tag;
-            Direction face = NBTHelper.readEnum(coverTag, "Face", Direction.class);
-            covers.put(face, GearshiftCoverState.load(coverTag, registries));
-        }
+        covers.load(compound.getList("Covers", Tag.TAG_COMPOUND), registries);
         super.read(compound, registries, clientPacket);
     }
 }

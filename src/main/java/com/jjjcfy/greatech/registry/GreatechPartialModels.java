@@ -77,6 +77,10 @@ public final class GreatechPartialModels {
             block("electrostatic_generator/eu_in_overlay");
     public static final PartialModel ELECTROSTATIC_GENERATOR_EU_OUT_OVERLAY =
             block("electrostatic_generator/eu_out_overlay");
+    public static final PartialModel STEAM_TURBINE_SIDE_OVERLAY =
+            block("steam_turbine/turbine_side_overlay");
+    public static final PartialModel STEAM_TURBINE_SIDE_ACTIVE_OVERLAY =
+            block("steam_turbine/turbine_side_active_overlay");
 
     private GreatechPartialModels() {
     }

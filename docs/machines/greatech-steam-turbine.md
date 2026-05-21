@@ -31,6 +31,25 @@ Current side roles:
 
 The fluid handler is input-only and accepts only GTCEu steam.
 
+## Covers
+
+The turbine can host Greatech redstone covers through the shared `content.cover` system.
+
+Cover placement is blocked on:
+
+- `front`: the Create shaft/SU output face
+- side overlay faces used by the turbine animation
+
+For a horizontal turbine, this leaves `back`, `top`, and `bottom` available for covers. Installed covers are saved on the block entity, update their redstone power from the covered face, drop as items when removed or when the block is broken, and render with the same cover overlays used by the programmable gearshift.
+
+Powered cover behavior:
+
+- `CLUTCH`: stops the turbine and prevents steam consumption
+- `REVERSE`: reverses generated RPM
+- `OVERDRIVE`: doubles generated RPM, steam consumption, and stress capacity
+
+Multiple powered covers do not stack by count. `CLUTCH` takes priority over the other effects.
+
 ## Runtime Behavior
 
 `SteamTurbineBlockEntity` extends Create's `GeneratingKineticBlockEntity`.
@@ -38,10 +57,11 @@ The fluid handler is input-only and accepts only GTCEu steam.
 Each server tick:
 
 1. update the internal steam tank capacity from config
-2. try to consume the tier's configured steam per tick
-3. if steam was consumed, output the tier's configured RPM and stress capacity
-4. if steam is missing, output `0 RPM`
-5. update the block's `ACTIVE` state for light/model state
+2. read powered cover effects
+3. try to consume the tier's configured steam per tick, doubled if overdrive is active
+4. if steam was consumed, output the tier's configured RPM and stress capacity, modified by active covers
+5. if steam is missing, output `0 RPM`
+6. update the block's `ACTIVE` state for light/model state
 
 Current default config values are ordered as `[LV, MV, HV]`:
 
@@ -74,6 +94,7 @@ The placed block model inherits the shared generator parent:
 - [greatech_generator.json](../../src/main/resources/assets/greatech/models/block/electrostatic_generator/greatech_generator.json)
 
 The block entity renderer adds a dynamic front half-shaft using `GreatechPartialModels.STEEL_SHAFT_HALF`.
+It also renders static/active turbine side overlays and any installed cover overlays.
 
 ## Current Limits
 

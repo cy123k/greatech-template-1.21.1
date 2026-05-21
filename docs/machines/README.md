@@ -17,3 +17,4 @@ Current machine and transmission docs:
 Use these when you want the behavior, rendering, resources, and limitations of one concrete machine or part.
 
 Current transmission notes include Greatech-owned Create-casing support for shafts, small cogwheels, and large cogwheels.
+Cover behavior shared by the programmable gearshift and steam turbine is documented in [Greatech Cover System](../systems/greatech-cover-system.md).

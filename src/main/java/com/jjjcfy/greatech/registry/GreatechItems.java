@@ -1,10 +1,10 @@
 package com.jjjcfy.greatech.registry;
 
 import com.jjjcfy.greatech.Greatech;
+import com.jjjcfy.greatech.content.cover.GreatechCoverItem;
+import com.jjjcfy.greatech.content.cover.GreatechCoverType;
 import com.jjjcfy.greatech.content.creative.GreatechCreativeTabMarkerItem;
 import com.jjjcfy.greatech.content.equipment.goggles.GreatechGogglesItem;
-import com.jjjcfy.greatech.content.gearshift.GearshiftCoverItem;
-import com.jjjcfy.greatech.content.gearshift.GearshiftCoverType;
 
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
@@ -18,9 +18,9 @@ public final class GreatechItems {
             () -> new GreatechGogglesItem(new Item.Properties().stacksTo(1)));
     public static final DeferredItem<Item> CREATIVE_TAB_MARKER = ITEMS.register("creative_tab_marker",
             () -> new GreatechCreativeTabMarkerItem(new Item.Properties()));
-    public static final DeferredItem<Item> REDSTONE_CLUTCH_COVER = registerCover(GearshiftCoverType.CLUTCH);
-    public static final DeferredItem<Item> REDSTONE_REVERSE_COVER = registerCover(GearshiftCoverType.REVERSE);
-    public static final DeferredItem<Item> REDSTONE_OVERDRIVE_COVER = registerCover(GearshiftCoverType.OVERDRIVE);
+    public static final DeferredItem<Item> REDSTONE_CLUTCH_COVER = registerCover(GreatechCoverType.CLUTCH);
+    public static final DeferredItem<Item> REDSTONE_REVERSE_COVER = registerCover(GreatechCoverType.REVERSE);
+    public static final DeferredItem<Item> REDSTONE_OVERDRIVE_COVER = registerCover(GreatechCoverType.OVERDRIVE);
 
     private GreatechItems() {
     }
@@ -29,7 +29,7 @@ public final class GreatechItems {
         ITEMS.register(modEventBus);
     }
 
-    public static DeferredItem<Item> coverItem(GearshiftCoverType type) {
+    public static DeferredItem<Item> coverItem(GreatechCoverType type) {
         return switch (type) {
             case CLUTCH -> REDSTONE_CLUTCH_COVER;
             case REVERSE -> REDSTONE_REVERSE_COVER;
@@ -37,7 +37,7 @@ public final class GreatechItems {
         };
     }
 
-    private static DeferredItem<Item> registerCover(GearshiftCoverType type) {
-        return ITEMS.register(type.itemId(), () -> new GearshiftCoverItem(type, new Item.Properties()));
+    private static DeferredItem<Item> registerCover(GreatechCoverType type) {
+        return ITEMS.register(type.itemId(), () -> new GreatechCoverItem(type, new Item.Properties()));
     }
 }

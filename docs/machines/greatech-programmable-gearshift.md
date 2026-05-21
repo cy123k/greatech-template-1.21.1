@@ -11,6 +11,8 @@ It is intended to combine the useful runtime roles of Create's `clutch`, `gearsh
 - installed covers decide the outgoing rotation modifier
 - the block keeps Greatech ownership for registration, rendering, item display, and future HUD support
 
+The cover item/state/rendering infrastructure is shared with other Greatech machines through the [Greatech Cover System](../systems/greatech-cover-system.md).
+
 Current registered block:
 
 - `greatech:programmable_gearshift`
@@ -28,9 +30,11 @@ Core classes:
 - [GreatechProgrammableGearshiftBlock.java](../../src/main/java/com/jjjcfy/greatech/content/gearshift/GreatechProgrammableGearshiftBlock.java)
 - [GreatechProgrammableGearshiftBlockEntity.java](../../src/main/java/com/jjjcfy/greatech/content/gearshift/GreatechProgrammableGearshiftBlockEntity.java)
 - [GreatechProgrammableGearshiftRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/gearshift/GreatechProgrammableGearshiftRenderer.java)
-- [GearshiftCoverType.java](../../src/main/java/com/jjjcfy/greatech/content/gearshift/GearshiftCoverType.java)
-- [GearshiftCoverState.java](../../src/main/java/com/jjjcfy/greatech/content/gearshift/GearshiftCoverState.java)
-- [GearshiftCoverItem.java](../../src/main/java/com/jjjcfy/greatech/content/gearshift/GearshiftCoverItem.java)
+- [GreatechCoverType.java](../../src/main/java/com/jjjcfy/greatech/content/cover/GreatechCoverType.java)
+- [GreatechCoverState.java](../../src/main/java/com/jjjcfy/greatech/content/cover/GreatechCoverState.java)
+- [GreatechCoverItem.java](../../src/main/java/com/jjjcfy/greatech/content/cover/GreatechCoverItem.java)
+- [GreatechCoverHandler.java](../../src/main/java/com/jjjcfy/greatech/content/cover/GreatechCoverHandler.java)
+- [GreatechCoverRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/cover/GreatechCoverRenderer.java)
 
 Registry hooks:
 
@@ -102,7 +106,7 @@ The machine-wide active overlay is rendered by the block entity renderer, not by
 
 The source model is authored with its shaft axis on north/south (`Z`). The blockstate keeps `axis=z` unrotated, rotates `axis=x` around Y, and rotates `axis=y` around X. The active overlay renderer follows the same source-axis convention.
 
-Installed covers have their own per-face overlay partials. Each cover type has a normal overlay that renders whenever the cover is installed and a full-bright active overlay that renders only while that cover face is powered:
+Installed covers have their own per-face overlay partials. Each cover type has a normal overlay that renders whenever the cover is installed and a full-bright active overlay that renders only while that cover face is powered. Rendering is delegated to the shared `GreatechCoverRenderer`:
 
 | Cover | Installed overlay | Active overlay |
 | --- | --- | --- |
@@ -125,8 +129,8 @@ The baked world model renders the casing and static panel geometry.
 The renderer contributes:
 
 - rotating steel shaft halves
-- per-face installed cover overlays for clutch, reverse, and overdrive covers
-- per-face full-bright active cover overlays when the matching installed cover face is powered
+- shared per-face installed cover overlays for clutch, reverse, and overdrive covers
+- shared per-face full-bright active cover overlays when the matching installed cover face is powered
 - the full-bright machine active overlay when any installed cover face is powered
 
 The item model is hand-authored at:

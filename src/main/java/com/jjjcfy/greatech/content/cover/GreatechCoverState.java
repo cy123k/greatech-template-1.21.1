@@ -1,18 +1,18 @@
-package com.jjjcfy.greatech.content.gearshift;
+package com.jjjcfy.greatech.content.cover;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 
-public final class GearshiftCoverState {
-    private final GearshiftCoverType type;
+public final class GreatechCoverState {
+    private final GreatechCoverType type;
     private int redstonePower;
     private boolean poweredPreviously;
 
-    public GearshiftCoverState(GearshiftCoverType type) {
+    public GreatechCoverState(GreatechCoverType type) {
         this.type = type;
     }
 
-    public GearshiftCoverType type() {
+    public GreatechCoverType type() {
         return type;
     }
 
@@ -41,8 +41,8 @@ public final class GearshiftCoverState {
         return tag;
     }
 
-    public static GearshiftCoverState load(CompoundTag tag, HolderLookup.Provider registries) {
-        GearshiftCoverState state = new GearshiftCoverState(GearshiftCoverType.byId(tag.getString("Type")));
+    public static GreatechCoverState load(CompoundTag tag, HolderLookup.Provider registries) {
+        GreatechCoverState state = new GreatechCoverState(GreatechCoverType.byId(tag.getString("Type")));
         state.redstonePower = tag.getInt("Power");
         state.poweredPreviously = tag.getBoolean("PrevPowered");
         return state;

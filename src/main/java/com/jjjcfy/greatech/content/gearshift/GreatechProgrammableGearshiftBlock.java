@@ -5,6 +5,8 @@
 package com.jjjcfy.greatech.content.gearshift;
 
 import com.jjjcfy.greatech.content.kinetics.failure.KineticBreakable;
+import com.jjjcfy.greatech.content.cover.GreatechCoverItem;
+import com.jjjcfy.greatech.content.cover.GreatechCoverState;
 import com.jjjcfy.greatech.registry.GreatechBlockEntityTypes;
 import com.jjjcfy.greatech.registry.GreatechItems;
 import com.simibubi.create.content.kinetics.RotationPropagator;
@@ -67,7 +69,7 @@ public class GreatechProgrammableGearshiftBlock extends AbstractEncasedShaftBloc
         if (level.getBlockEntity(pos) instanceof GreatechProgrammableGearshiftBlockEntity gearshift) {
             Direction face = hitResult.getDirection();
 
-            if (stack.getItem() instanceof GearshiftCoverItem coverItem) {
+            if (stack.getItem() instanceof GreatechCoverItem coverItem) {
                 if (!canInstallCover(state, face)) {
                     return ItemInteractionResult.FAIL;
                 }
@@ -81,7 +83,7 @@ public class GreatechProgrammableGearshiftBlock extends AbstractEncasedShaftBloc
             if (stack.isEmpty() && player.isShiftKeyDown() && canInstallCover(state, face)
                     && gearshift.getCover(face) != null) {
                 if (!level.isClientSide) {
-                    GearshiftCoverState removed = gearshift.removeCover(face);
+                    GreatechCoverState removed = gearshift.removeCover(face);
                     if (removed != null) {
                         popResource(level, pos, new ItemStack(GreatechItems.coverItem(removed.type()).get()));
                     }
@@ -116,7 +118,7 @@ public class GreatechProgrammableGearshiftBlock extends AbstractEncasedShaftBloc
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!level.isClientSide && state.getBlock() != newState.getBlock()
                 && level.getBlockEntity(pos) instanceof GreatechProgrammableGearshiftBlockEntity gearshift) {
-            for (GearshiftCoverState cover : gearshift.covers().values()) {
+            for (GreatechCoverState cover : gearshift.covers().values()) {
                 popResource(level, pos, new ItemStack(GreatechItems.coverItem(cover.type()).get()));
             }
         }

@@ -1,17 +1,17 @@
-package com.jjjcfy.greatech.content.gearshift;
+package com.jjjcfy.greatech.content.cover;
 
 import java.util.Locale;
 
 import net.minecraft.util.StringRepresentable;
 
-public enum GearshiftCoverType implements StringRepresentable {
+public enum GreatechCoverType implements StringRepresentable {
     CLUTCH("clutch"),
     REVERSE("reverse"),
     OVERDRIVE("overdrive");
 
     private final String id;
 
-    GearshiftCoverType(String id) {
+    GreatechCoverType(String id) {
         this.id = id;
     }
 
@@ -20,8 +20,8 @@ public enum GearshiftCoverType implements StringRepresentable {
         return id;
     }
 
-    public static GearshiftCoverType byId(String id) {
-        for (GearshiftCoverType type : values()) {
+    public static GreatechCoverType byId(String id) {
+        for (GreatechCoverType type : values()) {
             if (type.id.equals(id)) {
                 return type;
             }

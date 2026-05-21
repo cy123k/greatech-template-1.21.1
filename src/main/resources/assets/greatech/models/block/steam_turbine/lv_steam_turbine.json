@@ -3,7 +3,7 @@
   "textures": {
     "0": "greatech:block/greatech_machine/lv_machine/lv_casing",
     "1": "greatech:block/greatech_machine/lv_machine/lv_gearshift_ki",
-    "5": "greatech:block/greatech_machine/lv_machine/lv_powerout",
+    "5": "greatech:block/greatech_machine/lv_machine/lv_casing",
     "particle": "greatech:block/greatech_machine/lv_machine/lv_casing"
   }
 }

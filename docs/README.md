@@ -21,8 +21,9 @@ Registered or partially implemented feature families:
 - Wireless EU transfer prototype: `lv_electrostatic_generator` and `lv_wireless_coil`, including generator-side coil overlays, dynamic kinetic shaft rendering, coil display models, and electric spark particles
 - Heat Chamber: casing, glass, and controller blocks
 - Steam Engine Hatch: `lv`, `mv`, and `hv` hatch machine parts
+- Steam Turbine: `lv_steam_turbine`, a single-block GTCEu-steam-to-Create-SU generator with animated side overlays and Greatech redstone cover control
 - Transmission parts: steel, aluminium, and stainless shafts/cogwheels, including powered variants and Greatech-owned Create-casing variants for shafts, small cogwheels, and large cogwheels
-- Programmable Gearshift: `programmable_gearshift` plus redstone clutch, reverse, and overdrive covers with installed-face and active overlay rendering
+- Programmable Gearshift: `programmable_gearshift` plus shared redstone clutch, reverse, and overdrive covers with installed-face and active overlay rendering
 - Kinetic failure accidents for overloaded Greatech-monitored Create shafts, cogwheels, clutches, gearshifts, sequenced gearshifts, and belt connections
 - Sectioned Greatech creative tab UI with full-row category headers for generators, transmission parts, multiblock structures, GTCEu hatches, machines, fluids, and items
 - Greatech Goggles HUD providers for supported Greatech, Create, and GTCEu-adjacent blocks
@@ -44,6 +45,7 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 - [Greatech HUD System](systems/greatech-hud-system.md)
 - [Greatech Heat Chamber](systems/greatech-heat-chamber.md)
 - [Greatech Dimension EU Pool](systems/greatech-dimension-eu-pool.md)
+- [Greatech Cover System](systems/greatech-cover-system.md)
 - [Kinetic Failure](systems/greatech-kinetic-failure.md)
 - [Fluid Hazard](systems/greatech-fluid-hazard.md)
 - [Placement Helper](systems/greatech-placement-helper.md)
@@ -95,6 +97,8 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 - [Heat chamber code](../src/main/java/com/jjjcfy/greatech/content/heat)
 - [Hydraulic press code](../src/main/java/com/jjjcfy/greatech/content/hydraulic)
 - [Programmable gearshift code](../src/main/java/com/jjjcfy/greatech/content/gearshift)
+- [Shared cover code](../src/main/java/com/jjjcfy/greatech/content/cover)
+- [Steam turbine code](../src/main/java/com/jjjcfy/greatech/content/steam/turbine)
 - [HUD/goggles code](../src/main/java/com/jjjcfy/greatech/content/equipment/hud)
 - [Network payloads](../src/main/java/com/jjjcfy/greatech/network)
 - [JEI integration](../src/main/java/com/jjjcfy/greatech/integration/jei)

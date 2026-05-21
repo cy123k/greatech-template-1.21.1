@@ -6,11 +6,11 @@ The current build focuses on:
 
 - Create kinetic parts and machine interaction
 - Greatech-owned steel, aluminium, and stainless transmission families with Create-style encased shafts, small cogwheels, and large cogwheels
-- a cover-driven Programmable Gearshift with redstone-controlled clutch, reverse, and overdrive behavior plus per-face cover overlays
+- shared Greatech redstone covers with clutch, reverse, and overdrive behavior, currently used by the Programmable Gearshift and LV Steam Turbine
 - a Greatech kinetic failure system that can break overloaded Create shafts, cogwheels, clutches, gearshifts, sequenced gearshifts, and belt connections in Greatech-monitored networks
 - a sectioned Greatech creative tab with full-row category headers for generators, transmission parts, multiblock structures, GTCEu hatches, machines, fluids, and items
 - GTCEu-flavored tiers, energy output, and industrial recipes
-- Greatech-owned machines such as the SU Energy Converter, Electrostatic Generator, Fluid Bridge, Heat Chamber, and Hydraulic Press
+- Greatech-owned machines such as the SU Energy Converter, Electrostatic Generator, Fluid Bridge, Heat Chamber, Hydraulic Press, and LV Steam Turbine
 - an LV wireless EU transfer prototype with adjacent LV Wireless Coils, coil-side overlays, electric spark particles, and one server-saved EU pool per dimension
 - shared HUD/goggles display helpers with on-demand server sampling for transient machine and cable data
 - datagen-backed transmission and wireless-coil resources, including generated Create-casing wrapper models and tiered coil block/item models

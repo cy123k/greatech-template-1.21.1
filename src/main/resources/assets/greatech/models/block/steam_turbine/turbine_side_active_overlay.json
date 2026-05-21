@@ -1,0 +1,30 @@
+{
+  "parent": "block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "overlay": "greatech:block/greatech_overlay/general/turbine/overlay_turbine_active",
+    "particle": "greatech:block/greatech_overlay/general/turbine/overlay_turbine_active"
+  },
+  "elements": [
+    {
+      "from": [-0.1, 0, 0],
+      "to": [-0.1, 16, 16],
+      "faces": {
+        "west": {
+          "uv": [0, 0, 16, 16],
+          "texture": "#overlay"
+        }
+      }
+    },
+    {
+      "from": [16.1, 0, 0],
+      "to": [16.1, 16, 16],
+      "faces": {
+        "east": {
+          "uv": [0, 0, 16, 16],
+          "texture": "#overlay"
+        }
+      }
+    }
+  ]
+}
