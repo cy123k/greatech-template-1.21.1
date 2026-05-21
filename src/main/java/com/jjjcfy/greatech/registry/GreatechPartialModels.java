@@ -20,6 +20,8 @@ public final class GreatechPartialModels {
     public static final PartialModel HV_SUCON_CASING = block("su_energy_converter/hv_sucon_casing");
     public static final PartialModel HV_SUCON_OVERLAY = block("su_energy_converter/hv_sucon_overlay");
     public static final PartialModel HV_SUCON_ROTOR = block("su_energy_converter/hv_sucon_rotor");
+    public static final PartialModel SUCON_EU_OUT_OVERLAY =
+            block("su_energy_converter/greatech_su_converter_eu_out_overlay");
     public static final PartialModel STEEL_SHAFT = block("shaft/steel_shaft");
     public static final PartialModel ALUMINIUM_SHAFT = block("shaft/aluminium_shaft");
     public static final PartialModel STAINLESS_SHAFT = block("shaft/stainless_shaft");
@@ -71,6 +73,10 @@ public final class GreatechPartialModels {
             block("gearshift/overdrive_cover_active_overlay");
     public static final PartialModel ELECTROSTATIC_GENERATOR_COIL_CONTAINER_OVERLAY =
             block("electrostatic_generator/coil_container_overlay");
+    public static final PartialModel ELECTROSTATIC_GENERATOR_EU_IN_OVERLAY =
+            block("electrostatic_generator/eu_in_overlay");
+    public static final PartialModel ELECTROSTATIC_GENERATOR_EU_OUT_OVERLAY =
+            block("electrostatic_generator/eu_out_overlay");
 
     private GreatechPartialModels() {
     }

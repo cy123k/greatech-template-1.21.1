@@ -1,0 +1,10 @@
+{
+  "multipart": [
+    { "when": { "facing": "north" }, "apply": { "model": "greatech:block/steam_turbine/lv_steam_turbine" } },
+    { "when": { "facing": "south" }, "apply": { "model": "greatech:block/steam_turbine/lv_steam_turbine", "y": 180 } },
+    { "when": { "facing": "east" }, "apply": { "model": "greatech:block/steam_turbine/lv_steam_turbine", "y": 90 } },
+    { "when": { "facing": "west" }, "apply": { "model": "greatech:block/steam_turbine/lv_steam_turbine", "y": 270 } },
+    { "when": { "facing": "up" }, "apply": { "model": "greatech:block/steam_turbine/lv_steam_turbine", "x": 270 } },
+    { "when": { "facing": "down" }, "apply": { "model": "greatech:block/steam_turbine/lv_steam_turbine", "x": 90 } }
+  ]
+}

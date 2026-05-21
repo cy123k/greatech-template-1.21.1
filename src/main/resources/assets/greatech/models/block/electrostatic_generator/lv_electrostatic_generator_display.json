@@ -7,6 +7,8 @@
     "0": "greatech:block/greatech_machine/lv_machine/lv_casing",
     "1": "greatech:block/greatech_machine/lv_machine/lv_gearshift_ki",
     "2": "greatech:block/greatech_overlay/panel/greatech_generator/coil_cotainer",
+    "3": "greatech:block/greatech_overlay/general/energy_port/eu_out_overlay",
+    "5": "greatech:block/greatech_machine/lv_machine/lv_powerout",
     "particle": "greatech:block/greatech_machine/lv_machine/lv_casing"
   },
   "elements": [
@@ -68,7 +70,7 @@
       "to": [14, 14, 15.1],
       "rotation": {"angle": 0, "axis": "y", "origin": [2, 2, 0]},
       "faces": {
-        "north": {"uv": [2, 2, 14, 14], "texture": "#0"},
+        "north": {"uv": [2, 2, 14, 14], "texture": "#5"},
         "south": {"uv": [2, 2, 14, 14], "texture": "#1"}
       }
     },
@@ -102,6 +104,14 @@
       "to": [14, -0.01, 14],
       "faces": {
         "down": {"uv": [2, 2, 14, 14], "texture": "#2"}
+      }
+    },
+    {
+      "name": "energy_port_out_overlay",
+      "from": [2, 2, -0.01],
+      "to": [14, 14, -0.01],
+      "faces": {
+        "north": {"uv": [2, 2, 14, 14], "texture": "#3"}
       }
     }
   ],

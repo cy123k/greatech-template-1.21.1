@@ -50,6 +50,17 @@ public class SUEnergyConverterRenderer extends KineticBlockEntityRenderer<SUEner
 
         renderRotatingBuffer(blockEntity, rotor, poseStack, vertexConsumer, rotorLight);
 
+        var energyPortOverlay = CachedBuffers.partialFacing(
+                GreatechPartialModels.SUCON_EU_OUT_OVERLAY,
+                state,
+                modelFacing);
+        energyPortOverlay.light(GreatechLightSampler.sample(
+                blockEntity.getLevel(),
+                blockEntity.getBlockPos(),
+                SUEnergyConverterBlock.getEnergyOutputSide(state)));
+        energyPortOverlay.overlay(overlay);
+        energyPortOverlay.renderInto(poseStack, bufferSource.getBuffer(RenderType.cutout()));
+
         if (state.getValue(SUEnergyConverterBlock.ACTIVE)) {
             var panelOverlay = CachedBuffers.partialFacing(
                     getOverlayPartial(blockEntity),

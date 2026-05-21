@@ -43,5 +43,9 @@ public final class GreatechCapabilities {
                 Capabilities.FluidHandler.BLOCK,
                 GreatechBlockEntityTypes.HYDRAULIC_PRESS.get(),
                 (blockEntity, side) -> blockEntity.getFluidHandler(side));
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                GreatechBlockEntityTypes.STEAM_TURBINE.get(),
+                (blockEntity, side) -> blockEntity.getFluidHandler(side));
     }
 }

@@ -7,6 +7,7 @@
 		"1": "texture/mv_kioutput",
 		"2": "texture/mv_su_converter_panel_off",
 		"3": "texture/mv_powerout",
+		"4": "greatech:block/greatech_overlay/general/energy_port/eu_out_overlay",
 		"5": "texture/mv_rotor",
 		"particle": "texture/mv_casing"
 	},
@@ -158,6 +159,14 @@
 			"rotation": {"angle": 0, "axis": "y", "origin": [1, 1, 15]},
 			"faces": {
 				"south": {"uv": [1, 1, 15, 15], "texture": "#3"}
+			}
+		},
+		{
+			"name": "energy_port_out_overlay",
+			"from": [2, 2, 16.01],
+			"to": [14, 14, 16.01],
+			"faces": {
+				"south": {"uv": [2, 2, 14, 14], "texture": "#4"}
 			}
 		},
 		{

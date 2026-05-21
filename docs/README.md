@@ -55,6 +55,7 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 - [Electric Fluid Bridge](machines/greatech-fluidbridge.md)
 - [Hydraulic Press](machines/greatech-hydraulic-press.md)
 - [Electrostatic Generator](machines/greatech-electrostatic-generator.md)
+- [Steam Turbine](machines/greatech-steam-turbine.md)
 - [Steam Engine Hatch](machines/greatech-steam-engine-hatch.md)
 - [Programmable Gearshift](machines/greatech-programmable-gearshift.md)
 - [Shafts](machines/greatech-shaft.md)

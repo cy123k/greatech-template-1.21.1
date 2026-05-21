@@ -47,6 +47,7 @@ public class ElectrostaticGeneratorRenderer extends KineticBlockEntityRenderer<E
         shaftHalf.renderInto(poseStack, vertexConsumer);
 
         renderCoilContainerOverlays(blockEntity, poseStack, bufferSource, light, overlay);
+        renderEnergyPortOverlay(blockEntity, poseStack, bufferSource, light, overlay);
     }
 
     private static void renderCoilContainerOverlays(ElectrostaticGeneratorBlockEntity blockEntity,
@@ -65,6 +66,21 @@ public class ElectrostaticGeneratorRenderer extends KineticBlockEntityRenderer<E
                     .overlay(overlay)
                     .renderInto(poseStack, bufferSource.getBuffer(RenderType.cutout()));
         }
+    }
+
+    private static void renderEnergyPortOverlay(ElectrostaticGeneratorBlockEntity blockEntity,
+            PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
+        var state = blockEntity.getBlockState();
+        boolean charging = blockEntity.getSpeed() > 0;
+        SuperByteBuffer energyPortOverlay = CachedBuffers.partial(
+                charging
+                        ? GreatechPartialModels.ELECTROSTATIC_GENERATOR_EU_IN_OVERLAY
+                        : GreatechPartialModels.ELECTROSTATIC_GENERATOR_EU_OUT_OVERLAY,
+                state);
+        orientOverlayToFace(energyPortOverlay, ElectrostaticGeneratorBlock.getEnergySide(state));
+        energyPortOverlay.light(light)
+                .overlay(overlay)
+                .renderInto(poseStack, bufferSource.getBuffer(RenderType.cutout()));
     }
 
     private static void orientOverlayToFace(SuperByteBuffer overlay, Direction face) {

@@ -1,0 +1,20 @@
+{
+  "parent": "block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "overlay": "greatech:block/greatech_overlay/general/energy_port/eu_out_overlay",
+    "particle": "greatech:block/greatech_overlay/general/energy_port/eu_out_overlay"
+  },
+  "elements": [
+    {
+      "from": [2, 2, 16.1],
+      "to": [14, 14, 16.1],
+      "faces": {
+        "south": {
+          "uv": [2, 2, 14, 14],
+          "texture": "#overlay"
+        }
+      }
+    }
+  ]
+}
