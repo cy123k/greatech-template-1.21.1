@@ -1,5 +1,6 @@
 package com.jjjcfy.greatech.content.steam.turbine;
 
+import com.jjjcfy.greatech.client.render.GreatechPortOverlayRenderer;
 import com.jjjcfy.greatech.client.render.GreatechLightSampler;
 import com.jjjcfy.greatech.content.cover.GreatechCoverRenderer;
 import com.jjjcfy.greatech.registry.GreatechPartialModels;
@@ -26,7 +27,8 @@ public class SteamTurbineRenderer extends KineticBlockEntityRenderer<SteamTurbin
     @Override
     protected void renderSafe(SteamTurbineBlockEntity blockEntity, float partialTicks, PoseStack poseStack,
             MultiBufferSource bufferSource, int light, int overlay) {
-        Direction outputSide = SteamTurbineBlock.getShaftOutputSide(blockEntity.getBlockState());
+        var state = blockEntity.getBlockState();
+        Direction outputSide = SteamTurbineBlock.getShaftOutputSide(state);
         Axis axis = outputSide.getAxis();
         int shaftLight = blockEntity.getLevel() == null
                 ? light
@@ -48,6 +50,8 @@ public class SteamTurbineRenderer extends KineticBlockEntityRenderer<SteamTurbin
         shaftHalf.renderInto(poseStack, vertexConsumer);
 
         renderTurbineSideOverlay(blockEntity, poseStack, bufferSource, light, overlay);
+        GreatechPortOverlayRenderer.renderSuOutput(state, outputSide, state.getValue(SteamTurbineBlock.ACTIVE),
+                poseStack, bufferSource, light, overlay);
         GreatechCoverRenderer.renderInstalledCovers(blockEntity.covers(), blockEntity.getBlockState(), poseStack,
                 bufferSource, light);
     }

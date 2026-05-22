@@ -1,0 +1,20 @@
+{
+  "parent": "block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "overlay": "greatech:block/greatech_overlay/general/kinetic_port/su_input_active",
+    "particle": "greatech:block/greatech_overlay/general/kinetic_port/su_input_active"
+  },
+  "elements": [
+    {
+      "from": [2, 2, 0.85],
+      "to": [14, 14, 0.85],
+      "faces": {
+        "north": {
+          "uv": [2, 2, 14, 14],
+          "texture": "#overlay"
+        }
+      }
+    }
+  ]
+}

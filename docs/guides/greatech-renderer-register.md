@@ -30,6 +30,9 @@ for (var family : GreatechBlockEntityTypes.families()) {
 }
 event.registerBlockEntityRenderer(GreatechBlockEntityTypes.ELECTRIC_FLUID_BRIDGE.get(), ElectricFluidBridgeRenderer::new);
 event.registerBlockEntityRenderer(GreatechBlockEntityTypes.HYDRAULIC_PRESS.get(), HydraulicPressRenderer::new);
+event.registerBlockEntityRenderer(GreatechBlockEntityTypes.ELECTROSTATIC_GENERATOR.get(),
+        ElectrostaticGeneratorRenderer::new);
+event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEAM_TURBINE.get(), SteamTurbineRenderer::new);
 event.registerBlockEntityRenderer(GreatechBlockEntityTypes.HEAT_CHAMBER_CONTROLLER.get(), HeatChamberControllerRenderer::new);
 event.registerBlockEntityRenderer(GreatechBlockEntityTypes.PROGRAMMABLE_GEARSHIFT.get(),
         GreatechProgrammableGearshiftRenderer::new);
@@ -126,11 +129,31 @@ For `programmable_gearshift`, the world visual is split between baked casing/pan
 
 - static world model: `programmable_gearshift_block.json`, rendered by the blockstate
 - dynamic shaft partial: `GreatechPartialModels.STEEL_SHAFT_HALF`, rendered once for each shaft-axis side
-- machine active overlay: `GreatechPartialModels.PROGRAMMABLE_GEARSHIFT_ACTIVE_OVERLAY`, rendered full-bright when any installed cover face is powered
+- shared `SU` input/output port overlays: rendered full-bright on the shaft-axis faces through `GreatechPortOverlayRenderer` when any installed cover face is powered
 - cover overlays: one normal partial and one active partial per cover type, rendered on the installed non-axis face
 - item/display model: `models/item/programmable_gearshift.json`, pointing at a full wrapper with static shaft geometry
 
 Cover overlay source models are authored as north-facing sheets slightly outside the block cube. `GreatechProgrammableGearshiftRenderer` rotates those partials onto the installed face, so new cover visuals should follow the same north-source convention.
+
+## Shared Port Overlays
+
+Repeated `SU` and `EU` connector visuals should go through:
+
+- [GreatechPortOverlayRenderer.java](../../src/main/java/com/jjjcfy/greatech/client/render/GreatechPortOverlayRenderer.java)
+- [greatech-port-overlays.md](../systems/greatech-port-overlays.md)
+
+Current shared port partials live under:
+
+- `assets/greatech/models/block/port`
+
+Current convention:
+
+- source port models are authored on the north face
+- `GreatechPortOverlayRenderer` rotates the source sheet to the runtime face
+- `SU` active overlays are inset to match recessed kinetic port geometry and render full-bright
+- `EU` overlays sit on the energy face and use ordinary packed light
+
+Use these helpers instead of adding per-machine copies of the same `SU` or `EU` connector model.
 
 For a machine with static casing and one moving rotor:
 

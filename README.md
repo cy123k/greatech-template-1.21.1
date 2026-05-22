@@ -12,6 +12,7 @@ The current build focuses on:
 - GTCEu-flavored tiers, energy output, and industrial recipes
 - Greatech-owned machines such as the SU Energy Converter, Electrostatic Generator, Fluid Bridge, Heat Chamber, Hydraulic Press, and LV Steam Turbine
 - an LV wireless EU transfer prototype with adjacent LV Wireless Coils, coil-side overlays, electric spark particles, and one server-saved EU pool per dimension
+- shared client-rendered `SU` and `EU` port overlays for repeated kinetic and energy connector faces
 - shared HUD/goggles display helpers with on-demand server sampling for transient machine and cable data
 - datagen-backed transmission and wireless-coil resources, including generated Create-casing wrapper models and tiered coil block/item models
 

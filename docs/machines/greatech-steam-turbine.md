@@ -78,6 +78,7 @@ Core classes:
 - [SteamTurbineBlockEntity.java](../../src/main/java/com/jjjcfy/greatech/content/steam/turbine/SteamTurbineBlockEntity.java)
 - [SteamTurbineRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/steam/turbine/SteamTurbineRenderer.java)
 - [SteamTurbineTier.java](../../src/main/java/com/jjjcfy/greatech/content/steam/turbine/SteamTurbineTier.java)
+- [GreatechPortOverlayRenderer.java](../../src/main/java/com/jjjcfy/greatech/client/render/GreatechPortOverlayRenderer.java)
 
 Registry hooks:
 
@@ -94,7 +95,12 @@ The placed block model inherits the shared generator parent:
 - [greatech_generator.json](../../src/main/resources/assets/greatech/models/block/electrostatic_generator/greatech_generator.json)
 
 The block entity renderer adds a dynamic front half-shaft using `GreatechPartialModels.STEEL_SHAFT_HALF`.
-It also renders static/active turbine side overlays and any installed cover overlays.
+It also renders the shared full-bright `SU` output port overlay on the front face while the turbine is active, static/active turbine side overlays, and any installed cover overlays.
+
+Shared port overlay resources:
+
+- [su_output_active_overlay.json](../../src/main/resources/assets/greatech/models/block/port/su_output_active_overlay.json)
+- [greatech-port-overlays.md](../systems/greatech-port-overlays.md)
 
 ## Current Limits
 

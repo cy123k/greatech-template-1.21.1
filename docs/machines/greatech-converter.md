@@ -25,6 +25,7 @@ Core classes:
 - [SUEnergyConverterBlockEntity.java](../../src/main/java/com/jjjcfy/greatech/content/converter/SUEnergyConverterBlockEntity.java)
 - [SUEnergyConverterRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/converter/SUEnergyConverterRenderer.java)
 - [SUEnergyConverterTier.java](../../src/main/java/com/jjjcfy/greatech/content/converter/SUEnergyConverterTier.java)
+- [GreatechPortOverlayRenderer.java](../../src/main/java/com/jjjcfy/greatech/client/render/GreatechPortOverlayRenderer.java)
 
 Registry hooks:
 
@@ -44,6 +45,7 @@ Main docs that explain surrounding patterns:
 
 - [create-machine-tips.md](../guides/create-machine-tips.md)
 - [greatech-renderer-register.md](../guides/greatech-renderer-register.md)
+- [greatech-port-overlays.md](../systems/greatech-port-overlays.md)
 - [kinetic-failure.md](../systems/greatech-kinetic-failure.md)
 - [art-direction.md](../reference/art-direction.md)
 
@@ -155,6 +157,7 @@ The converter uses a split visual model:
 - empty world model in the blockstate
 - BER-rendered casing partial
 - BER-rendered rotating rotor partial
+- shared `EU` output port overlay rendered on the energy output face
 - active-state full-bright panel overlay partial rendered above the casing
 
 Renderer class:
@@ -168,6 +171,7 @@ Important current renderer details:
 - both casing and rotor are rendered through `CachedBuffers.partialFacing(...)`
 - the rotor partial is chosen from the block tier
 - the casing partial is chosen from the block tier
+- the `EU` output overlay is rendered through `GreatechPortOverlayRenderer.renderEuOutput(...)`
 - when `ACTIVE=true`, the renderer draws the tier overlay partial with `LightTexture.FULL_BRIGHT` and `RenderType.cutout()`
 - BER light is sampled with `GreatechLightSampler` from the shaft-input side rather than relying on the block's own packed light
 
@@ -204,12 +208,14 @@ Current blockstate files:
 Current block model folder:
 
 - [models/block/su_energy_converter](../../src/main/resources/assets/greatech/models/block/su_energy_converter)
+- [models/block/port](../../src/main/resources/assets/greatech/models/block/port)
 
 Current shared geometry files:
 
 - `greatech_su_converter_casing.json`
 - `greatech_su_converter_rotor.json`
 - `greatech_su_converter_panel_overlay.json`
+- shared `EU` output port model: `port/eu_output_overlay.json`
 
 Current tier wrappers:
 

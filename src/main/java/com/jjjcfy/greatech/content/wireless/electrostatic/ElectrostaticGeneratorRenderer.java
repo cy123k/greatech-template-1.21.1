@@ -1,5 +1,6 @@
 package com.jjjcfy.greatech.content.wireless.electrostatic;
 
+import com.jjjcfy.greatech.client.render.GreatechPortOverlayRenderer;
 import com.jjjcfy.greatech.client.render.GreatechLightSampler;
 import com.jjjcfy.greatech.registry.GreatechPartialModels;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -48,6 +49,9 @@ public class ElectrostaticGeneratorRenderer extends KineticBlockEntityRenderer<E
 
         renderCoilContainerOverlays(blockEntity, poseStack, bufferSource, light, overlay);
         renderEnergyPortOverlay(blockEntity, poseStack, bufferSource, light, overlay);
+        GreatechPortOverlayRenderer.renderSuInput(blockEntity.getBlockState(), shaftInputSide,
+                blockEntity.getSpeed() != 0, poseStack, bufferSource,
+                light, overlay);
     }
 
     private static void renderCoilContainerOverlays(ElectrostaticGeneratorBlockEntity blockEntity,
@@ -72,15 +76,12 @@ public class ElectrostaticGeneratorRenderer extends KineticBlockEntityRenderer<E
             PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
         var state = blockEntity.getBlockState();
         boolean charging = blockEntity.getSpeed() > 0;
-        SuperByteBuffer energyPortOverlay = CachedBuffers.partial(
-                charging
-                        ? GreatechPartialModels.ELECTROSTATIC_GENERATOR_EU_IN_OVERLAY
-                        : GreatechPartialModels.ELECTROSTATIC_GENERATOR_EU_OUT_OVERLAY,
-                state);
-        orientOverlayToFace(energyPortOverlay, ElectrostaticGeneratorBlock.getEnergySide(state));
-        energyPortOverlay.light(light)
-                .overlay(overlay)
-                .renderInto(poseStack, bufferSource.getBuffer(RenderType.cutout()));
+        Direction energySide = ElectrostaticGeneratorBlock.getEnergySide(state);
+        if (charging) {
+            GreatechPortOverlayRenderer.renderEuInput(state, energySide, poseStack, bufferSource, light, overlay);
+        } else {
+            GreatechPortOverlayRenderer.renderEuOutput(state, energySide, poseStack, bufferSource, light, overlay);
+        }
     }
 
     private static void orientOverlayToFace(SuperByteBuffer overlay, Direction face) {

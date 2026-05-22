@@ -1,5 +1,6 @@
 package com.jjjcfy.greatech.content.gearshift;
 
+import com.jjjcfy.greatech.client.render.GreatechPortOverlayRenderer;
 import com.jjjcfy.greatech.content.cover.GreatechCoverRenderer;
 import com.jjjcfy.greatech.registry.GreatechPartialModels;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -10,7 +11,6 @@ import net.createmod.catnip.data.Iterate;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
@@ -19,9 +19,6 @@ import net.minecraft.core.Direction.Axis;
 
 public class GreatechProgrammableGearshiftRenderer
         extends KineticBlockEntityRenderer<GreatechProgrammableGearshiftBlockEntity> {
-    private static final float HALF_PI = (float) Math.PI / 2.0F;
-    private static final float PI = (float) Math.PI;
-
     public GreatechProgrammableGearshiftRenderer(BlockEntityRendererProvider.Context context) {
         super(context);
     }
@@ -54,22 +51,18 @@ public class GreatechProgrammableGearshiftRenderer
         GreatechCoverRenderer.renderInstalledCovers(blockEntity.covers(), blockEntity.getBlockState(), poseStack,
                 bufferSource, light);
 
-        if (blockEntity.isRedstoneActive()) {
-            SuperByteBuffer activeOverlay = CachedBuffers.partial(
-                    GreatechPartialModels.PROGRAMMABLE_GEARSHIFT_ACTIVE_OVERLAY,
-                    blockEntity.getBlockState());
-            orientOverlayToAxis(activeOverlay, axis);
-            activeOverlay.light(LightTexture.FULL_BRIGHT)
-                    .renderInto(poseStack, bufferSource.getBuffer(RenderType.cutout()));
+        boolean active = blockEntity.isRedstoneActive();
+        for (Direction direction : Iterate.directions) {
+            if (direction.getAxis() != axis) {
+                continue;
+            }
+            if (direction.getAxisDirection() == Direction.AxisDirection.NEGATIVE) {
+                GreatechPortOverlayRenderer.renderSuInput(blockEntity.getBlockState(), direction, active, poseStack,
+                        bufferSource, light, overlay);
+            } else {
+                GreatechPortOverlayRenderer.renderSuOutput(blockEntity.getBlockState(), direction, active, poseStack,
+                        bufferSource, light, overlay);
+            }
         }
     }
-
-    private static void orientOverlayToAxis(SuperByteBuffer overlay, Axis axis) {
-        if (axis == Axis.X) {
-            overlay.rotateCentered(HALF_PI, Direction.UP);
-        } else if (axis == Axis.Y) {
-            overlay.rotateCentered(HALF_PI, Direction.EAST);
-        }
-    }
-
 }

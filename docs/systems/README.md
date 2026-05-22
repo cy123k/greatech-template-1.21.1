@@ -9,6 +9,7 @@ Current system docs:
 - [Greatech Heat Chamber](./greatech-heat-chamber.md)
 - [Greatech Dimension EU Pool](./greatech-dimension-eu-pool.md)
 - [Greatech Cover System](./greatech-cover-system.md)
+- [Greatech Port Overlays](./greatech-port-overlays.md)
 - [Kinetic Failure](./greatech-kinetic-failure.md)
 - [Greatech Fluid Hazard](./greatech-fluid-hazard.md)
 - [Greatech Placement Helper](./greatech-placement-helper.md)

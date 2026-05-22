@@ -1,5 +1,6 @@
 package com.jjjcfy.greatech.content.converter;
 
+import com.jjjcfy.greatech.client.render.GreatechPortOverlayRenderer;
 import com.jjjcfy.greatech.client.render.GreatechLightSampler;
 import com.jjjcfy.greatech.registry.GreatechPartialModels;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -50,16 +51,11 @@ public class SUEnergyConverterRenderer extends KineticBlockEntityRenderer<SUEner
 
         renderRotatingBuffer(blockEntity, rotor, poseStack, vertexConsumer, rotorLight);
 
-        var energyPortOverlay = CachedBuffers.partialFacing(
-                GreatechPartialModels.SUCON_EU_OUT_OVERLAY,
-                state,
-                modelFacing);
-        energyPortOverlay.light(GreatechLightSampler.sample(
+        GreatechPortOverlayRenderer.renderEuOutput(state, SUEnergyConverterBlock.getEnergyOutputSide(state),
+                poseStack, bufferSource, GreatechLightSampler.sample(
                 blockEntity.getLevel(),
                 blockEntity.getBlockPos(),
-                SUEnergyConverterBlock.getEnergyOutputSide(state)));
-        energyPortOverlay.overlay(overlay);
-        energyPortOverlay.renderInto(poseStack, bufferSource.getBuffer(RenderType.cutout()));
+                SUEnergyConverterBlock.getEnergyOutputSide(state)), overlay);
 
         if (state.getValue(SUEnergyConverterBlock.ACTIVE)) {
             var panelOverlay = CachedBuffers.partialFacing(

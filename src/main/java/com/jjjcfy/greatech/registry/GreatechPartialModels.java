@@ -20,8 +20,6 @@ public final class GreatechPartialModels {
     public static final PartialModel HV_SUCON_CASING = block("su_energy_converter/hv_sucon_casing");
     public static final PartialModel HV_SUCON_OVERLAY = block("su_energy_converter/hv_sucon_overlay");
     public static final PartialModel HV_SUCON_ROTOR = block("su_energy_converter/hv_sucon_rotor");
-    public static final PartialModel SUCON_EU_OUT_OVERLAY =
-            block("su_energy_converter/greatech_su_converter_eu_out_overlay");
     public static final PartialModel STEEL_SHAFT = block("shaft/steel_shaft");
     public static final PartialModel ALUMINIUM_SHAFT = block("shaft/aluminium_shaft");
     public static final PartialModel STAINLESS_SHAFT = block("shaft/stainless_shaft");
@@ -57,6 +55,14 @@ public final class GreatechPartialModels {
             block("heat_chamber/heat_chamber_controller_active_overlay");
     public static final PartialModel LV_HYDRAULIC_PRESS_HEAD =
             block("hydraulic_press/lv_hydraulic_press_head");
+    public static final PartialModel SU_INPUT_PORT_ACTIVE_OVERLAY =
+            block("port/su_input_active_overlay");
+    public static final PartialModel SU_OUTPUT_PORT_ACTIVE_OVERLAY =
+            block("port/su_output_active_overlay");
+    public static final PartialModel EU_INPUT_PORT_OVERLAY =
+            block("port/eu_input_overlay");
+    public static final PartialModel EU_OUTPUT_PORT_OVERLAY =
+            block("port/eu_output_overlay");
     public static final PartialModel PROGRAMMABLE_GEARSHIFT_ACTIVE_OVERLAY =
             block("gearshift/programmable_gearshift_active_overlay");
     public static final PartialModel CLUTCH_COVER_OVERLAY =
@@ -73,10 +79,6 @@ public final class GreatechPartialModels {
             block("gearshift/overdrive_cover_active_overlay");
     public static final PartialModel ELECTROSTATIC_GENERATOR_COIL_CONTAINER_OVERLAY =
             block("electrostatic_generator/coil_container_overlay");
-    public static final PartialModel ELECTROSTATIC_GENERATOR_EU_IN_OVERLAY =
-            block("electrostatic_generator/eu_in_overlay");
-    public static final PartialModel ELECTROSTATIC_GENERATOR_EU_OUT_OVERLAY =
-            block("electrostatic_generator/eu_out_overlay");
     public static final PartialModel STEAM_TURBINE_SIDE_OVERLAY =
             block("steam_turbine/turbine_side_overlay");
     public static final PartialModel STEAM_TURBINE_SIDE_ACTIVE_OVERLAY =

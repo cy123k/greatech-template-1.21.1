@@ -18,10 +18,10 @@ Registered or partially implemented feature families:
 - SU Energy Converter: `lv_sucon`, `mv_sucon`, `hv_sucon`
 - Electric Fluid Bridge: `lv_fluid_bridge`
 - Hydraulic Press: `lv_hydraulic_press`
-- Wireless EU transfer prototype: `lv_electrostatic_generator` and `lv_wireless_coil`, including generator-side coil overlays, dynamic kinetic shaft rendering, coil display models, and electric spark particles
+- Wireless EU transfer prototype: `lv_electrostatic_generator` and `lv_wireless_coil`, including generator-side coil overlays, shared `SU`/`EU` port overlays, dynamic kinetic shaft rendering, coil display models, and electric spark particles
 - Heat Chamber: casing, glass, and controller blocks
 - Steam Engine Hatch: `lv`, `mv`, and `hv` hatch machine parts
-- Steam Turbine: `lv_steam_turbine`, a single-block GTCEu-steam-to-Create-SU generator with animated side overlays and Greatech redstone cover control
+- Steam Turbine: `lv_steam_turbine`, a single-block GTCEu-steam-to-Create-SU generator with animated side overlays, shared `SU` output port overlay, and Greatech redstone cover control
 - Transmission parts: steel, aluminium, and stainless shafts/cogwheels, including powered variants and Greatech-owned Create-casing variants for shafts, small cogwheels, and large cogwheels
 - Programmable Gearshift: `programmable_gearshift` plus shared redstone clutch, reverse, and overdrive covers with installed-face and active overlay rendering
 - Kinetic failure accidents for overloaded Greatech-monitored Create shafts, cogwheels, clutches, gearshifts, sequenced gearshifts, and belt connections
@@ -46,6 +46,7 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 - [Greatech Heat Chamber](systems/greatech-heat-chamber.md)
 - [Greatech Dimension EU Pool](systems/greatech-dimension-eu-pool.md)
 - [Greatech Cover System](systems/greatech-cover-system.md)
+- [Greatech Port Overlays](systems/greatech-port-overlays.md)
 - [Kinetic Failure](systems/greatech-kinetic-failure.md)
 - [Fluid Hazard](systems/greatech-fluid-hazard.md)
 - [Placement Helper](systems/greatech-placement-helper.md)
@@ -98,6 +99,7 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 - [Hydraulic press code](../src/main/java/com/jjjcfy/greatech/content/hydraulic)
 - [Programmable gearshift code](../src/main/java/com/jjjcfy/greatech/content/gearshift)
 - [Shared cover code](../src/main/java/com/jjjcfy/greatech/content/cover)
+- [Shared client render helpers](../src/main/java/com/jjjcfy/greatech/client/render)
 - [Steam turbine code](../src/main/java/com/jjjcfy/greatech/content/steam/turbine)
 - [HUD/goggles code](../src/main/java/com/jjjcfy/greatech/content/equipment/hud)
 - [Network payloads](../src/main/java/com/jjjcfy/greatech/network)
@@ -109,6 +111,7 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 
 - [Hand-authored blockstates](../src/main/resources/assets/greatech/blockstates)
 - [Hand-authored block models](../src/main/resources/assets/greatech/models/block)
+- [Shared port models](../src/main/resources/assets/greatech/models/block/port)
 - [Hand-authored item models](../src/main/resources/assets/greatech/models/item)
 - [Textures](../src/main/resources/assets/greatech/textures/block)
 - [Hydraulic pressing recipes](../src/main/resources/data/greatech/recipe/hydraulic_pressing)
