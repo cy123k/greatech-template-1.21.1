@@ -36,6 +36,12 @@ Fluid bridge HUD payloads:
 - [FluidBridgeHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/fluid/FluidBridgeHudDataPayload.java)
 - [GreatechFluidBridgeHudCache.java](../../src/main/java/com/jjjcfy/greatech/network/fluid/GreatechFluidBridgeHudCache.java)
 
+Internal machine fluid HUD payloads:
+
+- [RequestInternalFluidHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/fluid/RequestInternalFluidHudDataPayload.java)
+- [InternalFluidHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/fluid/InternalFluidHudDataPayload.java)
+- [GreatechInternalFluidHudCache.java](../../src/main/java/com/jjjcfy/greatech/network/fluid/GreatechInternalFluidHudCache.java)
+
 Hydraulic press HUD payloads:
 
 - [RequestHydraulicPressHudDataPayload.java](../../src/main/java/com/jjjcfy/greatech/network/hydraulic/RequestHydraulicPressHudDataPayload.java)
@@ -94,7 +100,7 @@ See [gtceu-cable-observation.md](../reference/gtceu-cable-observation.md) for th
 
 ## Fluid Sync
 
-Fluid HUD currently has two branches.
+Fluid HUD currently has three branches.
 
 `RequestFluidHudDataPayload` covers:
 
@@ -116,6 +122,15 @@ The split exists because the bridge needs extra machine-local values such as:
 
 Regular pipe observation only needs fluid contents and derived fluid traits.
 
+`RequestInternalFluidHudDataPayload` covers Greatech-owned machine tanks exposed through `GreatechFluidHudInspectable`, currently including:
+
+- steam turbine internal steam
+- gas turbine internal fuel
+- steam engine hatch internal steam
+- hydraulic press internal hydraulic fluid
+
+The response sends a list of labeled observed tanks. This keeps machine-specific HUD payloads from each inventing their own fluid fields.
+
 ## Machine Telemetry Sync
 
 Some Greatech machines expose values that are server-authoritative and can change every tick.
@@ -124,8 +139,9 @@ Some Greatech machines expose values that are server-authoritative and can chang
 
 - `Greatech` hydraulic press mold state
 - effective heat chamber tier and temperature
-- hydraulic fluid contents
 - press RPM
+
+The hydraulic press fluid line is intentionally rendered from `RequestInternalFluidHudDataPayload` instead, so its visible tank display follows the same path as turbines and steam engine hatches. The older hydraulic press payload still carries a fluid list for now, but the provider no longer uses it for the HUD line.
 
 `RequestSUEnergyConverterHudDataPayload` covers:
 
@@ -156,6 +172,7 @@ Current server handlers reject requests when:
 - the target position is not loaded
 - the player is too far away
 - the target block entity type does not match the payload contract
+- the internal-fluid request cannot find either a block entity or GTCEu `MetaMachine` implementing `GreatechFluidHudInspectable`
 
 This keeps the HUD request path narrow and avoids using it as a generic remote inspection API.
 

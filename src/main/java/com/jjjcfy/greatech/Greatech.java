@@ -58,6 +58,7 @@ public class Greatech {
                 tab.accept(GreatechBlocks.SU_ENERGY_CONVERTER_ITEMS);
                 tab.accept(GreatechBlocks.ELECTROSTATIC_GENERATOR_ITEMS);
                 tab.accept(GreatechBlocks.STEAM_TURBINE_ITEMS);
+                tab.accept(GreatechBlocks.GAS_TURBINE_ITEMS);
                 tab.accept(GreatechBlocks.WIRELESS_COIL_ITEMS);
 
                 tab.section(CreativeSection.TRANSMISSION);
@@ -127,6 +128,7 @@ public class Greatech {
             acceptRegistered(event, GreatechBlocks.SU_ENERGY_CONVERTER_ITEMS);
             acceptRegistered(event, GreatechBlocks.ELECTROSTATIC_GENERATOR_ITEMS);
             acceptRegistered(event, GreatechBlocks.STEAM_TURBINE_ITEMS);
+            acceptRegistered(event, GreatechBlocks.GAS_TURBINE_ITEMS);
             acceptRegistered(event, GreatechBlocks.WIRELESS_COIL_ITEMS);
             acceptRegistered(event, GreatechBlocks.ELECTRIC_FLUID_BRIDGE_ITEMS);
             acceptRegistered(event, GreatechBlocks.HYDRAULIC_PRESS_ITEMS);

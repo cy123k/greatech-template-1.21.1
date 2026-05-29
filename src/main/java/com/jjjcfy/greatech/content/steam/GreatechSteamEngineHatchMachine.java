@@ -5,6 +5,8 @@
 package com.jjjcfy.greatech.content.steam;
 
 import com.jjjcfy.greatech.Config;
+import com.jjjcfy.greatech.content.equipment.hud.GreatechFluidHudInspectable;
+import com.jjjcfy.greatech.content.equipment.hud.content.GreatechObservedTank;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.IControllable;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
@@ -24,7 +26,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 
-public class GreatechSteamEngineHatchMachine extends MultiblockPartMachine implements IControllable {
+public class GreatechSteamEngineHatchMachine extends MultiblockPartMachine
+        implements IControllable, GreatechFluidHudInspectable {
     public static final int STEAM_TANK_CAPACITY = 8 * FluidType.BUCKET_VOLUME;
 
     private final SteamEngineHatchTier tier;
@@ -87,5 +90,14 @@ public class GreatechSteamEngineHatchMachine extends MultiblockPartMachine imple
 
     public int getSteamPerTick() {
         return Config.steamEngineHatchSteamPerTick(tier);
+    }
+
+    @Override
+    public java.util.List<GreatechObservedTank> getObservedTanks() {
+        return java.util.List.of(GreatechObservedTank.of(
+                "greatech.goggles.steam",
+                steamTank.getFluidInTank(0).copy(),
+                steamTank.getTankCapacity(0),
+                false));
     }
 }

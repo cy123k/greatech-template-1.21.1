@@ -63,6 +63,7 @@ The model paths still live under `models/block/gearshift` because these visuals 
 
 - [Programmable Gearshift](../machines/greatech-programmable-gearshift.md)
 - [Steam Turbine](../machines/greatech-steam-turbine.md)
+- [Gas Turbine](../machines/greatech-gas-turbine.md)
 
 ## Host-Specific Meaning
 
@@ -77,5 +78,11 @@ Steam Turbine:
 - `CLUTCH`: stops the turbine and prevents steam consumption
 - `REVERSE`: reverses generated RPM
 - `OVERDRIVE`: doubles generated RPM, steam consumption, and stress capacity
+
+Gas Turbine:
+
+- `CLUTCH`: stops the turbine and prevents fuel consumption
+- `REVERSE`: reverses generated RPM
+- `OVERDRIVE`: doubles generated RPM, fuel consumption, and stress capacity
 
 Multiple powered covers of the same type do not stack. `CLUTCH` takes priority where a host supports it.

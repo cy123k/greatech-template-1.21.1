@@ -7,6 +7,7 @@ import com.jjjcfy.greatech.content.cogwheel.GreatechCogwheelRenderer;
 import com.jjjcfy.greatech.content.converter.SUEnergyConverterRenderer;
 import com.jjjcfy.greatech.content.equipment.hud.GreatechGoggleOverlayRenderer;
 import com.jjjcfy.greatech.content.fluid.ElectricFluidBridgeRenderer;
+import com.jjjcfy.greatech.content.gas.turbine.GasTurbineRenderer;
 import com.jjjcfy.greatech.content.gearshift.GreatechProgrammableGearshiftRenderer;
 import com.jjjcfy.greatech.content.heat.HeatChamberControllerRenderer;
 import com.jjjcfy.greatech.content.hydraulic.HydraulicPressRenderer;
@@ -70,6 +71,7 @@ public class GreatechClient {
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.ELECTROSTATIC_GENERATOR.get(),
                 ElectrostaticGeneratorRenderer::new);
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.STEAM_TURBINE.get(), SteamTurbineRenderer::new);
+        event.registerBlockEntityRenderer(GreatechBlockEntityTypes.GAS_TURBINE.get(), GasTurbineRenderer::new);
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.HEAT_CHAMBER_CONTROLLER.get(), HeatChamberControllerRenderer::new);
         event.registerBlockEntityRenderer(GreatechBlockEntityTypes.PROGRAMMABLE_GEARSHIFT.get(),
                 GreatechProgrammableGearshiftRenderer::new);

@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import com.jjjcfy.greatech.content.converter.SUEnergyConverterTier;
 import com.jjjcfy.greatech.content.fluid.ElectricFluidBridgeTier;
+import com.jjjcfy.greatech.content.gas.turbine.GasTurbineTier;
 import com.jjjcfy.greatech.content.hydraulic.HydraulicPressTier;
 import com.jjjcfy.greatech.content.steam.SteamEngineHatchTier;
 import com.jjjcfy.greatech.content.steam.turbine.SteamTurbineTier;
@@ -54,6 +55,10 @@ public final class Config {
     private static final int[] DEFAULT_STEAM_TURBINE_RPM = {32, 32, 32};
     private static final double[] DEFAULT_STEAM_TURBINE_STRESS_CAPACITY = {16.0D, 64.0D, 256.0D};
     private static final int[] DEFAULT_STEAM_TURBINE_STEAM_PER_TICK = {40, 60, 80};
+    private static final int[] DEFAULT_GAS_TURBINE_TANK_CAPACITY = {8_000, 32_000, 128_000};
+    private static final int[] DEFAULT_GAS_TURBINE_RPM = {32, 32, 32};
+    private static final double[] DEFAULT_GAS_TURBINE_STRESS_CAPACITY = {16.0D, 64.0D, 256.0D};
+    private static final int[] DEFAULT_GAS_TURBINE_EQUIVALENT_EU_PER_TICK = {32, 128, 512};
     private static final int[] DEFAULT_HYDRAULIC_PRESS_TANK_CAPACITY = {4_000, 8_000, 16_000, 32_000, 64_000};
     private static final int[] DEFAULT_HYDRAULIC_PRESS_MAX_ITEMS_PER_CYCLE = {2, 4, 8, 16, 32};
     private static final int[] DEFAULT_HYDRAULIC_PRESS_FLUID_CONSUMPTION = {100, 75, 50, 25, 10};
@@ -307,6 +312,23 @@ public final class Config {
             .comment("Steam consumed each tick by single-block steam turbines, in mB/t.", TIER_ORDER)
             .defineList("steamTurbineSteamPerTick", List.of(40, 60, 80), Config::isNonNegativeInteger);
 
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> GAS_TURBINE_TANK_CAPACITY = BUILDER
+            .comment("Internal gas tank capacities in mB for single-block gas turbines.", TIER_ORDER)
+            .defineList("gasTurbineTankCapacity", List.of(8_000, 32_000, 128_000), Config::isPositiveInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> GAS_TURBINE_RPM = BUILDER
+            .comment("Generated shaft RPM for single-block gas turbines.", TIER_ORDER)
+            .defineList("gasTurbineRpm", List.of(32, 32, 32), Config::isNonNegativeInteger);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Double>> GAS_TURBINE_STRESS_CAPACITY = BUILDER
+            .comment("Generated Create stress capacity for single-block gas turbines.", TIER_ORDER)
+            .defineList("gasTurbineStressCapacity", List.of(16.0D, 64.0D, 256.0D), Config::isNonNegativeDouble);
+
+    private static final ModConfigSpec.ConfigValue<List<? extends Integer>> GAS_TURBINE_EQUIVALENT_EU_PER_TICK = BUILDER
+            .comment("GTCEu-equivalent fuel power consumed by single-block gas turbines.", TIER_ORDER,
+                    "Fuel recipes with higher total EU per mB burn less fluid per tick for the same Create output.")
+            .defineList("gasTurbineEquivalentEuPerTick", List.of(32, 128, 512), Config::isPositiveInteger);
+
     private static final ModConfigSpec.ConfigValue<List<? extends Integer>> HYDRAULIC_PRESS_TANK_CAPACITY = BUILDER
             .comment("Internal fluid tank capacities in mB for hydraulic presses.", FIVE_TIER_ORDER)
             .defineList("hydraulicPressTankCapacity", List.of(4_000, 8_000, 16_000, 32_000, 64_000),
@@ -365,6 +387,10 @@ public final class Config {
     private static int[] steamTurbineRpm = DEFAULT_STEAM_TURBINE_RPM.clone();
     private static double[] steamTurbineStressCapacity = DEFAULT_STEAM_TURBINE_STRESS_CAPACITY.clone();
     private static int[] steamTurbineSteamPerTick = DEFAULT_STEAM_TURBINE_STEAM_PER_TICK.clone();
+    private static int[] gasTurbineTankCapacity = DEFAULT_GAS_TURBINE_TANK_CAPACITY.clone();
+    private static int[] gasTurbineRpm = DEFAULT_GAS_TURBINE_RPM.clone();
+    private static double[] gasTurbineStressCapacity = DEFAULT_GAS_TURBINE_STRESS_CAPACITY.clone();
+    private static int[] gasTurbineEquivalentEuPerTick = DEFAULT_GAS_TURBINE_EQUIVALENT_EU_PER_TICK.clone();
     private static int[] hydraulicPressTankCapacity = DEFAULT_HYDRAULIC_PRESS_TANK_CAPACITY.clone();
     private static int[] hydraulicPressMaxItemsPerCycle = DEFAULT_HYDRAULIC_PRESS_MAX_ITEMS_PER_CYCLE.clone();
     private static int[] hydraulicPressFluidConsumption = DEFAULT_HYDRAULIC_PRESS_FLUID_CONSUMPTION.clone();
@@ -438,6 +464,13 @@ public final class Config {
                 DEFAULT_STEAM_TURBINE_STRESS_CAPACITY);
         steamTurbineSteamPerTick = readIntTierValues(STEAM_TURBINE_STEAM_PER_TICK.get(),
                 DEFAULT_STEAM_TURBINE_STEAM_PER_TICK);
+        gasTurbineTankCapacity = readIntTierValues(GAS_TURBINE_TANK_CAPACITY.get(),
+                DEFAULT_GAS_TURBINE_TANK_CAPACITY);
+        gasTurbineRpm = readIntTierValues(GAS_TURBINE_RPM.get(), DEFAULT_GAS_TURBINE_RPM);
+        gasTurbineStressCapacity = readDoubleTierValues(GAS_TURBINE_STRESS_CAPACITY.get(),
+                DEFAULT_GAS_TURBINE_STRESS_CAPACITY);
+        gasTurbineEquivalentEuPerTick = readIntTierValues(GAS_TURBINE_EQUIVALENT_EU_PER_TICK.get(),
+                DEFAULT_GAS_TURBINE_EQUIVALENT_EU_PER_TICK);
         hydraulicPressTankCapacity = readIntTierValues(HYDRAULIC_PRESS_TANK_CAPACITY.get(),
                 DEFAULT_HYDRAULIC_PRESS_TANK_CAPACITY);
         hydraulicPressMaxItemsPerCycle = readIntTierValues(HYDRAULIC_PRESS_MAX_ITEMS_PER_CYCLE.get(),
@@ -589,6 +622,22 @@ public final class Config {
 
     public static int steamTurbineSteamPerTick(SteamTurbineTier tier) {
         return steamTurbineSteamPerTick[tier.configIndex()];
+    }
+
+    public static int gasTurbineTankCapacity(GasTurbineTier tier) {
+        return gasTurbineTankCapacity[tier.configIndex()];
+    }
+
+    public static int gasTurbineRpm(GasTurbineTier tier) {
+        return gasTurbineRpm[tier.configIndex()];
+    }
+
+    public static float gasTurbineStressCapacity(GasTurbineTier tier) {
+        return (float) gasTurbineStressCapacity[tier.configIndex()];
+    }
+
+    public static int gasTurbineEquivalentEuPerTick(GasTurbineTier tier) {
+        return gasTurbineEquivalentEuPerTick[tier.configIndex()];
     }
 
     public static int hydraulicPressTankCapacity(HydraulicPressTier tier) {

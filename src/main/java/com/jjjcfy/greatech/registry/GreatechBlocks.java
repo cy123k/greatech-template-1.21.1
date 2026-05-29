@@ -8,6 +8,8 @@ import com.jjjcfy.greatech.content.converter.SUEnergyConverterBlock;
 import com.jjjcfy.greatech.content.converter.SUEnergyConverterTier;
 import com.jjjcfy.greatech.content.fluid.ElectricFluidBridgeBlock;
 import com.jjjcfy.greatech.content.fluid.ElectricFluidBridgeTier;
+import com.jjjcfy.greatech.content.gas.turbine.GasTurbineBlock;
+import com.jjjcfy.greatech.content.gas.turbine.GasTurbineTier;
 import com.jjjcfy.greatech.content.gearshift.GreatechProgrammableGearshiftBlock;
 import com.jjjcfy.greatech.content.heat.HeatChamberCasingBlock;
 import com.jjjcfy.greatech.content.heat.HeatChamberControllerBlock;
@@ -56,6 +58,9 @@ public final class GreatechBlocks {
     private static final SteamTurbineTier[] REGISTERED_STEAM_TURBINE_TIERS = {
             SteamTurbineTier.LV
     };
+    private static final GasTurbineTier[] REGISTERED_GAS_TURBINE_TIERS = {
+            GasTurbineTier.LV
+    };
     private static final WirelessCoilTier[] REGISTERED_WIRELESS_COIL_TIERS = {
             WirelessCoilTier.LV
     };
@@ -65,6 +70,7 @@ public final class GreatechBlocks {
     public static final DeferredBlock<Block>[] HYDRAULIC_PRESSES = registerHydraulicPresses();
     public static final DeferredBlock<Block>[] ELECTROSTATIC_GENERATORS = registerElectrostaticGenerators();
     public static final DeferredBlock<Block>[] STEAM_TURBINES = registerSteamTurbines();
+    public static final DeferredBlock<Block>[] GAS_TURBINES = registerGasTurbines();
     public static final DeferredBlock<Block>[] WIRELESS_COILS = registerWirelessCoils();
     public static final DeferredBlock<Block> LV_SUCON = suEnergyConverter(SUEnergyConverterTier.LV);
     public static final DeferredBlock<Block> MV_SUCON = suEnergyConverter(SUEnergyConverterTier.MV);
@@ -74,6 +80,7 @@ public final class GreatechBlocks {
     public static final DeferredBlock<Block> LV_ELECTROSTATIC_GENERATOR =
             electrostaticGenerator(ElectrostaticGeneratorTier.LV);
     public static final DeferredBlock<Block> LV_STEAM_TURBINE = steamTurbine(SteamTurbineTier.LV);
+    public static final DeferredBlock<Block> LV_GAS_TURBINE = gasTurbine(GasTurbineTier.LV);
     public static final DeferredBlock<Block> LV_WIRELESS_COIL = wirelessCoil(WirelessCoilTier.LV);
     public static final DeferredBlock<Block> HEAT_CHAMBER_CASING = registerHeatChamberCasing("heat_chamber_casing");
     public static final DeferredBlock<Block> HEAT_CHAMBER_GLASS = registerHeatChamberGlass("heat_chamber_glass");
@@ -123,6 +130,8 @@ public final class GreatechBlocks {
             GreatechBlocks::electrostaticGeneratorName);
     public static final DeferredItem<BlockItem>[] STEAM_TURBINE_ITEMS =
             registerBlockItems(REGISTERED_STEAM_TURBINE_TIERS, STEAM_TURBINES, GreatechBlocks::steamTurbineName);
+    public static final DeferredItem<BlockItem>[] GAS_TURBINE_ITEMS =
+            registerBlockItems(REGISTERED_GAS_TURBINE_TIERS, GAS_TURBINES, GreatechBlocks::gasTurbineName);
     public static final DeferredItem<BlockItem>[] WIRELESS_COIL_ITEMS =
             registerBlockItems(REGISTERED_WIRELESS_COIL_TIERS, WIRELESS_COILS, GreatechBlocks::wirelessCoilName);
     public static final DeferredItem<BlockItem> LV_SUCON_ITEM = suEnergyConverterItem(SUEnergyConverterTier.LV);
@@ -134,6 +143,8 @@ public final class GreatechBlocks {
             electrostaticGeneratorItem(ElectrostaticGeneratorTier.LV);
     public static final DeferredItem<BlockItem> LV_STEAM_TURBINE_ITEM =
             steamTurbineItem(SteamTurbineTier.LV);
+    public static final DeferredItem<BlockItem> LV_GAS_TURBINE_ITEM =
+            gasTurbineItem(GasTurbineTier.LV);
     public static final DeferredItem<BlockItem> LV_WIRELESS_COIL_ITEM = wirelessCoilItem(WirelessCoilTier.LV);
     public static final DeferredItem<BlockItem> HEAT_CHAMBER_CASING_ITEM =
             registerBlockItem("heat_chamber_casing", HEAT_CHAMBER_CASING);
@@ -187,6 +198,10 @@ public final class GreatechBlocks {
         return STEAM_TURBINES[tier.configIndex()];
     }
 
+    public static DeferredBlock<Block> gasTurbine(GasTurbineTier tier) {
+        return GAS_TURBINES[tier.configIndex()];
+    }
+
     public static DeferredBlock<Block> wirelessCoil(WirelessCoilTier tier) {
         return WIRELESS_COILS[tier.configIndex()];
     }
@@ -209,6 +224,10 @@ public final class GreatechBlocks {
 
     public static DeferredItem<BlockItem> steamTurbineItem(SteamTurbineTier tier) {
         return STEAM_TURBINE_ITEMS[tier.configIndex()];
+    }
+
+    public static DeferredItem<BlockItem> gasTurbineItem(GasTurbineTier tier) {
+        return GAS_TURBINE_ITEMS[tier.configIndex()];
     }
 
     public static DeferredItem<BlockItem> wirelessCoilItem(WirelessCoilTier tier) {
@@ -261,6 +280,15 @@ public final class GreatechBlocks {
     }
 
     @SuppressWarnings("unchecked")
+    private static DeferredBlock<Block>[] registerGasTurbines() {
+        DeferredBlock<Block>[] blocks = new DeferredBlock[GasTurbineTier.values().length];
+        for (GasTurbineTier tier : REGISTERED_GAS_TURBINE_TIERS) {
+            blocks[tier.configIndex()] = registerGasTurbine(gasTurbineName(tier), tier);
+        }
+        return blocks;
+    }
+
+    @SuppressWarnings("unchecked")
     private static DeferredBlock<Block>[] registerWirelessCoils() {
         DeferredBlock<Block>[] blocks = new DeferredBlock[WirelessCoilTier.values().length];
         for (WirelessCoilTier tier : REGISTERED_WIRELESS_COIL_TIERS) {
@@ -296,6 +324,9 @@ public final class GreatechBlocks {
         if (tier instanceof SteamTurbineTier turbineTier) {
             return turbineTier.configIndex();
         }
+        if (tier instanceof GasTurbineTier turbineTier) {
+            return turbineTier.configIndex();
+        }
         if (tier instanceof WirelessCoilTier coilTier) {
             return coilTier.configIndex();
         }
@@ -320,6 +351,10 @@ public final class GreatechBlocks {
 
     private static String steamTurbineName(SteamTurbineTier tier) {
         return tier.id() + "_steam_turbine";
+    }
+
+    private static String gasTurbineName(GasTurbineTier tier) {
+        return tier.id() + "_gas_turbine";
     }
 
     private static String wirelessCoilName(WirelessCoilTier tier) {
@@ -394,6 +429,20 @@ public final class GreatechBlocks {
                         .isSuffocating((state, level, pos) -> false)
                         .isViewBlocking((state, level, pos) -> false)
                         .lightLevel(state -> state.getValue(SteamTurbineBlock.ACTIVE) ? 1 : 0)
+                        .requiresCorrectToolForDrops(), tier));
+    }
+
+    private static DeferredBlock<Block> registerGasTurbine(String name, GasTurbineTier tier) {
+        return BLOCKS.register(
+                name,
+                () -> new GasTurbineBlock(BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.METAL)
+                        .strength(3.5F)
+                        .sound(SoundType.METAL)
+                        .noOcclusion()
+                        .isSuffocating((state, level, pos) -> false)
+                        .isViewBlocking((state, level, pos) -> false)
+                        .lightLevel(state -> state.getValue(GasTurbineBlock.ACTIVE) ? 1 : 0)
                         .requiresCorrectToolForDrops(), tier));
     }
 

@@ -4,8 +4,11 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.jjjcfy.greatech.content.equipment.hud.content.ObservedFluidInfo;
+import com.jjjcfy.greatech.content.equipment.hud.content.GreatechObservedTank;
 import com.jjjcfy.greatech.content.hydraulic.HydraulicPressBlockEntity;
+import com.jjjcfy.greatech.network.fluid.GreatechInternalFluidHudCache;
+import com.jjjcfy.greatech.network.fluid.InternalFluidHudDataPayload;
+import com.jjjcfy.greatech.network.fluid.RequestInternalFluidHudDataPayload;
 import com.jjjcfy.greatech.network.hydraulic.GreatechHydraulicPressHudCache;
 import com.jjjcfy.greatech.network.hydraulic.HydraulicPressHudDataPayload;
 import com.jjjcfy.greatech.network.hydraulic.RequestHydraulicPressHudDataPayload;
@@ -39,6 +42,10 @@ public class GreatechHydraulicPressGoggleInfoProvider implements GreatechGoggleI
                 REQUEST_INTERVAL)) {
             PacketDistributor.sendToServer(new RequestHydraulicPressHudDataPayload(context.pos()));
         }
+        if (GreatechHudRequestTracker.shouldRequest("greatech_hydraulic_press_internal_fluid", context.pos(),
+                context.gameTime(), REQUEST_INTERVAL)) {
+            PacketDistributor.sendToServer(new RequestInternalFluidHudDataPayload(context.pos()));
+        }
     }
 
     @Override
@@ -60,15 +67,7 @@ public class GreatechHydraulicPressGoggleInfoProvider implements GreatechGoggleI
                         : GreatechGoggleTooltipHelper.goggleText("greatech.goggles.empty")
                                 .withStyle(ChatFormatting.DARK_GRAY));
 
-        if (payload.fluids().isEmpty()) {
-            GreatechGoggleTooltipHelper.addLabelValue(tooltip, "greatech.goggles.fluid",
-                    GreatechGoggleTooltipHelper.goggleText("greatech.goggles.empty")
-                            .withStyle(ChatFormatting.DARK_GRAY));
-        } else {
-            for (ObservedFluidInfo fluid : payload.fluids()) {
-                GreatechGoggleTooltipHelper.addObservedFluidInfo(tooltip, fluid, false);
-            }
-        }
+        addInternalFluidTooltip(pos, level.getGameTime(), tooltip);
 
         GreatechGoggleTooltipHelper.addLabelValue(tooltip, "greatech.goggles.heat_chamber",
                 GreatechGoggleTooltipHelper.goggleText(payload.heatChamberUsable()
@@ -85,5 +84,27 @@ public class GreatechHydraulicPressGoggleInfoProvider implements GreatechGoggleI
         GreatechGoggleTooltipHelper.addLabelValue(tooltip, "greatech.goggles.rpm",
                 GreatechGoggleTooltipHelper.formatRpm(payload.rpm()));
         return true;
+    }
+
+    private void addInternalFluidTooltip(BlockPos pos, long gameTime, List<Component> tooltip) {
+        InternalFluidHudDataPayload fluidPayload = GreatechInternalFluidHudCache.get(pos, gameTime);
+        if (fluidPayload == null || fluidPayload.tanks().isEmpty()) {
+            GreatechGoggleTooltipHelper.addLabelValue(tooltip, "greatech.goggles.hydraulic_fluid",
+                    GreatechGoggleTooltipHelper.goggleText("greatech.goggles.scanning")
+                            .withStyle(ChatFormatting.DARK_GRAY));
+            return;
+        }
+
+        for (GreatechObservedTank tank : fluidPayload.tanks()) {
+            if (tank.isEmpty()) {
+                GreatechGoggleTooltipHelper.addLabelValue(tooltip, tank.labelKey(),
+                        GreatechGoggleTooltipHelper.goggleText("greatech.goggles.empty")
+                                .withStyle(ChatFormatting.DARK_GRAY));
+                continue;
+            }
+
+            GreatechGoggleTooltipHelper.addObservedFluidInfo(tooltip, tank.labelKey(), tank.fluid(),
+                    tank.showTemperature());
+        }
     }
 }

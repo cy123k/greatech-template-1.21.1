@@ -122,6 +122,15 @@ MV: 16 RPM, 64 SU, 60 mB/t
 HV: 16 RPM, 256 SU, 80 mB/t
 ```
 
+## HUD
+
+Steam engine hatches expose their internal steam tank through the generic internal-fluid HUD path:
+
+- [GreatechFluidHudInspectable.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechFluidHudInspectable.java)
+- [GreatechInternalFluidGoggleInfoProvider.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechInternalFluidGoggleInfoProvider.java)
+
+This lets the goggles read the hatch's `NotifiableFluidTank` without relying on the old GTCEu hatch GUI path. The displayed tank label is `Steam`, and temperature is hidden.
+
 Current control flow is intentionally centered on the powered shaft rather than the hatch. This avoids stale Create source/network state when blocks change, unload, or reattach.
 
 Hatch-side behavior:
@@ -217,9 +226,7 @@ The item models now inherit the shared hatch geometry, and [greatech_hatch.json]
 ## Current Limitations
 
 - The powered shaft uses the steel shaft model.
-- RPM is fixed instead of deriving from boiler size, steam amount, heat, or configuration.
-- Stress capacity is fixed.
-- Steam consumption is fixed.
+- RPM, stress capacity, and steam consumption currently use tiered config defaults instead of deriving from boiler size, steam amount, or heat.
 - The current hatch supports only one adjacent shaft.
 - The movement direction is currently hard-coded to `1`.
 - The powered shaft always reverts to plain `steel_shaft` when its hatch source is lost, so there is not yet a separate "idle powered shaft" presentation.

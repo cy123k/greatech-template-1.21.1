@@ -42,6 +42,7 @@ public final class GreatechGoggleTooltipHelper {
             case "greatech_fluid_bridge" -> "Greatech Fluid Bridge";
             case "greatech_hydraulic_press" -> "Greatech Hydraulic Press";
             case "greatech_su_converter" -> "Greatech SU Converter";
+            case "internal_fluids" -> "Internal Fluids";
             case "machine" -> "GTCEu Machine";
             case "create_kinetics" -> "Create Kinetics";
             case "tier" -> "Tier";
@@ -52,6 +53,9 @@ public final class GreatechGoggleTooltipHelper {
             case "heat_tier" -> "Heat Tier";
             case "stored" -> "Stored";
             case "fluid" -> "Fluid";
+            case "steam" -> "Steam";
+            case "fuel" -> "Fuel";
+            case "hydraulic_fluid" -> "Hydraulic Fluid";
             case "amount" -> "Amount";
             case "flow" -> "Flow";
             case "pressure" -> "Pressure";
@@ -196,7 +200,12 @@ public final class GreatechGoggleTooltipHelper {
     }
 
     public static void addObservedFluidInfo(List<Component> tooltip, ObservedFluidInfo fluid, boolean showTemperature) {
-        addLabelValue(tooltip, "greatech.goggles.fluid", Component.literal(fluid.fluidName()));
+        addObservedFluidInfo(tooltip, "greatech.goggles.fluid", fluid, showTemperature);
+    }
+
+    public static void addObservedFluidInfo(List<Component> tooltip, String fluidLabelKey, ObservedFluidInfo fluid,
+            boolean showTemperature) {
+        addLabelValue(tooltip, fluidLabelKey, Component.literal(fluid.fluidName()));
         addLabelValue(tooltip, "greatech.goggles.amount", formatMillibuckets(fluid.amountMb(), fluid.capacityMb()));
         if (showTemperature) {
             addLabelValue(tooltip, "greatech.goggles.fluid_temperature", formatTemperature(fluid.temperature()));

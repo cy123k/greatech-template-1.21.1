@@ -5,6 +5,7 @@ import com.jjjcfy.greatech.content.cogwheel.GreatechCogwheelBlockEntity;
 import com.jjjcfy.greatech.content.cogwheel.GreatechLargeCogwheelBlockEntity;
 import com.jjjcfy.greatech.content.converter.SUEnergyConverterBlockEntity;
 import com.jjjcfy.greatech.content.fluid.ElectricFluidBridgeBlockEntity;
+import com.jjjcfy.greatech.content.gas.turbine.GasTurbineBlockEntity;
 import com.jjjcfy.greatech.content.gearshift.GreatechProgrammableGearshiftBlockEntity;
 import com.jjjcfy.greatech.content.heat.HeatChamberControllerBlockEntity;
 import com.jjjcfy.greatech.content.hydraulic.HydraulicPressBlockEntity;
@@ -59,6 +60,12 @@ public final class GreatechBlockEntityTypes {
             () -> BlockEntityType.Builder.of(
                     SteamTurbineBlockEntity::new,
                     GreatechBlocks.LV_STEAM_TURBINE.get()).build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GasTurbineBlockEntity>> GAS_TURBINE = BLOCK_ENTITY_TYPES.register(
+            "gas_turbine",
+            () -> BlockEntityType.Builder.of(
+                    GasTurbineBlockEntity::new,
+                    GreatechBlocks.LV_GAS_TURBINE.get()).build(null));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HeatChamberControllerBlockEntity>> HEAT_CHAMBER_CONTROLLER = BLOCK_ENTITY_TYPES.register(
             "heat_chamber_controller",

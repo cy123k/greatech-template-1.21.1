@@ -70,6 +70,15 @@ Current default config values are ordered as `[LV, MV, HV]`:
 - `steamTurbineStressCapacity = [16.0, 64.0, 256.0]`
 - `steamTurbineSteamPerTick = [40, 60, 80]`
 
+## HUD
+
+The steam turbine exposes its internal steam tank through the generic internal-fluid HUD path:
+
+- [GreatechFluidHudInspectable.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechFluidHudInspectable.java)
+- [GreatechInternalFluidGoggleInfoProvider.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechInternalFluidGoggleInfoProvider.java)
+
+The displayed tank label is `Steam`. Temperature is hidden for this tank to keep the turbine HUD compact.
+
 ## Main Code
 
 Core classes:
@@ -106,6 +115,6 @@ Shared port overlay resources:
 
 - only LV is registered
 - no GUI
-- no dedicated goggles HUD provider yet
+- goggles HUD support currently covers the internal steam tank through the generic internal-fluid provider, but there is no turbine-specific telemetry provider yet
 - no recipe or progression path yet
 - steam turbine art currently reuses the shared generator body

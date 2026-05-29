@@ -30,6 +30,8 @@ Provider API and registry:
 Shared fluid observation model:
 
 - [ObservedFluidInfo.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/content/ObservedFluidInfo.java)
+- [GreatechObservedTank.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/content/GreatechObservedTank.java)
+- [GreatechFluidHudInspectable.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechFluidHudInspectable.java)
 
 ## Wearable Gate
 
@@ -88,9 +90,11 @@ The current stack is:
 4. `Create` fluid tank
 5. `Greatech` fluid bridge
 6. `Greatech` hydraulic press
-7. `Greatech` SU energy converter
-8. `GTCEu` machine energy
-9. `Create` kinetics
+7. `Greatech` generic internal fluids
+8. `Greatech` SU energy converter
+9. `Greatech` electrostatic generator
+10. `GTCEu` machine energy
+11. `Create` kinetics
 
 This makes pipe and tank observation independent from machine observation, while still allowing mixed machines such as converters to display multiple sections.
 
@@ -107,6 +111,9 @@ The HUD currently supports:
 - `Greatech` SU energy converters
 - `Greatech` electric fluid bridge
 - `Greatech` hydraulic press
+- `Greatech` steam turbine internal steam tank
+- `Greatech` gas turbine internal fuel tank
+- `Greatech` steam engine hatch internal steam tank
 
 ## Shared Fluid Presentation
 
@@ -123,7 +130,13 @@ This keeps:
 - cryogenic flag
 - plasma flag
 
-in one neutral structure so `GTCEu` pipes, `Create` pipes, `Create` tanks, and Greatech bridge HUDs can render with the same visual language.
+in one neutral structure so `GTCEu` pipes, `Create` pipes, `Create` tanks, Greatech bridge HUDs, and Greatech internal machine tanks can render with the same visual language.
+
+Internal machine tanks are exposed through `GreatechFluidHudInspectable`, which returns a list of `GreatechObservedTank` records. Each observed tank combines:
+
+- a HUD label key, such as `Steam`, `Fuel`, or `Hydraulic Fluid`
+- one `ObservedFluidInfo`
+- a flag controlling whether temperature should be shown
 
 Providers can hide individual shared fields when the machine context would be noisy. For example, the hydraulic press uses the shared fluid model for its internal hydraulic fluid tank but suppresses fluid temperature in its HUD.
 
@@ -140,7 +153,8 @@ Examples:
 - `Create` fluid tanks are read directly from synced controller inventory state
 - `GTCEu` cables use request/response networking because peak runtime data is too transient
 - Greatech fluid bridge uses request/response because the HUD includes extra machine-local telemetry
-- Greatech hydraulic press uses request/response for mold, heat chamber, tank, and speed telemetry
+- Greatech internal machine tanks use request/response through the generic internal-fluid path
+- Greatech hydraulic press uses request/response for mold, heat chamber, and speed telemetry, while its tank display reuses the generic internal-fluid cache
 - Greatech SU energy converter uses request/response for server-authoritative generated and stored EU values
 
 The actual packet architecture is documented in [greatech-hud-networking.md](../networks/greatech-hud-networking.md).
@@ -163,6 +177,7 @@ When adding a new observation target:
 1. decide whether it belongs in an existing provider family or needs a new provider
 2. decide whether its data can be read client-side
 3. reuse `ObservedFluidInfo` when the target is fundamentally a fluid container or transport node
-4. choose `APPEND` or `EXCLUSIVE` based on whether the target should coexist with other sections
+4. implement `GreatechFluidHudInspectable` for Greatech-owned internal tanks that should be visible to goggles
+5. choose `APPEND` or `EXCLUSIVE` based on whether the target should coexist with other sections
 
 This keeps the HUD system scalable as Greatech adds more Create and GTCEu bridges.

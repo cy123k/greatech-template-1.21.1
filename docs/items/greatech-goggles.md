@@ -9,6 +9,7 @@ It is modeled after `Create` goggles in spirit, but the feature goal is broader:
 - inspect `Create` kinetic state
 - inspect `GTCEu` electrical state
 - inspect fluid transport and storage across both ecosystems
+- inspect selected Greatech internal machine tanks
 
 ## Main Code
 
@@ -61,6 +62,10 @@ When worn, the goggles can currently inspect:
 - `Create` fluid pipes
 - `Create` fluid tanks
 - `Greatech` electric fluid bridge
+- `Greatech` hydraulic press
+- `Greatech` steam turbine
+- `Greatech` gas turbine
+- `Greatech` steam engine hatch
 
 The exact text shown depends on the provider for the observed target.
 
@@ -73,6 +78,7 @@ Current examples include:
 - `RPM` and stress-related Create tooltip lines on kinetic blocks
 - fluid name, amount, temperature, and fluid traits on supported fluid pipes and tanks
 - flow direction, pressure, throughput, and `EU/t` usage on the electric fluid bridge
+- internal steam, fuel, or hydraulic-fluid tank contents on supported Greatech machines
 
 ## Design Notes
 

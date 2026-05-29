@@ -6,8 +6,10 @@ import com.jjjcfy.greatech.network.converter.RequestSUEnergyConverterHudDataPayl
 import com.jjjcfy.greatech.network.converter.SUEnergyConverterHudDataPayload;
 import com.jjjcfy.greatech.network.fluid.FluidBridgeHudDataPayload;
 import com.jjjcfy.greatech.network.fluid.FluidHudDataPayload;
+import com.jjjcfy.greatech.network.fluid.InternalFluidHudDataPayload;
 import com.jjjcfy.greatech.network.fluid.RequestFluidBridgeHudDataPayload;
 import com.jjjcfy.greatech.network.fluid.RequestFluidHudDataPayload;
+import com.jjjcfy.greatech.network.fluid.RequestInternalFluidHudDataPayload;
 import com.jjjcfy.greatech.network.hydraulic.HydraulicPressHudDataPayload;
 import com.jjjcfy.greatech.network.hydraulic.RequestHydraulicPressHudDataPayload;
 import com.jjjcfy.greatech.network.wireless.ElectrostaticGeneratorHudDataPayload;
@@ -35,6 +37,11 @@ public final class GreatechNetworking {
                 RequestFluidBridgeHudDataPayload::handleServer);
         registrar.playToClient(FluidBridgeHudDataPayload.TYPE, FluidBridgeHudDataPayload.STREAM_CODEC,
                 FluidBridgeHudDataPayload::handleClient);
+        registrar.playToServer(RequestInternalFluidHudDataPayload.TYPE,
+                RequestInternalFluidHudDataPayload.STREAM_CODEC,
+                RequestInternalFluidHudDataPayload::handleServer);
+        registrar.playToClient(InternalFluidHudDataPayload.TYPE, InternalFluidHudDataPayload.STREAM_CODEC,
+                InternalFluidHudDataPayload::handleClient);
         registrar.playToServer(RequestHydraulicPressHudDataPayload.TYPE, RequestHydraulicPressHudDataPayload.STREAM_CODEC,
                 RequestHydraulicPressHudDataPayload::handleServer);
         registrar.playToClient(HydraulicPressHudDataPayload.TYPE, HydraulicPressHudDataPayload.STREAM_CODEC,

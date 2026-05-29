@@ -28,6 +28,7 @@ Current callers:
 - [SUEnergyConverterRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/converter/SUEnergyConverterRenderer.java)
 - [ElectrostaticGeneratorRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/wireless/electrostatic/ElectrostaticGeneratorRenderer.java)
 - [SteamTurbineRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/steam/turbine/SteamTurbineRenderer.java)
+- [GasTurbineRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/gas/turbine/GasTurbineRenderer.java)
 - [GreatechProgrammableGearshiftRenderer.java](../../src/main/java/com/jjjcfy/greatech/content/gearshift/GreatechProgrammableGearshiftRenderer.java)
 
 ## Resource Layout
@@ -80,6 +81,10 @@ The `EU` overlay sheets stay slightly outside the block cube at `z = -0.1`, matc
 The electrostatic generator's `SU` input overlay follows `getSpeed() != 0`, because kinetic-side activity should be visible while the shaft is turning even if EU transfer is blocked by buffer, coil, pool, or neighbor conditions.
 
 `LV Steam Turbine`:
+
+- `FACING`: `SU` output side
+
+`LV Gas Turbine`:
 
 - `FACING`: `SU` output side
 

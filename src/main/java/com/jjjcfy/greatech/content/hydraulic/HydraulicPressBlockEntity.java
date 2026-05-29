@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.jjjcfy.greatech.Config;
+import com.jjjcfy.greatech.content.equipment.hud.GreatechFluidHudInspectable;
+import com.jjjcfy.greatech.content.equipment.hud.content.GreatechObservedTank;
 import com.jjjcfy.greatech.content.heat.HeatChamberEnvironment;
 import com.jjjcfy.greatech.content.heat.HeatChamberRegistry;
 import com.jjjcfy.greatech.registry.GreatechBlockEntityTypes;
@@ -31,7 +33,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
-public class HydraulicPressBlockEntity extends KineticBlockEntity {
+public class HydraulicPressBlockEntity extends KineticBlockEntity implements GreatechFluidHudInspectable {
     private final FluidTank tank = new FluidTank(1) {
         @Override
         public boolean isFluidValid(FluidStack stack) {
@@ -294,6 +296,15 @@ public class HydraulicPressBlockEntity extends KineticBlockEntity {
 
     public FluidStack getFluidStack() {
         return tank.getFluid().copy();
+    }
+
+    @Override
+    public List<GreatechObservedTank> getObservedTanks() {
+        return List.of(GreatechObservedTank.of(
+                "greatech.goggles.hydraulic_fluid",
+                getFluidStack(),
+                getFluidCapacity(),
+                false));
     }
 
     public boolean isHydraulicFluid(FluidStack stack) {

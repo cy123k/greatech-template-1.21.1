@@ -74,6 +74,12 @@ Registry hooks:
 - [GreatechPartialModels.java](../../src/main/java/com/jjjcfy/greatech/registry/GreatechPartialModels.java)
 - [GreatechClient.java](../../src/main/java/com/jjjcfy/greatech/GreatechClient.java)
 
+HUD-related classes:
+
+- [GreatechFluidHudInspectable.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechFluidHudInspectable.java)
+- [GreatechInternalFluidGoggleInfoProvider.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechInternalFluidGoggleInfoProvider.java)
+- [GreatechHydraulicPressGoggleInfoProvider.java](../../src/main/java/com/jjjcfy/greatech/content/equipment/hud/GreatechHydraulicPressGoggleInfoProvider.java)
+
 Important resources:
 
 - [lv_hydraulic_press.json blockstate](../../src/main/resources/assets/greatech/blockstates/lv_hydraulic_press.json)
@@ -137,6 +143,7 @@ Current fluid rules:
 - exposed tank wrapper accepts input only
 - the tank does not output fluid
 - the tank has no GUI in the current prototype
+- the goggles HUD reads the internal tank through the generic internal-fluid HUD path, while the hydraulic press provider keeps mold, heat chamber, tier, and RPM in its machine-specific payload
 
 Current side rules:
 

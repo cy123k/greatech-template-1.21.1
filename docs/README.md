@@ -21,7 +21,8 @@ Registered or partially implemented feature families:
 - Wireless EU transfer prototype: `lv_electrostatic_generator` and `lv_wireless_coil`, including generator-side coil overlays, shared `SU`/`EU` port overlays, dynamic kinetic shaft rendering, coil display models, and electric spark particles
 - Heat Chamber: casing, glass, and controller blocks
 - Steam Engine Hatch: `lv`, `mv`, and `hv` hatch machine parts
-- Steam Turbine: `lv_steam_turbine`, a single-block GTCEu-steam-to-Create-SU generator with animated side overlays, shared `SU` output port overlay, and Greatech redstone cover control
+- Steam Turbine: `lv_steam_turbine`, a single-block GTCEu-steam-to-Create-SU generator with animated side overlays, shared `SU` output port overlay, Greatech redstone cover control, and generic internal-fluid HUD support
+- Gas Turbine: `lv_gas_turbine`, a single-block GTCEu gas-turbine-fuel-to-Create-SU generator using the shared generator body, steam-turbine side materials, Greatech redstone cover control, and GTCEu gas fuel recipe heat-value scaling
 - Transmission parts: steel, aluminium, and stainless shafts/cogwheels, including powered variants and Greatech-owned Create-casing variants for shafts, small cogwheels, and large cogwheels
 - Programmable Gearshift: `programmable_gearshift` plus shared redstone clutch, reverse, and overdrive covers with installed-face and active overlay rendering
 - Kinetic failure accidents for overloaded Greatech-monitored Create shafts, cogwheels, clutches, gearshifts, sequenced gearshifts, and belt connections
@@ -59,6 +60,7 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 - [Hydraulic Press](machines/greatech-hydraulic-press.md)
 - [Electrostatic Generator](machines/greatech-electrostatic-generator.md)
 - [Steam Turbine](machines/greatech-steam-turbine.md)
+- [Gas Turbine](machines/greatech-gas-turbine.md)
 - [Steam Engine Hatch](machines/greatech-steam-engine-hatch.md)
 - [Programmable Gearshift](machines/greatech-programmable-gearshift.md)
 - [Shafts](machines/greatech-shaft.md)
@@ -101,6 +103,7 @@ The current SU Energy Converter is the clearest bridge: Create rotation produces
 - [Shared cover code](../src/main/java/com/jjjcfy/greatech/content/cover)
 - [Shared client render helpers](../src/main/java/com/jjjcfy/greatech/client/render)
 - [Steam turbine code](../src/main/java/com/jjjcfy/greatech/content/steam/turbine)
+- [Gas turbine code](../src/main/java/com/jjjcfy/greatech/content/gas/turbine)
 - [HUD/goggles code](../src/main/java/com/jjjcfy/greatech/content/equipment/hud)
 - [Network payloads](../src/main/java/com/jjjcfy/greatech/network)
 - [JEI integration](../src/main/java/com/jjjcfy/greatech/integration/jei)

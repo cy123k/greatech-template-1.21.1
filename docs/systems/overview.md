@@ -53,6 +53,7 @@ The currently registered block families are:
 - `lv_electrostatic_generator`
 - `lv_wireless_coil`
 - `lv_steam_turbine`
+- `lv_gas_turbine`
 - `lv_steam_engine_hatch`
 - `mv_steam_engine_hatch`
 - `hv_steam_engine_hatch`
@@ -70,7 +71,7 @@ Create casing compatibility is active for Greatech shafts, small cogwheels, and 
 
 The shared cover prototype provides Greatech-owned redstone clutch, reverse, and overdrive covers. Cover item, state, NBT persistence, redstone sampling, item return, and per-face overlay rendering are shared through `content.cover`; each host machine defines its own valid faces and behavior. The current programmable gearshift host is a Create-style split-shaft kinetic block: its shaft axis is still the kinetic connection path, while non-axis faces can hold covers. Cover signals combine into the outgoing rotation modifier: clutch wins with `0x`, reverse contributes `-1x`, overdrive contributes `2x`, and reverse plus overdrive becomes `-2x`. The block renders per-face cover overlays for installed covers, adds a full-bright active cover overlay when that cover face is powered, and renders shared full-bright `SU` input/output port overlays on its shaft-axis faces while a cover-controlled modifier is active.
 
-The shared port overlay prototype centralizes repeated connector visuals for `SU` and `EU` faces. `GreatechPortOverlayRenderer` rotates north-authored source sheets onto the machine's runtime face. `SU` input/output overlays are full-bright and only render while the kinetic port is active; `EU` input/output overlays are always visible and use normal packed light. Current users include the SU Energy Converter, Electrostatic Generator, LV Steam Turbine, and Programmable Gearshift.
+The shared port overlay prototype centralizes repeated connector visuals for `SU` and `EU` faces. `GreatechPortOverlayRenderer` rotates north-authored source sheets onto the machine's runtime face. `SU` input/output overlays are full-bright and only render while the kinetic port is active; `EU` input/output overlays are always visible and use normal packed light. Current users include the SU Energy Converter, Electrostatic Generator, LV Steam Turbine, LV Gas Turbine, and Programmable Gearshift.
 
 The kinetic failure prototype now covers Greatech transmission parts and selected Create kinetic controls in networks that contain a Greatech failure source. Create shafts, cogwheels, clutches, gearshifts, sequenced gearshifts, and belt connections can become accident candidates when total network stress exceeds their configured thresholds. Pure Create networks are not checked.
 
@@ -86,7 +87,11 @@ The wireless EU prototype adds `lv_electrostatic_generator` and `lv_wireless_coi
 
 The current steam turbine prototype adds `lv_steam_turbine`, a single-block GTCEu-steam-to-Create-SU generator. The turbine accepts steam on every face except its front shaft output face, renders a dynamic half-shaft and shared `SU` output overlay on the output face, and uses animated side overlays while active. It can host shared Greatech redstone covers on available non-output/non-overlay faces. Powered clutch covers stop the turbine and prevent steam consumption, reverse covers flip generated RPM, and overdrive covers double generated RPM, steam consumption, and stress capacity.
 
+The current gas turbine prototype adds `lv_gas_turbine`, a single-block GTCEu gas-turbine-fuel-to-Create-SU generator. It shares the steam turbine's generator-body presentation and cover behavior, but accepts fluids matching GTCEu `GAS_TURBINE_FUELS` recipes. Fuel consumption is calculated from the matched recipe's input amount, output EU/t, duration, and the tier's configured equivalent EU/t target, so higher-energy fuels burn for longer.
+
 The current steam prototype adds three `GTCEu` machine parts, `lv_steam_engine_hatch`, `mv_steam_engine_hatch`, and `hv_steam_engine_hatch`, plus a matching `Create` generator relay, `powered_steel_shaft`. Each hatch behaves like a fluid export hatch for GTCEu multiblock recognition, stores only steam, and converts a valid neighboring `steel_shaft` into `powered_steel_shaft`. The powered shaft then acts as the actual `Create` kinetic source: it validates the adjacent hatch, requests steam power each tick, outputs configured tier RPM and stress capacity, and automatically reverts back to `steel_shaft` when it no longer has a valid hatch source.
+
+The goggles HUD now has a generic internal-fluid observation path for Greatech machines. Steam turbines, gas turbines, steam engine hatches, and the hydraulic press expose their internal tanks through `GreatechFluidHudInspectable`; each machine-specific provider can either render the generic section directly or reuse the generic cache for only its fluid lines.
 
 The current creative tab prototype keeps one Greatech tab while adding client-rendered section headers for generators, transmission parts, multiblock structures, GTCEu hatches, machines, fluids, and items. It uses invisible marker item stacks for layout and a `ScreenEvent`/`ContainerScreenEvent` renderer for the visible header bars. Powered and encased transmission variants are intentionally omitted from the main Greatech creative tab.
 
@@ -97,8 +102,8 @@ Because Greatech mixes Create-style blocks and GTCEu machine definitions, new ma
 - validate the new custom art and active-state presentation in gameplay
 - validate Greatech placement helper previews against Create/Greatech bare and encased transmission part combinations
 - validate Greatech-owned encased shaft, small cogwheel, and large cogwheel visuals in dense kinetic networks
-- validate shared cover installation, per-face redstone sampling, cover overlay orientation, active overlay orientation, and mixed reverse/overdrive behavior on both `programmable_gearshift` and `lv_steam_turbine`
-- validate shared `SU`/`EU` port overlay placement, inset depth, and active-state rules across the converter, electrostatic generator, programmable gearshift, and steam turbine
+- validate shared cover installation, per-face redstone sampling, cover overlay orientation, active overlay orientation, and mixed reverse/overdrive behavior on `programmable_gearshift`, `lv_steam_turbine`, and `lv_gas_turbine`
+- validate shared `SU`/`EU` port overlay placement, inset depth, and active-state rules across the converter, electrostatic generator, programmable gearshift, steam turbine, and gas turbine
 - validate kinetic failure thresholds for Create clutch, gearshift, sequenced gearshift, and belt connector candidates
 - validate `lv_fluid_bridge` fixed pump behavior for GTCEu-to-Create and Create-to-GTCEu fluid direction
 - validate Create pressure refresh behavior so pressure does not stack every tick
@@ -108,6 +113,8 @@ Because Greatech mixes Create-style blocks and GTCEu machine definitions, new ma
 - validate the LV electrostatic generator, LV wireless coil, coil-container overlays, electric spark particles, and per-dimension EU pool prototype in gameplay
 - validate `lv_steam_engine_hatch` / `mv_steam_engine_hatch` / `hv_steam_engine_hatch` recognition in GTCEu large boiler structures
 - validate `lv_steam_turbine` steam consumption, cover control behavior, and animated side overlays in gameplay
+- validate `lv_gas_turbine` fuel matching, GTCEu fuel-value scaling, cover control behavior, and reused turbine overlays in gameplay
+- validate generic internal-fluid HUD reads on steam turbine, gas turbine, steam engine hatch, and hydraulic press
 - validate Greatech creative tab section headers, marker interaction blocking, and search behavior
 - replace the current steam engine config defaults with recipe- or multiblock-derived values
 - finish `neoforge.mods.toml` dependency declarations

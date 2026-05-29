@@ -1,9 +1,11 @@
-package com.jjjcfy.greatech.content.steam.turbine;
+package com.jjjcfy.greatech.content.gas.turbine;
 
 import java.util.List;
 import java.util.Map;
 
-import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
+import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.jjjcfy.greatech.Config;
 import com.jjjcfy.greatech.content.cover.GreatechCoverHandler;
 import com.jjjcfy.greatech.content.cover.GreatechCoverHost;
@@ -20,20 +22,22 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
-public class SteamTurbineBlockEntity extends GeneratingKineticBlockEntity
+public class GasTurbineBlockEntity extends GeneratingKineticBlockEntity
         implements GreatechCoverHost, GreatechFluidHudInspectable {
     private static final int OVERDRIVE_MULTIPLIER = 2;
 
     private final GreatechCoverHandler covers = new GreatechCoverHandler();
-    private final FluidTank steamTank = new FluidTank(1) {
+    private final FluidTank gasTank = new FluidTank(1) {
         @Override
         public boolean isFluidValid(FluidStack stack) {
-            return isSteam(stack);
+            return !stack.isEmpty();
         }
 
         @Override
@@ -41,15 +45,15 @@ public class SteamTurbineBlockEntity extends GeneratingKineticBlockEntity
             setChanged();
         }
     };
-    private final IFluidHandler inputHandler = new SteamInputHandler();
+    private final IFluidHandler inputHandler = new GasInputHandler();
 
     private boolean powered;
-    private int lastConsumedSteam;
+    private int lastConsumedGas;
     private boolean coverRedstoneActive;
 
-    public SteamTurbineBlockEntity(BlockPos pos, BlockState blockState) {
-        super(GreatechBlockEntityTypes.STEAM_TURBINE.get(), pos, blockState);
-        steamTank.setCapacity(Config.steamTurbineTankCapacity(getTier()));
+    public GasTurbineBlockEntity(BlockPos pos, BlockState blockState) {
+        super(GreatechBlockEntityTypes.GAS_TURBINE.get(), pos, blockState);
+        gasTank.setCapacity(Config.gasTurbineTankCapacity(getTier()));
     }
 
     @Override
@@ -68,18 +72,63 @@ public class SteamTurbineBlockEntity extends GeneratingKineticBlockEntity
     }
 
     private void serverTick() {
-        steamTank.setCapacity(Config.steamTurbineTankCapacity(getTier()));
+        gasTank.setCapacity(Config.gasTurbineTankCapacity(getTier()));
         TurbineCoverControl control = coverControl();
-        int steamPerTick = control.clutched() ? 0 : Config.steamTurbineSteamPerTick(getTier()) * control.multiplier();
-        boolean shouldPower = !control.clutched() && (steamPerTick <= 0 || drainSteam(steamPerTick));
-        lastConsumedSteam = shouldPower ? Math.max(0, steamPerTick) : 0;
+        int gasPerTick = control.clutched() ? 0 : matchingFuelPerTick() * control.multiplier();
+        boolean shouldPower = !control.clutched() && gasPerTick > 0 && drainGas(gasPerTick);
+        lastConsumedGas = shouldPower ? gasPerTick : 0;
         setPowered(shouldPower);
         updateActiveState(shouldPower);
     }
 
-    private boolean drainSteam(int amount) {
-        FluidStack requested = GTMaterials.Steam.getFluid(amount);
-        FluidStack drained = steamTank.drain(requested, IFluidHandler.FluidAction.EXECUTE);
+    private int matchingFuelPerTick() {
+        if (level == null || gasTank.isEmpty()) {
+            return 0;
+        }
+
+        FluidStack stored = gasTank.getFluid();
+        return matchingFuelPerTick(stored);
+    }
+
+    private int matchingFuelPerTick(FluidStack stack) {
+        if (level == null || stack.isEmpty()) {
+            return 0;
+        }
+
+        for (RecipeHolder<GTRecipe> holder : level.getRecipeManager().getAllRecipesFor(GTRecipeTypes.GAS_TURBINE_FUELS)) {
+            GTRecipe recipe = holder.value();
+            for (var content : recipe.getInputContents(FluidRecipeCapability.CAP)) {
+                SizedFluidIngredient ingredient = FluidRecipeCapability.CAP.of(content.content);
+                if (!ingredient.test(stack)) {
+                    continue;
+                }
+                return fuelAmountPerTick(recipe, ingredient);
+            }
+        }
+        return 0;
+    }
+
+    private int fuelAmountPerTick(GTRecipe recipe, SizedFluidIngredient ingredient) {
+        long outputEuPerTick = recipe.getOutputEUt().getTotalEU();
+        int inputAmount = ingredient.amount();
+        if (outputEuPerTick <= 0 || inputAmount <= 0) {
+            return 0;
+        }
+
+        long totalRecipeEu = outputEuPerTick * Math.max(1, recipe.duration);
+        long targetEuPerTick = Config.gasTurbineEquivalentEuPerTick(getTier());
+        long numerator = targetEuPerTick * inputAmount;
+        return Math.max(1, (int) Math.ceilDiv(numerator, totalRecipeEu));
+    }
+
+    private boolean drainGas(int amount) {
+        FluidStack stored = gasTank.getFluid();
+        if (stored.isEmpty()) {
+            return false;
+        }
+
+        FluidStack requested = stored.copyWithAmount(amount);
+        FluidStack drained = gasTank.drain(requested, IFluidHandler.FluidAction.EXECUTE);
         return drained.getAmount() >= amount;
     }
 
@@ -99,22 +148,22 @@ public class SteamTurbineBlockEntity extends GeneratingKineticBlockEntity
         }
 
         BlockState state = getBlockState();
-        if (state.getValue(SteamTurbineBlock.ACTIVE) == active) {
+        if (state.getValue(GasTurbineBlock.ACTIVE) == active) {
             return;
         }
 
-        level.setBlock(worldPosition, state.setValue(SteamTurbineBlock.ACTIVE, active), 3);
+        level.setBlock(worldPosition, state.setValue(GasTurbineBlock.ACTIVE, active), 3);
     }
 
     @Override
     public float getGeneratedSpeed() {
         TurbineCoverControl control = coverControl();
-        return powered ? Config.steamTurbineRpm(getTier()) * control.multiplier() * control.direction() : 0;
+        return powered ? Config.gasTurbineRpm(getTier()) * control.multiplier() * control.direction() : 0;
     }
 
     @Override
     public float calculateAddedStressCapacity() {
-        float capacity = powered ? Config.steamTurbineStressCapacity(getTier()) * coverControl().multiplier() : 0;
+        float capacity = powered ? Config.gasTurbineStressCapacity(getTier()) * coverControl().multiplier() : 0;
         lastCapacityProvided = capacity;
         return capacity;
     }
@@ -123,8 +172,8 @@ public class SteamTurbineBlockEntity extends GeneratingKineticBlockEntity
     protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         tag.putBoolean("Powered", powered);
         tag.putBoolean("CoverRedstoneActive", coverRedstoneActive);
-        tag.putInt("LastConsumedSteam", lastConsumedSteam);
-        tag.put("SteamTank", steamTank.writeToNBT(registries, new CompoundTag()));
+        tag.putInt("LastConsumedGas", lastConsumedGas);
+        tag.put("GasTank", gasTank.writeToNBT(registries, new CompoundTag()));
         tag.put("Covers", covers.save(registries));
         super.write(tag, registries, clientPacket);
     }
@@ -133,34 +182,34 @@ public class SteamTurbineBlockEntity extends GeneratingKineticBlockEntity
     protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         powered = tag.getBoolean("Powered");
         coverRedstoneActive = tag.getBoolean("CoverRedstoneActive");
-        lastConsumedSteam = tag.getInt("LastConsumedSteam");
-        steamTank.setCapacity(Config.steamTurbineTankCapacity(getTier()));
-        steamTank.readFromNBT(registries, tag.getCompound("SteamTank"));
+        lastConsumedGas = tag.getInt("LastConsumedGas");
+        gasTank.setCapacity(Config.gasTurbineTankCapacity(getTier()));
+        gasTank.readFromNBT(registries, tag.getCompound("GasTank"));
         covers.load(tag.getList("Covers", Tag.TAG_COMPOUND), registries);
         super.read(tag, registries, clientPacket);
     }
 
     public IFluidHandler getFluidHandler(Direction side) {
-        return SteamTurbineBlock.isSteamInputSide(getBlockState(), side) ? inputHandler : null;
+        return GasTurbineBlock.isGasInputSide(getBlockState(), side) ? inputHandler : null;
     }
 
-    public SteamTurbineTier getTier() {
-        if (getBlockState().getBlock() instanceof SteamTurbineBlock turbineBlock) {
+    public GasTurbineTier getTier() {
+        if (getBlockState().getBlock() instanceof GasTurbineBlock turbineBlock) {
             return turbineBlock.getTier();
         }
-        return SteamTurbineTier.LV;
+        return GasTurbineTier.LV;
     }
 
-    public int getStoredSteam() {
-        return steamTank.getFluidAmount();
+    public int getStoredGas() {
+        return gasTank.getFluidAmount();
     }
 
-    public int getSteamCapacity() {
-        return steamTank.getCapacity();
+    public int getGasCapacity() {
+        return gasTank.getCapacity();
     }
 
-    public int getLastConsumedSteam() {
-        return lastConsumedSteam;
+    public int getLastConsumedGas() {
+        return lastConsumedGas;
     }
 
     public boolean isPowered() {
@@ -170,15 +219,15 @@ public class SteamTurbineBlockEntity extends GeneratingKineticBlockEntity
     @Override
     public List<GreatechObservedTank> getObservedTanks() {
         return List.of(GreatechObservedTank.of(
-                "greatech.goggles.steam",
-                steamTank.getFluid(),
-                steamTank.getCapacity(),
-                false));
+                "greatech.goggles.fuel",
+                gasTank.getFluid(),
+                gasTank.getCapacity(),
+                true));
     }
 
     @Override
     public boolean canInstallCover(Direction face) {
-        return getBlockState().getBlock() instanceof SteamTurbineBlock turbineBlock
+        return getBlockState().getBlock() instanceof GasTurbineBlock turbineBlock
                 && turbineBlock.canInstallCover(getBlockState(), face)
                 && !covers.hasCover(face);
     }
@@ -266,34 +315,33 @@ public class SteamTurbineBlockEntity extends GeneratingKineticBlockEntity
     private record TurbineCoverControl(boolean clutched, int multiplier, int direction) {
     }
 
-    private static boolean isSteam(FluidStack stack) {
-        return !stack.isEmpty() && FluidStack.isSameFluidSameComponents(stack, GTMaterials.Steam.getFluid(1));
-    }
-
-    private class SteamInputHandler implements IFluidHandler {
+    private class GasInputHandler implements IFluidHandler {
         @Override
         public int getTanks() {
-            return steamTank.getTanks();
+            return gasTank.getTanks();
         }
 
         @Override
         public FluidStack getFluidInTank(int tank) {
-            return steamTank.getFluidInTank(tank);
+            return gasTank.getFluidInTank(tank);
         }
 
         @Override
         public int getTankCapacity(int tank) {
-            return steamTank.getTankCapacity(tank);
+            return gasTank.getTankCapacity(tank);
         }
 
         @Override
         public boolean isFluidValid(int tank, FluidStack stack) {
-            return steamTank.isFluidValid(tank, stack);
+            return gasTank.isFluidValid(tank, stack) && matchingFuelPerTick(stack) > 0;
         }
 
         @Override
         public int fill(FluidStack resource, FluidAction action) {
-            return steamTank.fill(resource, action);
+            if (matchingFuelPerTick(resource) <= 0) {
+                return 0;
+            }
+            return gasTank.fill(resource, action);
         }
 
         @Override
